@@ -309,12 +309,12 @@
         {
           "index": 2,
           "classification": "leg",
-          "length": 371.61,
+          "length": 320.72,
           "segments": [
-            81.6,
-            290.0
+            156.5,
+            164.2
           ],
-          "deviation_percent": 25.87
+          "deviation_percent": 8.64
         },
         {
           "index": 3,
@@ -347,9 +347,8 @@
       "issues": [
         "limb 1 (leg) total 623.3 is +111.1% from 295.2",
         "limb 1 has 3 skeletal segments; expected upper/lower pair",
-        "limb 2 (leg) total 371.6 is +25.9% from 295.2",
-        "limb 2 thigh 81.6 is -46.2% from 151.8",
-        "limb 2 calf 290.0 is +102.2% from 143.5",
+        "limb 2 (leg) total 320.7 is +8.6% from 295.2",
+        "limb 2 calf 164.2 is +14.5% from 143.5",
         "limb 3 (leg) total 576.3 is +95.2% from 295.2",
         "limb 3 thigh 188.0 is +23.9% from 151.8",
         "limb 3 calf 388.3 is +170.7% from 143.5",

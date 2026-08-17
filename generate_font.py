@@ -766,10 +766,15 @@ def pose(letter: str) -> Drawer:
         d.head(stem_x + 40, 630, 1, -0.62)
         # Middle prong: the left arm forward from mid-torso, ninety degrees at
         # the elbow, forearm horizontal.
-        elbow = (stem_x + 34, 462)
+        # The elbow is carried out along the prong rather than tucked against
+        # the torso: previously the upper arm was an 82-unit stub against a
+        # 290-unit forearm, so one overlong forearm spanned the whole bar.
+        # Splitting it evenly also brings the whole limb near the font's
+        # baseline arm length.
+        elbow = (stem_x + 150, 470)
         d.path([(stem_x + 10, 540), elbow], 38, False, False, track=False)
-        d.path([elbow, (496, 462)], 36, False, False, track=False)
-        mid_arm = [(stem_x + 10, 540), elbow, (496, 462)]
+        d.path([elbow, (486, 462)], 34, False, False, track=False)
+        mid_arm = [(stem_x + 10, 540), elbow, (486, 462)]
         segments, length = d.centerline_measurements(mid_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
@@ -780,8 +785,8 @@ def pose(letter: str) -> Drawer:
             (elbow[0] + 18, elbow[1] + 16), (elbow[0] + 22, elbow[1]),
             (elbow[0] + 10, elbow[1] - 17),
         ], 4.0, True)
-        d.ellipse(508, 462, 17, 18, 0.0)
-        d.cut_path([(490, 446), (490, 478)], 3.4, False)
+        d.ellipse(498, 462, 17, 18, 0.0)
+        d.cut_path([(480, 446), (480, 478)], 3.4, False)
         # Lower bar: kneeling thigh drops to the knee, then the limb bends up
         # at the knee and runs horizontally right along the ground.
         knee = (stem_x - 2, 118)
