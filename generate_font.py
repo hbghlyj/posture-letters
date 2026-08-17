@@ -1026,15 +1026,35 @@ def pose(letter: str) -> Drawer:
         d.head(165, 752, 1)
         # Hips sit at mid-stem so the legs below match the trunk in length.
         d.torso([(165, 690), (165, 555), (165, 425)], 88, False)
-        d.limb([(190, 650), (425, 710), (555, 585), (450, 470), (175, 480)], 54, end="hand")
+        # Upper bowl, built like B: two shortened clasped arms with a normal
+        # shoulder-elbow-hand span, instead of one distorted overlong limb
+        # looping all the way out and back.
+        upper_arm = [(192, 650), (288, 668), (355, 600)]
+        lower_arm = [(175, 505), (290, 492), (355, 600)]
+        for arm, width in ((upper_arm, 50), (lower_arm, 46)):
+            d.path(arm, width, True, True, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+        # Elbow and sleeve creases, as on B.
+        d.cut_path([(284, 665), (307, 651), (322, 629)], 4.5, True)
+        d.cut_path([(278, 500), (299, 500), (318, 512)], 4.0, True)
+        # Clasped hands close the bowl at the right.
+        d.ellipse(360, 603, 22, 27, -0.25)
+        d.ellipse(352, 587, 20, 24, -0.25)
+        d.cut_path([(343, 615), (358, 607), (375, 612)], 4.5, True)
+        d.cut_path([(345, 601), (359, 594), (374, 600)], 4.5, True)
         d.leg(
-            [(175, 300), (335, 220), (585, 55)], 62, knee_index=1, shoe_direction=(1, 0)
+            [(180, 428), (350, 250), (585, 55)], 62, knee_index=1, shoe_direction=(1, 0)
         )
         # In the crop the planted shoe projects toe-first to the figure's right;
         # a full horizontal direction makes that outward profile unmistakable
         # and removes the formerly reversed foot.
         d.leg(
-            [(155, 295), (145, 165), (140, 55)], 55, knee_index=1, shoe_direction=(1, 0)
+            [(152, 425), (146, 240), (140, 55)], 55, knee_index=1,
+            breeches_width=60, shoe_direction=(1, 0)
         )
 
     elif letter == "S":

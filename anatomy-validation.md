@@ -41,7 +41,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | O | **FAIL** | L 696.2, L 696.2 | — | 124.0 | expected 4 measurable limbs; found 2 |
 | P | **FAIL** | A 324.6, A 283.1, A 369.1, A 369.2 | 265.0 | 110.0 | limb 1 has 4 skeletal segments; expected upper/lower pair |
 | Q | **FAIL** | L 720.4, L 720.4, A 182.2 | — | 124.0 | expected 4 measurable limbs; found 3 |
-| R | **FAIL** | L 853.8, L 478.4, A 240.5 | 265.0 | 110.0 | expected 4 measurable limbs; found 3 |
+| R | **FAIL** | A 193.1, A 241.8, L 551.5, A 370.2 | 265.0 | 110.0 | limb 1 (arm) total 193.1 is -41.9% from 332.5 |
 | S | **FAIL** | A 363.8, A 317.7, L 517.9, A 114.4 | 423.2 | 110.0 | limb 1 (arm) total 363.8 is +9.4% from 332.5 |
 | T | **FAIL** | A 258.2, A 258.2, A 345.0, A 345.0 | 235.0 | 110.0 | limb 1 (arm) total 258.2 is -22.4% from 332.5 |
 | U | **FAIL** | L 721.2, L 721.2, L 617.7, L 617.7 | 100.0 | 110.0 | limb 1 (leg) total 721.2 is +19.1% from 605.7 |
@@ -257,15 +257,18 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - head 124.0 is +12.7% from 110.0
 
 ### R
-- expected 4 measurable limbs; found 3
-- limb 1 (leg) total 853.8 is +40.9% from 605.7
-- limb 1 has 4 skeletal segments; expected upper/lower pair
-- limb 2 (leg) total 478.4 is -21.0% from 605.7
-- limb 2 thigh 178.9 is -40.6% from 300.9
-- limb 3 (arm) total 240.5 is -27.7% from 332.5
-- limb 3 upper arm 130.4 is -15.9% from 155.0
-- limb 3 forearm 110.1 is -38.0% from 177.5
+- limb 1 (arm) total 193.1 is -41.9% from 332.5
+- limb 1 upper arm 97.7 is -37.0% from 155.0
+- limb 1 forearm 95.5 is -46.2% from 177.5
+- limb 2 (arm) total 241.8 is -27.3% from 332.5
+- limb 2 upper arm 115.7 is -25.3% from 155.0
+- limb 2 forearm 126.1 is -29.0% from 177.5
+- limb 3 (leg) total 551.5 is -9.0% from 605.7
+- limb 3 thigh 246.1 is -18.2% from 300.9
+- limb 4 (arm) total 370.2 is +11.3% from 332.5
+- limb 4 upper arm 185.1 is +19.4% from 155.0
 - torso 265.0 is -48.3% from 512.1
+- nearest-baseline classification gives 3 arm(s) and 1 leg(s)
 
 ### S
 - limb 1 (arm) total 363.8 is +9.4% from 332.5
