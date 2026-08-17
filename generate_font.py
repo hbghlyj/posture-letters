@@ -18,6 +18,8 @@ from fontTools.ttLib import TTFont
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
 ADVANCE = 700
+# Constant space kept on each side of a glyph's ink when fitting its advance.
+SIDEBEARING = 55
 
 Point = tuple[float, float]
 
@@ -1470,7 +1472,22 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
     fb = FontBuilder(UPM, isTTF=True)
     fb.setupGlyphOrder(order)
     fb.setupCharacterMap(cmap)
-    metrics = {name: (330 if name == "space" else ADVANCE, 0) for name in order}
+    # Proportional spacing. A single fixed advance suits the wide poses but
+    # strands narrow figures like I and J in a sea of white, so each glyph is
+    # fitted to its own ink with a constant sidebearing. Poses that already
+    # fill the em keep the full advance.
+    def fitted_metrics(name: str) -> tuple[int, int]:
+        if name == "space":
+            return (330, 0)
+        drawer = drawings.get(name)
+        xs = [x for contour, _ in drawer.contours for x, _ in contour] if drawer else []
+        if not xs:
+            return (ADVANCE, 0)
+        left, right = min(xs), max(xs)
+        advance = min(ADVANCE, round(right - left + 2 * SIDEBEARING))
+        return (advance, round(SIDEBEARING - left))
+
+    metrics = {name: fitted_metrics(name) for name in order}
     fb.setupGlyf(glyphs)
     fb.setupHorizontalMetrics(metrics)
     fb.setupHorizontalHeader(ascent=850, descent=-150, lineGap=50)
