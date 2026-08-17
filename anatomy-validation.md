@@ -31,7 +31,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | E | **FAIL** | A 410.2, A 286.6, A 425.0, A 390.0 | 580.0 | 110.0 | limb 1 (arm) total 410.2 is +23.4% from 332.5 |
 | F | **FAIL** | A 410.6, A 289.0, A 240.6, A 240.6 | 380.0 | 110.0 | limb 1 (arm) total 410.6 is +23.5% from 332.5 |
 | G | **FAIL** | L 721.6, A 412.0, L 429.6, A 308.8 | 423.6 | 96.0 | limb 1 (leg) total 721.6 is +19.1% from 605.7 |
-| H | **FAIL** | A 357.6, A 357.6, A 362.4, A 362.4 | 200.0 | 110.0 | limb 1 (arm) total 357.6 is +7.5% from 332.5 |
+| H | **FAIL** | A 176.8, A 345.1, A 345.0, A 176.8, A 345.1, A 345.0 | 245.1, 245.1 | 110.0, 110.0 | expected 4 measurable limbs; found 6 |
 | I | **FAIL** | A 290.4, A 290.4, A 340.1, A 340.1 | 290.0 | 110.0 | limb 1 (arm) total 290.4 is -12.7% from 332.5 |
 | J | **FAIL** | A 266.5, A 84.0, A 282.4 | 898.4 | 110.0 | expected 4 measurable limbs; found 3 |
 | K | **FAIL** | A 349.7, A 256.8, A 266.2, A 387.1 | 320.1 | 110.0 | limb 1 (arm) total 349.7 is +5.2% from 332.5 |
@@ -47,8 +47,8 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | U | **FAIL** | L 721.2, L 721.2, L 617.7, L 617.7 | 100.0 | 110.0 | limb 1 (leg) total 721.2 is +19.1% from 605.7 |
 | V | **FAIL** | L 516.6, L 516.6, A 338.9, A 338.9 | 120.0 | 110.0 | limb 1 (leg) total 516.6 is -14.7% from 605.7 |
 | W | **FAIL** | A 339.4, A 339.4, L 1155.4, L 1155.4 | 135.0 | 110.0 | limb 1 upper arm 184.4 is +19.0% from 155.0 |
-| X | **FAIL** | A 246.2, A 246.2, A 389.6, A 389.6 | 90.0 | 110.0 | limb 1 (arm) total 246.2 is -25.9% from 332.5 |
-| Y | **FAIL** | A 216.9, A 216.9, A 325.5, A 325.5 | 115.0 | 110.0 | limb 1 (arm) total 216.9 is -34.8% from 332.5 |
+| X | **FAIL** | A 363.2, A 363.2, A 371.4, A 371.4 | 80.0 | 110.0 | limb 1 (arm) total 363.2 is +9.2% from 332.5 |
+| Y | **FAIL** | A 231.1, A 231.1, A 380.4, A 380.4 | 210.0 | 110.0 | limb 1 (arm) total 231.1 is -30.5% from 332.5 |
 | Z | **FAIL** | A 415.5, L 445.3, A 377.8 | 614.8 | 110.0 | expected 4 measurable limbs; found 3 |
 
 ## Detailed flags
@@ -131,16 +131,25 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - head 96.0 is -12.7% from 110.0
 
 ### H
-- limb 1 (arm) total 357.6 is +7.5% from 332.5
-- limb 1 has 3 skeletal segments; expected upper/lower pair
-- limb 2 (arm) total 357.6 is +7.5% from 332.5
-- limb 2 has 3 skeletal segments; expected upper/lower pair
-- limb 3 (arm) total 362.4 is +9.0% from 332.5
-- limb 3 has 3 skeletal segments; expected upper/lower pair
-- limb 4 (arm) total 362.4 is +9.0% from 332.5
-- limb 4 has 3 skeletal segments; expected upper/lower pair
-- torso 200.0 is -60.9% from 512.1
-- nearest-baseline classification gives 4 arm(s) and 0 leg(s)
+- expected 4 measurable limbs; found 6
+- expected 1 measurable torso; found 2
+- expected 1 head; found 2
+- limb 1 (arm) total 176.7 is -46.8% from 332.5
+- limb 1 upper arm 73.2 is -52.8% from 155.0
+- limb 1 forearm 103.6 is -41.6% from 177.5
+- limb 2 upper arm 180.1 is +16.2% from 155.0
+- limb 2 forearm 165.0 is -7.0% from 177.5
+- limb 3 upper arm 180.0 is +16.1% from 155.0
+- limb 3 forearm 165.0 is -7.0% from 177.5
+- limb 4 (arm) total 176.7 is -46.8% from 332.5
+- limb 4 upper arm 73.2 is -52.8% from 155.0
+- limb 4 forearm 103.6 is -41.6% from 177.5
+- limb 5 upper arm 180.1 is +16.2% from 155.0
+- limb 5 forearm 165.0 is -7.0% from 177.5
+- limb 6 upper arm 180.0 is +16.1% from 155.0
+- limb 6 forearm 165.0 is -7.0% from 177.5
+- torso 245.1 is -52.1% from 512.1
+- torso 245.1 is -52.1% from 512.1
 
 ### I
 - limb 1 (arm) total 290.4 is -12.7% from 332.5
@@ -322,33 +331,33 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - torso 135.0 is -73.6% from 512.1
 
 ### X
-- limb 1 (arm) total 246.2 is -25.9% from 332.5
-- limb 1 upper arm 141.2 is -8.9% from 155.0
-- limb 1 forearm 105.0 is -40.8% from 177.5
-- limb 2 (arm) total 246.2 is -25.9% from 332.5
-- limb 2 upper arm 141.2 is -8.9% from 155.0
-- limb 2 forearm 105.0 is -40.8% from 177.5
-- limb 3 (arm) total 389.6 is +17.2% from 332.5
-- limb 3 upper arm 191.4 is +23.5% from 155.0
-- limb 3 forearm 198.1 is +11.6% from 177.5
-- limb 4 (arm) total 389.6 is +17.2% from 332.5
-- limb 4 upper arm 191.4 is +23.5% from 155.0
-- limb 4 forearm 198.1 is +11.6% from 177.5
-- torso 90.0 is -82.4% from 512.1
+- limb 1 (arm) total 363.2 is +9.2% from 332.5
+- limb 1 upper arm 182.6 is +17.8% from 155.0
+- limb 2 (arm) total 363.2 is +9.2% from 332.5
+- limb 2 upper arm 182.6 is +17.8% from 155.0
+- limb 3 (arm) total 371.4 is +11.7% from 332.5
+- limb 3 upper arm 172.2 is +11.1% from 155.0
+- limb 3 forearm 199.1 is +12.2% from 177.5
+- limb 4 (arm) total 371.4 is +11.7% from 332.5
+- limb 4 upper arm 172.2 is +11.1% from 155.0
+- limb 4 forearm 199.1 is +12.2% from 177.5
+- torso 80.0 is -84.4% from 512.1
 - nearest-baseline classification gives 4 arm(s) and 0 leg(s)
 
 ### Y
-- limb 1 (arm) total 216.9 is -34.8% from 332.5
-- limb 1 upper arm 125.0 is -19.4% from 155.0
-- limb 1 forearm 91.9 is -48.2% from 177.5
-- limb 2 (arm) total 216.9 is -34.8% from 332.5
-- limb 2 upper arm 125.0 is -19.4% from 155.0
-- limb 2 forearm 91.9 is -48.2% from 177.5
-- limb 3 upper arm 165.2 is +6.6% from 155.0
-- limb 3 forearm 160.3 is -9.7% from 177.5
-- limb 4 upper arm 165.2 is +6.6% from 155.0
-- limb 4 forearm 160.3 is -9.7% from 177.5
-- torso 115.0 is -77.5% from 512.1
+- limb 1 (arm) total 231.1 is -30.5% from 332.5
+- limb 1 upper arm 118.0 is -23.9% from 155.0
+- limb 1 forearm 113.1 is -36.3% from 177.5
+- limb 2 (arm) total 231.1 is -30.5% from 332.5
+- limb 2 upper arm 118.0 is -23.9% from 155.0
+- limb 2 forearm 113.1 is -36.3% from 177.5
+- limb 3 (arm) total 380.4 is +14.4% from 332.5
+- limb 3 upper arm 190.1 is +22.6% from 155.0
+- limb 3 forearm 190.3 is +7.2% from 177.5
+- limb 4 (arm) total 380.4 is +14.4% from 332.5
+- limb 4 upper arm 190.1 is +22.6% from 155.0
+- limb 4 forearm 190.3 is +7.2% from 177.5
+- torso 210.0 is -59.0% from 512.1
 - nearest-baseline classification gives 4 arm(s) and 0 leg(s)
 
 ### Z

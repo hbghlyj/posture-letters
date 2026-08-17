@@ -608,17 +608,40 @@ def pose(letter: str) -> Drawer:
         d.front_head(190, 505, 48, hair_down=False)
 
     elif letter == "H":
-        # Back-bend/tabletop with four clean limb roots. Each raised arm joins
-        # the top of the horizontal torso, while each thigh joins below it at
-        # a distinct point; the outer bends retain an unmistakable open gap.
-        # The source reverses the asymmetric face/hat details at the center;
-        # mirror those alone without swapping any of H's four limb roots.
-        d.head(350, 350, 1, -math.pi / 2, mirror_details=True)
-        d.torso([(250, 420), (350, 420), (450, 420)], 88, False, False)
-        d.limb([(250, 465), (160, 500), (145, 625), (140, 760)], 50, end="hand")
-        d.limb([(450, 465), (540, 500), (555, 625), (560, 760)], 50, end="hand")
-        d.leg([(250, 375), (165, 330), (150, 205), (140, 65)], 58, knee_index=1)
-        d.leg([(450, 375), (535, 330), (550, 205), (560, 65)], 58, knee_index=1)
+        # Two persons standing straight in profile, facing one another, each
+        # forming one upright stem of the H. Their straightened arms reach out
+        # and clasp at the centre, and that shared horizontal arm-line is the
+        # crossbar. Both bodies use normal standing proportions: head, upright
+        # torso, and two legs planted on the baseline.
+        for side in (-1, 1):
+            cx = 350 - side * 205
+            shoulder_x = cx + side * 18
+            d.head(cx, 690, side)
+            d.torso([(cx, 630), (cx + side * 4, 510), (cx + side * 2, 385)], 84, True)
+            # Straightened arm reaching across to the partner's hands.
+            arm = [
+                (shoulder_x, 598),
+                (cx + side * 90, 585),
+                (350 - side * 12, 574),
+            ]
+            d.path(arm, 40, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            # Two legs per figure: the near leg planted, the far leg just behind.
+            d.leg(
+                [(cx - side * 14, 385), (cx - side * 20, 205), (cx - side * 22, 40)],
+                54, knee_index=1, shoe_direction=(side, 0),
+            )
+            d.leg(
+                [(cx + side * 14, 385), (cx + side * 16, 205), (cx + side * 18, 40)],
+                54, knee_index=1, shoe_direction=(side, 0),
+            )
+        # Clasped hands where the two straightened arms meet.
+        d.ellipse(350, 574, 34, 26, 0.0)
+        d.cut_path([(350, 552), (352, 574), (350, 596)], 5.0, True)
 
     elif letter == "I":
         # Neutral rigid stance, rebuilt around a realistic seven-head figure.
@@ -1058,50 +1081,68 @@ def pose(letter: str) -> Drawer:
         d.cut_path([(419, 18), (412, 25), (404, 18)], 3.2, True)
 
     elif letter == "X":
-        # Source-like spread X: keep the legs reaching the lower corners, but
-        # pull the raised-arm terminals down/in so the sleeves no longer read as
-        # disproportionately long beside the legs and short torso. The arms use
-        # a slim stroke and small hand so they never approach torso width.
-        d.head(350, 455, 1)
-        d.torso([(350, 395), (350, 305)], 86, False)
-        for arm in (
-            [(340, 390), (258, 505), (190, 585)],
-            [(360, 390), (442, 505), (510, 585)],
-        ):
-            d.path(arm, 32, True, False, track=False)
+        # Spread-eagle X in the Vitruvian diagonal pose: head at center, arms
+        # raised to the upper corners and legs spread to the lower corners. Arms
+        # and legs are both limbs and share a similar width; both are visibly
+        # slimmer than the torso. The raised hands are open with spread fingers.
+        d.head(350, 440, 1)
+        d.torso([(350, 380), (350, 300)], 86, False)
+        left_arm = [(338, 395), (250, 555), (130, 690)]
+        right_arm = [(362, 395), (450, 555), (570, 690)]
+        for arm in (left_arm, right_arm):
+            d.path(arm, 44, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[-1][0], arm[-1][1], 18)
+        # Open raised hands with fingers splayed toward the upper corners.
+        for x, y, s in ((130, 690, -1), (570, 690, 1)):
+            d.ellipse(x, y, 22, 15, s * 0.55)
+            for dx, dy in (
+                (-18, 10), (-20, 0), (-16, -9), (-8, -15), (2, -15),
+            ):
+                d.polygon([
+                    (x - s * 6, y + 4),
+                    (x + s * dx, y + dy),
+                    (x + s * (dx + 4), y + dy + 3),
+                ])
         d.leg(
-            [(340, 305), (215, 160), (70, 25)], 60, knee_index=1, shoe_direction=(-1, 0)
+            [(338, 300), (225, 170), (70, 45)], 60, knee_index=1, shoe_direction=(-1, 0)
         )
         d.leg(
-            [(360, 305), (485, 160), (630, 25)], 60, knee_index=1, shoe_direction=(1, 0)
+            [(362, 300), (475, 170), (630, 45)], 60, knee_index=1, shoe_direction=(1, 0)
         )
 
     elif letter == "Y":
-        # Raised arms form the Y fork at a compact, normal sleeve length. The
-        # torso is shortened and the paired legs start higher so they carry the
-        # stem down to the baseline at a more natural leg-to-torso proportion.
-        # Arms use a slim stroke and small hand so they stay well under torso width.
-        d.head(350, 490, 1)
-        d.torso([(350, 430), (350, 315)], 90, False)
-        for arm in (
-            [(335, 425), (260, 525), (195, 590)],
-            [(365, 425), (440, 525), (505, 590)],
-        ):
-            d.path(arm, 30, True, False, track=False)
+        # Upright Y in the Vitruvian raised-arm pose: head at top, arms
+        # diagonally up to the upper forks, paired legs descending together as
+        # the stem. Arms and legs share a similar limb width, both visibly
+        # slimmer than the torso; the raised hands are open with splayed fingers.
+        d.head(350, 700, 1)
+        d.torso([(350, 640), (350, 430)], 90, False)
+        left_arm = [(335, 630), (240, 700), (135, 742)]
+        right_arm = [(365, 630), (460, 700), (565, 742)]
+        for arm in (left_arm, right_arm):
+            d.path(arm, 42, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[-1][0], arm[-1][1], 17)
-        d.leg([(338, 315), (330, 150), (320, -10)], 58, knee_index=1)
-        d.leg([(362, 315), (370, 150), (380, -10)], 58, knee_index=1)
+        # Open raised hands with fingers splayed toward the upper corners.
+        for x, y, s in ((135, 742, -1), (565, 742, 1)):
+            d.ellipse(x, y, 22, 15, s * 0.55)
+            for dx, dy in (
+                (-18, 10), (-20, 0), (-16, -9), (-8, -15), (2, -15),
+            ):
+                d.polygon([
+                    (x - s * 6, y + 4),
+                    (x + s * dx, y + dy),
+                    (x + s * (dx + 4), y + dy + 3),
+                ])
+        d.leg([(338, 430), (332, 240), (322, 50)], 58, knee_index=1)
+        d.leg([(362, 430), (368, 240), (378, 50)], 58, knee_index=1)
 
     elif letter == "Z":
         d.head(530, 710, -1)

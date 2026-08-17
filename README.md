@@ -63,6 +63,7 @@ Every visible foot-ending leg now uses the print’s shared costume anatomy rath
 - **A:** a complete forward fold. Hips form the apex; full short breeches narrow through below-knee cuffs into engraved, muscular calf/shin contours on the right; both shoes turn left; the attached torso descends on the left to an inverted head; two horizontal arms grip the knees as the crossbar.
 - **B:** the left leg remains separately planted while the right leg bends outward at a visible knee and curls inward on a shortened calf to form the lower bowl. Both upper loop arms are shortened to normal anatomical proportions.
 - **D / H:** only the asymmetric eye, nose, and cocked-hat details are horizontally mirrored; their attached heads and established body constructions remain fixed.
+- **H:** rebuilt from a two-person reference: two figures stand straight in profile facing one another, each forming an upright stem with a head, vertical torso, and two planted legs. Their straightened arms reach across and clasp at the centre, and that shared arm line is the crossbar.
 - **E:** the broad baseline leg joins directly and seamlessly to the vertical seated torso, while the slimmer near leg remains separately visible above it.
 - **G:** a flat aerial open ring. The curved body and limbs leave a distinct right-side gap; the right hand returns horizontally inward as the G terminal, while the legs complete the lower loop.
 - **I:** the source’s rigid straight posture now uses a realistic head, torso, thigh, calf, and arm ratio rather than an overlong trunk above abbreviated legs.
@@ -74,8 +75,8 @@ Every visible foot-ending leg now uses the print’s shared costume anatomy rath
 - **Q:** two inverted, short-breeched legs form the ring; side knee cuffs articulate the bends and tapered calves meet in small inward apex shoes. Its bottom face is inverted like O. The tail arm is shortened to a normal reach, begins inside a reinforced right shoulder socket, and terminates in a visible hand.
 - **R:** the planted shoe now projects clearly to the figure’s right, matching the crop instead of appearing reversed.
 - **T:** wide horizontal arms form the crossbar while two close legs descend vertically.
-- **X:** the raised arms are shortened to a normal diagonal reach and drawn slimmer than the torso, while the long legs still spread to the lower corners and retain the source-directed outward shoes.
-- **Y:** the raised arms form the fork at compact sleeve length and are slimmer than the torso; the torso is shorter and the paired legs lengthen into the stem so legs and torso read in proper proportion.
+- **X:** rebuilt against a spread-eagle reference photograph. The figure is a true Vitruvian diagonal — arms raised to the upper corners, legs spread to the lower corners — with arms and legs sharing one limb width that stays clearly under the torso, and open hands with splayed fingers at the raised terminals.
+- **Y:** matched to the same reference. The head sits at the cap line, the arms rise diagonally to form the fork, and the paired legs descend as the stem; arms and legs again share a single limb width narrower than the torso, and the hands are open like X's. Cap height is aligned with T and V.
 - **W:** the outer knees are lowered to the baseline, where the two inner hands support the figure with visible index fingers and thumbs; the outer stockinged legs retain the source’s raised-foot topology.
 - The detailed A–I, K–T, V–Z mapping is recorded in `reference-crops/historical-pose-map.md`.
 
