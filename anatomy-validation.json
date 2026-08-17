@@ -1494,7 +1494,7 @@
         120.0
       ],
       "head_diameters": [
-        110.0
+        116.0
       ],
       "composite_path_lengths": [],
       "issues": [
@@ -1511,6 +1511,7 @@
         "limb 4 thigh 174.4 is +13.5% from 153.7",
         "limb 4 calf 164.5 is +13.0% from 145.6",
         "torso 120.0 is -26.3% from 162.8",
+        "head 116.0 is +5.5% from 110.0",
         "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
       ]
     },

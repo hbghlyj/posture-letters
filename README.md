@@ -1,5 +1,7 @@
 # Posture Master
 
+![The A–Z glyph set](glyph-sheet.svg)
+
 A comic display font in which **single bodies contort into letterforms**. Its 24 historical poses reconstruct the surreal body constructions in the supplied 1782 print, *The Comical Hotch-Potch, or the Alphabet turn’d Posture-Master*. The engraving’s construction takes priority over modern anatomical plausibility.
 
 ## Quick start
@@ -86,6 +88,7 @@ Every visible foot-ending leg now uses the print’s shared costume anatomy rath
 - **T:** the straight spine, narrow hips and tightly closed legs make the central pillar, and both arms now extend dead level at ninety degrees from the shoulders so the crossbar is one continuous top line rather than two drooping limbs. At each end the wrist flexes downward and the hand hangs as a terminal, mimicking the downward serifs of a typographic T, while the feet flare outward at the base as stabilising foot serifs.
 - **X:** rebuilt against a spread-eagle reference photograph. The figure is a true Vitruvian diagonal — arms raised to the upper corners, legs spread to the lower corners — with arms and legs sharing one limb width that stays clearly under the torso, and open hands with splayed fingers at the raised terminals.
 - **Y:** rebuilt as a seated figure, deliberately contrasted with the standing T. Both arms extend up and outward from the shoulders in a wide V with the open palms turned upward, instead of T's flat horizontal bar. Below, the body is condensed into a tight frontal squat: the knees come up close against the chest and the shins and feet run vertically down the front of the body, giving a short, thick central column that grounds the letter. The head sits centrally between the shoulders, exactly where the upper branches converge on the seated torso.
+- **V:** the inverted head at the low apex now keeps its face upright with the gaze lifted, as Q does, so the figure looks up out of the apex rather than down into it.
 - **W:** the outer knees are lowered to the baseline, where the two inner hands support the figure with visible index fingers and thumbs; the outer stockinged legs retain the source’s raised-foot topology.
 - The detailed A–I, K–T, V–Z mapping is recorded in `reference-crops/historical-pose-map.md`.
 

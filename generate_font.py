@@ -1430,8 +1430,11 @@ def pose(letter: str) -> Drawer:
 
     elif letter == "V":
         # Upside-down figure: the head is the low apex, legs spread to the two
-        # top corners, and the arms lie along and grip the rising legs.
-        d.head(350, 105, 1, -math.pi / 2)
+        # top corners, and the arms lie along and grip the rising legs. As in
+        # Q, the inverted head keeps its face upright and the gaze lifted, so
+        # the figure looks up out of the apex rather than down into it.
+        d.front_head(350, 108, 58, hair_down=True, upside_down=True,
+                     gaze_up=True)
         d.torso([(350, 165), (350, 285)], 90, False)
         d.leg([(340, 285), (225, 500), (105, 745)], 64, knee_index=1)
         d.leg([(360, 285), (475, 500), (595, 745)], 64, knee_index=1)
