@@ -735,19 +735,64 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "G":
-        # Aerial recumbent G. The foreshortened body and limbs describe an
-        # open ring; the right arm turns sharply inward to make G's terminal.
-        d.torso([(205, 225), (120, 335), (115, 485), (205, 585)], 94, True)
-        d.limb([(205, 585), (335, 695), (500, 660), (575, 545), (565, 410), (455, 410)], 54, True, end="hand")
-        d.limb([(190, 560), (300, 655), (455, 630), (535, 555)], 38, True, end="hand")
-        # The source shoes rise at the right opening instead of hanging below it.
-        d.leg(
-            [(205, 225), (335, 115), (505, 125), (575, 180)], 58, knee_index=1, shoe_direction=(0.4, 1.0)
-        )
-        d.leg(
-            [(225, 245), (345, 150), (500, 165)], 42, knee_index=1, shoe_direction=(0.4, 1.0)
-        )
-        d.front_head(190, 505, 48, hair_down=False)
+        # G built as one continuous body with a deliberate twist at the waist.
+        # The arms stretch overhead and curve forward to make the upper crest,
+        # the head looking down and the chest turned inward so the top of the
+        # letter reads as a rounded, protected profile. The middle torso then
+        # twists, reorienting the body so the lower torso faces outward to the
+        # left; that puts the hips where the knees can bend up and forward,
+        # sweeping the thighs through the wide bottom arc. Finally the shins
+        # push up the right side and the feet angle sharply back inward,
+        # running horizontally into the counter as G's terminal bar.
+        shoulder = (300, 754)
+        hip = (170, 232)
+        # Upper crest: both arms stretched overhead, curving forward and down
+        # to the open terminal at the upper right.
+        for spread, width in ((22, 54), (-20, 44)):
+            arm = [
+                (shoulder[0] + 14, shoulder[1] + spread * 0.4),
+                (452 + spread, 790 + spread * 0.3),
+                (596 + spread, 690 + spread * 0.6),
+            ]
+            d.path(arm, width, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
+            # Hand terminal closing the top of the arc.
+            d.ellipse(arm[-1][0] + 8, arm[-1][1] - 18, 20, 24, -0.35)
+            d.cut_path([
+                (arm[-1][0] - 12, arm[-1][1] - 6),
+                (arm[-1][0] + 16, arm[-1][1] - 14),
+            ], 3.6, False)
+        # Torso: chest turned inward at the top, twisting through the waist so
+        # the lower torso faces outward down the left side.
+        d.torso([shoulder, (112, 486), hip], 92, True)
+        # An engraved seam marks the rotational shift at the middle torso.
+        d.cut_path([(84, 520), (128, 496), (146, 458)], 5.0, True)
+        # Lower curve: hips open so the knees bend up and forward, the thighs
+        # sweeping the wide bottom arc to the right.
+        for spread, width, breeches in ((-18, 56, 68), (20, 46, 56)):
+            knee = (474 + spread, 92)
+            ankle = (626 + spread * 0.4, 316 + spread)
+            d.leg(
+                [(hip[0] + spread * 0.5, hip[1] - 24), knee, ankle],
+                width, knee_index=1, breeches_width=breeches,
+                shoe_direction=(-1, 0), shoe_scale=0.5,
+            )
+            # The foot turns sharply inward and runs horizontally into the
+            # counter: this pair of level feet is the letter's crossbar.
+            foot_y = ankle[1] + 26
+            d.path([(ankle[0] + 4, foot_y), (402 + spread * 0.5, foot_y)],
+                   width * 0.78, False, False, track=False)
+            d.ellipse(398 + spread * 0.5, foot_y, 16, width * 0.42, 0.0)
+            d.cut_path([
+                (ankle[0] - 40, foot_y - 14), (ankle[0] - 40, foot_y + 14),
+            ], 3.4, False)
+        # The head is tucked into the crest, face turned down into the letter.
+        d.head(336, 668, 1, -math.pi / 2)
 
     elif letter == "H":
         # Two standing figures act as the vertical sides of the H; their joined
