@@ -623,9 +623,12 @@ def pose(letter: str) -> Drawer:
         # The arms taper toward the wrist and finish in modelled hands rather
         # than a round terminal: a plain circle at the tip came out wider than
         # the forearm itself and read as a blob beside the tapered shins.
+        # The far arm is swung clear of the near one: drawn on the same route
+        # the two fused into a single slab, and a cut cannot separate stacked
+        # shapes under the nonzero fill rule.
         for arm, base_w in (
-            ([(255, 585), (390, 675), (545, 600)], 46),
-            ([(235, 565), (375, 645), (525, 580)], 40),
+            ([(256, 592), (394, 682), (552, 606)], 44),
+            ([(238, 552), (376, 634), (528, 562)], 34),
         ):
             d.tapered_path(
                 arm + [(arm[-1][0] + 4, arm[-1][1] - 6)],
@@ -1209,7 +1212,10 @@ def pose(letter: str) -> Drawer:
                 d.cut_path([(arm_x - 16, fy), (arm_x - 78, fy)], 3.6, False)
         # Head hangs back and down past the planted shoulders.
         # The face looks left, as on L, rather than back across the diagonal.
-        d.head(108, 736, -1, 0.34)
+        # A neck ties the head to the shoulders; drawn at the old offset the
+        # head floated clear of the torso and read as detached.
+        d.path([(140, 664), (112, 716)], 40, False, False, track=False)
+        d.head(106, 730, -1, 0.34)
         # Diagonal: the torso leans back from the chest down toward the floor.
         d.torso([shoulder, (300, 430), (430, 216)], 82, True)
         # Right stroke: knees on the ground, lower legs straight up in the air.
@@ -1522,27 +1528,23 @@ def pose(letter: str) -> Drawer:
                 (ankle_x - 20, foot_y - 8), (ankle_x - 22, foot_y + 20),
             ], 3.2, False)
         # Right bar: both arms vertical and parallel, hands pointing skyward.
-        for spread in (-14, 14):
+        # The two arms are separately drawn shapes stacked on each other, so an
+        # engraved seam is cancelled by the layer beneath under the nonzero
+        # fill rule. They are held apart with a real gap instead, as H's arms
+        # are, and each is slimmed so the pair still reads as one bar.
+        for spread in (-19, 19):
             arm = [
                 (shoulder[0] + spread * 0.5, shoulder[1] + 30),
                 (shoulder[0] + spread, 460),
                 (shoulder[0] + spread, 654),
             ]
-            d.path(arm, 40 if spread < 0 else 34, True, False, track=False)
+            d.path(arm, 30 if spread < 0 else 27, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
             d.circle(arm[0][0], arm[0][1], 21)
-            # Seam down the inner edge separates the two arm columns, as the
-            # paired limbs on M and N do, so the bar does not read as a slab.
-            if spread < 0:
-                d.cut_path([
-                    (shoulder[0], shoulder[1] + 44),
-                    (shoulder[0], 460),
-                    (shoulder[0], 636),
-                ], 7.0, True)
             # Hand held flat with the fingers pointing straight up.
             palm_x, palm_y = arm[-1]
             d.ellipse(palm_x, palm_y + 14, 19, 22, 0.0)
