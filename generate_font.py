@@ -1519,34 +1519,53 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "Y":
-        # Upright Y in the Vitruvian raised-arm pose: head at top, arms
-        # diagonally up to the upper forks, paired legs descending together as
-        # the stem. Arms and legs share a similar limb width, both visibly
-        # slimmer than the torso; the raised hands are open with splayed fingers.
-        d.head(350, 700, 1)
-        d.torso([(350, 640), (350, 430)], 90, False)
-        left_arm = [(335, 630), (240, 700), (135, 742)]
-        right_arm = [(365, 630), (460, 700), (565, 742)]
-        for arm in (left_arm, right_arm):
-            d.path(arm, 42, True, False, track=False)
+        # Seated Y, deliberately contrasted with the standing T. Both arms
+        # extend up and outward from the shoulders in a wide V with the open
+        # palms turned upward, instead of T's flat horizontal bar. Below, the
+        # body is condensed into a tight frontal squat: the knees come up close
+        # against the chest and the shins and feet run vertically down the
+        # front of the body, giving a short, thick central column. The head
+        # sits centrally between the shoulders, exactly where the upper
+        # branches converge on the seated torso.
+        fork_y = 392
+        d.torso([(350, 212), (350, 302), (350, fork_y)], 92, False)
+        d.head(350, 456, 1)
+        for sign in (-1, 1):
+            tip = (350 + sign * 258, 668)
+            arm = [
+                (350 + sign * 34, fork_y - 16),
+                (350 + sign * 146, 530),
+                tip,
+            ]
+            d.path(arm, 40, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-        # Open raised hands with fingers splayed toward the upper corners.
-        for x, y, s in ((135, 742, -1), (565, 742, 1)):
-            d.ellipse(x, y, 22, 15, s * 0.55)
-            for dx, dy in (
-                (-18, 10), (-20, 0), (-16, -9), (-8, -15), (2, -15),
-            ):
+            d.circle(arm[0][0], arm[0][1], 22)
+            # Open palm turned upward, fingers spread at the top of the branch.
+            d.ellipse(tip[0], tip[1] + 14, 21, 16, sign * 0.30)
+            for dx, dy in ((-16, 20), (-6, 26), (5, 25), (14, 19)):
                 d.polygon([
-                    (x - s * 6, y + 4),
-                    (x + s * dx, y + dy),
-                    (x + s * (dx + 4), y + dy + 3),
+                    (tip[0] + sign * dx - 5, tip[1] + dy),
+                    (tip[0] + sign * dx + 5, tip[1] + dy),
+                    (tip[0] + sign * dx + 4, tip[1] + dy + 30),
+                    (tip[0] + sign * dx - 4, tip[1] + dy + 30),
                 ])
-        d.leg([(338, 430), (332, 240), (322, 50)], 58, knee_index=1)
-        d.leg([(362, 430), (368, 240), (378, 50)], 58, knee_index=1)
+            d.cut_path([
+                (tip[0] - 15, tip[1] + 22), (tip[0] + 15, tip[1] + 22),
+            ], 3.4, False)
+        # Frontal squat: knees drawn up toward the chest, then the shins drop
+        # vertically down the front of the body to the planted feet.
+        d.leg(
+            [(350 - 30, 222), (350 - 34, 300), (350 - 32, 56)], 58,
+            knee_index=1, breeches_width=76, shoe_direction=(-1, 0)
+        )
+        d.leg(
+            [(350 + 30, 222), (350 + 34, 300), (350 + 32, 56)], 58,
+            knee_index=1, breeches_width=76, shoe_direction=(1, 0)
+        )
 
     elif letter == "Z":
         d.head(530, 710, -1)

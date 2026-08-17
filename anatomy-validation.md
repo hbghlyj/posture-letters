@@ -48,7 +48,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | V | **FAIL** | L 516.6, L 516.6, L 338.9, L 338.9 | 120.0 | 110.0 | limb 1 (leg) total 516.6 is +72.7% from 299.2 |
 | W | **FAIL** | L 339.4, L 339.4, L 1155.4, L 1155.4 | 135.0 | 110.0 | limb 1 (leg) total 339.4 is +13.4% from 299.2 |
 | X | **FAIL** | L 363.2, L 363.2, L 371.4, L 371.4 | 80.0 | 110.0 | limb 1 (leg) total 363.2 is +21.4% from 299.2 |
-| Y | **FAIL** | A 231.1, A 231.1, L 380.4, L 380.4 | 210.0 | 110.0 | limb 1 (arm) total 231.1 is +16.8% from 197.8 |
+| Y | **FAIL** | L 368.1, L 368.1, L 322.1, L 322.1 | 180.0 | 110.0 | limb 1 (leg) total 368.2 is +23.0% from 299.2 |
 | Z | **FAIL** | L 415.5, L 445.3, L 377.8 | 614.8 | 110.0 | expected 4 measurable limbs; found 3 |
 
 ## Detailed flags
@@ -386,17 +386,20 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### Y
-- limb 1 (arm) total 231.1 is +16.8% from 197.8
-- limb 1 forearm 113.1 is +32.8% from 85.1
-- limb 2 (arm) total 231.1 is +16.8% from 197.8
-- limb 2 forearm 113.1 is +32.8% from 85.1
-- limb 3 (leg) total 380.4 is +27.1% from 299.2
-- limb 3 thigh 190.1 is +23.7% from 153.7
-- limb 3 calf 190.3 is +30.7% from 145.6
-- limb 4 (leg) total 380.4 is +27.1% from 299.2
-- limb 4 thigh 190.1 is +23.7% from 153.7
-- limb 4 calf 190.3 is +30.7% from 145.6
-- torso 210.0 is +29.0% from 162.8
+- limb 1 (leg) total 368.2 is +23.0% from 299.2
+- limb 1 thigh 190.4 is +23.9% from 153.7
+- limb 1 calf 177.7 is +22.1% from 145.6
+- limb 2 (leg) total 368.2 is +23.0% from 299.2
+- limb 2 thigh 190.4 is +23.9% from 153.7
+- limb 2 calf 177.7 is +22.1% from 145.6
+- limb 3 (leg) total 322.1 is +7.6% from 299.2
+- limb 3 thigh 78.1 is -49.2% from 153.7
+- limb 3 calf 244.0 is +67.6% from 145.6
+- limb 4 (leg) total 322.1 is +7.6% from 299.2
+- limb 4 thigh 78.1 is -49.2% from 153.7
+- limb 4 calf 244.0 is +67.6% from 145.6
+- torso 180.0 is +10.6% from 162.8
+- nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### Z
 - expected 4 measurable limbs; found 3
