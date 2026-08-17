@@ -866,44 +866,48 @@ def pose(letter: str) -> Drawer:
         d.leg([(365, 455), (370, 255), (375, 55)], 52, knee_index=1)
 
     elif letter == "J":
-        # Seated J. The torso and head rise straight up as the vertical stem,
-        # the head turned to the right so it makes the small top-right serif.
-        # Below the waist the hips and upper thighs curve down and sweep
-        # forward to the left; the knees then bend so the lower legs run back
-        # up slightly, closing the bottom hook. The arms hang straight down
-        # along the sides of the torso, carried just proud of it so the
-        # shoulder-to-hand run stays visible against the stem.
-        stem_x = 430
-        hip = (stem_x, 210)
-        d.torso([hip, (stem_x, 430), (stem_x, 640)], 84, False)
-        d.head(stem_x, 704, 1)
+        # Kneeling side profile facing right. Head, neck and upright torso
+        # align vertically as the straight main stem. At the base the knees
+        # turn forward and bend sharply so the lower legs — shins, ankles and
+        # feet — swing diagonally upward and backward behind the body, making
+        # the upward-turning hook. The arms hang straight down the sides,
+        # blending into the vertical line of the stem.
+        stem_x = 452
+        hip = (stem_x, 300)
+        d.torso([hip, (stem_x, 466), (stem_x, 632)], 84, False)
+        d.head(stem_x + 2, 696, 1)
         for sign in (-1, 1):
             arm = [
-                (stem_x + sign * 56, 612),
-                (stem_x + sign * 62, 470),
-                (stem_x + sign * 60, 340),
+                (stem_x + sign * 52, 612),
+                (stem_x + sign * 60, 482),
+                (stem_x + sign * 58, 362),
             ]
-            d.path(arm, 28, True, False, track=False)
+            d.path(arm, 26, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            # Deltoid wedge keeps the offset arm attached at the shoulder.
-            d.path([(stem_x + sign * 26, 634), arm[0]], 26, False, False,
+            d.path([(stem_x + sign * 24, 630), arm[0]], 24, False, False,
                    track=False)
-            d.circle(arm[0][0], arm[0][1], 16)
-            d.circle(arm[-1][0], arm[-1][1], 15)
-        # Hips and thighs sweep down-left, then the bent knees send the lower
-        # legs back up to finish the hook.
-        d.leg(
-            [hip, (312, 56), (208, 190)], 54, knee_index=1,
-            breeches_width=70, shoe_direction=(0.05, 1.0),
-        )
-        d.leg(
-            [(stem_x - 26, 182), (310, 108), (236, 226)], 44, knee_index=1,
-            breeches_width=56, shoe_direction=(0.05, 1.0),
-        )
+            d.circle(arm[0][0], arm[0][1], 15)
+            d.circle(arm[-1][0], arm[-1][1], 14)
+            d.cut_path([
+                (stem_x + sign * 44, 592), (stem_x + sign * 50, 482),
+                (stem_x + sign * 48, 388),
+            ], 3.6, True)
+        # Thighs drop to bent knees, then the lower legs rise diagonally back
+        # behind the body to close the hook.
+        for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
+            d.leg(
+                [
+                    (stem_x + spread * 0.5, hip[1]),
+                    (stem_x + spread, 116),
+                    (188 + spread, 292),
+                ],
+                width, knee_index=1, breeches_width=breeches,
+                shoe_direction=(-0.34, 0.94),
+            )
 
     elif letter == "K":
         # Kneeling K. Torso, neck, head and the kneeling near leg stack into
@@ -962,67 +966,51 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "L":
-        # Lying flat on the back with the hips flexed to a right angle. The
-        # whole lower half of the body is lifted straight up, and because the
-        # legs plus lower torso are naturally longer than the upper torso they
-        # make the tall vertical stem while the upper back, shoulders and head
-        # lie along the ground as the shorter horizontal base. The knees stay
-        # locked so the stem is rigid, the toes point up as a terminal peak,
-        # and the arms rest on the floor with the hands beside the head.
-        hip = (196, 156)
-        ground_y = 130
-        # Vertical stem: both legs perfectly straight up from the flexed hips,
-        # knees locked, feet pointing at the ceiling.
-        # The two legs are set far enough apart to leave a real gap between
-        # them: an engraved seam cannot separate overlapping shapes under the
-        # nonzero fill rule, so the stem would otherwise read as one slab.
-        for spread, width, breeches in ((-20, 50, 58), (22, 44, 52)):
-            d.leg(
-                [
-                    (hip[0] + spread * 0.5, hip[1]),
-                    (hip[0] + spread, 392),
-                    (hip[0] + spread, 626),
-                ],
-                width, knee_index=1, breeches_width=breeches,
-                shoe_direction=(0, 1),
-            )
-            # Engraved contour down the length of the limb keeps the thigh and
-            # shin modelled rather than flat.
-            d.cut_path([
-                (hip[0] + spread - width * 0.20, 336),
-                (hip[0] + spread - width * 0.14, 430),
-                (hip[0] + spread - width * 0.20, 524),
-            ], 3.6, True)
-        # Horizontal base: the upper torso runs right along the ground.
-        d.torso([hip, (316, ground_y), (436, ground_y)], 84, False)
-        d.head(508, ground_y + 4, -1, math.pi / 2)
-        # Arms lie flat on the floor beside the body, hands up by the head.
+        # Kneeling side profile. The upright upper body — head, straight neck
+        # and vertical torso — makes the tall pillar. At its base the posture
+        # hinges sharply: the knees turn forward and bend completely so the
+        # thighs drop vertically and the lower body pivots into the horizontal
+        # plane, the shins and ankles stretching out along the floor as the
+        # bottom bar. The feet finish the stroke as a serif, heels and toes
+        # adding a slight vertical terminal.
+        stem_x = 208
+        hip = (stem_x, 306)
+        d.torso([hip, (stem_x, 470), (stem_x, 636)], 84, False)
+        d.head(stem_x - 2, 700, -1)
+        # Arms hang along the sides, carried just clear of the trunk so the
+        # shoulder-to-hand run stays legible against the stem.
         for sign in (-1, 1):
-            # The arm lies along the floor from the shoulder and reaches back
-            # toward the head, the hand coming to rest just short of it. It is
-            # carried clear of the torso's own edge so the whole
-            # shoulder-to-hand run stays a separate silhouette, with a short
-            # deltoid wedge tying it back to the shoulder.
             arm = [
-                (336, ground_y + sign * 70),
-                (400, ground_y + sign * 76),
-                (456, ground_y + sign * 74),
+                (stem_x + sign * 52, 616),
+                (stem_x + sign * 60, 486),
+                (stem_x + sign * 58, 366),
             ]
-            d.path([(300, ground_y + sign * 40), arm[0]], 24, False, False,
-                   track=False)
             d.path(arm, 26, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
+            d.path([(stem_x + sign * 24, 634), arm[0]], 24, False, False,
+                   track=False)
             d.circle(arm[0][0], arm[0][1], 15)
-            d.ellipse(arm[-1][0] + 6, arm[-1][1], 18, 14, 0.0)
-            # Engraved crease along the forearm.
+            d.circle(arm[-1][0], arm[-1][1], 14)
             d.cut_path([
-                (364, ground_y + sign * 64), (404, ground_y + sign * 70),
-                (436, ground_y + sign * 68),
+                (stem_x + sign * 44, 596), (stem_x + sign * 50, 486),
+                (stem_x + sign * 48, 392),
             ], 3.6, True)
+        # The knees turn forward and bend right through: thighs vertical, then
+        # shins running horizontally out along the floor to the right.
+        for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
+            d.leg(
+                [
+                    (stem_x + spread * 0.5, hip[1]),
+                    (stem_x + spread, 132),
+                    (592 + spread, 108),
+                ],
+                width, knee_index=1, breeches_width=breeches,
+                shoe_direction=(0.25, 1.0),
+            )
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
