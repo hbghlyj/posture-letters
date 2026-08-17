@@ -13,7 +13,7 @@ This map records the visible construction of each figure. Historical fidelity ta
 | E | Seated upright at the left: head and torso form the stem. One arm extends straight right at the top and the second reaches right at mid-height. The broad lower leg lies horizontally along the baseline; the slimmer near leg remains separately visible just above it, with both profile shoes turning upward. |
 | F | Standing upright at the left. One arm extends straight right from the shoulder as the top bar, the other reaches right at mid-height, and two close legs form the lower stem. |
 | G | Deeper version of C. The body sweeps around the left; the face looks into the counter. Arms meet toward the upper-right, and paired lower legs/feet run right at the bottom, producing the inward G terminals. |
-| H | Back-bend/tabletop pose. The horizontal torso and centered upside-down head make the crossbar, with the head/hat asymmetry facing the source direction. Both arms rise vertically at the outer sides; both legs descend vertically to the ground. |
+| H | Two-person pose. Two figures stand straight in profile facing one another and act as the vertical sides. Each upper arm hangs vertically from the shoulder, overlapping its own pillar; only the forearms turn out horizontally at elbow height and clasp at the centre, so the crossbar is made of forearms alone and sits level with the elbows. |
 | I | Neutral upright person: head above a rigid straight torso, arms hanging at the sides, and two close straight legs below. The ordinary human head/trunk/leg balance is essential to this deliberately simple posture. |
 | K | Upright profile at the left. Torso and near leg create the stem. The upper arm drops to a distinct elbow, then the forearm curves upward into an open upper-right hand: thumb and index project from the palm while the other fingers curl inward. The second arm stays near the body. The far leg steps diagonally lower-right, and both lower legs retain visible calf/shin modeling. |
 | L | Seated profile leaning back behind the pelvis. Paired straight legs extend horizontally to the right along the ground, with both shoes turning upward. Hands rest near the lap/knees. |
@@ -22,14 +22,29 @@ This map records the visible construction of each figure. Historical fidelity ta
 | O | Inverted ring. The upside-down head and shoulders lie at the bottom center, with the face directed toward the ring interior. Mirrored shoulder, elbow, and arm arcs rise smoothly on both sides, and the hands clasp at the top. Two tiny foreshortened feet remain visible just above the bottom base. |
 | P | Standing profile at the left. Head/torso/legs make the stem; two separately visible, normally proportioned arms bend backward through distinct upper and lower elbows and clasp at the right to form the compact upper bowl. The paired shoes turn outward at the base. |
 | Q | Inverted lower body. The head/shoulders lie at the bottom; paired short-breeched thighs rise around the ring, bend at explicit side knees, and taper through stockinged calves to small inward shoes joined at the apex. One shoulder-attached arm and hand projects below the lower-right as the Q tail. |
-| R | Standing profile at the left. Arms clasp into the upper bowl as in P. One leg remains under the body with its profile shoe pointing right as in the crop, while the other steps diagonally lower-right to make the R leg. |
+| R | Standing profile at the left. Arms clasp into the upper bowl on B's two-arm construction — two shortened arms with normal shoulder-elbow-hand spans meeting at overlapping palms, forming one solid unbroken loop. One leg remains under the body with its profile shoe pointing right as in the crop, while the other steps diagonally lower-right to make the R leg. |
 | S | Kneeling profile. Close shins and feet extend left along the ground; thighs/hips and torso curve up through the middle. The face looks into the upper counter, and one long arm arches overhead toward the upper-right. |
-| T | Upright figure. Both arms stretch widely and horizontally to form the crossbar. The torso is central and both close legs descend straight down; they do not spread. |
+| T | Upright figure. Both arms stretch widely and horizontally to form the crossbar. The torso is central and both close legs descend straight down; they do not spread. Trunk and legs are of roughly equal length, with the hips near the middle of the stem, and the two legs are set slightly apart so each reads individually. |
 | V | Upside-down figure. The head is at the bottom apex. Two straight legs spread upward to the outer top corners; the arms lie along/grip the legs near the lower V. |
 | W | Upright centered head. The torso splits into the two inner descending strokes; arms reach all the way to two shared-baseline inner hand/contact points, while two long legs rise vertically at the outer sides, creating the four-stroke W. |
-| X | Head and short torso occupy the center. Both arms rise diagonally to the upper corners at normal sleeve length, while both legs spread diagonally to the lower corners. |
+| X | Spread-eagle Vitruvian diagonal. Head and short torso occupy the center; both arms rise diagonally to the upper corners and both legs spread diagonally to the lower corners. Arms and legs share one limb width, clearly under the torso, and the raised hands are open with splayed fingers. |
 | Y | Upright head/torso at center. Both arms rise diagonally at compact normal length to form the fork; two close straight legs lengthen into the stem, balancing a shortened torso. |
 | Z | Kneeling diagonal pose. A horizontal arm extends left from the head/shoulder at the top, the torso descends diagonally toward the lower-left, and close bent legs extend right along the ground. |
+
+## Photographic body references
+
+Several glyphs were additionally checked against modern photographs of the same
+posture, used only to correct proportion and joint anatomy — never to override
+the print's pose topology:
+
+- A spread-eagle silhouette informed **X** and **Y**: one shared limb width for
+  arms and legs, both under torso width, and open hands at the raised terminals.
+- A handshake photograph of two people standing in profile informed **H**:
+  standing torso-to-leg balance, vertical upper arms, and a forearm-only
+  crossbar at elbow height.
+- A standing frontal figure informed **T**, and the same balance was then
+  applied to the other upright standing poses **F** and **P**: hips near the
+  middle of the stem with legs matching the trunk in length.
 
 ## Current font-outline refinement note
 
