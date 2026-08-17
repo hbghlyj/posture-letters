@@ -988,41 +988,42 @@ def pose(letter: str) -> Drawer:
         d.anatomy.append({"part": "head", "diameter": 70.0, "center": (350, 400)})
 
     elif letter == "N":
-        # Historical inverted curl: head and hands at lower-left, a folded
-        # limb rises on the left, the body sweeps diagonally down-right, and a
-        # stockinged leg rises vertically at the right. The broad bent knee is
-        # lowered to the same ground plane as the inverted head, while the high
-        # inner corner remains at waist level for a decisive N construction.
-        d.torso([(120, 145), (115, 560), (185, 625)], 78, True)
-        d.leg(
-            [(185, 625), (300, 450), (470, 55), (505, 365), (535, 655)],
-            58, knee_index=2, breeches_width=86, shoe_direction=(1, 0),
-        )
-        d.limb([(175, 165), (140, 145), (110, 150)], 38, True, end="hand")
-        # The source sleeve begins at the raised inner corner and descends over
-        # the front of the broad blue body. Keep its human-length centerline on
-        # that foreground diagonal; the narrower forearm and projecting palm
-        # remain visible at the body's right edge even in one-color outlines.
-        foreground_arm = [(185, 575), (245, 500), (300, 410), (390, 335)]
-        # A narrow negative halo is cut only where the sleeve crosses the blue
-        # leg; redrawing the narrower arm inside it gives a true over-under edge
-        # without detaching the shoulder or erasing the projecting hand.
-        d.cut_path([(220, 540), (245, 500), (300, 410), (355, 365)], 56, True)
-        d.path(foreground_arm[:3], 44, True, True, track=False)
-        d.path(foreground_arm[2:], 32, True, True, track=False)
-        segments, length = d.centerline_measurements(foreground_arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": foreground_arm, "role": "N-foreground-arm",
-        })
-        d.ellipse(300, 410, 24, 10, -0.55)
-        d.circle(390, 335, 24)
-        d.ellipse(409, 340, 15, 5, 0.10)
-        d.ellipse(408, 330, 15, 5, -0.16)
-        # The left composite endpoint retains its attached source-direction shoe.
-        d.shoe(120, 585, (115, 545))
-        # Draw the low head last so the eye is not buried by the diagonal.
-        d.head(105, 90, 1, 0.10)
+        # Dynamic back-bend. The straight arms are planted on the ground and
+        # stand vertically to make the left stroke; the torso and thighs slope
+        # down-right from the shoulders to the knees as the diagonal; and the
+        # knees rest on the ground so both lower legs rise straight up into the
+        # air, forming the right stroke.
+        shoulder = (150, 640)
+        knee = (486, 130)
+        # Left stroke: two straight vertical arms bearing weight on the floor.
+        for sign, arm_x in ((-1, 116), (1, 178)):
+            arm = [(arm_x, 640), (arm_x, 390), (arm_x, 142)]
+            d.path(arm, 40 if sign < 0 else 34, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], 21)
+            # Flat supporting hand pressed on the ground.
+            d.ellipse(arm_x, 118, 26, 20, 0.0)
+            for offset in (-16, -6, 4, 14):
+                d.polygon([
+                    (arm_x + offset - 4, 106), (arm_x + offset + 4, 106),
+                    (arm_x + offset + 3, 78), (arm_x + offset - 3, 78),
+                ])
+            d.cut_path([(arm_x - 15, 112), (arm_x + 15, 112)], 3.6, False)
+        # Head hangs back and down past the planted shoulders.
+        d.head(108, 736, 1, -0.34)
+        # Diagonal: the torso leans back from the chest down toward the floor.
+        d.torso([shoulder, (300, 430), (430, 216)], 82, True)
+        # Right stroke: knees on the ground, lower legs straight up in the air.
+        for sign, foot_x in ((-1, 556), (1, 620)):
+            d.leg(
+                [(430, 216), (knee[0] + sign * 14, knee[1]), (foot_x, 686)],
+                54, knee_index=1, breeches_width=74,
+                shoe_direction=(0.62, 0.78),
+            )
 
     elif letter == "O":
         # Flat aerial O, closely following the 1782 construction. A broad,

@@ -37,7 +37,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | K | **FAIL** | L 349.7, L 256.8, L 266.2, L 387.1 | 320.1 | 110.0 | limb 1 (leg) total 349.7 is +16.9% from 299.2 |
 | L | **FAIL** | L 339.3, L 339.3, L 515.0, L 515.0 | 280.0 | 110.0 | limb 1 (leg) total 339.3 is +13.4% from 299.2 |
 | M | **FAIL** | L 640.0, L 640.0 | — | 70.0 | expected 4 measurable limbs; found 2 |
-| N | **FAIL** | L 1243.0, A 70.7, L 318.7 | 510.6 | 110.0 | expected 4 measurable limbs; found 3 |
+| N | **FAIL** | L 498.0, L 498.0, L 658.0, L 679.7 | 508.5 | 110.0 | limb 1 (leg) total 498.0 is +66.4% from 299.2 |
 | O | **FAIL** | L 696.2, L 696.2 | — | 124.0 | expected 4 measurable limbs; found 2 |
 | P | **FAIL** | L 324.6, L 283.1, L 369.1, L 369.2 | 265.0 | 110.0 | limb 1 (leg) total 324.6 is +8.5% from 299.2 |
 | Q | **FAIL** | L 720.4, L 720.4, A 182.2 | — | 124.0 | expected 4 measurable limbs; found 3 |
@@ -224,15 +224,20 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - head 70.0 is -36.4% from 110.0
 
 ### N
-- expected 4 measurable limbs; found 3
-- limb 1 (leg) total 1243.0 is +315.4% from 299.2
-- limb 1 has 4 skeletal segments; expected upper/lower pair
-- limb 2 (arm) total 70.7 is -64.2% from 197.8
-- limb 2 upper arm 40.3 is -64.2% from 112.7
-- limb 2 forearm 30.4 is -64.3% from 85.1
-- limb 3 (leg) total 318.7 is +6.5% from 299.2
-- limb 3 has 3 skeletal segments; expected upper/lower pair
-- torso 510.6 is +213.6% from 162.8
+- limb 1 (leg) total 498.0 is +66.4% from 299.2
+- limb 1 thigh 250.0 is +62.7% from 153.7
+- limb 1 calf 248.0 is +70.4% from 145.6
+- limb 2 (leg) total 498.0 is +66.4% from 299.2
+- limb 2 thigh 250.0 is +62.7% from 153.7
+- limb 2 calf 248.0 is +70.4% from 145.6
+- limb 3 (leg) total 658.0 is +119.9% from 299.2
+- limb 3 thigh 95.7 is -37.7% from 153.7
+- limb 3 calf 562.3 is +286.3% from 145.6
+- limb 4 (leg) total 679.7 is +127.2% from 299.2
+- limb 4 thigh 110.9 is -27.8% from 153.7
+- limb 4 calf 568.8 is +290.8% from 145.6
+- torso 508.5 is +212.3% from 162.8
+- nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### O
 - expected 4 measurable limbs; found 2
