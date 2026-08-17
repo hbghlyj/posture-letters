@@ -1013,42 +1013,42 @@
         {
           "index": 1,
           "classification": "leg",
-          "length": 474.1,
+          "length": 514.76,
           "segments": [
             215.5,
-            258.6
+            299.3
           ],
-          "deviation_percent": 60.59
+          "deviation_percent": 74.36
         },
         {
           "index": 2,
           "classification": "leg",
-          "length": 466.45,
+          "length": 507.11,
           "segments": [
             207.9,
-            258.6
+            299.3
           ],
-          "deviation_percent": 58.0
+          "deviation_percent": 71.77
         },
         {
           "index": 3,
           "classification": "leg",
-          "length": 418.72,
+          "length": 461.09,
           "segments": [
             177.9,
-            240.8
+            283.2
           ],
-          "deviation_percent": 41.83
+          "deviation_percent": 56.18
         },
         {
           "index": 4,
           "classification": "leg",
-          "length": 425.29,
+          "length": 467.66,
           "segments": [
             184.5,
-            240.8
+            283.2
           ],
-          "deviation_percent": 44.06
+          "deviation_percent": 58.41
         }
       ],
       "torso_lengths": [
@@ -1059,18 +1059,18 @@
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 (leg) total 474.1 is +60.6% from 295.2",
+        "limb 1 (leg) total 514.8 is +74.4% from 295.2",
         "limb 1 thigh 215.5 is +42.0% from 151.8",
-        "limb 1 calf 258.6 is +80.3% from 143.5",
-        "limb 2 (leg) total 466.4 is +58.0% from 295.2",
+        "limb 1 calf 299.3 is +108.6% from 143.5",
+        "limb 2 (leg) total 507.1 is +71.8% from 295.2",
         "limb 2 thigh 207.9 is +37.0% from 151.8",
-        "limb 2 calf 258.6 is +80.3% from 143.5",
-        "limb 3 (leg) total 418.7 is +41.8% from 295.2",
+        "limb 2 calf 299.3 is +108.6% from 143.5",
+        "limb 3 (leg) total 461.1 is +56.2% from 295.2",
         "limb 3 thigh 177.9 is +17.2% from 151.8",
-        "limb 3 calf 240.8 is +67.9% from 143.5",
-        "limb 4 (leg) total 425.3 is +44.1% from 295.2",
+        "limb 3 calf 283.2 is +97.4% from 143.5",
+        "limb 4 (leg) total 467.7 is +58.4% from 295.2",
         "limb 4 thigh 184.5 is +21.5% from 151.8",
-        "limb 4 calf 240.8 is +67.9% from 143.5",
+        "limb 4 calf 283.2 is +97.4% from 143.5",
         "torso 607.1 is +272.9% from 162.8",
         "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
       ]
@@ -1532,65 +1532,64 @@
         {
           "index": 1,
           "classification": "leg",
-          "length": 339.42,
+          "length": 382.29,
           "segments": [
-            184.4,
-            155.0
+            202.4,
+            179.9
           ],
-          "deviation_percent": 14.97
+          "deviation_percent": 29.49
         },
         {
           "index": 2,
           "classification": "leg",
-          "length": 339.42,
+          "length": 382.29,
           "segments": [
-            184.4,
-            155.0
+            202.4,
+            179.9
           ],
-          "deviation_percent": 14.97
+          "deviation_percent": 29.49
         },
         {
           "index": 3,
           "classification": "leg",
-          "length": 1155.41,
+          "length": 1071.32,
           "segments": [
-            425.4,
-            730.0
+            460.6,
+            610.7
           ],
-          "deviation_percent": 291.37
+          "deviation_percent": 262.88
         },
         {
           "index": 4,
           "classification": "leg",
-          "length": 1155.41,
+          "length": 1071.32,
           "segments": [
-            425.4,
-            730.0
+            460.6,
+            610.7
           ],
-          "deviation_percent": 291.37
+          "deviation_percent": 262.88
         }
       ],
       "torso_lengths": [
-        135.0
+        170.0
       ],
       "head_diameters": [
         110.0
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 (leg) total 339.4 is +15.0% from 295.2",
-        "limb 1 thigh 184.4 is +21.5% from 151.8",
-        "limb 1 calf 155.0 is +8.1% from 143.5",
-        "limb 2 (leg) total 339.4 is +15.0% from 295.2",
-        "limb 2 thigh 184.4 is +21.5% from 151.8",
-        "limb 2 calf 155.0 is +8.1% from 143.5",
-        "limb 3 (leg) total 1155.4 is +291.4% from 295.2",
-        "limb 3 thigh 425.4 is +180.3% from 151.8",
-        "limb 3 calf 730.0 is +408.9% from 143.5",
-        "limb 4 (leg) total 1155.4 is +291.4% from 295.2",
-        "limb 4 thigh 425.4 is +180.3% from 151.8",
-        "limb 4 calf 730.0 is +408.9% from 143.5",
-        "torso 135.0 is -17.1% from 162.8",
+        "limb 1 (leg) total 382.3 is +29.5% from 295.2",
+        "limb 1 thigh 202.4 is +33.4% from 151.8",
+        "limb 1 calf 179.9 is +25.4% from 143.5",
+        "limb 2 (leg) total 382.3 is +29.5% from 295.2",
+        "limb 2 thigh 202.4 is +33.4% from 151.8",
+        "limb 2 calf 179.9 is +25.4% from 143.5",
+        "limb 3 (leg) total 1071.3 is +262.9% from 295.2",
+        "limb 3 thigh 460.6 is +203.5% from 151.8",
+        "limb 3 calf 610.7 is +325.8% from 143.5",
+        "limb 4 (leg) total 1071.3 is +262.9% from 295.2",
+        "limb 4 thigh 460.6 is +203.5% from 151.8",
+        "limb 4 calf 610.7 is +325.8% from 143.5",
         "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
       ]
     },

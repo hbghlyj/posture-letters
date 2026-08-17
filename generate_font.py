@@ -1163,15 +1163,15 @@ def pose(letter: str) -> Drawer:
         knee = (536, 610)
         ankle = (610, 118)
         # Left stem: both arms straight down behind the back, shoulders locked.
-        for sign, arm_x in ((-1, 116), (1, 168)):
+        for sign, arm_x in ((-1, 124), (1, 166)):
             arm = [(arm_x, 640), (arm_x, 386), (arm_x, 132)]
-            d.path(arm, 42 if sign < 0 else 34, True, False, track=False)
+            d.path(arm, 34 if sign < 0 else 28, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[0][0], arm[0][1], 22)
+            d.circle(arm[0][0], arm[0][1], 18)
         # Left hand serif: bent horizontally at the wrist, pressed flat on the
         # ground so it reads as the left-side base serif.
         d.ellipse(140, 128, 40, 30, 0.0)
@@ -1212,15 +1212,15 @@ def pose(letter: str) -> Drawer:
         # Left stroke: two straight vertical arms bearing weight on the floor.
         # The pair is spaced as on M, so both weight-bearing arm columns have
         # the same stance rather than N's reading wider than M's.
-        for sign, arm_x in ((-1, 116), (1, 168)):
+        for sign, arm_x in ((-1, 124), (1, 166)):
             arm = [(arm_x, 640), (arm_x, 390), (arm_x, 142)]
-            d.path(arm, 42 if sign < 0 else 34, True, False, track=False)
+            d.path(arm, 34 if sign < 0 else 28, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[0][0], arm[0][1], 21)
+            d.circle(arm[0][0], arm[0][1], 18)
             # Flat supporting hand lying along the floor, as on M: the wrist
             # bends and the fingers run out horizontally to the left, giving
             # the base of the left stroke a proper serif.
@@ -1272,7 +1272,7 @@ def pose(letter: str) -> Drawer:
                 [
                     (hip[0] + spread * 0.4, hip[1] - 30),
                     (116 + spread, 320),
-                    (238 + spread, 92),
+                    (300 + spread, 84),
                 ],
                 width, knee_index=1, breeches_width=width * 1.3,
                 shoe_direction=(1, -0.24),
@@ -1282,7 +1282,7 @@ def pose(letter: str) -> Drawer:
             arm = [
                 (shoulder[0] + spread * 0.4, shoulder[1] - 28),
                 (628 + spread, 322),
-                (500 + spread, 118),
+                (438 + spread, 112),
             ]
             d.path(arm, width, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
@@ -1297,8 +1297,8 @@ def pose(letter: str) -> Drawer:
                 (632 + spread, 276),
             ], 4.0, True)
         # Hands planted flat on the ground, fingers reaching toward the feet.
-        for spread, hy in ((-18, 132), (18, 96)):
-            hx = 500 + spread
+        for spread, hy in ((-18, 126), (18, 92)):
+            hx = 438 + spread
             d.ellipse(hx, hy, 25, 19, 0.0)
             # Fingers spread forward along the floor toward the feet.
             for dy in (-11, 0, 11):
@@ -1608,10 +1608,13 @@ def pose(letter: str) -> Drawer:
         # shared baseline, while the outer stockinged legs bend at baseline
         # knees and rise to high feet. The palms sit exactly on y=0, and their
         # index fingers and thumbs are drawn as distinct supporting digits.
-        d.head(350, 585, 1)
-        d.torso([(350, 525), (350, 390)], 88, False)
-        left_arm = [(320, 405), (280, 225), (255, 72)]
-        right_arm = [(380, 405), (420, 225), (445, 72)]
+        # The arms are lengthened and the shins shortened: at the old lengths
+        # the raised shin ran nearly five times the forearm, so the outer
+        # strokes dwarfed the inner ones.
+        d.head(350, 660, 1)
+        d.torso([(350, 600), (350, 430)], 88, False)
+        left_arm = [(320, 448), (278, 250), (252, 72)]
+        right_arm = [(380, 448), (422, 250), (448, 72)]
         for arm in (left_arm, right_arm):
             d.path(arm, 54, True, True, track=False)
             segments, length = d.centerline_measurements(arm)
@@ -1620,11 +1623,11 @@ def pose(letter: str) -> Drawer:
                 "points": arm,
             })
         d.leg(
-            [(315, 390), (145, 0), (60, 725)], 62, knee_index=1,
+            [(315, 430), (150, 0), (74, 606)], 62, knee_index=1,
             shoe_direction=(-0.92, 0.40),
         )
         d.leg(
-            [(385, 390), (555, 0), (640, 725)], 62, knee_index=1,
+            [(385, 430), (550, 0), (626, 606)], 62, knee_index=1,
             shoe_direction=(0.92, 0.40),
         )
         # Draw the supporting hands after the outer legs so the fingertips stay
