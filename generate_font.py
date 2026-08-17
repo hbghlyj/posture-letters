@@ -1098,7 +1098,8 @@ def pose(letter: str) -> Drawer:
             for fy in (125, 107):
                 d.cut_path([(arm_x - 16, fy), (arm_x - 78, fy)], 3.6, False)
         # Head hangs back and down past the planted shoulders.
-        d.head(108, 736, 1, -0.34)
+        # The face looks left, as on L, rather than back across the diagonal.
+        d.head(108, 736, -1, 0.34)
         # Diagonal: the torso leans back from the chest down toward the floor.
         d.torso([shoulder, (300, 430), (430, 216)], 82, True)
         # Right stroke: knees on the ground, lower legs straight up in the air.
