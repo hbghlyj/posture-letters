@@ -1026,65 +1026,82 @@ def pose(letter: str) -> Drawer:
             )
 
     elif letter == "K":
-        # Kneeling K. Torso, neck, head and the kneeling near leg stack into
-        # one plumb line: the knee is planted directly under the torso so the
-        # left side of the letter is dead vertical. The far leg extends well
-        # out to the side at a bent knee, giving the lower diagonal the extra
-        # length a K needs to balance. The near arm raises straight up and out
-        # at about forty-five degrees as the upper diagonal, ending in an open
-        # hand serif, while the far arm is pinned flat along the hip and thigh
-        # so the centre of the letter stays solid with no trapped white.
-        stem_x = 206
-        hip_y = 412
-        d.head(stem_x - 26, 706, 1)
-        d.torso([(stem_x, 646), (stem_x + 4, 530), (stem_x + 2, hip_y)], 84, False)
-        # Upper branch: the arm is raised straight up from the shoulder and
-        # curves slightly outward to the right near the top, rather than
-        # striking off at a flat forty-five degrees. The steep rise keeps the
-        # junction tight against the stem, as the reference does.
-        raised = [(stem_x + 26, 612), (272, 690), (330, 754)]
-        d.path(raised[:2], 44, True, False, track=False)
-        d.path(raised[1:], 38, True, False, track=False)
-        segments, length = d.centerline_measurements(raised)
+        # Kneeling, reaching K built from four directional limbs. The head sits
+        # centrally at the top of the body axis, tilted slightly back. The near
+        # arm rises vertically from the shoulder, curving at the elbow with the
+        # hand pointing up, to make the tall upper-left branch; the far arm
+        # strikes diagonally up and out to complete the upper-right branch.
+        # Below, the figure is dropped into a deep kneel: one thigh slopes down
+        # to a knee planted on the floor and the shin folds sharply back so the
+        # heel rises to hip height, making a compact fold at the lower left,
+        # while the other leg reaches out from the pelvis and changes direction
+        # at the knee to drive right-and-down as the lower-right branch.
+        stem_x = 210
+        hip_y = 384
+        d.torso([(stem_x, 616), (stem_x + 2, 500), (stem_x, hip_y)], 80, False)
+        # Head central at the top of the axis, tilted slightly back.
+        d.head(stem_x + 4, 676, 1, 0.15)
+        # Upper-left branch: the arm rises from the shoulder and curves at the
+        # elbow so the hand points straight up. It is carried clear of the head
+        # so the branch stays a separate silhouette.
+        left_arm = [(176, 606), (126, 664), (120, 730)]
+        d.path(left_arm[:2], 40, True, False, track=False)
+        d.path(left_arm[1:], 34, True, False, track=False)
+        segments, length = d.centerline_measurements(left_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
-            "points": raised,
+            "points": left_arm,
         })
-        d.circle(raised[0][0], raised[0][1], 23)
-        # Elbow crease on the outside of the rising curve.
-        d.cut_path([(266, 664), (284, 688), (290, 712)], 4.0, True)
-        # Open hand at the tip, fingers spread up and outward.
-        d.ellipse(340, 766, 20, 16, 0.62)
-        for dx, dy in ((22, 18), (28, 6), (25, -8), (14, -18)):
+        d.circle(left_arm[0][0], left_arm[0][1], 21)
+        d.cut_path([(106, 660), (122, 676), (124, 700)], 3.6, True)
+        # Hand at the top of the branch, fingers pointing up.
+        d.ellipse(119, 740, 16, 18, 0.08)
+        for dx in (-11, -2, 7):
             d.polygon([
-                (334, 760), (340 + dx, 766 + dy), (344 + dx, 760 + dy),
+                (119 + dx - 4, 746), (119 + dx + 4, 746),
+                (119 + dx + 3, 772), (119 + dx - 3, 772),
             ])
-        d.cut_path([(328, 772), (342, 764), (350, 752)], 3.4, True)
-        # Closed centre: the far arm lies flat down the hip and thigh.
-        pinned = [(stem_x - 30, 614), (stem_x - 38, 516), (stem_x - 34, 424)]
-        d.path(pinned, 28, True, False, track=False)
-        d.circle(pinned[-1][0], pinned[-1][1], 15)
-        d.cut_path([
-            (stem_x - 22, 594), (stem_x - 28, 516), (stem_x - 25, 444),
-        ], 3.6, True)
-        # Kneeling near leg. A straight leg with a shoe under it just reads as
-        # standing, so the kneel is made explicit: the thigh drops vertically
-        # to a knee resting on the ground, then the shin turns a right angle
-        # and lies flat along the floor with the foot trailing behind.
-        knee = (stem_x - 16, 128)
+        d.cut_path([(106, 752), (132, 750)], 3.2, False)
+        # Upper-right branch: the far arm diagonally up and outward.
+        right_arm = [(244, 610), (370, 664), (486, 726)]
+        d.path(right_arm[:2], 38, True, False, track=False)
+        d.path(right_arm[1:], 32, True, False, track=False)
+        segments, length = d.centerline_measurements(right_arm)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": right_arm,
+        })
+        d.circle(right_arm[0][0], right_arm[0][1], 20)
+        d.cut_path([(356, 688), (376, 668), (384, 646)], 3.6, True)
+        d.ellipse(498, 736, 18, 14, 0.58)
+        for dx, dy in ((19, 16), (24, 5), (21, -8), (12, -16)):
+            d.polygon([
+                (493, 730), (498 + dx, 736 + dy), (502 + dx, 730 + dy),
+            ])
+        d.cut_path([(488, 744), (500, 734), (507, 722)], 3.2, True)
+        # Lower-left fold: the thigh slopes down to a knee planted on the
+        # floor, then the shin folds sharply back so the heel rises level with
+        # the hip, giving a compact muscular fold.
+        knee = (146, 96)
         d.leg(
-            [(stem_x - 12, hip_y), knee, (stem_x - 74, 96)], 52,
-            knee_index=1, breeches_width=58, shoe_direction=(-0.55, -0.84)
+            [(196, hip_y), knee, (256, hip_y - 16)], 50,
+            knee_index=1, breeches_width=58, shoe_direction=(0.58, 0.81),
+            shoe_scale=0.74,
         )
-        # The kneecap itself sits on the ground: a rounded bulb at the corner
-        # makes the weight-bearing joint unmistakable.
-        d.ellipse(knee[0] + 8, knee[1] - 6, 32, 26, 0.0)
-        # Lower diagonal: the far leg reaches well out to the right at a bent
-        # knee, its foot planting to make the wide, elongated base.
+        # The planted kneecap: a rounded bulb marks the weight-bearing joint.
+        d.ellipse(knee[0] + 6, knee[1] - 4, 29, 23, 0.0)
+        # Lower-right branch: the far leg reaches out, then changes direction
+        # at the knee to drive down and right, planting flat with spread toes.
         d.leg(
-            [(stem_x + 20, hip_y), (352, 226), (556, 74)], 56,
-            knee_index=1, breeches_width=64, shoe_direction=(1, 0)
+            [(230, hip_y), (372, 300), (552, 102)], 54,
+            knee_index=1, breeches_width=64, shoe_scale=0.0,
         )
+        d.ellipse(562, 94, 23, 18, -0.5)
+        for dx, dy in ((21, -6), (17, -17), (7, -26)):
+            d.polygon([
+                (558, 98), (562 + dx, 94 + dy), (566 + dx, 102 + dy),
+            ])
+        d.cut_path([(545, 102), (562, 88), (572, 72)], 3.2, True)
 
     elif letter == "L":
         # Kneeling side profile. The upright upper body — head, straight neck
