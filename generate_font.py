@@ -766,11 +766,44 @@ def pose(letter: str) -> Drawer:
         d.leg([(365, 395), (370, 225), (375, 55)], 52, knee_index=1)
 
     elif letter == "J":
-        d.head(500, 750, -1)
-        d.torso([(500, 685), (500, 470), (500, 250), (450, 100), (300, 60), (170, 135)], 88)
-        d.limb([(470, 630), (335, 650), (205, 650)], 48, False, end="hand")
-        d.limb([(520, 625), (560, 635), (600, 650)], 44, False, end="hand")
-        d.leg([(450, 115), (325, 65), (190, 125)], 55, knee_index=1)
+        # Seated J. The torso and head rise straight up as the vertical stem,
+        # the head turned to the right so it makes the small top-right serif.
+        # Below the waist the hips and upper thighs curve down and sweep
+        # forward to the left; the knees then bend so the lower legs run back
+        # up slightly, closing the bottom hook. The arms hang straight down
+        # along the sides of the torso, carried just proud of it so the
+        # shoulder-to-hand run stays visible against the stem.
+        stem_x = 430
+        hip = (stem_x, 210)
+        d.torso([hip, (stem_x, 430), (stem_x, 640)], 84, False)
+        d.head(stem_x, 704, 1)
+        for sign in (-1, 1):
+            arm = [
+                (stem_x + sign * 56, 612),
+                (stem_x + sign * 62, 470),
+                (stem_x + sign * 60, 340),
+            ]
+            d.path(arm, 28, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            # Deltoid wedge keeps the offset arm attached at the shoulder.
+            d.path([(stem_x + sign * 26, 634), arm[0]], 26, False, False,
+                   track=False)
+            d.circle(arm[0][0], arm[0][1], 16)
+            d.circle(arm[-1][0], arm[-1][1], 15)
+        # Hips and thighs sweep down-left, then the bent knees send the lower
+        # legs back up to finish the hook.
+        d.leg(
+            [hip, (312, 56), (208, 190)], 54, knee_index=1,
+            breeches_width=70, shoe_direction=(0.05, 1.0),
+        )
+        d.leg(
+            [(stem_x - 26, 182), (310, 108), (236, 226)], 44, knee_index=1,
+            breeches_width=56, shoe_direction=(0.05, 1.0),
+        )
 
     elif letter == "K":
         # Historical standing profile: body/near leg are the stem. The upper
