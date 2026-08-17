@@ -1328,19 +1328,38 @@ def pose(letter: str) -> Drawer:
             d.circle(arm[-1][0], arm[-1][1], 16)
 
     elif letter == "T":
-        # Arms make the crossbar; both legs stay together and descend
-        # vertically, matching the upright stance in the historical print.
-        # Proportions follow a standing human reference: the torso runs from
-        # shoulders to hips at roughly the same length as the legs beneath it,
-        # rather than a long trunk on stub legs.
-        d.head(350, 700, 1)
-        d.torso([(350, 635), (350, 520), (350, 400)], 90, False)
-        d.limb([(330, 620), (190, 650), (75, 650)], 50, False, end="hand")
-        d.limb([(370, 620), (510, 650), (625, 650)], 50, False, end="hand")
-        d.leg([(324, 400), (322, 228), (321, 55)], 44, knee_index=1,
-              breeches_width=48)
-        d.leg([(376, 400), (378, 228), (379, 55)], 44, knee_index=1,
-              breeches_width=48)
+        # Upright T. The straight spine, narrow hips and tightly closed legs
+        # make the central pillar; both arms extend dead level at ninety
+        # degrees from the shoulders to form one continuous top line. At each
+        # end the wrist flexes so the hand hangs downward, giving the letter
+        # its hanging terminals, and the feet flare outward at the base as
+        # stabilising foot serifs.
+        bar_y = 646
+        d.head(350, 706, 1)
+        d.torso([(350, 642), (350, 520), (350, 398)], 84, False)
+        for sign in (-1, 1):
+            tip = 350 + sign * 268
+            arm = [(350 + sign * 26, bar_y), (350 + sign * 150, bar_y), (tip, bar_y)]
+            d.path(arm, 44, False, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], 24)
+            # Wrist flexes down: the hand hangs as a terminal serif.
+            d.path([(tip, bar_y + 6), (tip + sign * 8, bar_y - 62)], 34,
+                   False, False, track=False)
+            d.ellipse(tip + sign * 9, bar_y - 70, 19, 15, 0.0)
+            d.cut_path([
+                (tip + sign * 9 - 15, bar_y - 34),
+                (tip + sign * 9 + 15, bar_y - 34),
+            ], 3.6, False)
+        # Tightly closed legs down the centre, feet flaring out at the base.
+        d.leg([(330, 398), (328, 226), (327, 58)], 44, knee_index=1,
+              breeches_width=48, shoe_direction=(-1, 0))
+        d.leg([(370, 398), (372, 226), (373, 58)], 44, knee_index=1,
+              breeches_width=48, shoe_direction=(1, 0))
 
     elif letter == "U":
         # Deep backbend performed lying down. The lower torso and glutes arch
