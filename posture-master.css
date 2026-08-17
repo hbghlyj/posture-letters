@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "Posture Master";
+  src: url("posture-master.woff2") format("woff2"),
+       url("posture-master.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Example: use large—these performers need room to stretch. */
+.posture-master {
+  font-family: "Posture Master", fantasy;
+  font-weight: 400;
+  line-height: 0.95;
+}

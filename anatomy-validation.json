@@ -1,0 +1,1638 @@
+{
+  "tolerance_percent": 5.0,
+  "baseline_glyph": "A",
+  "baseline": {
+    "thigh": 300.919,
+    "calf": 304.825,
+    "leg_total": 605.743,
+    "upper_arm": 155.0,
+    "forearm": 177.5,
+    "arm_total": 332.5,
+    "torso": 512.115,
+    "head": 110.0
+  },
+  "results": [
+    {
+      "letter": "A",
+      "status": "PASS",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 606.93,
+          "segments": [
+            297.7,
+            309.2
+          ],
+          "deviation_percent": 0.2
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 604.55,
+          "segments": [
+            304.1,
+            300.4
+          ],
+          "deviation_percent": -0.2
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 325.0,
+          "segments": [
+            150.0,
+            175.0
+          ],
+          "deviation_percent": -2.26
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 340.0,
+          "segments": [
+            160.0,
+            180.0
+          ],
+          "deviation_percent": 2.26
+        }
+      ],
+      "torso_lengths": [
+        512.1
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": []
+    },
+    {
+      "letter": "B",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 833.23,
+          "segments": [
+            248.6,
+            159.5,
+            135.1,
+            290.0
+          ],
+          "deviation_percent": 37.56
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 270.86,
+          "segments": [
+            135.6,
+            135.2
+          ],
+          "deviation_percent": -18.54
+        },
+        {
+          "index": 3,
+          "classification": "leg",
+          "length": 650.81,
+          "segments": [
+            152.3,
+            140.8,
+            111.0,
+            115.4,
+            131.2
+          ],
+          "deviation_percent": 7.44
+        }
+      ],
+      "torso_lengths": [
+        350.3
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (leg) total 833.2 is +37.6% from 605.7",
+        "limb 1 has 4 skeletal segments; expected upper/lower pair",
+        "limb 2 (arm) total 270.9 is -18.5% from 332.5",
+        "limb 2 upper arm 135.6 is -12.5% from 155.0",
+        "limb 2 forearm 135.2 is -23.8% from 177.5",
+        "limb 3 (leg) total 650.8 is +7.4% from 605.7",
+        "limb 3 has 5 skeletal segments; expected upper/lower pair",
+        "torso 350.3 is -31.6% from 512.1"
+      ]
+    },
+    {
+      "letter": "C",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 334.44,
+          "segments": [
+            162.2,
+            172.2
+          ],
+          "deviation_percent": 0.58
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 324.72,
+          "segments": [
+            161.2,
+            163.5
+          ],
+          "deviation_percent": -2.34
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 385.55,
+          "segments": [
+            145.3,
+            240.2
+          ],
+          "deviation_percent": 15.96
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 317.84,
+          "segments": [
+            127.8,
+            190.1
+          ],
+          "deviation_percent": -4.41
+        }
+      ],
+      "torso_lengths": [
+        371.5
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 2 forearm 163.5 is -7.9% from 177.5",
+        "limb 3 (arm) total 385.6 is +16.0% from 332.5",
+        "limb 3 upper arm 145.3 is -6.2% from 155.0",
+        "limb 3 forearm 240.2 is +35.3% from 177.5",
+        "limb 4 upper arm 127.8 is -17.6% from 155.0",
+        "limb 4 forearm 190.1 is +7.1% from 177.5",
+        "torso 371.5 is -27.5% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "D",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 663.7,
+          "segments": [
+            183.1,
+            172.6,
+            153.0,
+            155.0
+          ],
+          "deviation_percent": 9.57
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 327.39,
+          "segments": [
+            111.8,
+            110.1,
+            105.5
+          ],
+          "deviation_percent": -1.54
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 293.0,
+          "segments": [
+            105.5,
+            112.4,
+            75.2
+          ],
+          "deviation_percent": -11.88
+        }
+      ],
+      "torso_lengths": [
+        524.1
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (leg) total 663.7 is +9.6% from 605.7",
+        "limb 1 has 4 skeletal segments; expected upper/lower pair",
+        "limb 2 has 3 skeletal segments; expected upper/lower pair",
+        "limb 3 (arm) total 293.0 is -11.9% from 332.5",
+        "limb 3 has 3 skeletal segments; expected upper/lower pair"
+      ]
+    },
+    {
+      "letter": "E",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 410.24,
+          "segments": [
+            210.2,
+            200.0
+          ],
+          "deviation_percent": 23.38
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 286.55,
+          "segments": [
+            161.6,
+            125.0
+          ],
+          "deviation_percent": -13.82
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 425.0,
+          "segments": [
+            210.0,
+            215.0
+          ],
+          "deviation_percent": 27.82
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 390.0,
+          "segments": [
+            195.0,
+            195.0
+          ],
+          "deviation_percent": 17.29
+        }
+      ],
+      "torso_lengths": [
+        580.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 410.2 is +23.4% from 332.5",
+        "limb 1 upper arm 210.2 is +35.6% from 155.0",
+        "limb 1 forearm 200.0 is +12.7% from 177.5",
+        "limb 2 (arm) total 286.6 is -13.8% from 332.5",
+        "limb 2 forearm 125.0 is -29.6% from 177.5",
+        "limb 3 (arm) total 425.0 is +27.8% from 332.5",
+        "limb 3 upper arm 210.0 is +35.5% from 155.0",
+        "limb 3 forearm 215.0 is +21.1% from 177.5",
+        "limb 4 (arm) total 390.0 is +17.3% from 332.5",
+        "limb 4 upper arm 195.0 is +25.8% from 155.0",
+        "limb 4 forearm 195.0 is +9.9% from 177.5",
+        "torso 580.0 is +13.3% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "F",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 410.56,
+          "segments": [
+            200.6,
+            210.0
+          ],
+          "deviation_percent": 23.48
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 288.96,
+          "segments": [
+            144.0,
+            145.0
+          ],
+          "deviation_percent": -13.09
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 240.55,
+          "segments": [
+            130.1,
+            110.5
+          ],
+          "deviation_percent": -27.65
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 240.55,
+          "segments": [
+            130.1,
+            110.5
+          ],
+          "deviation_percent": -27.65
+        }
+      ],
+      "torso_lengths": [
+        380.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 410.6 is +23.5% from 332.5",
+        "limb 1 upper arm 200.6 is +29.4% from 155.0",
+        "limb 1 forearm 210.0 is +18.3% from 177.5",
+        "limb 2 (arm) total 289.0 is -13.1% from 332.5",
+        "limb 2 upper arm 144.0 is -7.1% from 155.0",
+        "limb 2 forearm 145.0 is -18.3% from 177.5",
+        "limb 3 (arm) total 240.5 is -27.7% from 332.5",
+        "limb 3 upper arm 130.1 is -16.1% from 155.0",
+        "limb 3 forearm 110.5 is -37.8% from 177.5",
+        "limb 4 (arm) total 240.5 is -27.7% from 332.5",
+        "limb 4 upper arm 130.1 is -16.1% from 155.0",
+        "limb 4 forearm 110.5 is -37.8% from 177.5",
+        "torso 380.0 is -25.8% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "G",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 721.63,
+          "segments": [
+            170.3,
+            168.7,
+            137.3,
+            135.4,
+            110.0
+          ],
+          "deviation_percent": 19.13
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 412.01,
+          "segments": [
+            145.3,
+            157.0,
+            109.7
+          ],
+          "deviation_percent": 23.91
+        },
+        {
+          "index": 3,
+          "classification": "leg",
+          "length": 429.61,
+          "segments": [
+            170.3,
+            170.3,
+            89.0
+          ],
+          "deviation_percent": -29.08
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 308.78,
+          "segments": [
+            153.1,
+            155.7
+          ],
+          "deviation_percent": -7.13
+        }
+      ],
+      "torso_lengths": [
+        423.6
+      ],
+      "head_diameters": [
+        96.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (leg) total 721.6 is +19.1% from 605.7",
+        "limb 1 has 5 skeletal segments; expected upper/lower pair",
+        "limb 2 (arm) total 412.0 is +23.9% from 332.5",
+        "limb 2 has 3 skeletal segments; expected upper/lower pair",
+        "limb 3 (leg) total 429.6 is -29.1% from 605.7",
+        "limb 3 has 3 skeletal segments; expected upper/lower pair",
+        "limb 4 (arm) total 308.8 is -7.1% from 332.5",
+        "limb 4 forearm 155.7 is -12.3% from 177.5",
+        "torso 423.6 is -17.3% from 512.1",
+        "head 96.0 is -12.7% from 110.0"
+      ]
+    },
+    {
+      "letter": "H",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 357.56,
+          "segments": [
+            96.6,
+            125.9,
+            135.1
+          ],
+          "deviation_percent": 7.54
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 357.56,
+          "segments": [
+            96.6,
+            125.9,
+            135.1
+          ],
+          "deviation_percent": 7.54
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 362.43,
+          "segments": [
+            96.2,
+            125.9,
+            140.4
+          ],
+          "deviation_percent": 9.0
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 362.43,
+          "segments": [
+            96.2,
+            125.9,
+            140.4
+          ],
+          "deviation_percent": 9.0
+        }
+      ],
+      "torso_lengths": [
+        200.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 357.6 is +7.5% from 332.5",
+        "limb 1 has 3 skeletal segments; expected upper/lower pair",
+        "limb 2 (arm) total 357.6 is +7.5% from 332.5",
+        "limb 2 has 3 skeletal segments; expected upper/lower pair",
+        "limb 3 (arm) total 362.4 is +9.0% from 332.5",
+        "limb 3 has 3 skeletal segments; expected upper/lower pair",
+        "limb 4 (arm) total 362.4 is +9.0% from 332.5",
+        "limb 4 has 3 skeletal segments; expected upper/lower pair",
+        "torso 200.0 is -60.9% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "I",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 290.38,
+          "segments": [
+            145.3,
+            145.0
+          ],
+          "deviation_percent": -12.67
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 290.38,
+          "segments": [
+            145.3,
+            145.0
+          ],
+          "deviation_percent": -12.67
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 340.15,
+          "segments": [
+            170.1,
+            170.1
+          ],
+          "deviation_percent": 2.3
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 340.15,
+          "segments": [
+            170.1,
+            170.1
+          ],
+          "deviation_percent": 2.3
+        }
+      ],
+      "torso_lengths": [
+        290.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 290.4 is -12.7% from 332.5",
+        "limb 1 upper arm 145.3 is -6.2% from 155.0",
+        "limb 1 forearm 145.0 is -18.3% from 177.5",
+        "limb 2 (arm) total 290.4 is -12.7% from 332.5",
+        "limb 2 upper arm 145.3 is -6.2% from 155.0",
+        "limb 2 forearm 145.0 is -18.3% from 177.5",
+        "limb 3 upper arm 170.1 is +9.7% from 155.0",
+        "limb 4 upper arm 170.1 is +9.7% from 155.0",
+        "torso 290.0 is -43.4% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "J",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 266.47,
+          "segments": [
+            136.5,
+            130.0
+          ],
+          "deviation_percent": -19.86
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 83.95,
+          "segments": [
+            41.2,
+            42.7
+          ],
+          "deviation_percent": -74.75
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 282.36,
+          "segments": [
+            134.6,
+            147.7
+          ],
+          "deviation_percent": -15.08
+        }
+      ],
+      "torso_lengths": [
+        898.4
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (arm) total 266.5 is -19.9% from 332.5",
+        "limb 1 upper arm 136.5 is -12.0% from 155.0",
+        "limb 1 forearm 130.0 is -26.8% from 177.5",
+        "limb 2 (arm) total 84.0 is -74.8% from 332.5",
+        "limb 2 upper arm 41.2 is -73.4% from 155.0",
+        "limb 2 forearm 42.7 is -75.9% from 177.5",
+        "limb 3 (arm) total 282.4 is -15.1% from 332.5",
+        "limb 3 upper arm 134.6 is -13.1% from 155.0",
+        "limb 3 forearm 147.7 is -16.8% from 177.5",
+        "torso 898.4 is +75.4% from 512.1"
+      ]
+    },
+    {
+      "letter": "K",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 349.66,
+          "segments": [
+            91.9,
+            62.6,
+            106.1,
+            89.0
+          ],
+          "deviation_percent": 5.16
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 256.78,
+          "segments": [
+            140.8,
+            116.0
+          ],
+          "deviation_percent": -22.77
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 266.19,
+          "segments": [
+            145.8,
+            120.4
+          ],
+          "deviation_percent": -19.94
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 387.05,
+          "segments": [
+            180.3,
+            206.7
+          ],
+          "deviation_percent": 16.41
+        }
+      ],
+      "torso_lengths": [
+        320.1
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 349.7 is +5.2% from 332.5",
+        "limb 1 has 4 skeletal segments; expected upper/lower pair",
+        "limb 2 (arm) total 256.8 is -22.8% from 332.5",
+        "limb 2 upper arm 140.8 is -9.2% from 155.0",
+        "limb 2 forearm 116.0 is -34.7% from 177.5",
+        "limb 3 (arm) total 266.2 is -19.9% from 332.5",
+        "limb 3 upper arm 145.8 is -6.0% from 155.0",
+        "limb 3 forearm 120.4 is -32.2% from 177.5",
+        "limb 4 (arm) total 387.0 is +16.4% from 332.5",
+        "limb 4 upper arm 180.3 is +16.4% from 155.0",
+        "limb 4 forearm 206.7 is +16.5% from 177.5",
+        "torso 320.1 is -37.5% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "L",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 380.0,
+          "segments": [
+            190.0,
+            190.0
+          ],
+          "deviation_percent": 14.29
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 340.0,
+          "segments": [
+            170.0,
+            170.0
+          ],
+          "deviation_percent": 2.26
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 305.03,
+          "segments": [
+            177.6,
+            127.5
+          ],
+          "deviation_percent": -8.26
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 270.66,
+          "segments": [
+            153.0,
+            117.7
+          ],
+          "deviation_percent": -18.6
+        }
+      ],
+      "torso_lengths": [
+        472.3
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 380.0 is +14.3% from 332.5",
+        "limb 1 upper arm 190.0 is +22.6% from 155.0",
+        "limb 1 forearm 190.0 is +7.0% from 177.5",
+        "limb 2 upper arm 170.0 is +9.7% from 155.0",
+        "limb 3 (arm) total 305.0 is -8.3% from 332.5",
+        "limb 3 upper arm 177.6 is +14.6% from 155.0",
+        "limb 3 forearm 127.5 is -28.2% from 177.5",
+        "limb 4 (arm) total 270.7 is -18.6% from 332.5",
+        "limb 4 forearm 117.7 is -33.7% from 177.5",
+        "torso 472.3 is -7.8% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "M",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 640.0,
+          "segments": [
+            640.0
+          ],
+          "deviation_percent": 5.66
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 640.0,
+          "segments": [
+            640.0
+          ],
+          "deviation_percent": 5.66
+        }
+      ],
+      "torso_lengths": [],
+      "head_diameters": [
+        70.0
+      ],
+      "composite_path_lengths": [
+        433.0,
+        433.0
+      ],
+      "issues": [
+        "expected 4 measurable limbs; found 2",
+        "expected 1 measurable torso; found 0",
+        "contains 2 unclassified composite body path(s): 433.0, 433.0",
+        "limb 1 (leg) total 640.0 is +5.7% from 605.7",
+        "limb 1 has 1 skeletal segments; expected upper/lower pair",
+        "limb 2 (leg) total 640.0 is +5.7% from 605.7",
+        "limb 2 has 1 skeletal segments; expected upper/lower pair",
+        "head 70.0 is -36.4% from 110.0"
+      ]
+    },
+    {
+      "letter": "N",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 1242.95,
+          "segments": [
+            209.4,
+            430.0,
+            312.0,
+            291.5
+          ],
+          "deviation_percent": 105.19
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 70.73,
+          "segments": [
+            40.3,
+            30.4
+          ],
+          "deviation_percent": -78.73
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 318.68,
+          "segments": [
+            96.0,
+            105.5,
+            117.2
+          ],
+          "deviation_percent": -4.16
+        }
+      ],
+      "torso_lengths": [
+        510.6
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (leg) total 1243.0 is +105.2% from 605.7",
+        "limb 1 has 4 skeletal segments; expected upper/lower pair",
+        "limb 2 (arm) total 70.7 is -78.7% from 332.5",
+        "limb 2 upper arm 40.3 is -74.0% from 155.0",
+        "limb 2 forearm 30.4 is -82.9% from 177.5",
+        "limb 3 has 3 skeletal segments; expected upper/lower pair"
+      ]
+    },
+    {
+      "letter": "O",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 706.45,
+          "segments": [
+            101.5,
+            122.6,
+            125.8,
+            128.8,
+            137.2,
+            90.6
+          ],
+          "deviation_percent": 16.63
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 706.45,
+          "segments": [
+            101.5,
+            122.6,
+            125.8,
+            128.8,
+            137.2,
+            90.6
+          ],
+          "deviation_percent": 16.63
+        }
+      ],
+      "torso_lengths": [],
+      "head_diameters": [
+        124.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 2",
+        "expected 1 measurable torso; found 0",
+        "limb 1 (leg) total 706.5 is +16.6% from 605.7",
+        "limb 1 has 6 skeletal segments; expected upper/lower pair",
+        "limb 2 (leg) total 706.5 is +16.6% from 605.7",
+        "limb 2 has 6 skeletal segments; expected upper/lower pair",
+        "head 124.0 is +12.7% from 110.0"
+      ]
+    },
+    {
+      "letter": "P",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 324.58,
+          "segments": [
+            88.6,
+            79.1,
+            91.9,
+            65.0
+          ],
+          "deviation_percent": -2.38
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 283.07,
+          "segments": [
+            103.1,
+            90.6,
+            89.4
+          ],
+          "deviation_percent": -14.86
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 240.21,
+          "segments": [
+            125.1,
+            115.1
+          ],
+          "deviation_percent": -27.76
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 240.53,
+          "segments": [
+            125.1,
+            115.4
+          ],
+          "deviation_percent": -27.66
+        }
+      ],
+      "torso_lengths": [
+        395.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 has 4 skeletal segments; expected upper/lower pair",
+        "limb 2 (arm) total 283.1 is -14.9% from 332.5",
+        "limb 2 has 3 skeletal segments; expected upper/lower pair",
+        "limb 3 (arm) total 240.2 is -27.8% from 332.5",
+        "limb 3 upper arm 125.1 is -19.3% from 155.0",
+        "limb 3 forearm 115.1 is -35.2% from 177.5",
+        "limb 4 (arm) total 240.5 is -27.7% from 332.5",
+        "limb 4 upper arm 125.1 is -19.3% from 155.0",
+        "limb 4 forearm 115.4 is -35.0% from 177.5",
+        "torso 395.0 is -22.9% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "Q",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 720.35,
+          "segments": [
+            155.3,
+            175.9,
+            182.0,
+            153.1,
+            54.1
+          ],
+          "deviation_percent": 18.92
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 720.35,
+          "segments": [
+            155.3,
+            175.9,
+            182.0,
+            153.1,
+            54.1
+          ],
+          "deviation_percent": 18.92
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 344.87,
+          "segments": [
+            75.6,
+            85.1,
+            92.2,
+            91.9
+          ],
+          "deviation_percent": 3.72
+        }
+      ],
+      "torso_lengths": [],
+      "head_diameters": [
+        124.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 3",
+        "expected 1 measurable torso; found 0",
+        "limb 1 (leg) total 720.4 is +18.9% from 605.7",
+        "limb 1 has 5 skeletal segments; expected upper/lower pair",
+        "limb 2 (leg) total 720.4 is +18.9% from 605.7",
+        "limb 2 has 5 skeletal segments; expected upper/lower pair",
+        "limb 3 has 4 skeletal segments; expected upper/lower pair",
+        "head 124.0 is +12.7% from 110.0"
+      ]
+    },
+    {
+      "letter": "R",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 853.79,
+          "segments": [
+            242.5,
+            180.3,
+            155.7,
+            275.2
+          ],
+          "deviation_percent": 40.95
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 478.43,
+          "segments": [
+            178.9,
+            299.5
+          ],
+          "deviation_percent": -21.02
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 240.5,
+          "segments": [
+            130.4,
+            110.1
+          ],
+          "deviation_percent": -27.67
+        }
+      ],
+      "torso_lengths": [
+        395.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (leg) total 853.8 is +40.9% from 605.7",
+        "limb 1 has 4 skeletal segments; expected upper/lower pair",
+        "limb 2 (leg) total 478.4 is -21.0% from 605.7",
+        "limb 2 thigh 178.9 is -40.6% from 300.9",
+        "limb 3 (arm) total 240.5 is -27.7% from 332.5",
+        "limb 3 upper arm 130.4 is -15.9% from 155.0",
+        "limb 3 forearm 110.1 is -38.0% from 177.5",
+        "torso 395.0 is -22.9% from 512.1"
+      ]
+    },
+    {
+      "letter": "S",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 363.82,
+          "segments": [
+            158.8,
+            205.0
+          ],
+          "deviation_percent": 9.42
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 317.73,
+          "segments": [
+            147.7,
+            170.0
+          ],
+          "deviation_percent": -4.44
+        },
+        {
+          "index": 3,
+          "classification": "leg",
+          "length": 517.93,
+          "segments": [
+            109.8,
+            97.1,
+            165.3,
+            145.8
+          ],
+          "deviation_percent": -14.5
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 114.44,
+          "segments": [
+            65.2,
+            49.2
+          ],
+          "deviation_percent": -65.58
+        }
+      ],
+      "torso_lengths": [
+        423.2
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 363.8 is +9.4% from 332.5",
+        "limb 1 forearm 205.0 is +15.5% from 177.5",
+        "limb 3 (leg) total 517.9 is -14.5% from 605.7",
+        "limb 3 has 4 skeletal segments; expected upper/lower pair",
+        "limb 4 (arm) total 114.4 is -65.6% from 332.5",
+        "limb 4 upper arm 65.2 is -57.9% from 155.0",
+        "limb 4 forearm 49.2 is -72.3% from 177.5",
+        "torso 423.2 is -17.4% from 512.1",
+        "nearest-baseline classification gives 3 arm(s) and 1 leg(s)"
+      ]
+    },
+    {
+      "letter": "T",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 258.18,
+          "segments": [
+            143.2,
+            115.0
+          ],
+          "deviation_percent": -22.35
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 258.18,
+          "segments": [
+            143.2,
+            115.0
+          ],
+          "deviation_percent": -22.35
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 200.0,
+          "segments": [
+            100.0,
+            100.0
+          ],
+          "deviation_percent": -39.85
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 200.0,
+          "segments": [
+            100.0,
+            100.0
+          ],
+          "deviation_percent": -39.85
+        }
+      ],
+      "torso_lengths": [
+        390.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 258.2 is -22.4% from 332.5",
+        "limb 1 upper arm 143.2 is -7.6% from 155.0",
+        "limb 1 forearm 115.0 is -35.2% from 177.5",
+        "limb 2 (arm) total 258.2 is -22.4% from 332.5",
+        "limb 2 upper arm 143.2 is -7.6% from 155.0",
+        "limb 2 forearm 115.0 is -35.2% from 177.5",
+        "limb 3 (arm) total 200.0 is -39.8% from 332.5",
+        "limb 3 upper arm 100.0 is -35.5% from 155.0",
+        "limb 3 forearm 100.0 is -43.7% from 177.5",
+        "limb 4 (arm) total 200.0 is -39.8% from 332.5",
+        "limb 4 upper arm 100.0 is -35.5% from 155.0",
+        "limb 4 forearm 100.0 is -43.7% from 177.5",
+        "torso 390.0 is -23.8% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "U",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 721.16,
+          "segments": [
+            152.1,
+            199.1,
+            370.0
+          ],
+          "deviation_percent": 19.05
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 721.16,
+          "segments": [
+            152.1,
+            199.1,
+            370.0
+          ],
+          "deviation_percent": 19.05
+        },
+        {
+          "index": 3,
+          "classification": "leg",
+          "length": 617.74,
+          "segments": [
+            130.4,
+            192.4,
+            295.0
+          ],
+          "deviation_percent": 1.98
+        },
+        {
+          "index": 4,
+          "classification": "leg",
+          "length": 617.74,
+          "segments": [
+            130.4,
+            192.4,
+            295.0
+          ],
+          "deviation_percent": 1.98
+        }
+      ],
+      "torso_lengths": [
+        100.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (leg) total 721.2 is +19.1% from 605.7",
+        "limb 1 has 3 skeletal segments; expected upper/lower pair",
+        "limb 2 (leg) total 721.2 is +19.1% from 605.7",
+        "limb 2 has 3 skeletal segments; expected upper/lower pair",
+        "limb 3 has 3 skeletal segments; expected upper/lower pair",
+        "limb 4 has 3 skeletal segments; expected upper/lower pair",
+        "torso 100.0 is -80.5% from 512.1",
+        "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
+      ]
+    },
+    {
+      "letter": "V",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 516.63,
+          "segments": [
+            243.8,
+            272.8
+          ],
+          "deviation_percent": -14.71
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 516.63,
+          "segments": [
+            243.8,
+            272.8
+          ],
+          "deviation_percent": -14.71
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 338.9,
+          "segments": [
+            174.4,
+            164.5
+          ],
+          "deviation_percent": 1.92
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 338.9,
+          "segments": [
+            174.4,
+            164.5
+          ],
+          "deviation_percent": 1.92
+        }
+      ],
+      "torso_lengths": [
+        120.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (leg) total 516.6 is -14.7% from 605.7",
+        "limb 1 thigh 243.8 is -19.0% from 300.9",
+        "limb 1 calf 272.8 is -10.5% from 304.8",
+        "limb 2 (leg) total 516.6 is -14.7% from 605.7",
+        "limb 2 thigh 243.8 is -19.0% from 300.9",
+        "limb 2 calf 272.8 is -10.5% from 304.8",
+        "limb 3 upper arm 174.4 is +12.5% from 155.0",
+        "limb 3 forearm 164.5 is -7.3% from 177.5",
+        "limb 4 upper arm 174.4 is +12.5% from 155.0",
+        "limb 4 forearm 164.5 is -7.3% from 177.5",
+        "torso 120.0 is -76.6% from 512.1"
+      ]
+    },
+    {
+      "letter": "W",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 395.23,
+          "segments": [
+            189.7,
+            205.5
+          ],
+          "deviation_percent": 18.87
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 395.23,
+          "segments": [
+            189.7,
+            205.5
+          ],
+          "deviation_percent": 18.87
+        },
+        {
+          "index": 3,
+          "classification": "leg",
+          "length": 640.92,
+          "segments": [
+            178.0,
+            462.9
+          ],
+          "deviation_percent": 5.81
+        },
+        {
+          "index": 4,
+          "classification": "leg",
+          "length": 640.92,
+          "segments": [
+            178.0,
+            462.9
+          ],
+          "deviation_percent": 5.81
+        }
+      ],
+      "torso_lengths": [
+        135.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 395.2 is +18.9% from 332.5",
+        "limb 1 upper arm 189.7 is +22.4% from 155.0",
+        "limb 1 forearm 205.5 is +15.8% from 177.5",
+        "limb 2 (arm) total 395.2 is +18.9% from 332.5",
+        "limb 2 upper arm 189.7 is +22.4% from 155.0",
+        "limb 2 forearm 205.5 is +15.8% from 177.5",
+        "limb 3 (leg) total 640.9 is +5.8% from 605.7",
+        "limb 3 thigh 178.0 is -40.8% from 300.9",
+        "limb 3 calf 462.9 is +51.8% from 304.8",
+        "limb 4 (leg) total 640.9 is +5.8% from 605.7",
+        "limb 4 thigh 178.0 is -40.8% from 300.9",
+        "limb 4 calf 462.9 is +51.8% from 304.8",
+        "torso 135.0 is -73.6% from 512.1"
+      ]
+    },
+    {
+      "letter": "X",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "leg",
+          "length": 441.17,
+          "segments": [
+            201.1,
+            240.1
+          ],
+          "deviation_percent": -27.17
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 441.17,
+          "segments": [
+            201.1,
+            240.1
+          ],
+          "deviation_percent": -27.17
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 360.69,
+          "segments": [
+            166.2,
+            194.5
+          ],
+          "deviation_percent": 8.48
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 360.69,
+          "segments": [
+            166.2,
+            194.5
+          ],
+          "deviation_percent": 8.48
+        }
+      ],
+      "torso_lengths": [
+        95.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (leg) total 441.2 is -27.2% from 605.7",
+        "limb 1 thigh 201.1 is -33.2% from 300.9",
+        "limb 1 calf 240.1 is -21.2% from 304.8",
+        "limb 2 (leg) total 441.2 is -27.2% from 605.7",
+        "limb 2 thigh 201.1 is -33.2% from 300.9",
+        "limb 2 calf 240.1 is -21.2% from 304.8",
+        "limb 3 (arm) total 360.7 is +8.5% from 332.5",
+        "limb 3 upper arm 166.2 is +7.2% from 155.0",
+        "limb 3 forearm 194.5 is +9.6% from 177.5",
+        "limb 4 (arm) total 360.7 is +8.5% from 332.5",
+        "limb 4 upper arm 166.2 is +7.2% from 155.0",
+        "limb 4 forearm 194.5 is +9.6% from 177.5",
+        "torso 95.0 is -81.4% from 512.1"
+      ]
+    },
+    {
+      "letter": "Y",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 411.01,
+          "segments": [
+            186.0,
+            225.0
+          ],
+          "deviation_percent": 23.61
+        },
+        {
+          "index": 2,
+          "classification": "arm",
+          "length": 411.01,
+          "segments": [
+            186.0,
+            225.0
+          ],
+          "deviation_percent": 23.61
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 203.58,
+          "segments": [
+            103.1,
+            100.5
+          ],
+          "deviation_percent": -38.77
+        },
+        {
+          "index": 4,
+          "classification": "arm",
+          "length": 203.58,
+          "segments": [
+            103.1,
+            100.5
+          ],
+          "deviation_percent": -38.77
+        }
+      ],
+      "torso_lengths": [
+        180.0
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "limb 1 (arm) total 411.0 is +23.6% from 332.5",
+        "limb 1 upper arm 186.0 is +20.0% from 155.0",
+        "limb 1 forearm 225.0 is +26.8% from 177.5",
+        "limb 2 (arm) total 411.0 is +23.6% from 332.5",
+        "limb 2 upper arm 186.0 is +20.0% from 155.0",
+        "limb 2 forearm 225.0 is +26.8% from 177.5",
+        "limb 3 (arm) total 203.6 is -38.8% from 332.5",
+        "limb 3 upper arm 103.1 is -33.5% from 155.0",
+        "limb 3 forearm 100.5 is -43.4% from 177.5",
+        "limb 4 (arm) total 203.6 is -38.8% from 332.5",
+        "limb 4 upper arm 103.1 is -33.5% from 155.0",
+        "limb 4 forearm 100.5 is -43.4% from 177.5",
+        "torso 180.0 is -64.9% from 512.1",
+        "nearest-baseline classification gives 4 arm(s) and 0 leg(s)"
+      ]
+    },
+    {
+      "letter": "Z",
+      "status": "FAIL",
+      "limbs": [
+        {
+          "index": 1,
+          "classification": "arm",
+          "length": 415.54,
+          "segments": [
+            205.0,
+            210.5
+          ],
+          "deviation_percent": 24.97
+        },
+        {
+          "index": 2,
+          "classification": "leg",
+          "length": 445.26,
+          "segments": [
+            195.3,
+            250.0
+          ],
+          "deviation_percent": -26.49
+        },
+        {
+          "index": 3,
+          "classification": "arm",
+          "length": 377.79,
+          "segments": [
+            162.8,
+            215.0
+          ],
+          "deviation_percent": 13.62
+        }
+      ],
+      "torso_lengths": [
+        614.8
+      ],
+      "head_diameters": [
+        110.0
+      ],
+      "composite_path_lengths": [],
+      "issues": [
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (arm) total 415.5 is +25.0% from 332.5",
+        "limb 1 upper arm 205.0 is +32.3% from 155.0",
+        "limb 1 forearm 210.5 is +18.6% from 177.5",
+        "limb 2 (leg) total 445.3 is -26.5% from 605.7",
+        "limb 2 thigh 195.3 is -35.1% from 300.9",
+        "limb 2 calf 250.0 is -18.0% from 304.8",
+        "limb 3 (arm) total 377.8 is +13.6% from 332.5",
+        "limb 3 upper arm 162.8 is +5.0% from 155.0",
+        "limb 3 forearm 215.0 is +21.1% from 177.5",
+        "torso 614.8 is +20.0% from 512.1"
+      ]
+    }
+  ]
+}
