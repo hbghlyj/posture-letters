@@ -1038,13 +1038,13 @@ def pose(letter: str) -> Drawer:
         # at the knee to drive right-and-down as the lower-right branch.
         stem_x = 210
         hip_y = 384
-        d.torso([(stem_x, 616), (stem_x + 2, 500), (stem_x, hip_y)], 80, False)
+        d.torso([(stem_x, 576), (stem_x + 2, 486), (stem_x, hip_y)], 80, False)
         # Head central at the top of the axis, tilted slightly back.
-        d.head(stem_x + 4, 676, 1, 0.15)
+        d.head(stem_x + 4, 636, 1, 0.15)
         # Upper-left branch: the arm rises from the shoulder and curves at the
         # elbow so the hand points straight up. It is carried clear of the head
         # so the branch stays a separate silhouette.
-        left_arm = [(176, 606), (126, 664), (120, 730)]
+        left_arm = [(176, 566), (122, 638), (114, 736)]
         d.path(left_arm[:2], 40, True, False, track=False)
         d.path(left_arm[1:], 34, True, False, track=False)
         segments, length = d.centerline_measurements(left_arm)
@@ -1053,17 +1053,17 @@ def pose(letter: str) -> Drawer:
             "points": left_arm,
         })
         d.circle(left_arm[0][0], left_arm[0][1], 21)
-        d.cut_path([(106, 660), (122, 676), (124, 700)], 3.6, True)
+        d.cut_path([(100, 634), (116, 652), (118, 678)], 3.6, True)
         # Hand at the top of the branch, fingers pointing up.
-        d.ellipse(119, 740, 16, 18, 0.08)
+        d.ellipse(113, 746, 16, 18, 0.08)
         for dx in (-11, -2, 7):
             d.polygon([
-                (119 + dx - 4, 746), (119 + dx + 4, 746),
-                (119 + dx + 3, 772), (119 + dx - 3, 772),
+                (113 + dx - 4, 752), (113 + dx + 4, 752),
+                (113 + dx + 3, 778), (113 + dx - 3, 778),
             ])
-        d.cut_path([(106, 752), (132, 750)], 3.2, False)
+        d.cut_path([(100, 758), (126, 756)], 3.2, False)
         # Upper-right branch: the far arm diagonally up and outward.
-        right_arm = [(244, 610), (370, 664), (486, 726)]
+        right_arm = [(244, 570), (370, 628), (486, 692)]
         d.path(right_arm[:2], 38, True, False, track=False)
         d.path(right_arm[1:], 32, True, False, track=False)
         segments, length = d.centerline_measurements(right_arm)
@@ -1072,13 +1072,13 @@ def pose(letter: str) -> Drawer:
             "points": right_arm,
         })
         d.circle(right_arm[0][0], right_arm[0][1], 20)
-        d.cut_path([(356, 688), (376, 668), (384, 646)], 3.6, True)
-        d.ellipse(498, 736, 18, 14, 0.58)
+        d.cut_path([(356, 652), (376, 632), (384, 610)], 3.6, True)
+        d.ellipse(498, 702, 18, 14, 0.58)
         for dx, dy in ((19, 16), (24, 5), (21, -8), (12, -16)):
             d.polygon([
-                (493, 730), (498 + dx, 736 + dy), (502 + dx, 730 + dy),
+                (493, 696), (498 + dx, 702 + dy), (502 + dx, 696 + dy),
             ])
-        d.cut_path([(488, 744), (500, 734), (507, 722)], 3.2, True)
+        d.cut_path([(488, 710), (500, 700), (507, 688)], 3.2, True)
         # Lower-left fold: the thigh slopes down to a knee planted on the
         # floor, then the shin folds sharply back so the heel rises level with
         # the hip, giving a compact muscular fold.
@@ -1744,7 +1744,7 @@ def pose(letter: str) -> Drawer:
         for sign in (-1, 1):
             knee = (350 + sign * 74, 252)
             d.leg(
-                [(350 + sign * 22, 330), knee, (350 + sign * 22, 56)],
+                [(350 + sign * 22, 330), knee, (350 + sign * 26, 56)],
                 46, knee_index=1, breeches_width=56,
                 shoe_direction=(sign, 0), shoe_scale=0.82,
             )
@@ -1769,21 +1769,24 @@ def pose(letter: str) -> Drawer:
         knee = (166, 168)
         d.head(576, 712, -1)
         # Top bar: two flat arms tapering from shoulder to fingertip.
-        for spread, base_w in ((14, 56), (-14, 46)):
+        # The arms are separately drawn shapes stacked on one another, so a
+        # seam would be cancelled: they are held apart by a real gap instead,
+        # the far one slimmer, so the top bar reads as two limbs.
+        for spread, base_w in ((24, 48), (-22, 38)):
             tip_x = 108 + (0 if spread > 0 else 18)
             d.tapered_path(
                 [
                     (shoulder[0] - 8, shoulder[1] + spread),
-                    (380, shoulder[1] + spread * 0.9),
-                    (250, shoulder[1] + spread * 0.8),
-                    (tip_x, shoulder[1] + spread * 0.7),
+                    (380, shoulder[1] + spread),
+                    (250, shoulder[1] + spread),
+                    (tip_x, shoulder[1] + spread),
                 ],
                 [base_w, base_w * 0.82, base_w * 0.6, base_w * 0.34],
                 True,
             )
             arm = [
                 (shoulder[0] - 8, shoulder[1] + spread),
-                (tip_x, shoulder[1] + spread * 0.7),
+                (tip_x, shoulder[1] + spread),
             ]
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
@@ -1793,8 +1796,8 @@ def pose(letter: str) -> Drawer:
             d.circle(shoulder[0] - 8, shoulder[1] + spread, base_w // 2 + 2)
             # Engraved wrist line where the flat hand continues the forearm.
             d.cut_path([
-                (tip_x + 74, shoulder[1] + spread * 0.7 - 13),
-                (tip_x + 74, shoulder[1] + spread * 0.7 + 13),
+                (tip_x + 74, shoulder[1] + spread - 13),
+                (tip_x + 74, shoulder[1] + spread + 13),
             ], 3.4, False)
         # Diagonal spine: one straight lean from the shoulders back to the knees.
         d.torso([shoulder, (340, 420), knee], 92, False)
