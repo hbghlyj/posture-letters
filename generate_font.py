@@ -1012,12 +1012,17 @@ def pose(letter: str) -> Drawer:
     elif letter == "T":
         # Arms make the crossbar; both legs stay together and descend
         # vertically, matching the upright stance in the historical print.
+        # Proportions follow a standing human reference: the torso runs from
+        # shoulders to hips at roughly the same length as the legs beneath it,
+        # rather than a long trunk on stub legs.
         d.head(350, 700, 1)
-        d.torso([(350, 635), (350, 440), (350, 245)], 90, False)
+        d.torso([(350, 635), (350, 520), (350, 400)], 90, False)
         d.limb([(330, 620), (190, 650), (75, 650)], 50, False, end="hand")
         d.limb([(370, 620), (510, 650), (625, 650)], 50, False, end="hand")
-        d.leg([(330, 255), (330, 155), (330, 55)], 38, knee_index=1)
-        d.leg([(370, 255), (370, 155), (370, 55)], 38, knee_index=1)
+        d.leg([(324, 400), (322, 228), (321, 55)], 44, knee_index=1,
+              breeches_width=48)
+        d.leg([(376, 400), (378, 228), (379, 55)], 44, knee_index=1,
+              breeches_width=48)
 
     elif letter == "U":
         # The historic print omitted U; this hanging bend puts it back.
