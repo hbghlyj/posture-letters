@@ -1736,27 +1736,25 @@ def pose(letter: str) -> Drawer:
             ], 3.4, False)
         # Frontal squat: knees drawn up toward the chest, then the shins drop
         # vertically down the front of the body to the planted feet.
+        # The squat is drawn as real geometry, not engraving: a cut here is
+        # cancelled by the torso stacked beneath, so the fold has to live in
+        # the silhouette. Each thigh runs outward from the hip to a knee that
+        # juts clear of the body, and the shin then drops back inward, cutting
+        # a visible notch into the outline on each side.
         for sign in (-1, 1):
+            knee = (350 + sign * 96, 250)
             d.leg(
-                [
-                    (350 + sign * 30, 222),
-                    (350 + sign * 34, 300),
-                    (350 + sign * 32, 56),
-                ],
-                58, knee_index=1, breeches_width=76,
+                [(350 + sign * 26, 330), knee, (350 + sign * 44, 56)],
+                50, knee_index=1, breeches_width=62,
                 shoe_direction=(sign, 0),
             )
-            # The squat is a deep fold, so the drawn-up thigh and the shin
-            # below it are engraved apart; without this the whole column reads
-            # as one undifferentiated block rather than a folded leg.
+            # A rounded cap on the projecting knee makes the joint explicit.
+            d.ellipse(knee[0] + sign * 4, knee[1] + 6, 30, 26, 0.0)
+            # Crease inside the fold, held clear of the outline.
             d.cut_path([
-                (350 + sign * 8, 306), (350 + sign * 34, 316),
-                (350 + sign * 58, 306),
-            ], 5.0, True)
-            d.cut_path([
-                (350 + sign * 20, 248), (350 + sign * 22, 176),
-                (350 + sign * 20, 104),
-            ], 3.6, True)
+                (350 + sign * 62, 232), (350 + sign * 78, 250),
+                (350 + sign * 70, 274),
+            ], 4.4, True)
 
     elif letter == "Z":
         # Side-profile Z: a dramatic backward lean over a deep kneel, with the
