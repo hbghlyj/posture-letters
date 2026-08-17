@@ -668,15 +668,15 @@ def pose(letter: str) -> Drawer:
                 [
                     (stem_x + spread * 0.5, 350),
                     (knee[0] + spread, knee[1]),
-                    (meet[0] - 44 + spread, meet[1] + 16),
+                    (meet[0] - 62 + spread, meet[1] - 10),
                 ],
                 56, knee_index=1, breeches_width=74,
-                shoe_direction=(0.55, 0.84),
+                shoe_direction=(0.42, 0.91), shoe_scale=0.82,
             )
         # Upper curve: the arm arches back over the top and down behind.
         arm = [
             (stem_x + 34, 640), (318, 730), (466, 646),
-            (536, 500), (492, 350),
+            (536, 500), (500, 386),
         ]
         d.path(arm[:3], 46, True, False, track=False)
         d.path(arm[2:], 40, True, False, track=False)
@@ -688,12 +688,25 @@ def pose(letter: str) -> Drawer:
         d.circle(arm[0][0], arm[0][1], 24)
         # Elbow crease where the arch turns down behind the body.
         d.cut_path([(470, 682), (500, 654), (516, 620)], 4.6, True)
-        # Enclosure point: the reaching hand closes on the raised feet.
-        d.ellipse(meet[0] - 22, meet[1] + 28, 28, 30, -0.45)
+        # Enclosure point: the reaching hand closes on the raised feet. Hand
+        # and feet must stay legible as two separate body parts, so the palm
+        # sits above the shoes and an engraved seam runs along the contact
+        # line, with finger creases across the palm itself.
+        d.ellipse(meet[0] - 12, meet[1] + 56, 27, 23, -0.35)
+        # Fingers reach down past the palm onto the shoes.
+        for dx in (-22, -8, 6):
+            d.polygon([
+                (meet[0] + dx - 5, meet[1] + 48),
+                (meet[0] + dx + 5, meet[1] + 48),
+                (meet[0] + dx + 3, meet[1] + 18),
+                (meet[0] + dx - 4, meet[1] + 18),
+            ])
+        # Engraved seam along the contact line keeps hand and feet legible as
+        # two separate body parts rather than one fused mass.
         d.cut_path([
-            (meet[0] - 38, meet[1] + 42), (meet[0] - 20, meet[1] + 32),
-            (meet[0] - 6, meet[1] + 38),
-        ], 4.2, True)
+            (meet[0] - 52, meet[1] + 6), (meet[0] - 14, meet[1] - 2),
+            (meet[0] + 20, meet[1] + 8),
+        ], 6.5, True)
 
     elif letter == "E":
         # Historical seated E. Head and torso form the stem; the top and middle
