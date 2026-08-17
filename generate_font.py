@@ -1742,19 +1742,19 @@ def pose(letter: str) -> Drawer:
         # juts clear of the body, and the shin then drops back inward, cutting
         # a visible notch into the outline on each side.
         for sign in (-1, 1):
-            knee = (350 + sign * 96, 250)
+            knee = (350 + sign * 74, 252)
             d.leg(
-                [(350 + sign * 26, 330), knee, (350 + sign * 44, 56)],
-                50, knee_index=1, breeches_width=62,
-                shoe_direction=(sign, 0),
+                [(350 + sign * 22, 330), knee, (350 + sign * 22, 56)],
+                46, knee_index=1, breeches_width=56,
+                shoe_direction=(sign, 0), shoe_scale=0.82,
             )
             # A rounded cap on the projecting knee makes the joint explicit.
-            d.ellipse(knee[0] + sign * 4, knee[1] + 6, 30, 26, 0.0)
+            d.ellipse(knee[0] + sign * 3, knee[1] + 6, 26, 23, 0.0)
             # Crease inside the fold, held clear of the outline.
             d.cut_path([
-                (350 + sign * 62, 232), (350 + sign * 78, 250),
-                (350 + sign * 70, 274),
-            ], 4.4, True)
+                (350 + sign * 46, 234), (350 + sign * 60, 252),
+                (350 + sign * 53, 274),
+            ], 4.2, True)
 
     elif letter == "Z":
         # Side-profile Z: a dramatic backward lean over a deep kneel, with the
