@@ -1242,7 +1242,10 @@ def pose(letter: str) -> Drawer:
                     (hip[0] + spread, 74),
                 ],
                 width, knee_index=1, breeches_width=breeches,
-                shoe_direction=(-1 if spread < 0 else 1, 0),
+                # Both feet point right: the body faces that way, arching over
+                # to the shoulders and hanging head at the lower right, so
+                # splaying one foot back to the left contradicts the pose.
+                shoe_direction=(1, 0),
             )
         # Diagonal: one long backbend sweeping from the hips down to the
         # shoulders on the right.
