@@ -801,22 +801,22 @@
         {
           "index": 1,
           "classification": "arm",
-          "length": 206.85,
+          "length": 220.79,
           "segments": [
-            108.7,
-            98.2
+            116.6,
+            104.2
           ],
-          "deviation_percent": 4.56
+          "deviation_percent": 11.61
         },
         {
           "index": 2,
           "classification": "arm",
-          "length": 206.85,
+          "length": 220.79,
           "segments": [
-            108.7,
-            98.2
+            116.6,
+            104.2
           ],
-          "deviation_percent": 4.56
+          "deviation_percent": 11.61
         },
         {
           "index": 3,
@@ -840,22 +840,24 @@
         }
       ],
       "torso_lengths": [
-        334.0
+        386.0
       ],
       "head_diameters": [
         110.0
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 forearm 98.2 is +15.3% from 85.1",
-        "limb 2 forearm 98.2 is +15.3% from 85.1",
+        "limb 1 (arm) total 220.8 is +11.6% from 197.8",
+        "limb 1 forearm 104.2 is +22.4% from 85.1",
+        "limb 2 (arm) total 220.8 is +11.6% from 197.8",
+        "limb 2 forearm 104.2 is +22.4% from 85.1",
         "limb 3 (leg) total 356.0 is +19.0% from 299.2",
         "limb 3 thigh 190.0 is +23.6% from 153.7",
         "limb 3 calf 166.0 is +14.0% from 145.6",
         "limb 4 (leg) total 356.0 is +19.0% from 299.2",
         "limb 4 thigh 190.0 is +23.6% from 153.7",
         "limb 4 calf 166.0 is +14.0% from 145.6",
-        "torso 334.0 is +105.1% from 162.8"
+        "torso 386.0 is +137.1% from 162.8"
       ]
     },
     {
