@@ -26,7 +26,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 |---|---|---|---:|---:|---|
 | A | **PASS** | A 202.8, A 192.8, L 296.0, L 294.5, A 202.8, A 192.8, L 296.0, L 294.5 | 162.8, 162.8 | 110.0, 110.0 | Within tolerance |
 | B | **FAIL** | L 471.4, L 394.1, L 516.7 | 238.0 | 110.0 | expected 4 measurable limbs; found 3 |
-| C | **FAIL** | L 340.1, L 328.7, L 385.6, L 317.8 | 371.5 | 110.0 | limb 1 (leg) total 340.1 is +15.2% from 295.2 |
+| C | **FAIL** | L 340.1, L 333.5, L 385.6, L 317.8 | 371.5 | 110.0 | limb 1 (leg) total 340.1 is +15.2% from 295.2 |
 | D | **FAIL** | L 573.0, L 574.2, L 598.5 | 288.0 | 110.0 | expected 4 measurable limbs; found 3 |
 | E | **FAIL** | L 408.0, L 304.0, L 425.0, L 392.0 | 580.0 | 110.0 | limb 1 (leg) total 408.0 is +38.2% from 295.2 |
 | F | **FAIL** | L 406.0, L 306.0, L 368.1, L 368.1 | 256.0 | 110.0 | limb 1 (leg) total 406.0 is +37.5% from 295.2 |
@@ -69,9 +69,9 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - limb 1 (leg) total 340.1 is +15.2% from 295.2
 - limb 1 thigh 164.8 is +8.6% from 151.8
 - limb 1 calf 175.3 is +22.2% from 143.5
-- limb 2 (leg) total 328.7 is +11.3% from 295.2
-- limb 2 thigh 160.5 is +5.8% from 151.8
-- limb 2 calf 168.2 is +17.2% from 143.5
+- limb 2 (leg) total 333.5 is +13.0% from 295.2
+- limb 2 thigh 162.6 is +7.1% from 151.8
+- limb 2 calf 170.9 is +19.1% from 143.5
 - limb 3 (leg) total 385.6 is +30.6% from 295.2
 - limb 3 calf 240.2 is +67.5% from 143.5
 - limb 4 (leg) total 317.8 is +7.7% from 295.2

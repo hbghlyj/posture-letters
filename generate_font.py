@@ -628,7 +628,7 @@ def pose(letter: str) -> Drawer:
         # shapes under the nonzero fill rule.
         for arm, base_w in (
             ([(256, 592), (394, 682), (552, 606)], 44),
-            ([(238, 552), (376, 634), (528, 562)], 34),
+            ([(244, 566), (382, 652), (536, 578)], 34),
         ):
             d.tapered_path(
                 arm + [(arm[-1][0] + 4, arm[-1][1] - 6)],
