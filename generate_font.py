@@ -776,20 +776,22 @@ def pose(letter: str) -> Drawer:
         # sweeping the wide bottom arc to the right.
         for spread, width, breeches in ((-18, 56, 68), (20, 46, 56)):
             knee = (474 + spread, 92)
-            ankle = (626 + spread * 0.4, 316 + spread)
+            ankle = (600 + spread * 0.4, 330 + spread)
             d.leg(
                 [(hip[0] + spread * 0.5, hip[1] - 24), knee, ankle],
                 width, knee_index=1, breeches_width=breeches,
                 shoe_direction=(-1, 0), shoe_scale=0.5,
             )
             # The foot turns sharply inward and runs horizontally into the
-            # counter: this pair of level feet is the letter's crossbar.
-            foot_y = ankle[1] + 26
-            d.path([(ankle[0] + 4, foot_y), (402 + spread * 0.5, foot_y)],
+            # counter: this pair of level feet is the letter's crossbar. The
+            # bar is kept to a believable foot length — roughly half the shin
+            # rather than matching it — so the terminal reads as feet.
+            foot_y = ankle[1] + 24
+            d.path([(ankle[0] + 4, foot_y), (462 + spread * 0.5, foot_y)],
                    width * 0.78, False, False, track=False)
-            d.ellipse(398 + spread * 0.5, foot_y, 16, width * 0.42, 0.0)
+            d.ellipse(458 + spread * 0.5, foot_y, 15, width * 0.42, 0.0)
             d.cut_path([
-                (ankle[0] - 40, foot_y - 14), (ankle[0] - 40, foot_y + 14),
+                (ankle[0] - 30, foot_y - 13), (ankle[0] - 30, foot_y + 13),
             ], 3.4, False)
         # The head is tucked into the crest, face turned down into the letter.
         d.head(336, 668, 1, -math.pi / 2)
