@@ -46,6 +46,8 @@ Or declare only the compact WOFF2:
 - a–z aliases (same pose outlines as uppercase)
 - space
 - period, comma, exclamation mark, question mark, hyphen
+
+The period, comma and hyphen keep a figure's head as their body, but the exclamation and question marks use plain solid dots — a hatted head at that size reads as a figure rather than punctuation and clutters the mark in running text.
 - en dash and em dash aliases
 
 The original print uses a 24-letter alphabet and omits **J** and **U**. Those two modern-coverage glyphs are editorial interpolations and are not represented as historical reconstructions.

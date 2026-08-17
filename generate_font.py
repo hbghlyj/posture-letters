@@ -1461,11 +1461,13 @@ def punctuation(name: str) -> Drawer:
         d.head(340, 90, 1)
         d.path([(355, 55), (330, -15), (285, -65)], 36)
     elif name == "exclam":
-        d.head(350, 90, 1)
+        # The dot is a plain solid disc: a hatted head here reads as a figure
+        # rather than punctuation and clutters the mark at text sizes.
+        d.circle(350, 90, 55)
         d.torso([(350, 720), (350, 250)], 80, False)
         d.circle(350, 760, 34)
     elif name == "question":
-        d.head(350, 90, 1)
+        d.circle(350, 90, 55)
         d.path([(170, 620), (250, 750), (455, 730), (530, 600), (470, 475), (355, 400), (350, 260)], 72)
         d.circle(170, 620, 28)
     elif name == "hyphen":
