@@ -924,7 +924,7 @@ def pose(letter: str) -> Drawer:
             right_leg, 58, knee_index=2, breeches_width=78,
             shoe_direction=(-1, 0), shoe_scale=0.48,
         )
-        d.front_head(340, 108, 62, hair_down=True)
+        d.front_head(340, 108, 62, hair_down=True, upside_down=True, gaze_up=True)
         # The projecting Q tail is the visible arm. Begin it well inside the
         # right shoulder mass, reinforce the socket, and continue outward as one
         # unbroken upper-arm/forearm route so the appendage cannot read detached.
