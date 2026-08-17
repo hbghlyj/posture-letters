@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent
 UPM = 1000
 ADVANCE = 700
 # Constant space kept on each side of a glyph's ink when fitting its advance.
-SIDEBEARING = 55
+SIDEBEARING = 72
 
 Point = tuple[float, float]
 
@@ -460,12 +460,18 @@ class Drawer:
             (x + radius * 0.18, mouth_y),
         ], 4, True)
 
-    def to_glyph(self):
+    def to_glyph(self, dx: float = 0.0):
+        """Build the TrueType glyph, optionally shifted along x.
+
+        Spacing has to move the outline itself: setting a left sidebearing in
+        hmtx without translating the contours leaves the ink where it was
+        drawn, so neighbouring glyphs still collide however the metrics read.
+        """
         pen = TTGlyphPen(None)
         for poly, _hole in self.contours:
-            pen.moveTo(poly[0])
+            pen.moveTo((poly[0][0] + dx, poly[0][1]))
             for p in poly[1:]:
-                pen.lineTo(p)
+                pen.lineTo((p[0] + dx, p[1]))
             pen.closePath()
         return pen.glyph()
 
@@ -1493,7 +1499,19 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
     drawings.update({name: punctuation(name) for name in punct_names})
     drawings[".notdef"] = notdef()
 
-    glyphs = {name: drawings[name].to_glyph() for name in drawings}
+    def ink_bounds(name: str) -> tuple[float, float] | None:
+        drawer = drawings.get(name)
+        xs = [x for contour, _ in drawer.contours for x, _ in contour] if drawer else []
+        return (min(xs), max(xs)) if xs else None
+
+    # Shift each outline so its ink starts exactly one sidebearing from the
+    # glyph origin, then give it a matching advance.
+    shifts = {}
+    for name in drawings:
+        bounds = ink_bounds(name)
+        shifts[name] = SIDEBEARING - bounds[0] if bounds else 0.0
+
+    glyphs = {name: drawings[name].to_glyph(shifts[name]) for name in drawings}
     glyphs["space"] = TTGlyphPen(None).glyph()
 
     cmap = {ord(ch): ch for ch in letters}
@@ -1521,13 +1539,17 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
     def fitted_metrics(name: str) -> tuple[int, int]:
         if name == "space":
             return (330, 0)
-        drawer = drawings.get(name)
-        xs = [x for contour, _ in drawer.contours for x, _ in contour] if drawer else []
-        if not xs:
+        bounds = ink_bounds(name)
+        if bounds is None:
             return (ADVANCE, 0)
-        left, right = min(xs), max(xs)
-        advance = min(ADVANCE, round(right - left + 2 * SIDEBEARING))
-        return (advance, round(SIDEBEARING - left))
+        left, right = bounds
+        # No cap at the em: clamping the advance to ADVANCE squeezed the
+        # sidebearings of the widest poses (W and X span nearly the whole em)
+        # down to a couple of units, so their limbs collided with the
+        # neighbouring letters. Every glyph gets its full sidebearing and the
+        # advance grows past the em where the pose needs it.
+        advance = round(right - left + 2 * SIDEBEARING)
+        return (advance, round(SIDEBEARING))
 
     metrics = {name: fitted_metrics(name) for name in order}
     fb.setupGlyf(glyphs)
