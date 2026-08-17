@@ -1199,18 +1199,18 @@ def pose(letter: str) -> Drawer:
                 width, knee_index=1, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            # The foot points down as a wedge rather than up as a thin stub:
-            # the heel drops at the ankle, the sole runs forward and the toe
-            # tapers, and a curved cut lifts the arch off the ground.
+            # The foot hangs down from the ankle as a clean wedge: broad at the
+            # ankle, tapering down and back to a rounded toe at the lower left,
+            # with a curved cut marking the arch. Drawn as one tapered stroke
+            # so it reads as a foot rather than a blob of overlapping parts.
             ax, ay = 592 + spread, 108
-            d.polygon([
-                (ax - 30, ay + 22), (ax + 14, ay + 16),
-                (ax + 30, ay - 12), (ax + 6, ay - 30),
-                (ax - 26, ay - 20),
-            ])
-            d.ellipse(ax - 24, ay + 4, 20, 22, 0.0)
+            d.tapered_path(
+                [(ax + 4, ay + 16), (ax - 8, ay - 30), (ax - 30, ay - 74)],
+                [40, 30, 19], True,
+            )
+            d.ellipse(ax - 33, ay - 79, 11, 9, 0.5)
             d.cut_path([
-                (ax - 16, ay - 14), (ax - 2, ay - 6), (ax + 16, ay - 8),
+                (ax + 16, ay - 6), (ax + 6, ay - 34), (ax - 12, ay - 58),
             ], 4.0, True)
 
     elif letter == "M":
@@ -1887,17 +1887,16 @@ def pose(letter: str) -> Drawer:
                 width, knee_index=1, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            # Wedge foot pointing down, matching L: heel dropped at the ankle,
-            # sole forward, toe tapered, and a curved cut for the arch.
+            # Wedge foot hanging down, matching L: broad at the ankle, tapering
+            # down and back to a rounded toe, with a curved arch cut.
             ax, ay = 556 + spread, 108
-            d.polygon([
-                (ax - 32, ay + 24), (ax + 14, ay + 18),
-                (ax + 32, ay - 12), (ax + 6, ay - 32),
-                (ax - 28, ay - 20),
-            ])
-            d.ellipse(ax - 26, ay + 4, 21, 23, 0.0)
+            d.tapered_path(
+                [(ax + 4, ay + 18), (ax - 8, ay - 30), (ax - 32, ay - 76)],
+                [42, 31, 20], True,
+            )
+            d.ellipse(ax - 35, ay - 81, 12, 10, 0.5)
             d.cut_path([
-                (ax - 18, ay - 14), (ax - 2, ay - 6), (ax + 18, ay - 8),
+                (ax + 18, ay - 6), (ax + 6, ay - 34), (ax - 12, ay - 60),
             ], 4.0, True)
 
     return d
