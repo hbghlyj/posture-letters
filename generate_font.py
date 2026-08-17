@@ -730,77 +730,90 @@ def pose(letter: str) -> Drawer:
         ], 6.5, True)
 
     elif letter == "E":
-        # Kneeling E built from coordinated limb extensions. The right arm
-        # rises vertically from the shoulder and curves over the top of the
-        # head, running horizontally right as the upper crossbar; the head is
-        # nestled underneath it, tilted forward and facing down into the body.
-        # The left arm reaches forward from mid-torso and bends about ninety
-        # degrees at the elbow, throwing the forearm out as the shorter middle
-        # prong. The figure kneels on its lower legs, and at the front base the
-        # limb bends up at the knee and extends horizontally along the ground
-        # as the long lower bar, its foot flexing sharply up at the ankle to
-        # make a vertical terminal at the bottom-right corner.
+        # Kneeling E, coordinated limb by limb from the source figure. The
+        # torso is turned to her right into a partial side profile and stands
+        # dead vertical as the spine of the letter. The right arm is rotated
+        # fully at the shoulder and arches over the crown of the head to make
+        # the upper prong, and at its tip the hand droops straight down as the
+        # top-right serif. The head is nestled directly beneath that arch,
+        # tilted forward and facing to her right. The left arm hangs down the
+        # flank, flexes about ninety degrees at the elbow and throws the
+        # forearm out horizontally as the middle prong, set at the height that
+        # halves the counter. The figure has dropped into a deep kneel so the
+        # shins lie flat along the ground as the lower prong, and at the back
+        # of that stroke the heels flex up into a sharp bottom-right serif.
         stem_x = 172
         hip_y = 306
         d.torso([(stem_x, hip_y), (stem_x, 452), (stem_x, 598)], 84, False)
-        # Upper bar: the right arm straight up, then over the head to the right.
-        # The vertical run is carried out past the torso's left edge: drawn on
-        # the stem's own centreline the arm vanished into it, and an engraved
-        # seam is cancelled where two filled shapes stack.
-        upper = [(102, 572), (96, 690), (300, 736), (596, 736)]
-        # Deltoid wedge ties the offset arm back into the shoulder.
-        d.path([(stem_x - 10, 596), upper[0]], 34, False, False, track=False)
-        d.path(upper[:2], 40, True, False, track=False)
+        # Upper prong: the right arm rotated up out of the shoulder, then
+        # arching over the crown and running right. The whole arch sits above
+        # the torso's own end, so the limb reads clear of the trunk without
+        # needing a seam (an engraved seam is cancelled where fills stack).
+        upper = [(158, 592), (118, 692), (300, 742), (582, 736)]
+        d.path(upper[:2], 42, False, False, track=False)
         d.path(upper[1:], 38, True, False, track=False)
         segments, length = d.centerline_measurements(upper)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
             "points": upper,
         })
-        d.circle(upper[0][0], upper[0][1], 20)
-        # Shoulder-to-overhead crease at the turn above the head.
-        d.cut_path([(84, 700), (110, 726), (150, 734)], 4.0, True)
-        d.ellipse(608, 736, 18, 20, 0.0)
-        d.cut_path([(588, 718), (588, 754)], 3.4, False)
-        # Head nestled under the upper bar, tilted forward and facing down.
-        d.head(stem_x + 40, 630, 1, -0.62)
-        # Middle prong: the left arm forward from mid-torso, ninety degrees at
-        # the elbow, forearm horizontal.
-        # The elbow is carried out along the prong rather than tucked against
-        # the torso: previously the upper arm was an 82-unit stub against a
-        # 290-unit forearm, so one overlong forearm spanned the whole bar.
-        # Splitting it evenly also brings the whole limb near the font's
-        # baseline arm length.
-        elbow = (stem_x + 150, 470)
-        d.path([(stem_x + 10, 540), elbow], 38, False, False, track=False)
-        d.path([elbow, (486, 462)], 34, False, False, track=False)
-        mid_arm = [(stem_x + 10, 540), elbow, (486, 462)]
+        # Shoulder ball and deltoid, and the elbow mass at the top of the arch.
+        d.circle(upper[0][0], upper[0][1], 22)
+        d.circle(upper[1][0], upper[1][1], 21, n=24)
+        # Crease inside the elbow, on the underside of the arch.
+        d.cut_path([(112, 662), (146, 700), (188, 716)], 4.0, True)
+        # Hand serif: the wrist breaks over a rounded joint and the hand hangs
+        # straight down, giving the top-right corner a clean vertical terminal.
+        d.circle(582, 736, 20, n=24)
+        d.tapered_path([(584, 738), (592, 700), (598, 668)], [36, 31, 26], True)
+        d.ellipse(599, 660, 18, 15, 0.0)
+        for dx in (-11, -1, 9):
+            d.polygon([
+                (599 + dx - 4, 656), (599 + dx + 4, 656),
+                (599 + dx + 3, 630), (599 + dx - 4, 630),
+            ])
+        d.cut_path([(586, 706), (612, 702)], 3.2, False)
+        # Head nestled under the arch, tilted forward, facing to her right.
+        # No hat here: the crown and brim jam straight into the underside of
+        # the arching arm in this tight corner (the same reason A and G go
+        # bare-headed), leaving the head as one merged blob with the prong.
+        d.head(stem_x + 46, 624, 1, -0.34, hat=False)
+        # Middle prong: the left arm hangs down the flank, then the elbow
+        # flexes forward and the forearm runs out horizontally. The bar height
+        # is set so the two counters of the letter come out even.
+        bar_y = 416
+        shoulder = (206, 570)
+        elbow = (270, bar_y + 8)
+        d.path([shoulder, (258, 486), elbow], 38, True, False, track=False)
+        d.path([elbow, (430, bar_y)], 34, False, False, track=False)
+        mid_arm = [shoulder, elbow, (430, bar_y)]
         segments, length = d.centerline_measurements(mid_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
             "points": mid_arm,
         })
+        d.circle(shoulder[0], shoulder[1], 20)
         d.circle(elbow[0], elbow[1], 20)
         d.cut_path([
-            (elbow[0] + 18, elbow[1] + 16), (elbow[0] + 22, elbow[1]),
-            (elbow[0] + 10, elbow[1] - 17),
+            (elbow[0] + 20, elbow[1] + 16), (elbow[0] + 24, elbow[1]),
+            (elbow[0] + 12, elbow[1] - 17),
         ], 4.0, True)
-        d.ellipse(498, 462, 17, 18, 0.0)
-        d.cut_path([(480, 446), (480, 478)], 3.4, False)
-        # Lower bar: kneeling thigh drops to the knee, then the limb bends up
-        # at the knee and runs horizontally right along the ground.
+        d.ellipse(442, bar_y, 17, 18, 0.0)
+        d.cut_path([(424, bar_y - 16), (424, bar_y + 16)], 3.4, False)
+        # Lower prong: the thighs drop to the knees at the front, and from the
+        # knees the shins lie flat along the ground running right.
         knee = (stem_x - 2, 118)
         for spread, width, breeches in ((-16, 54, 62), (16, 42, 50)):
             d.leg(
                 [(stem_x + spread * 0.4, hip_y), (knee[0] + spread * 0.5, knee[1]),
-                 (566 + spread, 104)],
+                 (548 + spread, 104)],
                 width, knee_index=1, breeches_width=breeches, shoe_scale=0.0,
             )
-        # Foot flexes sharply up at the ankle: the bottom-right terminal.
-        d.path([(570, 96), (590, 200)], 40, False, False, track=False)
-        d.ellipse(592, 212, 17, 19, 0.10)
-        d.cut_path([(566, 132), (596, 138)], 3.4, False)
-
+        # Heel serif: the ankles flex up at the back of the base stroke and
+        # taper to a sharp point, the bottom-right terminal of the letter.
+        d.circle(552, 114, 26, n=24)
+        d.tapered_path([(552, 108), (568, 150), (580, 194)], [48, 38, 20], True)
+        d.cut_path([(534, 128), (566, 136)], 3.4, False)
     elif letter == "F":
         # Upright F built from both arms. Head, torso and two tightly parallel
         # legs make the vertical trunk; the near arm reaches straight out from

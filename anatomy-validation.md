@@ -28,7 +28,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | B | **FAIL** | L 471.4, L 394.1, L 516.7 | 238.0 | 110.0 | expected 4 measurable limbs; found 3 |
 | C | **FAIL** | L 340.1, L 333.5, L 385.6, L 317.8 | 371.5 | 110.0 | limb 1 (leg) total 340.1 is +15.2% from 295.2 |
 | D | **FAIL** | L 573.0, L 574.2, L 600.0 | 288.0 | 110.0 | expected 4 measurable limbs; found 3 |
-| E | **FAIL** | L 623.3, L 320.7, L 576.3, L 592.2 | 292.0 | 110.0 | limb 1 (leg) total 623.3 is +111.1% from 295.2 |
+| E | **FAIL** | L 578.5, L 319.6, L 558.3, L 574.2 | 292.0 | 110.0 | limb 1 (leg) total 578.5 is +96.0% from 295.2 |
 | F | **FAIL** | L 406.0, L 306.0, L 368.1, L 368.1 | 256.0 | 110.0 | limb 1 (leg) total 406.0 is +37.5% from 295.2 |
 | G | **FAIL** | L 335.2, L 302.8, L 576.0, L 616.8 | 587.9 | 110.0 | limb 1 (leg) total 335.2 is +13.5% from 295.2 |
 | H | **FAIL** | A 208.0, L 390.2, L 390.0, A 208.0, L 390.2, L 390.0 | 206.2, 206.2 | 110.0, 110.0 | expected 8 measurable limbs; found 6 |
@@ -93,16 +93,17 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - torso 288.0 is +76.9% from 162.8
 
 ### E
-- limb 1 (leg) total 623.3 is +111.1% from 295.2
+- limb 1 (leg) total 578.5 is +96.0% from 295.2
 - limb 1 has 3 skeletal segments; expected upper/lower pair
-- limb 2 (leg) total 320.7 is +8.6% from 295.2
-- limb 2 calf 164.2 is +14.5% from 143.5
-- limb 3 (leg) total 576.3 is +95.2% from 295.2
+- limb 2 (leg) total 319.6 is +8.3% from 295.2
+- limb 2 thigh 159.4 is +5.0% from 151.8
+- limb 2 calf 160.2 is +11.7% from 143.5
+- limb 3 (leg) total 558.3 is +89.1% from 295.2
 - limb 3 thigh 188.0 is +23.9% from 151.8
-- limb 3 calf 388.3 is +170.7% from 143.5
-- limb 4 (leg) total 592.2 is +100.6% from 295.2
+- limb 3 calf 370.3 is +158.1% from 143.5
+- limb 4 (leg) total 574.3 is +94.5% from 295.2
 - limb 4 thigh 188.0 is +23.9% from 151.8
-- limb 4 calf 404.2 is +181.8% from 143.5
+- limb 4 calf 386.3 is +169.3% from 143.5
 - torso 292.0 is +79.3% from 162.8
 - nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
