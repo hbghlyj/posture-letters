@@ -39,7 +39,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | M | **FAIL** | L 508.0, L 508.0, L 993.0, L 987.4 | 535.6 | 110.0 | limb 1 (leg) total 508.0 is +69.8% from 299.2 |
 | N | **FAIL** | L 498.0, L 498.0, L 658.0, L 679.7 | 508.5 | 110.0 | limb 1 (leg) total 498.0 is +66.4% from 299.2 |
 | O | **FAIL** | L 696.2, L 696.2 | — | 124.0 | expected 4 measurable limbs; found 2 |
-| P | **FAIL** | L 324.6, L 283.1, L 369.1, L 369.2 | 265.0 | 110.0 | limb 1 (leg) total 324.6 is +8.5% from 299.2 |
+| P | **FAIL** | L 542.7, L 394.1, L 394.1 | 238.0 | 110.0 | expected 4 measurable limbs; found 3 |
 | Q | **FAIL** | L 720.4, L 720.4, A 182.2 | — | 124.0 | expected 4 measurable limbs; found 3 |
 | R | **FAIL** | A 193.1, L 241.8, L 551.5, L 370.2 | 265.0 | 110.0 | limb 1 upper arm 97.7 is -13.3% from 112.7 |
 | S | **FAIL** | L 474.6, L 473.0, A 154.8, A 142.4 | 307.2 | 110.0 | limb 1 (leg) total 474.5 is +58.6% from 299.2 |
@@ -259,18 +259,16 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - head 124.0 is +12.7% from 110.0
 
 ### P
-- limb 1 (leg) total 324.6 is +8.5% from 299.2
-- limb 1 has 4 skeletal segments; expected upper/lower pair
-- limb 2 (leg) total 283.1 is -5.4% from 299.2
-- limb 2 has 3 skeletal segments; expected upper/lower pair
-- limb 3 (leg) total 369.1 is +23.4% from 299.2
-- limb 3 thigh 185.1 is +20.4% from 153.7
-- limb 3 calf 184.1 is +26.5% from 145.6
-- limb 4 (leg) total 369.2 is +23.4% from 299.2
-- limb 4 thigh 185.1 is +20.5% from 153.7
-- limb 4 calf 184.1 is +26.5% from 145.6
-- torso 265.0 is +62.8% from 162.8
-- nearest-baseline classification gives 0 arm(s) and 4 leg(s)
+- expected 4 measurable limbs; found 3
+- limb 1 (leg) total 542.7 is +81.4% from 299.2
+- limb 1 has 5 skeletal segments; expected upper/lower pair
+- limb 2 (leg) total 394.1 is +31.7% from 299.2
+- limb 2 thigh 198.1 is +28.9% from 153.7
+- limb 2 calf 196.0 is +34.7% from 145.6
+- limb 3 (leg) total 394.1 is +31.7% from 299.2
+- limb 3 thigh 198.0 is +28.9% from 153.7
+- limb 3 calf 196.0 is +34.7% from 145.6
+- torso 238.0 is +46.2% from 162.8
 
 ### Q
 - expected 4 measurable limbs; found 3

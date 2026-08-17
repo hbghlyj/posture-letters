@@ -1067,67 +1067,55 @@
         {
           "index": 1,
           "classification": "leg",
-          "length": 324.58,
+          "length": 542.7,
           "segments": [
-            88.6,
-            79.1,
-            91.9,
-            65.0
+            109.1,
+            120.8,
+            92.3,
+            86.6,
+            133.8
           ],
-          "deviation_percent": 8.48
+          "deviation_percent": 81.37
         },
         {
           "index": 2,
           "classification": "leg",
-          "length": 283.07,
+          "length": 394.13,
           "segments": [
-            103.1,
-            90.6,
-            89.4
+            198.1,
+            196.0
           ],
-          "deviation_percent": -5.4
+          "deviation_percent": 31.72
         },
         {
           "index": 3,
           "classification": "leg",
-          "length": 369.14,
+          "length": 394.08,
           "segments": [
-            185.1,
-            184.1
+            198.0,
+            196.0
           ],
-          "deviation_percent": 23.37
-        },
-        {
-          "index": 4,
-          "classification": "leg",
-          "length": 369.23,
-          "segments": [
-            185.1,
-            184.1
-          ],
-          "deviation_percent": 23.4
+          "deviation_percent": 31.7
         }
       ],
       "torso_lengths": [
-        265.0
+        238.0
       ],
       "head_diameters": [
         110.0
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 (leg) total 324.6 is +8.5% from 299.2",
-        "limb 1 has 4 skeletal segments; expected upper/lower pair",
-        "limb 2 (leg) total 283.1 is -5.4% from 299.2",
-        "limb 2 has 3 skeletal segments; expected upper/lower pair",
-        "limb 3 (leg) total 369.1 is +23.4% from 299.2",
-        "limb 3 thigh 185.1 is +20.4% from 153.7",
-        "limb 3 calf 184.1 is +26.5% from 145.6",
-        "limb 4 (leg) total 369.2 is +23.4% from 299.2",
-        "limb 4 thigh 185.1 is +20.5% from 153.7",
-        "limb 4 calf 184.1 is +26.5% from 145.6",
-        "torso 265.0 is +62.8% from 162.8",
-        "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (leg) total 542.7 is +81.4% from 299.2",
+        "limb 1 has 5 skeletal segments; expected upper/lower pair",
+        "limb 2 (leg) total 394.1 is +31.7% from 299.2",
+        "limb 2 thigh 198.1 is +28.9% from 153.7",
+        "limb 2 calf 196.0 is +34.7% from 145.6",
+        "limb 3 (leg) total 394.1 is +31.7% from 299.2",
+        "limb 3 thigh 198.0 is +28.9% from 153.7",
+        "limb 3 calf 196.0 is +34.7% from 145.6",
+        "torso 238.0 is +46.2% from 162.8"
       ]
     },
     {
