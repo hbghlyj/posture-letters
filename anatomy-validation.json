@@ -1157,14 +1157,14 @@
         {
           "index": 3,
           "classification": "arm",
-          "length": 161.62,
+          "length": 164.48,
           "segments": [
-            42.5,
-            45.3,
-            39.7,
-            34.1
+            46.0,
+            44.4,
+            38.4,
+            35.6
           ],
-          "deviation_percent": -18.3
+          "deviation_percent": -16.86
         }
       ],
       "torso_lengths": [],
@@ -1179,7 +1179,7 @@
         "limb 1 has 5 skeletal segments; expected upper/lower pair",
         "limb 2 (leg) total 720.4 is +144.0% from 295.2",
         "limb 2 has 5 skeletal segments; expected upper/lower pair",
-        "limb 3 (arm) total 161.6 is -18.3% from 197.8",
+        "limb 3 (arm) total 164.5 is -16.9% from 197.8",
         "limb 3 has 4 skeletal segments; expected upper/lower pair",
         "head 124.0 is +12.7% from 110.0"
       ]

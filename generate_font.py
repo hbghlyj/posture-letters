@@ -1467,7 +1467,11 @@ def pose(letter: str) -> Drawer:
         # ring, bend visibly at cuffed knees, and taper through calves/ankles to
         # the inward-pointing shoes that meet at the apex. These are articulated
         # legs, not anonymous tubular arms.
-        d.path([(245, 185), (340, 205), (435, 185)], 90, True, True, track=False)
+        # The shoulder bar stops short of the arm root. Run out to x=435 its
+        # rounded cap buried the whole shoulder-to-arm junction under three or
+        # four stacked filled shapes, where the nonzero fill rule cancels any
+        # engraved cut outright — no seam could ever render there.
+        d.path([(245, 185), (330, 203), (386, 193)], 88, True, True, track=False)
         left_leg = [(255, 200), (125, 285), (80, 455), (145, 625), (265, 720), (313, 745)]
         right_leg = [(680 - x, y) for x, y in left_leg]
         d.leg(
@@ -1487,8 +1491,8 @@ def pose(letter: str) -> Drawer:
         # within the shoulder bar, so shoulder, arm and leg piled into one
         # blob with no readable joint. A modest ball marks the joint at the
         # shoulder's edge and the limb tapers away from it.
-        d.circle(436, 186, 22)
-        tail_arm = [(436, 186), (468, 158), (502, 128), (532, 102), (558, 80)]
+        d.circle(423, 179, 16)
+        tail_arm = [(424, 178), (462, 152), (498, 126), (528, 102), (556, 80)]
         d.tapered_path(tail_arm, [42, 38, 34, 30, 26], True)
         # Engraved seam marking where the arm emerges from the shoulder mass.
         # Measuring the overlap shows the arm's upper edge is buried only for
@@ -1496,9 +1500,14 @@ def pose(letter: str) -> Drawer:
         # any further along the limb cuts open silhouette instead of the
         # shared boundary, which is what made earlier attempts read as a nick
         # in the outline rather than a joint.
+        # A cut cannot mark this junction: the arm and the leg are two stacked
+        # filled shapes, and under the nonzero fill rule a reverse contour
+        # there is simply cancelled. The separation has to be geometric, so
+        # the arm is lifted clear of the leg and only a short crease at the
+        # shoulder — where a single layer remains — is engraved.
         d.cut_path([
-            (450, 202), (466, 187), (480, 173),
-        ], 6.5, True)
+            (436, 194), (450, 184), (464, 173),
+        ], 6.0, True)
         segments, length = d.centerline_measurements(tail_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
@@ -1507,10 +1516,10 @@ def pose(letter: str) -> Drawer:
         # Compact tail hand with two visible supporting finger tips; the arm
         # stops just outside the lower-right ring instead of stretching past
         # the descender into a detached line.
-        d.ellipse(566, 74, 16, 21, -0.58)
-        d.polygon([(560, 62), (573, 51), (590, 46), (584, 58), (570, 67)])
-        d.polygon([(575, 70), (587, 64), (598, 71), (589, 80), (578, 77)])
-        d.cut_path([(563, 66), (571, 59), (581, 60)], 4.0, True)
+        d.ellipse(564, 74, 16, 21, -0.58)
+        d.polygon([(558, 62), (571, 51), (588, 46), (582, 58), (568, 67)])
+        d.polygon([(573, 70), (585, 64), (596, 71), (587, 80), (576, 77)])
+        d.cut_path([(561, 66), (569, 59), (579, 60)], 4.0, True)
 
     elif letter == "R":
         # R is P's stance with one leg swung out: head, upright torso and the
