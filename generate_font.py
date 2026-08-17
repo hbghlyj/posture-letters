@@ -557,40 +557,49 @@ def pose(letter: str) -> Drawer:
         d.circle(ball[0], ball[1], 13, hole=True)
 
     elif letter == "B":
-        # Upright stem with two stacked bowls. The upper, smaller bowl is made
-        # by the two clasped arms; the lower, larger one by the leg, which
-        # sweeps out from the hip, curves down and back in, and plants its foot
-        # against the base of the stem so the bowl actually closes. The other
-        # leg stays straight under the body to carry the stem to the baseline.
+        # B is the P/R stance carrying two loops. Head, upright torso and the
+        # perfectly straight standing leg make the vertical stem on the left;
+        # the near arm loops out from the shoulder in a smooth rubbery curve
+        # and tucks back to rest its hand at the waist, closing the upper bowl;
+        # and the other leg lifts, bends outward at the knee in a curved arc
+        # and tucks back so its foot rests against the standing ankle, closing
+        # the lower bowl. The far arm hangs straight down the opposite side.
         stem_x = 168
-        d.head(stem_x, 752, 1)
-        d.torso([(stem_x, 690), (stem_x, 560), (stem_x, 430)], 84, False)
-        # Upper bowl: two shortened arms clasping at the right.
-        upper_arm = [(stem_x + 26, 656), (280, 672), (344, 604)]
-        lower_arm = [(stem_x + 8, 512), (284, 496), (344, 604)]
-        for arm, width in ((upper_arm, 46), (lower_arm, 42)):
-            d.path(arm, width, True, True, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-        d.cut_path([(278, 668), (300, 654), (314, 632)], 4.2, True)
-        d.cut_path([(276, 504), (296, 502), (312, 512)], 3.8, True)
-        # Clasped hands close the upper bowl.
-        d.ellipse(348, 604, 25, 29, -0.25)
-        d.ellipse(340, 588, 23, 26, -0.25)
-        d.cut_path([(338, 616), (350, 610), (362, 614)], 4.0, True)
-        d.cut_path([(339, 602), (351, 597), (362, 601)], 4.0, True)
-        # Lower bowl: the leg swings out, curves down, and returns to the stem.
+        hip_y = 452
+        d.head(stem_x - 2, 752, 1)
+        d.torso([(stem_x, 690), (stem_x, 570), (stem_x, hip_y)], 86, False)
+        # Passive far arm, blending into the stem.
+        far_arm = [(stem_x - 30, 654), (stem_x - 38, 570), (stem_x - 34, 492)]
+        d.path(far_arm, 28, True, False, track=False)
+        d.circle(far_arm[-1][0], far_arm[-1][1], 15)
+        # Upper loop: the same rubbery arm curve used on P and R, kept a little
+        # smaller so the two bowls stack rather than compete.
+        loop = [
+            (stem_x + 26, 664), (288, 686), (382, 638),
+            (406, 560), (356, 502), (248, 476),
+        ]
+        d.path(loop, 44, True, False, track=False)
+        segments, length = d.centerline_measurements(loop)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": loop,
+        })
+        d.circle(loop[0][0], loop[0][1], 23)
+        d.cut_path([(364, 660), (388, 636), (396, 608)], 4.4, True)
+        # Hand closes the upper loop at the waist.
+        d.ellipse(238, 480, 27, 23, 0.18)
+        d.cut_path([(224, 494), (242, 485), (257, 491)], 4.0, True)
+        # Standing leg: perfectly straight, continuing the stem to the baseline.
         d.leg(
-            [(stem_x + 20, 424), (392, 296), (214, 108)], 54,
-            knee_index=1, breeches_width=70, shoe_direction=(-0.96, -0.28),
+            [(stem_x - 14, hip_y), (stem_x - 18, 254), (stem_x - 22, 58)], 52,
+            knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
         )
-        # Straight supporting leg keeps the stem running to the baseline.
+        # Lower loop: the lifted leg bows out at the knee and tucks its foot
+        # back against the standing ankle.
+        lifted = [(stem_x + 20, hip_y - 8), (404, 306), (214, 128)]
         d.leg(
-            [(stem_x - 12, 428), (stem_x - 18, 250), (stem_x - 22, 72)], 50,
-            knee_index=1, breeches_width=58, shoe_direction=(-1, 0),
+            lifted, 54, knee_index=1, breeches_width=68,
+            shoe_direction=(-0.98, -0.20),
         )
 
     elif letter == "C":
