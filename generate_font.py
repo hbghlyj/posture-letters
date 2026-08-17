@@ -608,11 +608,13 @@ def pose(letter: str) -> Drawer:
         d.front_head(190, 505, 48, hair_down=False)
 
     elif letter == "H":
-        # Two persons standing straight in profile, facing one another, each
-        # forming one upright stem of the H. Their straightened arms reach out
-        # and clasp at the centre, and that shared horizontal arm-line is the
-        # crossbar. Both bodies use normal standing proportions: head, upright
-        # torso, and two legs planted on the baseline.
+        # Two standing figures act as the vertical sides of the H; their joined
+        # hands at the centre form the horizontal crossbar. Each body is a
+        # normally proportioned upright person seen in profile — head, torso,
+        # two planted legs — and the near arm leaves the shoulder, levels off,
+        # and runs dead straight to the clasp so the two arms read as one
+        # continuous horizontal bar spanning the stems.
+        bar_y = 520
         for side in (-1, 1):
             cx = 350 - side * 210
             d.head(cx, 700, side)
@@ -620,21 +622,29 @@ def pose(letter: str) -> Drawer:
             d.torso(
                 [(cx, 636), (cx + side * 5, 545), (cx + side * 2, 430)], 78, True
             )
-            # Straight arm hanging from the shoulder and reaching slightly
-            # downward to the handshake, exactly as in the reference photo.
+            # Near arm: shoulder, a short drop to bar height, then a perfectly
+            # level forearm carrying the crossbar into the clasped hands.
             arm = [
-                (cx + side * 32, 590),
-                (cx + side * 115, 562),
-                (350 - side * 20, 545),
+                (cx + side * 26, 585),
+                (cx + side * 72, bar_y),
+                (cx + side * 140, bar_y),
+                (350 - side * 22, bar_y),
             ]
-            d.path(arm, 36, True, False, track=False)
+            d.path(arm, 38, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
+            # Elbow crease where the upper arm turns into the level forearm.
+            d.cut_path([
+                (cx + side * 62, bar_y + 18), (cx + side * 78, bar_y),
+                (cx + side * 66, bar_y - 18),
+            ], 5.0, True)
             # Far arm resting straight down along the body's outer side.
-            back_arm = [(cx - side * 26, 606), (cx - side * 34, 520), (cx - side * 32, 442)]
+            back_arm = [
+                (cx - side * 26, 606), (cx - side * 34, 520), (cx - side * 32, 442)
+            ]
             d.path(back_arm, 30, True, False, track=False)
             d.circle(back_arm[-1][0], back_arm[-1][1], 17)
             # Two legs per figure: near leg planted, far leg just behind it.
@@ -646,9 +656,9 @@ def pose(letter: str) -> Drawer:
                 [(cx + side * 15, 430), (cx + side * 18, 235), (cx + side * 20, 40)],
                 52, knee_index=1, shoe_direction=(side, 0),
             )
-        # Clasped hands where the two straightened arms meet at mid-height.
-        d.ellipse(350, 545, 36, 27, 0.0)
-        d.cut_path([(350, 521), (353, 545), (350, 569)], 5.0, True)
+        # Clasped hands at the centre of the crossbar.
+        d.ellipse(350, bar_y, 38, 26, 0.0)
+        d.cut_path([(350, bar_y - 23), (353, bar_y), (350, bar_y + 23)], 5.0, True)
 
     elif letter == "I":
         # Neutral rigid stance, rebuilt around a realistic seven-head figure.
