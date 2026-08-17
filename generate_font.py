@@ -1482,9 +1482,19 @@ def pose(letter: str) -> Drawer:
         # The projecting Q tail is the visible arm. Begin it well inside the
         # right shoulder mass, reinforce the socket, and continue outward as one
         # unbroken upper-arm/forearm route so the appendage cannot read detached.
-        d.circle(414, 190, 29)
-        tail_arm = [(414, 190), (448, 152), (490, 118), (525, 92), (552, 72)]
-        d.path(tail_arm, 46, True, True, track=False)
+        # The arm emerges from the edge of the shoulder mass rather than being
+        # rooted deep inside it: previously its socket circle sat entirely
+        # within the shoulder bar, so shoulder, arm and leg piled into one
+        # blob with no readable joint. A modest ball marks the joint at the
+        # shoulder's edge and the limb tapers away from it.
+        d.circle(436, 186, 22)
+        tail_arm = [(436, 186), (468, 158), (502, 128), (532, 102), (558, 80)]
+        d.tapered_path(tail_arm, [42, 38, 34, 30, 26], True)
+        # Engraved seam along the arm's underside where it passes the leg, so
+        # the two limbs stay legible instead of fusing into one wedge.
+        d.cut_path([
+            (452, 156), (486, 126), (518, 100),
+        ], 5.0, True)
         segments, length = d.centerline_measurements(tail_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
@@ -1493,10 +1503,10 @@ def pose(letter: str) -> Drawer:
         # Compact tail hand with two visible supporting finger tips; the arm
         # stops just outside the lower-right ring instead of stretching past
         # the descender into a detached line.
-        d.ellipse(558, 66, 17, 22, -0.58)
-        d.polygon([(552, 54), (565, 43), (582, 38), (576, 50), (562, 59)])
-        d.polygon([(567, 62), (579, 56), (590, 63), (581, 72), (570, 69)])
-        d.cut_path([(555, 58), (563, 51), (573, 52)], 4.0, True)
+        d.ellipse(566, 74, 16, 21, -0.58)
+        d.polygon([(560, 62), (573, 51), (590, 46), (584, 58), (570, 67)])
+        d.polygon([(575, 70), (587, 64), (598, 71), (589, 80), (578, 77)])
+        d.cut_path([(563, 66), (571, 59), (581, 60)], 4.0, True)
 
     elif letter == "R":
         # R is P's stance with one leg swung out: head, upright torso and the
