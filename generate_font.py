@@ -1036,31 +1036,36 @@ def pose(letter: str) -> Drawer:
         # so the centre of the letter stays solid with no trapped white.
         stem_x = 206
         hip_y = 412
-        d.head(stem_x, 742, 1)
-        d.torso([(stem_x, 678), (stem_x + 4, 546), (stem_x + 2, hip_y)], 84, False)
-        # Upper diagonal: the raised arm at roughly forty-five degrees.
-        raised = [(stem_x + 26, 634), (338, 690), (446, 748)]
-        d.path(raised, 44, True, False, track=False)
+        d.head(stem_x - 26, 706, 1)
+        d.torso([(stem_x, 646), (stem_x + 4, 530), (stem_x + 2, hip_y)], 84, False)
+        # Upper branch: the arm is raised straight up from the shoulder and
+        # curves slightly outward to the right near the top, rather than
+        # striking off at a flat forty-five degrees. The steep rise keeps the
+        # junction tight against the stem, as the reference does.
+        raised = [(stem_x + 26, 612), (272, 690), (330, 754)]
+        d.path(raised[:2], 44, True, False, track=False)
+        d.path(raised[1:], 38, True, False, track=False)
         segments, length = d.centerline_measurements(raised)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
             "points": raised,
         })
         d.circle(raised[0][0], raised[0][1], 23)
-        d.cut_path([(324, 712), (346, 690), (356, 668)], 4.2, True)
-        # Open hand serif at the top of the diagonal, fingers spread outward.
-        d.ellipse(458, 754, 22, 17, 0.48)
-        for dx, dy in ((26, 18), (30, 4), (24, -10), (12, -20)):
+        # Elbow crease on the outside of the rising curve.
+        d.cut_path([(266, 664), (284, 688), (290, 712)], 4.0, True)
+        # Open hand at the tip, fingers spread up and outward.
+        d.ellipse(340, 766, 20, 16, 0.62)
+        for dx, dy in ((22, 18), (28, 6), (25, -8), (14, -18)):
             d.polygon([
-                (454, 750), (458 + dx, 754 + dy), (460 + dx, 748 + dy),
+                (334, 760), (340 + dx, 766 + dy), (344 + dx, 760 + dy),
             ])
-        d.cut_path([(446, 762), (460, 752), (466, 740)], 3.4, True)
+        d.cut_path([(328, 772), (342, 764), (350, 752)], 3.4, True)
         # Closed centre: the far arm lies flat down the hip and thigh.
-        pinned = [(stem_x - 30, 642), (stem_x - 38, 528), (stem_x - 34, 424)]
+        pinned = [(stem_x - 30, 614), (stem_x - 38, 516), (stem_x - 34, 424)]
         d.path(pinned, 28, True, False, track=False)
         d.circle(pinned[-1][0], pinned[-1][1], 15)
         d.cut_path([
-            (stem_x - 22, 620), (stem_x - 28, 528), (stem_x - 25, 444),
+            (stem_x - 22, 594), (stem_x - 28, 516), (stem_x - 25, 444),
         ], 3.6, True)
         # Kneeling near leg. A straight leg with a shoe under it just reads as
         # standing, so the kneel is made explicit: the thigh drops vertically

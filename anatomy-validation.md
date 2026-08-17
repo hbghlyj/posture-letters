@@ -34,7 +34,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | H | **FAIL** | A 208.0, L 390.2, L 390.0, A 208.0, L 390.2, L 390.0 | 206.2, 206.2 | 110.0, 110.0 | expected 8 measurable limbs; found 6 |
 | I | **FAIL** | L 274.4, L 274.4, L 400.1, L 400.1 | 225.0 | 110.0 | limb 1 (leg) total 274.4 is -7.1% from 295.2 |
 | J | **FAIL** | L 250.3, L 250.3, L 501.5, L 501.6 | 332.0 | 110.0 | limb 1 (leg) total 250.3 is -15.2% from 295.2 |
-| K | **FAIL** | L 242.5, L 350.3, L 479.1 | 266.1 | 110.0 | expected 4 measurable limbs; found 3 |
+| K | **FAIL** | A 174.0, L 350.3, L 479.1 | 234.1 | 110.0 | expected 4 measurable limbs; found 3 |
 | L | **FAIL** | L 250.3, L 250.3, L 559.0, L 559.0 | 330.0 | 110.0 | limb 1 (leg) total 250.3 is -15.2% from 295.2 |
 | M | **FAIL** | L 508.0, L 508.0, L 993.0, L 987.4 | 535.6 | 110.0 | limb 1 (leg) total 508.0 is +72.1% from 295.2 |
 | N | **FAIL** | L 498.0, L 498.0, L 583.0, L 605.7 | 508.5 | 110.0 | limb 1 (leg) total 498.0 is +68.7% from 295.2 |
@@ -194,16 +194,15 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 
 ### K
 - expected 4 measurable limbs; found 3
-- limb 1 (leg) total 242.5 is -17.9% from 295.2
-- limb 1 thigh 119.9 is -21.0% from 151.8
-- limb 1 calf 122.6 is -14.5% from 143.5
+- limb 1 (arm) total 174.0 is -12.0% from 197.8
+- limb 1 upper arm 87.7 is -22.2% from 112.7
 - limb 2 (leg) total 350.3 is +18.6% from 295.2
 - limb 2 thigh 284.0 is +87.1% from 151.8
 - limb 2 calf 66.2 is -53.8% from 143.5
 - limb 3 (leg) total 479.1 is +62.3% from 295.2
 - limb 3 thigh 224.7 is +48.0% from 151.8
 - limb 3 calf 254.4 is +77.3% from 143.5
-- torso 266.1 is +63.4% from 162.8
+- torso 234.1 is +43.8% from 162.8
 
 ### L
 - limb 1 (leg) total 250.3 is -15.2% from 295.2
