@@ -614,9 +614,11 @@ def pose(letter: str) -> Drawer:
         # Two standing figures act as the vertical sides of the H; their joined
         # hands at the centre form the horizontal crossbar. Each body is a
         # normally proportioned upright person seen in profile — head, torso,
-        # two planted legs. Only the front arm reaches across: it drops from the
-        # shoulder to a distinctly bent elbow, then the level forearm carries
-        # the crossbar into the clasped hands. The back arm stays at the side.
+        # two planted legs. Both arms are bent at the elbow. The upper arm
+        # (shoulder to elbow) hangs vertically downward and overlaps the
+        # figure's own pillar; only the forearms turn out horizontally at elbow
+        # height and clasp at the centre, so the crossbar is made of forearms
+        # alone and sits exactly at the elbows.
         bar_y = 505
         for side in (-1, 1):
             cx = 350 - side * 210
@@ -625,19 +627,18 @@ def pose(letter: str) -> Drawer:
             d.torso(
                 [(cx, 636), (cx + side * 5, 545), (cx + side * 2, 430)], 78, True
             )
-            # Front arm, bent at the elbow. The upper arm hangs down and
-            # outward from the shoulder; the forearm turns sharply at the elbow
-            # and runs level to the centre, so the crossbar is formed only by
-            # the two clasped front arms.
-            shoulder = (cx + side * 22, 606)
-            elbow = (cx + side * 104, bar_y)
+            # Front arm, bent to a right angle at the elbow. The upper arm is
+            # strictly vertical: it drops from the shoulder straight down the
+            # front of the body, overlapping the pillar. At elbow height the
+            # forearm turns out horizontally and runs to the clasp, so the
+            # crossbar is carried by the forearms alone.
+            arm_x = cx + side * 22
+            shoulder = (arm_x, 610)
+            elbow = (arm_x, bar_y)
             hand = (350 - side * 24, bar_y)
-            # Upper arm hangs down and slightly forward from the shoulder;
-            # the forearm turns roughly ninety degrees at the elbow and runs
-            # level to the clasp, so the crossbar stays perfectly horizontal.
             d.path([shoulder, elbow], 40, False, False, track=False)
             d.path([elbow, hand], 34, False, False, track=False)
-            # A joint ball keeps the sharp bend readable as an actual elbow.
+            # A joint ball keeps the right-angle bend readable as an elbow.
             d.circle(elbow[0], elbow[1], 23)
             arm = [shoulder, elbow, hand]
             segments, length = d.centerline_measurements(arm)
@@ -645,17 +646,19 @@ def pose(letter: str) -> Drawer:
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            # Engraved crease on the outside of the bent elbow.
+            # Engraved crease around the outside of the bent elbow, wrapping
+            # from the vertical upper arm onto the horizontal forearm.
             d.cut_path([
-                (elbow[0] + side * 20, elbow[1] + 15),
-                (elbow[0] + side * 26, elbow[1] - 2),
-                (elbow[0] + side * 12, elbow[1] - 19),
+                (elbow[0] + side * 21, elbow[1] + 20),
+                (elbow[0] + side * 25, elbow[1] + 2),
+                (elbow[0] + side * 12, elbow[1] - 20),
             ], 5.0, True)
             # Back arm: bent at the elbow too, but kept in against the body
             # instead of joining the crossbar.
-            back_shoulder = (cx - side * 24, 600)
-            back_elbow = (cx - side * 40, 512)
-            back_hand = (cx - side * 14, 448)
+            back_arm_x = cx - side * 26
+            back_shoulder = (back_arm_x, 602)
+            back_elbow = (back_arm_x, 500)
+            back_hand = (back_arm_x + side * 62, 500)
             d.path([back_shoulder, back_elbow], 32, False, False, track=False)
             d.path([back_elbow, back_hand], 28, False, False, track=False)
             d.circle(back_elbow[0], back_elbow[1], 17)
