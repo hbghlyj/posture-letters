@@ -271,7 +271,14 @@ class Drawer:
             True,
         )
 
+        # Thigh and shin are separate tapered strokes with flat ends, so at a
+        # bent knee their two square ends leave a sharp beveled wedge. A round
+        # joint mass at the knee point fills that wedge, giving the outline the
+        # continuous curve of a real knee instead of a blocky corner.
         knee = pts[knee_index]
+        joint_r = max(width, breeches * 0.82) * 0.52
+        self.circle(knee[0], knee[1], joint_r, n=24)
+
         next_point = lower_profile[1]
         dx, dy = next_point[0] - knee[0], next_point[1] - knee[1]
         length = math.hypot(dx, dy) or 1.0
@@ -1598,13 +1605,21 @@ def pose(letter: str) -> Drawer:
             })
             d.circle(arm[0][0], arm[0][1], 24)
             # Wrist flexes down: the hand hangs as a terminal serif.
-            d.path([(tip, bar_y + 6), (tip + sign * 8, bar_y - 62)], 34,
-                   False, False, track=False)
-            d.ellipse(tip + sign * 9, bar_y - 70, 19, 15, 0.0)
+            # The hand turns down out of the arm through a rounded wrist. A
+            # plain vertical stroke butted against the bar left a hard step in
+            # the outline, so a joint mass fills the corner and the hand is
+            # tapered from wrist to fingertip.
+            d.circle(tip + sign * 2, bar_y - 4, 21, n=20)
+            d.tapered_path(
+                [(tip + sign * 3, bar_y - 2), (tip + sign * 7, bar_y - 36),
+                 (tip + sign * 10, bar_y - 66)],
+                [34, 30, 24], True,
+            )
+            d.ellipse(tip + sign * 11, bar_y - 72, 17, 13, 0.0)
             d.cut_path([
-                (tip + sign * 9 - 15, bar_y - 34),
-                (tip + sign * 9 + 15, bar_y - 34),
-            ], 3.6, False)
+                (tip + sign * 10 - 14, bar_y - 30),
+                (tip + sign * 10 + 14, bar_y - 32),
+            ], 3.6, True)
         # Tightly closed legs down the centre, feet flaring out at the base.
         d.leg([(330, 398), (328, 226), (327, 58)], 44, knee_index=1,
               breeches_width=48, shoe_direction=(-1, 0))
