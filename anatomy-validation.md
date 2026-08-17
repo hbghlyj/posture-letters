@@ -37,7 +37,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | K | **FAIL** | L 294.0, L 290.0, L 308.3, L 338.0 | 92.1 | 110.0 | limb 2 thigh 143.0 is -5.8% from 151.8 |
 | L | **FAIL** | A 216.3, A 216.3, L 581.1, L 581.1 | 242.0 | 110.0 | limb 1 (arm) total 216.3 is +9.3% from 197.8 |
 | M | **FAIL** | L 508.0, L 508.0, L 993.0, L 987.4 | 535.6 | 110.0 | limb 1 (leg) total 508.0 is +72.1% from 295.2 |
-| N | **FAIL** | L 572.2, L 572.2, L 454.4, L 454.4 | 578.0 | 110.0 | limb 1 (leg) total 572.2 is +93.8% from 295.2 |
+| N | **FAIL** | L 572.2, L 572.2, L 454.4, L 454.4 | 555.4 | 110.0 | limb 1 (leg) total 572.2 is +93.8% from 295.2 |
 | O | **FAIL** | L 514.8, L 507.1, L 461.1, L 467.7 | 607.1 | 108.0 | limb 1 (leg) total 514.8 is +74.4% from 295.2 |
 | P | **FAIL** | L 542.7, L 394.1, L 394.1 | 238.0 | 110.0 | expected 4 measurable limbs; found 3 |
 | Q | **FAIL** | L 720.4, L 720.4, A 164.5 | — | 124.0 | expected 4 measurable limbs; found 3 |
@@ -242,7 +242,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - limb 4 (leg) total 454.4 is +53.9% from 295.2
 - limb 4 thigh 182.4 is +20.2% from 151.8
 - limb 4 calf 272.0 is +89.6% from 143.5
-- torso 578.0 is +255.0% from 162.8
+- torso 555.4 is +241.1% from 162.8
 - nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### O

@@ -1311,6 +1311,15 @@ def pose(letter: str) -> Drawer:
         # right, anchoring the point where the diagonal meets that bar.
         hip = (156, 686)
         shoulder = (540, 254)
+        # Pelvis. The torso stroke ends in a round cap of its own half-width,
+        # which is far narrower than the pair of thighs where they leave it, so
+        # the two legs used to step out sideways from the trunk in a hard
+        # notch. A pelvic mass spanning the full width of both thigh tops
+        # carries the trunk into the legs as one continuous buttock-and-hip
+        # curve, which is what the flexed hip of an inverted body shows.
+        d.ellipse(hip[0] + 5, hip[1] - 4, 43, 46, 0.0)
+        d.ellipse(hip[0] + 5, hip[1] - 26, 41, 40, 0.0)
+        d.ellipse(hip[0] + 4, hip[1] - 48, 37, 34, 0.0)
         # Left pillar: hips flexed, both legs straight down, knees locked and
         # feet planted flat at the bottom.
         for spread, width, breeches in ((-18, 52, 60), (18, 44, 52)):
@@ -1328,7 +1337,7 @@ def pose(letter: str) -> Drawer:
             )
         # Diagonal: one long backbend sweeping from the hips down to the
         # shoulders on the right.
-        d.torso([hip, (348, 470), shoulder], 84, True)
+        d.torso([(hip[0] + 16, hip[1] - 16), (348, 470), shoulder], 84, True)
         # Right pillar: both arms straight up, parallel, past the hanging head.
         for spread in (-20, 20):
             arm = [

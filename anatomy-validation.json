@@ -974,7 +974,7 @@
         }
       ],
       "torso_lengths": [
-        578.0
+        555.4
       ],
       "head_diameters": [
         110.0
@@ -993,7 +993,7 @@
         "limb 4 (leg) total 454.4 is +53.9% from 295.2",
         "limb 4 thigh 182.4 is +20.2% from 151.8",
         "limb 4 calf 272.0 is +89.6% from 143.5",
-        "torso 578.0 is +255.0% from 162.8",
+        "torso 555.4 is +241.1% from 162.8",
         "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
       ]
     },
