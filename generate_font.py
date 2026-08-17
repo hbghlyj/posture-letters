@@ -504,7 +504,9 @@ def pose(letter: str) -> Drawer:
             hip = (px(196), 330)
             shoulder = (px(238), 502)
             # Head turned toward the partner, above a torso that leans inward.
-            d.head(px(232), 552, side * -1)
+            # Each head turns toward the partner: the two figures look at one
+            # another across the letter rather than away from it.
+            d.head(px(232), 552, side)
             d.torso(
                 [(px(228), 496), (px(212), 418), (px(198), 336)], 72, True
             )
