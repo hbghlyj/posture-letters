@@ -765,14 +765,16 @@ def pose(letter: str) -> Drawer:
             (stem_x - 18, mid_y + 34), (stem_x + 4, mid_y + 12),
             (stem_x + 8, mid_y - 16),
         ], 4.2, True)
-        # Tightly parallel legs, both feet facing forward at the base.
+        # Tightly parallel legs. The feet flare out left and right at the base
+        # as foot serifs, matching I, P and T; pointing them forward gave the
+        # stem a blunt end with no terminal.
         d.leg(
             [(stem_x - 18, 430), (stem_x - 22, 244), (stem_x - 26, 62)], 50,
-            knee_index=1, breeches_width=56, shoe_direction=(-0.35, -1)
+            knee_index=1, breeches_width=56, shoe_direction=(-1, 0)
         )
         d.leg(
             [(stem_x + 18, 430), (stem_x + 22, 244), (stem_x + 26, 62)], 50,
-            knee_index=1, breeches_width=56, shoe_direction=(0.35, -1)
+            knee_index=1, breeches_width=56, shoe_direction=(1, 0)
         )
 
     elif letter == "G":
@@ -1515,6 +1517,14 @@ def pose(letter: str) -> Drawer:
                 "points": arm,
             })
             d.circle(arm[0][0], arm[0][1], 21)
+            # Seam down the inner edge separates the two arm columns, as the
+            # paired limbs on M and N do, so the bar does not read as a slab.
+            if spread < 0:
+                d.cut_path([
+                    (shoulder[0], shoulder[1] + 44),
+                    (shoulder[0], 460),
+                    (shoulder[0], 636),
+                ], 7.0, True)
             # Hand held flat with the fingers pointing straight up.
             palm_x, palm_y = arm[-1]
             d.ellipse(palm_x, palm_y + 14, 19, 22, 0.0)
