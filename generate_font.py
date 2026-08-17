@@ -681,9 +681,12 @@ def pose(letter: str) -> Drawer:
                 shoe_direction=(0.42, 0.91), shoe_scale=0.82,
             )
         # Upper curve: the arm arches back over the top and down behind.
+        # Upper arm and forearm are drawn to the same length: the elbow was
+        # sitting far round the arch, leaving a short upper arm feeding a
+        # forearm half again as long.
         arm = [
-            (stem_x + 34, 640), (318, 730), (466, 646),
-            (536, 500), (500, 386),
+            (stem_x + 34, 640), (280, 726), (410, 700),
+            (516, 566), (500, 386),
         ]
         d.path(arm[:3], 46, True, False, track=False)
         d.path(arm[2:], 40, True, False, track=False)
@@ -694,7 +697,8 @@ def pose(letter: str) -> Drawer:
         })
         d.circle(arm[0][0], arm[0][1], 24)
         # Elbow crease where the arch turns down behind the body.
-        d.cut_path([(470, 682), (500, 654), (516, 620)], 4.6, True)
+        d.circle(410, 700, 22)
+        d.cut_path([(404, 726), (428, 706), (430, 678)], 4.4, True)
         # Enclosure point: the reaching hand closes on the raised feet. Hand
         # and feet must stay legible as two separate body parts, so the palm
         # sits above the shoes and an engraved seam runs along the contact
@@ -730,7 +734,7 @@ def pose(letter: str) -> Drawer:
         hip_y = 306
         d.torso([(stem_x, hip_y), (stem_x, 452), (stem_x, 598)], 84, False)
         # Upper bar: the right arm straight up, then over the head to the right.
-        upper = [(stem_x - 4, 592), (stem_x - 14, 700), (296, 744), (596, 744)]
+        upper = [(stem_x + 8, 600), (stem_x + 26, 690), (300, 736), (596, 736)]
         d.path(upper[:2], 42, True, False, track=False)
         d.path(upper[1:], 40, True, False, track=False)
         segments, length = d.centerline_measurements(upper)
@@ -740,11 +744,11 @@ def pose(letter: str) -> Drawer:
         })
         d.circle(upper[0][0], upper[0][1], 21)
         # Shoulder-to-overhead crease at the turn above the head.
-        d.cut_path([(148, 708), (170, 732), (202, 740)], 4.0, True)
-        d.ellipse(608, 744, 18, 20, 0.0)
-        d.cut_path([(588, 726), (588, 762)], 3.4, False)
+        d.cut_path([(196, 700), (222, 722), (256, 732)], 4.0, True)
+        d.ellipse(608, 736, 18, 20, 0.0)
+        d.cut_path([(588, 718), (588, 754)], 3.4, False)
         # Head nestled under the upper bar, tilted forward and facing down.
-        d.head(stem_x + 44, 654, 1, -0.62)
+        d.head(stem_x + 40, 630, 1, -0.62)
         # Middle prong: the left arm forward from mid-torso, ninety degrees at
         # the elbow, forearm horizontal.
         elbow = (stem_x + 34, 462)
