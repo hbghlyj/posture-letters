@@ -1186,66 +1186,56 @@
       "limbs": [
         {
           "index": 1,
-          "classification": "arm",
-          "length": 193.13,
+          "classification": "leg",
+          "length": 542.7,
           "segments": [
-            97.7,
-            95.5
+            109.1,
+            120.8,
+            92.3,
+            86.6,
+            133.8
           ],
-          "deviation_percent": -2.37
+          "deviation_percent": 81.37
         },
         {
           "index": 2,
           "classification": "leg",
-          "length": 241.78,
+          "length": 394.13,
           "segments": [
-            115.7,
-            126.1
+            198.1,
+            196.0
           ],
-          "deviation_percent": -19.2
+          "deviation_percent": 31.72
         },
         {
           "index": 3,
           "classification": "leg",
-          "length": 551.51,
+          "length": 511.81,
           "segments": [
-            246.1,
-            305.4
+            241.6,
+            270.2
           ],
-          "deviation_percent": 84.31
-        },
-        {
-          "index": 4,
-          "classification": "leg",
-          "length": 370.19,
-          "segments": [
-            185.1,
-            185.1
-          ],
-          "deviation_percent": 23.72
+          "deviation_percent": 71.05
         }
       ],
       "torso_lengths": [
-        265.0
+        238.0
       ],
       "head_diameters": [
         110.0
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 upper arm 97.7 is -13.3% from 112.7",
-        "limb 1 forearm 95.5 is +12.1% from 85.1",
-        "limb 2 (leg) total 241.8 is -19.2% from 299.2",
-        "limb 2 thigh 115.7 is -24.7% from 153.7",
-        "limb 2 calf 126.1 is -13.4% from 145.6",
-        "limb 3 (leg) total 551.5 is +84.3% from 299.2",
-        "limb 3 thigh 246.1 is +60.2% from 153.7",
-        "limb 3 calf 305.4 is +109.8% from 145.6",
-        "limb 4 (leg) total 370.2 is +23.7% from 299.2",
-        "limb 4 thigh 185.1 is +20.5% from 153.7",
-        "limb 4 calf 185.1 is +27.2% from 145.6",
-        "torso 265.0 is +62.8% from 162.8",
-        "nearest-baseline classification gives 1 arm(s) and 3 leg(s)"
+        "expected 4 measurable limbs; found 3",
+        "limb 1 (leg) total 542.7 is +81.4% from 299.2",
+        "limb 1 has 5 skeletal segments; expected upper/lower pair",
+        "limb 2 (leg) total 394.1 is +31.7% from 299.2",
+        "limb 2 thigh 198.1 is +28.9% from 153.7",
+        "limb 2 calf 196.0 is +34.7% from 145.6",
+        "limb 3 (leg) total 511.8 is +71.0% from 299.2",
+        "limb 3 thigh 241.6 is +57.2% from 153.7",
+        "limb 3 calf 270.2 is +85.6% from 145.6",
+        "torso 238.0 is +46.2% from 162.8"
       ]
     },
     {

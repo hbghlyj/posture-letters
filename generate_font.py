@@ -1174,42 +1174,48 @@ def pose(letter: str) -> Drawer:
         d.cut_path([(555, 58), (563, 51), (573, 52)], 4.0, True)
 
     elif letter == "R":
-        # P-like clasped-arm bowl with one planted leg and one stepped leg.
-        d.head(165, 752, 1)
-        # Hips sit at mid-stem so the legs below match the trunk in length.
-        d.torso([(165, 690), (165, 555), (165, 425)], 88, False)
-        # Upper bowl, built like B: two shortened clasped arms with a normal
-        # shoulder-elbow-hand span, instead of one distorted overlong limb
-        # looping all the way out and back.
-        upper_arm = [(192, 650), (288, 668), (355, 600)]
-        lower_arm = [(175, 505), (290, 492), (355, 600)]
-        for arm, width in ((upper_arm, 50), (lower_arm, 46)):
-            d.path(arm, width, True, True, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-        # Elbow and sleeve creases, as on B. They are kept short and well
-        # inside the limb so they read as engraving and never open a white
-        # gap through the bowl's outline.
-        d.cut_path([(288, 660), (303, 651), (314, 638)], 4.0, True)
-        d.cut_path([(284, 501), (299, 499), (312, 506)], 3.6, True)
-        # Clasped hands close the bowl at the right. The two palms overlap the
-        # arm ends generously so the loop stays one solid, continuous shape.
-        d.ellipse(356, 600, 26, 31, -0.25)
-        d.ellipse(347, 583, 24, 28, -0.25)
-        d.cut_path([(347, 612), (358, 606), (369, 610)], 4.0, True)
-        d.cut_path([(348, 598), (359, 593), (369, 597)], 4.0, True)
+        # R is P's stance with one leg swung out: head, upright torso and the
+        # firmly planted straight leg align vertically as the left backbone,
+        # the same single arm loops out from the shoulder and hooks back to
+        # close on the waist at the body's midline, and the other leg drives
+        # sharply down and out to the right, planting at an angle to make the
+        # stabilising diagonal.
+        stem_x = 168
+        hip_y = 452
+        d.head(stem_x - 2, 752, 1)
+        d.torso([(stem_x, 690), (stem_x, 570), (stem_x, hip_y)], 86, False)
+        # Passive far arm: straight down, held close against the body.
+        far_arm = [(stem_x - 30, 654), (stem_x - 38, 570), (stem_x - 34, 492)]
+        d.path(far_arm, 28, True, False, track=False)
+        d.circle(far_arm[-1][0], far_arm[-1][1], 15)
+        # The looping arm, exactly as on P: shoulder, out and over, down the
+        # outside, then back in to the hand resting flat on the waist.
+        loop = [
+            (stem_x + 26, 664), (300, 690), (410, 640),
+            (438, 552), (382, 486), (250, 464),
+        ]
+        d.path(loop, 46, True, False, track=False)
+        segments, length = d.centerline_measurements(loop)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": loop,
+        })
+        d.circle(loop[0][0], loop[0][1], 24)
+        # Elbow crease at the top of the rubbery arc.
+        d.cut_path([(392, 664), (416, 640), (426, 610)], 4.6, True)
+        # Midline enclosure: the hand closes the loop against the waist.
+        d.ellipse(238, 468, 28, 24, 0.18)
+        d.cut_path([(224, 484), (242, 474), (258, 480)], 4.2, True)
+        # Planted straight leg: continues the stem to the baseline.
         d.leg(
-            [(180, 428), (350, 250), (585, 55)], 62, knee_index=1, shoe_direction=(1, 0)
+            [(stem_x - 16, hip_y), (stem_x - 22, 254), (stem_x - 26, 58)], 52,
+            knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
         )
-        # In the crop the planted shoe projects toe-first to the figure's right;
-        # a full horizontal direction makes that outward profile unmistakable
-        # and removes the formerly reversed foot.
+        # Diagonal leg: sharply down and out to the right, foot planted at an
+        # angle on the ground.
         d.leg(
-            [(152, 425), (146, 240), (140, 55)], 55, knee_index=1,
-            breeches_width=60, shoe_direction=(1, 0)
+            [(stem_x + 18, hip_y), (330, 258), (516, 62)], 56,
+            knee_index=1, breeches_width=64, shoe_direction=(1, 0)
         )
 
     elif letter == "S":
