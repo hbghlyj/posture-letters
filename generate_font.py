@@ -1201,14 +1201,45 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "S":
-        # Kneeling profile from the print: close shins run left along the
-        # ground, the body curls upward, and one long arm arches over the head.
-        d.leg([(455, 185), (315, 110), (110, 110)], 58, knee_index=1)
-        d.leg([(440, 205), (305, 145), (135, 145)], 46, knee_index=1)
-        d.torso([(450, 190), (475, 340), (405, 470), (300, 535)], 96, True)
-        d.limb([(285, 555), (190, 610), (245, 690), (410, 700), (535, 625)], 50, True, end="hand")
-        d.limb([(300, 530), (245, 565), (225, 610)], 40, True, end="hand")
-        d.head(320, 525, 1, 0.06)
+        # Lying S. The naturally longer lower limbs sweep the biggest curve:
+        # the legs and lower torso rise and then arch forward to make the
+        # elongated upper hook, the feet pointing up and to the right. The hips
+        # flex sharply so the thighs run diagonally down and back as the
+        # letter's spine, and the upper torso, neck and head curl along the
+        # floor to the left, the head resting at the very bottom facing up to
+        # close the lower hook.
+        hip = (250, 500)
+        shoulder = (470, 286)
+        # Upper hook: hips lift, then the long legs arch forward and right.
+        for spread, width in ((-16, 56), (14, 48)):
+            d.leg(
+                [
+                    (hip[0] + spread * 0.4, hip[1]),
+                    (356 + spread * 0.5, 700),
+                    (596 + spread * 0.4, 640),
+                ],
+                width, knee_index=1, breeches_width=width * 1.28,
+                shoe_direction=(0.7, 0.72),
+            )
+        # Diagonal spine: thighs and trunk carry the centre line down-left.
+        d.torso([hip, (352, 392), shoulder], 90, True)
+        # Lower hook: chest, neck and head curl along the floor to the left.
+        d.path([shoulder, (430, 122), (216, 96)], 82, True, False, track=False)
+        d.head(154, 110, -1, 0.10)
+        # Arms fold in against the chest, following the lower curve.
+        for sign in (-1, 1):
+            arm = [
+                (shoulder[0] - 12, shoulder[1] - 44 + sign * 10),
+                (416 + sign * 6, 190 + sign * 14),
+                (346 + sign * 4, 148 + sign * 16),
+            ]
+            d.path(arm, 30, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[-1][0], arm[-1][1], 16)
 
     elif letter == "T":
         # Arms make the crossbar; both legs stay together and descend
