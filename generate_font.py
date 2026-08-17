@@ -906,56 +906,54 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "K":
-        # Historical standing profile: body/near leg are the stem. The upper
-        # arm first drops to a distinct elbow, then the forearm sweeps upward
-        # to the source's compact thumb-and-index hand at the upper-right serif.
-        d.head(230, 710, 1)
-        d.torso([(235, 650), (235, 500), (240, 330)], 90, False)
-        upper_arm = [(250, 585), (335, 550), (390, 580), (465, 655), (535, 710)]
-        d.path(upper_arm, 48, True, True, track=False)
-        segments, length = d.centerline_measurements(upper_arm)
+        # Kneeling K. Torso, neck, head and the kneeling near leg stack into
+        # one plumb line: the knee is planted directly under the torso so the
+        # left side of the letter is dead vertical. The far leg extends well
+        # out to the side at a bent knee, giving the lower diagonal the extra
+        # length a K needs to balance. The near arm raises straight up and out
+        # at about forty-five degrees as the upper diagonal, ending in an open
+        # hand serif, while the far arm is pinned flat along the hip and thigh
+        # so the centre of the letter stays solid with no trapped white.
+        stem_x = 206
+        hip_y = 412
+        d.head(stem_x, 742, 1)
+        d.torso([(stem_x, 678), (stem_x + 4, 546), (stem_x + 2, hip_y)], 84, False)
+        # Upper diagonal: the raised arm at roughly forty-five degrees.
+        raised = [(stem_x + 26, 634), (338, 690), (446, 748)]
+        d.path(raised, 44, True, False, track=False)
+        segments, length = d.centerline_measurements(raised)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
-            "points": upper_arm,
+            "points": raised,
         })
-        # The source hand is a compact directional serif rather than a five-ray
-        # star. Its index finger points sharply right and the thumb opens upward;
-        # the other three fingers fold back into the palm as engraved creases.
-        d.ellipse(543, 714, 31, 22, 0.55)
-        d.polygon([
-            (548, 720), (557, 711), (583, 722), (610, 732),
-            (626, 742), (608, 744), (579, 735), (552, 731),
-        ])
-        d.polygon([
-            (538, 720), (528, 714), (520, 737), (509, 756),
-            (516, 766), (530, 748), (546, 731),
-        ])
-        for crease in (
-            [(552, 716), (563, 710), (573, 714)],
-            [(549, 708), (559, 701), (569, 705)],
-            [(544, 700), (553, 693), (562, 698)],
-        ):
-            d.cut_path(crease, 4.4, True)
-
-        # The second arm remains close to the torso instead of becoming an
-        # invented fourth ray.
-        d.limb([(220, 570), (205, 430), (220, 315)], 40, True, end="hand")
-        # Both shoes face right in the source profile, including the planted leg.
+        d.circle(raised[0][0], raised[0][1], 23)
+        d.cut_path([(324, 712), (346, 690), (356, 668)], 4.2, True)
+        # Open hand serif at the top of the diagonal, fingers spread outward.
+        d.ellipse(458, 754, 22, 17, 0.48)
+        for dx, dy in ((26, 18), (30, 4), (24, -10), (12, -20)):
+            d.polygon([
+                (454, 750), (458 + dx, 754 + dy), (460 + dx, 748 + dy),
+            ])
+        d.cut_path([(446, 762), (460, 752), (466, 740)], 3.4, True)
+        # Closed centre: the far arm lies flat down the hip and thigh.
+        pinned = [(stem_x - 30, 642), (stem_x - 38, 528), (stem_x - 34, 424)]
+        d.path(pinned, 28, True, False, track=False)
+        d.circle(pinned[-1][0], pinned[-1][1], 15)
+        d.cut_path([
+            (stem_x - 22, 620), (stem_x - 28, 528), (stem_x - 25, 444),
+        ], 3.6, True)
+        # Kneeling near leg: thigh drops vertically to a knee on the ground,
+        # then the shin folds back along the floor.
         d.leg(
-            [(230, 330), (215, 185), (205, 65)], 56, knee_index=1, shoe_direction=(1, 0)
+            [(stem_x - 12, hip_y), (stem_x - 18, 246), (stem_x - 22, 86)], 52,
+            knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
         )
+        # Lower diagonal: the far leg reaches well out to the right at a bent
+        # knee, its foot planting to make the wide, elongated base.
         d.leg(
-            [(255, 330), (385, 205), (560, 95)], 58, knee_index=1, shoe_direction=(1, 0)
+            [(stem_x + 20, hip_y), (352, 226), (556, 74)], 56,
+            knee_index=1, breeches_width=64, shoe_direction=(1, 0)
         )
-        # Engraved calf and shin cuts give both lower strokes the modeled
-        # stocking anatomy visible in the historical figure.
-        for pts, width in (
-            ([(220, 290), (225, 245), (217, 205), (211, 140)], 5),
-            ([(203, 275), (203, 225), (207, 180)], 4),
-            ([(285, 302), (332, 258), (385, 212), (455, 160), (520, 120)], 5),
-            ([(325, 284), (370, 240), (420, 200), (475, 158)], 4),
-        ):
-            d.cut_path(pts, width, True)
 
     elif letter == "L":
         # Lying flat on the back with the hips flexed to a right angle. The
