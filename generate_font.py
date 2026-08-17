@@ -480,43 +480,73 @@ def pose(letter: str) -> Drawer:
     d = Drawer()
 
     if letter == "A":
-        # Source-faithful forward fold. Hips make the apex; paired breeched
-        # thighs and modeled calves descend on the right while the attached
-        # spine, neck, inverted head, and hanging hat continue down the left.
-        # Both source shoes turn inward/left beneath the closely paired legs.
-        a_legs = [
-            [(345, 650), (420, 520), (490, 390), (530, 245), (565, 90)],
-            [(375, 645), (445, 510), (515, 375), (565, 235), (610, 90)],
-        ]
-        for points in a_legs:
-            hip, thigh_mid, knee, calf_mid, ankle = points
-            d.leg(
-                points, 50, knee_index=2, breeches_width=70,
-                shoe_direction=(-1, 0), shoe_scale=0.72,
-                anatomy_points=[hip, knee, ankle],
+        # Two figures build the A, as in the Mitelli engraving: they lean
+        # toward one another, press their raised palms flat together at a sharp
+        # apex, and jointly hold a round object at hip level whose bar reads as
+        # the crossbar. A single folded body could not carry this letter at
+        # believable proportions, so the load is shared between two people.
+        apex_y = 742
+        ball = (350, 352)
+        for side in (-1, 1):
+            # side -1 is the left figure, +1 the right; each is the mirror of
+            # the other about the glyph centre.
+            def px(x: float) -> float:
+                return 350 + side * (x - 350)
+
+            hip = (px(196), 330)
+            shoulder = (px(238), 502)
+            # Head turned toward the partner, above a torso that leans inward.
+            d.head(px(232), 552, side * -1)
+            d.torso(
+                [(px(228), 496), (px(212), 418), (px(198), 336)], 72, True
             )
-
-        # Inset cuff seams and long engraved calf/shin contours keep the two
-        # lower bodies anatomical rather than reading as straight pant strokes.
-        for pts, width in (
-            ([(466, 401), (486, 412)], 4),
-            ([(520, 386), (540, 397)], 4),
-            ([(482, 350), (500, 292), (515, 220), (540, 125)], 5),
-            ([(512, 320), (526, 258), (540, 185)], 4),
-            ([(535, 338), (559, 278), (584, 205), (602, 125)], 5),
-            ([(560, 315), (578, 250), (594, 180)], 4),
-        ):
-            d.cut_path(pts, width, True)
-
-        d.torso(
-            [(360, 640), (300, 570), (245, 490), (190, 400), (145, 300), (105, 200)],
-            88, True, False
-        )
-        # Facing -1 under a half-turn keeps the nose/eye looking right while
-        # placing the hat below the head, exactly as the inverted source does.
-        d.head(105, 145, -1, math.pi)
-        d.limb([(175, 410), (325, 410), (500, 410)], 36, False, end="hand")
-        d.limb([(165, 372), (325, 372), (505, 372)], 36, False, end="hand")
+            # Raised arm: straight from the shoulder up to the apex, where the
+            # flat hand presses against the other figure's hand.
+            up_arm = [(px(262), 530), (px(304), 638), (px(338), apex_y - 24)]
+            d.path(up_arm, 34, True, False, track=False)
+            segments, length = d.centerline_measurements(up_arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": up_arm,
+            })
+            d.circle(up_arm[0][0], up_arm[0][1], 19)
+            # Flat pressed hand: fingers extended straight along the apex line.
+            d.polygon([
+                (px(330), apex_y - 46), (px(348), apex_y - 4),
+                (px(340), apex_y + 2), (px(314), apex_y - 38),
+            ])
+            d.cut_path([
+                (px(326), apex_y - 40), (px(338), apex_y - 18),
+            ], 3.4, False)
+            # Lower arm: down and forward from the shoulder, bending gently at
+            # the elbow to meet the partner's hand on the round object.
+            low_arm = [(px(238), 504), (px(256), 396), (px(328), 354)]
+            d.path(low_arm, 32, True, False, track=False)
+            segments, length = d.centerline_measurements(low_arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": low_arm,
+            })
+            d.cut_path([
+                (px(258), 384), (px(272), 380), (px(286), 386),
+            ], 3.6, True)
+            # Outer leg: straight and firmly planted, carrying the lean.
+            d.leg(
+                [(px(184), 326), (px(148), 176), (px(112), 32)], 50,
+                knee_index=1, breeches_width=58, shoe_direction=(-side, 0),
+            )
+            # Inner leg: set slightly forward with a gentle bend at the knee.
+            d.leg(
+                [(px(210), 326), (px(192), 174), (px(206), 32)], 48,
+                knee_index=1, breeches_width=56, shoe_direction=(-side, 0),
+            )
+        # Apex: the two flat hands meet in a sharp peak.
+        d.polygon([
+            (350, apex_y + 16), (368, apex_y - 30), (332, apex_y - 30),
+        ])
+        # The jointly held round object reads as the letter's crossbar.
+        d.circle(ball[0], ball[1], 36)
+        d.circle(ball[0], ball[1], 13, hole=True)
 
     elif letter == "B":
         # Upright left side with two shortened clasped arms making the upper

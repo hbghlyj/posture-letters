@@ -19,6 +19,10 @@ ROOT = Path(__file__).resolve().parent
 TOLERANCE = 0.05
 
 
+# Glyphs the 1782 print builds from more than one person.
+FIGURE_COUNT = {"A": 2, "H": 2}
+
+
 def pct(value: float, target: float) -> float:
     return (value - target) / target * 100
 
@@ -36,11 +40,17 @@ def establish_baseline() -> dict[str, float]:
     limbs = [e for e in entries if e["part"] == "limb"]
     torsos = [e for e in entries if e["part"] == "torso"]
     heads = [e for e in entries if e["part"] == "head"]
-    if len(limbs) != 4 or len(torsos) != 1 or len(heads) != 1:
-        raise RuntimeError("A must expose exactly four limbs, one torso, and one head")
+    # A is built from two mirrored figures, each contributing one head, one
+    # torso, two arms, and two legs. The baseline averages across both.
+    if len(limbs) != 8 or len(torsos) != 2 or len(heads) != 2:
+        raise RuntimeError(
+            "A must expose two figures of four limbs, one torso, and one head"
+        )
 
-    # A is authored in this order: paired legs, torso/head, paired arms.
-    legs, arms = limbs[:2], limbs[2:]
+    # Each figure is authored in this order: torso/head, raised arm, lower arm,
+    # outer leg, inner leg.
+    arms = [e for i, e in enumerate(limbs) if i % 4 in (0, 1)]
+    legs = [e for i, e in enumerate(limbs) if i % 4 in (2, 3)]
     return {
         "thigh": mean(float(e["segments"][0]) for e in legs),
         "calf": mean(float(e["segments"][1]) for e in legs),
@@ -48,8 +58,8 @@ def establish_baseline() -> dict[str, float]:
         "upper_arm": mean(float(e["segments"][0]) for e in arms),
         "forearm": mean(float(e["segments"][1]) for e in arms),
         "arm_total": mean(float(e["length"]) for e in arms),
-        "torso": float(torsos[0]["length"]),
-        "head": float(heads[0]["diameter"]),
+        "torso": mean(float(e["length"]) for e in torsos),
+        "head": mean(float(e["diameter"]) for e in heads),
     }
 
 
@@ -62,12 +72,19 @@ def audit_letter(letter: str, baseline: dict[str, float]) -> dict[str, Any]:
     issues: list[str] = []
     measured_limbs: list[dict[str, Any]] = []
 
-    if len(limbs) != 4:
-        issues.append(f"expected 4 measurable limbs; found {len(limbs)}")
-    if len(torsos) != 1:
-        issues.append(f"expected 1 measurable torso; found {len(torsos)}")
-    if len(heads) != 1:
-        issues.append(f"expected 1 head; found {len(heads)}")
+    # A and H are two-person constructions in the source, so their expected
+    # part counts are doubled rather than treated as anomalies.
+    figures = FIGURE_COUNT.get(letter, 1)
+    if len(limbs) != 4 * figures:
+        issues.append(
+            f"expected {4 * figures} measurable limbs; found {len(limbs)}"
+        )
+    if len(torsos) != figures:
+        issues.append(
+            f"expected {figures} measurable torso(s); found {len(torsos)}"
+        )
+    if len(heads) != figures:
+        issues.append(f"expected {figures} head(s); found {len(heads)}")
     if composites:
         lengths = ", ".join(f"{float(e['length']):.1f}" for e in composites)
         issues.append(f"contains {len(composites)} unclassified composite body path(s): {lengths}")
