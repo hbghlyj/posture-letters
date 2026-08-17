@@ -1310,7 +1310,10 @@ def pose(letter: str) -> Drawer:
         d.torso([hip, (352, 392), shoulder], 90, True)
         # Lower hook: chest, neck and head curl along the floor to the left.
         d.path([shoulder, (430, 122), (216, 96)], 82, True, False, track=False)
-        d.head(154, 110, -1, 0.10)
+        # The head rests at the very bottom of the lower hook facing upward:
+        # a quarter-turn puts the nose and eye on the vertical, so the face
+        # looks up out of the letter rather than back along the floor.
+        d.head(154, 110, 1, math.pi / 2)
         # Arms fold in against the chest, following the lower curve.
         for sign in (-1, 1):
             arm = [
