@@ -759,9 +759,14 @@ def pose(letter: str) -> Drawer:
         # merging into the torso; only the forearms turn out horizontally at
         # elbow height and clasp at the centre, so the crossbar is made of
         # forearms alone and sits exactly at the elbows.
-        bar_y = 505
+        # Upper arm and forearm are held to the same length, as in a real
+        # skeleton: the shoulder and the bar are both dropped and the two
+        # figures stand closer together, which shortens the crossbar and
+        # lowers it while keeping the two segments equal.
+        shoulder_y = 590
+        bar_y = 486
         for side in (-1, 1):
-            cx = 350 - side * 210
+            cx = 350 - side * 190
             d.head(cx, 700, side)
             # Upright torso: shoulders below the head, waist, then hips.
             d.torso(
@@ -778,13 +783,13 @@ def pose(letter: str) -> Drawer:
             # a single reverse contour cannot cut through two stacked filled
             # shapes — so the arm is held visibly proud of the pillar and its
             # own silhouette does the work instead.
-            arm_x = cx + side * 58
-            shoulder = (arm_x, 612)
+            arm_x = cx + side * 62
+            shoulder = (arm_x, shoulder_y)
             elbow = (arm_x, bar_y)
             hand = (350 - side * 24, bar_y)
             # Deltoid wedge ties the offset arm back into the shoulder so the
             # limb stays attached while remaining a separate silhouette below.
-            d.path([(cx + side * 12, 626), shoulder], 34, False, False, track=False)
+            d.path([(cx + side * 12, 622), shoulder], 34, False, False, track=False)
             d.path([shoulder, elbow], 36, False, False, track=False)
             d.path([elbow, hand], 34, False, False, track=False)
             # A shoulder ball roots the vertical upper arm at the joint.
@@ -809,9 +814,9 @@ def pose(letter: str) -> Drawer:
             # Far arm, likewise held proud of the back of the pillar so the
             # shoulder-to-elbow run stays visible on that side too.
             back_arm_x = cx - side * 56
-            back_shoulder = (back_arm_x, 606)
-            back_elbow = (back_arm_x, 508)
-            back_hand = (back_arm_x + side * 44, 508)
+            back_shoulder = (back_arm_x, 586)
+            back_elbow = (back_arm_x, 492)
+            back_hand = (back_arm_x + side * 42, 492)
             d.path([(cx - side * 12, 622), back_shoulder], 28, False, False, track=False)
             d.path([back_shoulder, back_elbow], 30, False, False, track=False)
             d.path([back_elbow, back_hand], 26, False, False, track=False)
@@ -1081,22 +1086,27 @@ def pose(letter: str) -> Drawer:
                 "points": arm,
             })
             d.circle(arm[0][0], arm[0][1], 21)
-            # Flat supporting hand pressed on the ground.
-            d.ellipse(arm_x, 118, 26, 20, 0.0)
-            for offset in (-16, -6, 4, 14):
+            # Flat supporting hand lying along the floor, as on M: the wrist
+            # bends and the fingers run out horizontally to the left, giving
+            # the base of the left stroke a proper serif.
+            d.ellipse(arm_x - 4, 116, 30, 24, 0.0)
+            for fy in (134, 116, 98):
                 d.polygon([
-                    (arm_x + offset - 4, 106), (arm_x + offset + 4, 106),
-                    (arm_x + offset + 3, 78), (arm_x + offset - 3, 78),
+                    (arm_x - 6, fy + 8), (arm_x - 6, fy - 8),
+                    (arm_x - 86, fy - 7), (arm_x - 86, fy + 7),
                 ])
-            d.cut_path([(arm_x - 15, 112), (arm_x + 15, 112)], 3.6, False)
+            for fy in (125, 107):
+                d.cut_path([(arm_x - 16, fy), (arm_x - 78, fy)], 3.6, False)
         # Head hangs back and down past the planted shoulders.
         d.head(108, 736, 1, -0.34)
         # Diagonal: the torso leans back from the chest down toward the floor.
         d.torso([shoulder, (300, 430), (430, 216)], 82, True)
         # Right stroke: knees on the ground, lower legs straight up in the air.
+        # The shin is kept shorter than the whole arm so the right stroke
+        # does not out-reach the weight-bearing left one.
         for sign, foot_x in ((-1, 556), (1, 620)):
             d.leg(
-                [(430, 216), (knee[0] + sign * 14, knee[1]), (foot_x, 686)],
+                [(430, 216), (knee[0] + sign * 14, knee[1]), (foot_x, 610)],
                 54, knee_index=1, breeches_width=74,
                 shoe_direction=(0.62, 0.78),
             )
