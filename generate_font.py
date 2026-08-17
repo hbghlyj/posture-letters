@@ -684,9 +684,12 @@ def pose(letter: str) -> Drawer:
         # Upper arm and forearm are drawn to the same length: the elbow was
         # sitting far round the arch, leaving a short upper arm feeding a
         # forearm half again as long.
+        # The elbow is carried further round the arch so the upper arm and the
+        # forearm come out near equal; before, the forearm ran half as long
+        # again as the upper arm.
         arm = [
-            (stem_x + 34, 640), (280, 726), (410, 700),
-            (516, 566), (500, 386),
+            (stem_x + 34, 640), (296, 734), (440, 676),
+            (520, 530), (500, 386),
         ]
         d.path(arm[:3], 46, True, False, track=False)
         d.path(arm[2:], 40, True, False, track=False)
@@ -734,17 +737,22 @@ def pose(letter: str) -> Drawer:
         hip_y = 306
         d.torso([(stem_x, hip_y), (stem_x, 452), (stem_x, 598)], 84, False)
         # Upper bar: the right arm straight up, then over the head to the right.
-        upper = [(stem_x + 8, 600), (stem_x + 26, 690), (300, 736), (596, 736)]
-        d.path(upper[:2], 42, True, False, track=False)
-        d.path(upper[1:], 40, True, False, track=False)
+        # The vertical run is carried out past the torso's left edge: drawn on
+        # the stem's own centreline the arm vanished into it, and an engraved
+        # seam is cancelled where two filled shapes stack.
+        upper = [(102, 572), (96, 690), (300, 736), (596, 736)]
+        # Deltoid wedge ties the offset arm back into the shoulder.
+        d.path([(stem_x - 10, 596), upper[0]], 34, False, False, track=False)
+        d.path(upper[:2], 40, True, False, track=False)
+        d.path(upper[1:], 38, True, False, track=False)
         segments, length = d.centerline_measurements(upper)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
             "points": upper,
         })
-        d.circle(upper[0][0], upper[0][1], 21)
+        d.circle(upper[0][0], upper[0][1], 20)
         # Shoulder-to-overhead crease at the turn above the head.
-        d.cut_path([(196, 700), (222, 722), (256, 732)], 4.0, True)
+        d.cut_path([(84, 700), (110, 726), (150, 734)], 4.0, True)
         d.ellipse(608, 736, 18, 20, 0.0)
         d.cut_path([(588, 718), (588, 754)], 3.4, False)
         # Head nestled under the upper bar, tilted forward and facing down.
