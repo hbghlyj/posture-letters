@@ -614,34 +614,41 @@ def pose(letter: str) -> Drawer:
         # crossbar. Both bodies use normal standing proportions: head, upright
         # torso, and two legs planted on the baseline.
         for side in (-1, 1):
-            cx = 350 - side * 205
-            shoulder_x = cx + side * 18
-            d.head(cx, 690, side)
-            d.torso([(cx, 630), (cx + side * 4, 510), (cx + side * 2, 385)], 84, True)
-            # Straightened arm reaching across to the partner's hands.
+            cx = 350 - side * 210
+            d.head(cx, 700, side)
+            # Upright torso: shoulders below the head, waist, then hips.
+            d.torso(
+                [(cx, 636), (cx + side * 5, 545), (cx + side * 2, 430)], 78, True
+            )
+            # Straight arm hanging from the shoulder and reaching slightly
+            # downward to the handshake, exactly as in the reference photo.
             arm = [
-                (shoulder_x, 598),
-                (cx + side * 90, 585),
-                (350 - side * 12, 574),
+                (cx + side * 32, 590),
+                (cx + side * 115, 562),
+                (350 - side * 20, 545),
             ]
-            d.path(arm, 40, True, False, track=False)
+            d.path(arm, 36, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            # Two legs per figure: the near leg planted, the far leg just behind.
+            # Far arm resting straight down along the body's outer side.
+            back_arm = [(cx - side * 26, 606), (cx - side * 34, 520), (cx - side * 32, 442)]
+            d.path(back_arm, 30, True, False, track=False)
+            d.circle(back_arm[-1][0], back_arm[-1][1], 17)
+            # Two legs per figure: near leg planted, far leg just behind it.
             d.leg(
-                [(cx - side * 14, 385), (cx - side * 20, 205), (cx - side * 22, 40)],
-                54, knee_index=1, shoe_direction=(side, 0),
+                [(cx - side * 15, 430), (cx - side * 22, 235), (cx - side * 26, 40)],
+                52, knee_index=1, shoe_direction=(side, 0),
             )
             d.leg(
-                [(cx + side * 14, 385), (cx + side * 16, 205), (cx + side * 18, 40)],
-                54, knee_index=1, shoe_direction=(side, 0),
+                [(cx + side * 15, 430), (cx + side * 18, 235), (cx + side * 20, 40)],
+                52, knee_index=1, shoe_direction=(side, 0),
             )
-        # Clasped hands where the two straightened arms meet.
-        d.ellipse(350, 574, 34, 26, 0.0)
-        d.cut_path([(350, 552), (352, 574), (350, 596)], 5.0, True)
+        # Clasped hands where the two straightened arms meet at mid-height.
+        d.ellipse(350, 545, 36, 27, 0.0)
+        d.cut_path([(350, 521), (353, 545), (350, 569)], 5.0, True)
 
     elif letter == "I":
         # Neutral rigid stance, rebuilt around a realistic seven-head figure.

@@ -467,67 +467,67 @@
         {
           "index": 1,
           "classification": "arm",
-          "length": 176.75,
+          "length": 164.5,
           "segments": [
-            73.2,
-            103.6
+            87.6,
+            76.9
           ],
-          "deviation_percent": -46.84
+          "deviation_percent": -50.53
         },
         {
           "index": 2,
           "classification": "arm",
-          "length": 345.11,
+          "length": 390.17,
           "segments": [
-            180.1,
-            165.0
+            195.1,
+            195.0
           ],
-          "deviation_percent": 3.79
+          "deviation_percent": 17.34
         },
         {
           "index": 3,
           "classification": "arm",
-          "length": 345.02,
+          "length": 390.03,
           "segments": [
-            180.0,
-            165.0
+            195.0,
+            195.0
           ],
-          "deviation_percent": 3.77
+          "deviation_percent": 17.3
         },
         {
           "index": 4,
           "classification": "arm",
-          "length": 176.75,
+          "length": 164.5,
           "segments": [
-            73.2,
-            103.6
+            87.6,
+            76.9
           ],
-          "deviation_percent": -46.84
+          "deviation_percent": -50.53
         },
         {
           "index": 5,
           "classification": "arm",
-          "length": 345.11,
+          "length": 390.17,
           "segments": [
-            180.1,
-            165.0
+            195.1,
+            195.0
           ],
-          "deviation_percent": 3.79
+          "deviation_percent": 17.34
         },
         {
           "index": 6,
           "classification": "arm",
-          "length": 345.02,
+          "length": 390.03,
           "segments": [
-            180.0,
-            165.0
+            195.0,
+            195.0
           ],
-          "deviation_percent": 3.77
+          "deviation_percent": 17.3
         }
       ],
       "torso_lengths": [
-        245.1,
-        245.1
+        206.2,
+        206.2
       ],
       "head_diameters": [
         110.0,
@@ -538,22 +538,26 @@
         "expected 4 measurable limbs; found 6",
         "expected 1 measurable torso; found 2",
         "expected 1 head; found 2",
-        "limb 1 (arm) total 176.7 is -46.8% from 332.5",
-        "limb 1 upper arm 73.2 is -52.8% from 155.0",
-        "limb 1 forearm 103.6 is -41.6% from 177.5",
-        "limb 2 upper arm 180.1 is +16.2% from 155.0",
-        "limb 2 forearm 165.0 is -7.0% from 177.5",
-        "limb 3 upper arm 180.0 is +16.1% from 155.0",
-        "limb 3 forearm 165.0 is -7.0% from 177.5",
-        "limb 4 (arm) total 176.7 is -46.8% from 332.5",
-        "limb 4 upper arm 73.2 is -52.8% from 155.0",
-        "limb 4 forearm 103.6 is -41.6% from 177.5",
-        "limb 5 upper arm 180.1 is +16.2% from 155.0",
-        "limb 5 forearm 165.0 is -7.0% from 177.5",
-        "limb 6 upper arm 180.0 is +16.1% from 155.0",
-        "limb 6 forearm 165.0 is -7.0% from 177.5",
-        "torso 245.1 is -52.1% from 512.1",
-        "torso 245.1 is -52.1% from 512.1"
+        "limb 1 (arm) total 164.5 is -50.5% from 332.5",
+        "limb 1 upper arm 87.6 is -43.5% from 155.0",
+        "limb 1 forearm 76.9 is -56.7% from 177.5",
+        "limb 2 (arm) total 390.2 is +17.3% from 332.5",
+        "limb 2 upper arm 195.1 is +25.9% from 155.0",
+        "limb 2 forearm 195.0 is +9.9% from 177.5",
+        "limb 3 (arm) total 390.0 is +17.3% from 332.5",
+        "limb 3 upper arm 195.0 is +25.8% from 155.0",
+        "limb 3 forearm 195.0 is +9.9% from 177.5",
+        "limb 4 (arm) total 164.5 is -50.5% from 332.5",
+        "limb 4 upper arm 87.6 is -43.5% from 155.0",
+        "limb 4 forearm 76.9 is -56.7% from 177.5",
+        "limb 5 (arm) total 390.2 is +17.3% from 332.5",
+        "limb 5 upper arm 195.1 is +25.9% from 155.0",
+        "limb 5 forearm 195.0 is +9.9% from 177.5",
+        "limb 6 (arm) total 390.0 is +17.3% from 332.5",
+        "limb 6 upper arm 195.0 is +25.8% from 155.0",
+        "limb 6 forearm 195.0 is +9.9% from 177.5",
+        "torso 206.2 is -59.7% from 512.1",
+        "torso 206.2 is -59.7% from 512.1"
       ]
     },
     {
