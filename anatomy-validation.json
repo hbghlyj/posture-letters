@@ -818,42 +818,42 @@
         {
           "index": 1,
           "classification": "leg",
-          "length": 470.1,
+          "length": 470.21,
           "segments": [
-            236.1,
+            236.2,
             234.0
           ],
-          "deviation_percent": 57.11
+          "deviation_percent": 57.15
         },
         {
           "index": 2,
           "classification": "leg",
-          "length": 470.14,
+          "length": 470.26,
           "segments": [
-            236.1,
+            236.3,
             234.0
           ],
-          "deviation_percent": 57.12
+          "deviation_percent": 57.16
         },
         {
           "index": 3,
           "classification": "arm",
-          "length": 122.52,
+          "length": 120.32,
           "segments": [
-            66.5,
+            64.3,
             56.0
           ],
-          "deviation_percent": -38.07
+          "deviation_percent": -39.18
         },
         {
           "index": 4,
           "classification": "arm",
-          "length": 122.52,
+          "length": 120.32,
           "segments": [
-            66.5,
+            64.3,
             56.0
           ],
-          "deviation_percent": -38.07
+          "deviation_percent": -39.18
         }
       ],
       "torso_lengths": [
@@ -864,17 +864,17 @@
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 (leg) total 470.1 is +57.1% from 299.2",
-        "limb 1 thigh 236.1 is +53.7% from 153.7",
+        "limb 1 (leg) total 470.2 is +57.1% from 299.2",
+        "limb 1 thigh 236.2 is +53.7% from 153.7",
         "limb 1 calf 234.0 is +60.8% from 145.6",
-        "limb 2 (leg) total 470.1 is +57.1% from 299.2",
-        "limb 2 thigh 236.1 is +53.7% from 153.7",
+        "limb 2 (leg) total 470.3 is +57.2% from 299.2",
+        "limb 2 thigh 236.3 is +53.8% from 153.7",
         "limb 2 calf 234.0 is +60.8% from 145.6",
-        "limb 3 (arm) total 122.5 is -38.1% from 197.8",
-        "limb 3 upper arm 66.5 is -41.0% from 112.7",
+        "limb 3 (arm) total 120.3 is -39.2% from 197.8",
+        "limb 3 upper arm 64.3 is -43.0% from 112.7",
         "limb 3 forearm 56.0 is -34.2% from 85.1",
-        "limb 4 (arm) total 122.5 is -38.1% from 197.8",
-        "limb 4 upper arm 66.5 is -41.0% from 112.7",
+        "limb 4 (arm) total 120.3 is -39.2% from 197.8",
+        "limb 4 upper arm 64.3 is -43.0% from 112.7",
         "limb 4 forearm 56.0 is -34.2% from 85.1",
         "torso 242.8 is +49.1% from 162.8"
       ]

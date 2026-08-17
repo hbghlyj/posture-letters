@@ -960,28 +960,43 @@ def pose(letter: str) -> Drawer:
         ground_y = 130
         # Vertical stem: both legs perfectly straight up from the flexed hips,
         # knees locked, feet pointing at the ceiling.
-        for spread, width in ((-14, 56), (16, 48)):
+        # The two legs are set far enough apart to leave a real gap between
+        # them: an engraved seam cannot separate overlapping shapes under the
+        # nonzero fill rule, so the stem would otherwise read as one slab.
+        for spread, width, breeches in ((-20, 50, 58), (22, 44, 52)):
             d.leg(
                 [
                     (hip[0] + spread * 0.5, hip[1]),
                     (hip[0] + spread, 392),
                     (hip[0] + spread, 626),
                 ],
-                width, knee_index=1, breeches_width=width * 1.3,
+                width, knee_index=1, breeches_width=breeches,
                 shoe_direction=(0, 1),
             )
+            # Engraved contour down the length of the limb keeps the thigh and
+            # shin modelled rather than flat.
+            d.cut_path([
+                (hip[0] + spread - width * 0.20, 336),
+                (hip[0] + spread - width * 0.14, 430),
+                (hip[0] + spread - width * 0.20, 524),
+            ], 3.6, True)
         # Horizontal base: the upper torso runs right along the ground.
         d.torso([hip, (316, ground_y), (436, ground_y)], 84, False)
         d.head(508, ground_y + 4, -1, math.pi / 2)
         # Arms lie flat on the floor beside the body, hands up by the head.
         for sign in (-1, 1):
             # The arm lies along the floor from the shoulder and reaches back
-            # toward the head, the hand coming to rest just short of it.
+            # toward the head, the hand coming to rest just short of it. It is
+            # carried clear of the torso's own edge so the whole
+            # shoulder-to-hand run stays a separate silhouette, with a short
+            # deltoid wedge tying it back to the shoulder.
             arm = [
-                (330, ground_y + sign * 50),
-                (396, ground_y + sign * 58),
-                (452, ground_y + sign * 56),
+                (336, ground_y + sign * 70),
+                (400, ground_y + sign * 76),
+                (456, ground_y + sign * 74),
             ]
+            d.path([(300, ground_y + sign * 40), arm[0]], 24, False, False,
+                   track=False)
             d.path(arm, 26, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
@@ -990,6 +1005,11 @@ def pose(letter: str) -> Drawer:
             })
             d.circle(arm[0][0], arm[0][1], 15)
             d.ellipse(arm[-1][0] + 6, arm[-1][1], 18, 14, 0.0)
+            # Engraved crease along the forearm.
+            d.cut_path([
+                (364, ground_y + sign * 64), (404, ground_y + sign * 70),
+                (436, ground_y + sign * 68),
+            ], 3.6, True)
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
