@@ -202,44 +202,68 @@ class Drawer:
         self, ax: float, ay: float, width: float, ground: float,
         sign: int = 1, reach: float = 96, lift: float = 74,
     ) -> None:
-        """A kneeling foot standing on the ground as a Λ.
+        """The foot at the foot of a kneeling leg's shin, drawn in profile.
 
-        Where a shin lies flat on the floor the knee faces the ground and the
-        ankle is free to bend. The foot therefore does not continue the bar as
-        a flat slab: it rises over the instep to an apex and drops away again
-        so the toe tips point straight down and plant on the baseline. Heel
-        and toes carry the weight, the arch stays clear of the floor, and the
-        space beneath it reads as the open counter of a Λ set on the ground.
+        The Λ of a kneeling leg is the whole lower limb: the shin is the long
+        diagonal rising from the knee on the floor to the ankle at the apex,
+        and it comes back down to the baseline here. This is the foot proper,
+        modelled as a human foot seen from the side — a rounded heel set
+        behind the ankle and resting on the floor, the instep sloping down
+        and forward from the ankle over a hollow arch, the ball of the foot
+        planted, and four tapering toes fanning forward to the tips.
         """
-        thick = width * 0.50
-        heel = (ax + sign * 2, ground + thick * 0.46)
-        apex = (ax + sign * (reach * 0.40), ground + lift)
-        toe = (ax + sign * reach, ground + thick * 0.30)
-        # Back leg of the Λ: the heel on the floor rising into the instep.
-        self.tapered_path([heel, apex], [thick * 1.00, thick * 0.74], False)
-        # Front leg: the instep dropping forward to the toes, narrowing as it
-        # goes so the tips come down to a point on the baseline.
-        self.tapered_path([apex, toe], [thick * 0.74, thick * 0.34], False)
-        # Rounded instep so the apex is a joint, not a folded corner.
-        self.circle(apex[0], apex[1], thick * 0.40, n=20)
-        # Heel pad on the baseline, taking the weight at the back of the Λ.
-        self.ellipse(heel[0], ground + thick * 0.30, thick * 0.46, thick * 0.32, 0.0)
-        # Toe tips: three tapering points aimed straight down at the floor.
-        for t in (0.0, 0.26, 0.52):
-            tx = toe[0] - sign * t * thick * 0.72
-            w = thick * (0.17 - 0.02 * (t > 0))
-            self.polygon([
-                (tx - w, ground + thick * 0.50),
-                (tx + w, ground + thick * 0.50),
-                (tx + w * 0.55, ground),
-                (tx - w * 0.55, ground),
-            ])
-        # Ankle crease separating the bending foot from the flat shin.
+        k = width / 52.0
+        heel_x = ax - sign * 8 * k
+        toe_x = ax + sign * 96 * k
+        sole = ground + 4 * k
+        # Sole and heel: the outline running from the back of the heel along
+        # the floor to the ball, with the heel rounded up behind the ankle.
+        self.ellipse(heel_x, ground + 19 * k, 19 * k, 20 * k, 0.0)
+        self.polygon([
+            (heel_x, ground), (ax + sign * 62 * k, ground),
+            (ax + sign * 62 * k, ground + 24 * k), (heel_x, ground + 22 * k),
+        ])
+        # Instep: the top of the foot sloping from the ankle down to the ball.
+        self.tapered_path(
+            [
+                (ax, ay - 10 * k),
+                (ax + sign * 22 * k, ground + 44 * k),
+                (ax + sign * 56 * k, ground + 20 * k),
+            ],
+            [width * 0.74, width * 0.60, width * 0.44], True,
+        )
+        # Ball of the foot, the pad under the toe joints.
+        self.ellipse(ax + sign * 60 * k, ground + 16 * k, 22 * k, 16 * k, 0.0)
+        # Toes: four digits fanning forward off the ball, each shorter and
+        # slimmer than the last, tips rounded down onto the floor.
+        for i in range(4):
+            half = (9.5 - 1.6 * i) * k
+            tip = toe_x - sign * (7.5 * i) * k
+            mid_y = ground + (17 - 1.6 * i) * k
+            self.tapered_path(
+                [(ax + sign * 56 * k, mid_y + 2 * k), (tip, mid_y)],
+                [half * 2.0, half * 1.5], False,
+            )
+            self.ellipse(tip, mid_y - 1 * k, half * 0.95, half * 0.92, 0.0)
+        # Toe clefts and the arch, engraved so the digits and the hollow of
+        # the foot read without breaking the silhouette.
+        for i in range(3):
+            cx = toe_x - sign * (3.8 + 7.5 * i) * k
+            self.cut_path([
+                (cx - sign * 22 * k, ground + (12 - 1.6 * i) * k),
+                (cx, ground + (10 - 1.6 * i) * k),
+            ], 3.0 * k, False)
         self.cut_path([
-            (ax - sign * 6, ay + width * 0.30),
-            (ax + sign * 2, ay),
-            (ax - sign * 6, ay - width * 0.26),
-        ], max(3.0, width * 0.07), True)
+            (ax + sign * 12 * k, ground + 2 * k),
+            (ax + sign * 30 * k, ground + 11 * k),
+            (ax + sign * 48 * k, ground + 2 * k),
+        ], 4.6 * k, True)
+        # Ankle crease: the tendon line where the shin enters the foot.
+        self.cut_path([
+            (ax - sign * 15 * k, ay - 12 * k),
+            (ax - sign * 5 * k, ay - 30 * k),
+            (ax + sign * 3 * k, ay - 48 * k),
+        ], 3.6 * k, True)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
@@ -1121,20 +1145,23 @@ def pose(letter: str) -> Drawer:
         # hook. Previously the shins swung diagonally up behind the body,
         # which put the knees in the air and left the ankles nowhere to bend.
         for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
+            # Mirror of L's lower leg: the thigh lies back along the floor to
+            # a grounded knee, and the shin rises from it as the upward
+            # diagonal with the foot dropping from the raised ankle. Shin and
+            # foot together are the Λ, and that rising shin is also the
+            # upward turn that closes the J hook.
             d.leg(
                 [
                     (stem_x + spread * 0.5, hip[1]),
-                    (stem_x + spread, 132),
-                    (232 + spread * 0.28, 108),
+                    (stem_x + spread, 126),
+                    (300 - spread * 0.30, 104),
+                    (196 - spread * 0.20, 206),
                 ],
-                width, knee_index=1, breeches_width=breeches,
+                width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            # The foot bends up over the instep and comes back down with the
-            # toes pointing at the floor: the Λ standing on the baseline, and
-            # here it doubles as the upward turn that finishes the J hook.
-            ax, ay = 232 + spread * 0.28, 108
-            d.kneeling_foot(ax, ay, width, ay - width * 0.5, -1, 104, 84)
+            ax, ay = 196 - spread * 0.20, 206
+            d.kneeling_foot(ax, ay, width, 80, -1, 150)
 
     elif letter == "K":
         # Cartwheel K: the figure balances sideways on one hand. The head lies
@@ -1270,26 +1297,24 @@ def pose(letter: str) -> Drawer:
         # The knees turn forward and bend right through: thighs vertical, then
         # shins running horizontally out along the floor to the right.
         for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
+            # The thigh drops from the hip and lies forward along the floor to
+            # the knee, which rests on the ground; the shin then rises from
+            # that knee as the upward diagonal, and the foot drops away from
+            # the raised ankle at the apex. Shin plus foot make the Λ, the
+            # whole lower leg standing on the ground rather than a foot-sized
+            # wedge stuck on the end of a flat bar.
             d.leg(
                 [
                     (stem_x + spread * 0.5, hip[1]),
-                    (stem_x + spread, 132),
-                    (520 + spread * 0.28, 108),
+                    (stem_x + spread, 126),
+                    (382 + spread * 0.30, 104),
+                    (500 + spread * 0.20, 206),
                 ],
-                width, knee_index=1, breeches_width=breeches,
+                width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            # In a kneel the shins lie flat and the feet rest on that same
-            # floor, so the foot continues the bar forward instead of dangling
-            # through the ground: it tapers from the ankle to a rounded toe
-            # with its sole flush to the shin's underside, and an engraved
-            # ankle crease keeps it legible as a foot.
-            ax, ay = 520 + spread * 0.28, 108
-            # With the shin flat on the floor the knee faces the ground and
-            # the ankle is free, so the foot arches up over the instep and
-            # drops again with the toes pointing down onto the baseline: a Λ
-            # standing on the ground, its open counter under the arch.
-            d.kneeling_foot(ax, ay, width, ay - width * 0.5, 1, 96, 74)
+            ax, ay = 500 + spread * 0.20, 206
+            d.kneeling_foot(ax, ay, width, 80, 1, 150)
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
@@ -1996,22 +2021,21 @@ def pose(letter: str) -> Drawer:
         # Bottom bar: shins and ankles flat along the floor, feet turning up at
         # the back end as the serif.
         for spread, width, breeches in ((-20, 56, 66), (18, 46, 54)):
+            # Same lower-leg Λ as L: the thigh runs forward along the floor to
+            # a grounded knee, the shin rises from it as the upward diagonal,
+            # and the foot drops from the raised ankle onto the baseline.
             d.leg(
                 [
                     (knee[0] + spread * 0.4, knee[1] + spread * 0.5),
-                    (330 + spread, 118),
-                    (556 + spread * 0.28, 108),
+                    (330 + spread, 114),
+                    (430 + spread * 0.30, 104),
+                    (546 + spread * 0.20, 206),
                 ],
-                width, knee_index=1, breeches_width=breeches,
+                width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            # The feet rest on the same floor the shins lie along, continuing
-            # the bar forward to a rounded toe rather than hanging below it.
-            ax, ay = 556 + spread * 0.28, 108
-            # Same kneeling foot as L: knee to the ground, ankle free, so the
-            # foot rises over the instep and the toes point down onto the
-            # baseline, leaving the open Λ counter beneath the arch.
-            d.kneeling_foot(ax, ay, width, ay - width * 0.5, 1, 96, 74)
+            ax, ay = 546 + spread * 0.20, 206
+            d.kneeling_foot(ax, ay, width, 80, 1, 150)
 
     return d
 
