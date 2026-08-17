@@ -1205,13 +1205,29 @@ def pose(letter: str) -> Drawer:
             # with its sole flush to the shin's underside, and an engraved
             # ankle crease keeps it legible as a foot.
             ax, ay = 592 + spread, 108
+            sole = ay - width * 0.5
+            # The foot is drawn as an arched stroke: it lifts away from the
+            # ankle, rises over the instep, then comes back down to the toe, so
+            # the underside curves clear of the ground between heel and toe.
             d.tapered_path(
-                [(ax - 16, ay), (ax + 20, ay - 8), (ax + 52, ay - 14)],
-                [width, width * 0.78, width * 0.5], True,
+                [(ax - 16, ay), (ax + 20, ay + 9), (ax + 58, ay - 4)],
+                [width, width * 0.72, width * 0.46], True,
             )
-            d.ellipse(ax + 54, ay - 14, 10, width * 0.25, 0.0)
+            # Rounded heel and a raised toe cap give the foot two contact
+            # points; between them the underside is cut away in a shallow
+            # curve, so the arch lifts clear of the ground and the foot reads
+            # as a foot rather than a continuation of the shin.
+            # Rounded heel and toe pads are the two contact points; both sit
+            # on the floor while the arch above them stays lifted.
+            d.ellipse(ax - 12, sole + 13, width * 0.34, 12, 0.0)
+            d.ellipse(ax + 60, sole + 14, width * 0.30, 12, 0.0)
+            # Shallow curved cut under the instep: the arch of the foot.
             d.cut_path([
-                (ax - 2, ay + 18), (ax + 2, ay), (ax - 2, ay - 18),
+                (ax + 8, sole + 9), (ax + 31, sole + 20), (ax + 42, sole + 9),
+            ], 12.0, True)
+            # Ankle crease separating the foot from the shin above it.
+            d.cut_path([
+                (ax - 6, ay + 17), (ax - 2, ay), (ax - 6, ay - 15),
             ], 4.0, True)
 
     elif letter == "M":
@@ -1891,13 +1907,26 @@ def pose(letter: str) -> Drawer:
             # The feet rest on the same floor the shins lie along, continuing
             # the bar forward to a rounded toe rather than hanging below it.
             ax, ay = 556 + spread, 108
+            sole = ay - width * 0.5
+            # The foot is drawn as an arched stroke: it lifts away from the
+            # ankle, rises over the instep, then comes back down to the toe, so
+            # the underside curves clear of the ground between heel and toe.
             d.tapered_path(
-                [(ax - 16, ay), (ax + 22, ay - 8), (ax + 56, ay - 14)],
-                [width, width * 0.78, width * 0.5], True,
+                [(ax - 16, ay), (ax + 22, ay + 9), (ax + 62, ay - 4)],
+                [width, width * 0.72, width * 0.46], True,
             )
-            d.ellipse(ax + 58, ay - 14, 10, width * 0.25, 0.0)
+            # Heel and toe cap touch down; the arch between them is cut away
+            # in a shallow curve so the foot lifts clear of the ground.
+            # Rounded heel and toe pads are the two contact points; both sit
+            # on the floor while the arch above them stays lifted.
+            d.ellipse(ax - 12, sole + 13, width * 0.34, 12, 0.0)
+            d.ellipse(ax + 64, sole + 14, width * 0.30, 12, 0.0)
+            # Shallow curved cut under the instep: the arch of the foot.
             d.cut_path([
-                (ax - 2, ay + 18), (ax + 2, ay), (ax - 2, ay - 18),
+                (ax + 8, sole + 9), (ax + 32, sole + 20), (ax + 44, sole + 9),
+            ], 12.0, True)
+            d.cut_path([
+                (ax - 6, ay + 17), (ax - 2, ay), (ax - 6, ay - 15),
             ], 4.0, True)
 
     return d
