@@ -1224,12 +1224,12 @@
         {
           "index": 3,
           "classification": "leg",
-          "length": 511.81,
+          "length": 509.6,
           "segments": [
-            241.6,
-            270.2
+            240.8,
+            268.8
           ],
-          "deviation_percent": 73.36
+          "deviation_percent": 72.61
         }
       ],
       "torso_lengths": [
@@ -1246,9 +1246,9 @@
         "limb 2 (leg) total 394.1 is +33.5% from 295.2",
         "limb 2 thigh 198.1 is +30.5% from 151.8",
         "limb 2 calf 196.0 is +36.7% from 143.5",
-        "limb 3 (leg) total 511.8 is +73.4% from 295.2",
-        "limb 3 thigh 241.6 is +59.2% from 151.8",
-        "limb 3 calf 270.2 is +88.4% from 143.5",
+        "limb 3 (leg) total 509.6 is +72.6% from 295.2",
+        "limb 3 thigh 240.8 is +58.7% from 151.8",
+        "limb 3 calf 268.8 is +87.4% from 143.5",
         "torso 238.0 is +46.2% from 162.8"
       ]
     },

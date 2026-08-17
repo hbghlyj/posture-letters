@@ -1428,12 +1428,19 @@ def pose(letter: str) -> Drawer:
             [(stem_x - 16, hip_y), (stem_x - 22, 254), (stem_x - 26, 58)], 52,
             knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
         )
-        # Diagonal leg: sharply down and out to the right, foot planted at an
-        # angle on the ground.
+        # Lower-right branch, as on K: the leg reaches out from the pelvis and
+        # changes direction at the knee to drive down and right, planting flat
+        # with spread toes anchoring the base.
         d.leg(
-            [(stem_x + 18, hip_y), (330, 258), (516, 62)], 56,
-            knee_index=1, breeches_width=64, shoe_direction=(1, 0)
+            [(stem_x + 18, hip_y), (334, 262), (520, 68)], 56,
+            knee_index=1, breeches_width=64, shoe_scale=0.0,
         )
+        d.ellipse(530, 60, 23, 18, -0.5)
+        for dx, dy in ((21, -6), (17, -17), (7, -26)):
+            d.polygon([
+                (526, 64), (530 + dx, 60 + dy), (534 + dx, 68 + dy),
+            ])
+        d.cut_path([(513, 68), (530, 54), (540, 38)], 3.2, True)
 
     elif letter == "S":
         # Lying S. The naturally longer lower limbs sweep the biggest curve:
