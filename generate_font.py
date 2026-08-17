@@ -865,7 +865,7 @@ def pose(letter: str) -> Drawer:
         # the toes pointing straight up. The arms are raised completely
         # overhead, parallel to the spine and spreading very slightly apart,
         # ending in wide-open palms with the fingers pointing up.
-        hip_y = 100
+        hip_y = 104
         d.torso([(186, hip_y), (186, 310), (186, 486)], 84, False)
         d.head(186, 552, 1)
         # Raised arms: they flank the head, rise parallel to the spine, and
@@ -897,14 +897,17 @@ def pose(letter: str) -> Drawer:
                 (palm_x - 14, palm_y + 30), (palm_x + 14, palm_y + 30),
             ], 3.6, False)
         # Both legs run straight ahead along the floor, feet together and
-        # flexed square so the toes point up at the end of the baseline.
+        # flexed square so the toes point up at the end of the baseline. They
+        # start inside the torso's own width so pelvis and thighs fuse into one
+        # silhouette with no notch at the corner, and they reach far enough
+        # right that the horizontal arm is proportional to a normal cap L.
         d.leg(
-            [(210, hip_y - 22), (400, hip_y - 22), (566, hip_y - 22)], 58,
-            knee_index=1, breeches_width=68, shoe_direction=(0, 1),
+            [(150, hip_y - 26), (390, hip_y - 26), (612, hip_y - 26)], 58,
+            knee_index=1, breeches_width=70, shoe_direction=(0, 1),
         )
         d.leg(
-            [(210, hip_y + 26), (400, hip_y + 26), (566, hip_y + 26)], 50,
-            knee_index=1, breeches_width=60, shoe_direction=(0, 1),
+            [(150, hip_y + 24), (390, hip_y + 24), (612, hip_y + 24)], 50,
+            knee_index=1, breeches_width=62, shoe_direction=(0, 1),
         )
 
     elif letter == "M":
