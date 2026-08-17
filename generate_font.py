@@ -899,60 +899,47 @@ def pose(letter: str) -> Drawer:
             d.cut_path(pts, width, True)
 
     elif letter == "L":
-        # Seated L: the spine is straight and strictly vertical, perpendicular
-        # to the ground, with the head facing forward in line with it. Both
-        # legs extend fully straight ahead along the floor to make the
-        # horizontal baseline, feet together and flexed to a right angle with
-        # the toes pointing straight up. The arms are raised completely
-        # overhead, parallel to the spine and spreading very slightly apart,
-        # ending in wide-open palms with the fingers pointing up.
-        hip_y = 104
-        # Torso, arms and legs are sized on the font's own baseline ratios
-        # (arm 1.22x torso, leg 1.84x torso) so this seated figure has the same
-        # build as the standing ones instead of a long trunk with stub arms.
-        d.torso([(186, hip_y), (186, 244), (186, 384)], 84, False)
-        d.head(186, 448, 1)
-        # Raised arms: they flank the head, rise parallel to the spine, and
-        # splay a little outward so the vertical stroke stays balanced.
+        # Lying flat on the back with the hips flexed to a right angle. The
+        # whole lower half of the body is lifted straight up, and because the
+        # legs plus lower torso are naturally longer than the upper torso they
+        # make the tall vertical stem while the upper back, shoulders and head
+        # lie along the ground as the shorter horizontal base. The knees stay
+        # locked so the stem is rigid, the toes point up as a terminal peak,
+        # and the arms rest on the floor with the hands beside the head.
+        hip = (196, 156)
+        ground_y = 130
+        # Vertical stem: both legs perfectly straight up from the flexed hips,
+        # knees locked, feet pointing at the ceiling.
+        for spread, width in ((-14, 56), (16, 48)):
+            d.leg(
+                [
+                    (hip[0] + spread * 0.5, hip[1]),
+                    (hip[0] + spread, 392),
+                    (hip[0] + spread, 626),
+                ],
+                width, knee_index=1, breeches_width=width * 1.3,
+                shoe_direction=(0, 1),
+            )
+        # Horizontal base: the upper torso runs right along the ground.
+        d.torso([hip, (316, ground_y), (436, ground_y)], 84, False)
+        d.head(508, ground_y + 4, -1, math.pi / 2)
+        # Arms lie flat on the floor beside the body, hands up by the head.
         for sign in (-1, 1):
+            # The arm lies along the floor from the shoulder and reaches back
+            # toward the head, the hand coming to rest just short of it.
             arm = [
-                (186 + sign * 52, 370),
-                (186 + sign * 70, 558),
-                (186 + sign * 82, 708),
+                (330, ground_y + sign * 50),
+                (396, ground_y + sign * 58),
+                (452, ground_y + sign * 56),
             ]
-            d.path(arm, 34, True, False, track=False)
+            d.path(arm, 26, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[0][0], arm[0][1], 18)
-            # Wide-open palm with the fingers pointing at the ceiling.
-            palm_x, palm_y = arm[-1]
-            d.ellipse(palm_x, palm_y + 14, 20, 24, 0.0)
-            for offset in (-13, -4, 5, 14):
-                d.polygon([
-                    (palm_x + offset - 4, palm_y + 24),
-                    (palm_x + offset + 4, palm_y + 24),
-                    (palm_x + offset + 3, palm_y + 50),
-                    (palm_x + offset - 3, palm_y + 50),
-                ])
-            d.cut_path([
-                (palm_x - 14, palm_y + 30), (palm_x + 14, palm_y + 30),
-            ], 3.6, False)
-        # Both legs run straight ahead along the floor, feet together and
-        # flexed square so the toes point up at the end of the baseline. They
-        # start inside the torso's own width so pelvis and thighs fuse into one
-        # silhouette with no notch at the corner, and they reach far enough
-        # right that the horizontal arm is proportional to a normal cap L.
-        d.leg(
-            [(142, hip_y - 26), (407, hip_y - 26), (657, hip_y - 26)], 58,
-            knee_index=1, breeches_width=70, shoe_direction=(0, 1),
-        )
-        d.leg(
-            [(142, hip_y + 24), (407, hip_y + 24), (657, hip_y + 24)], 50,
-            knee_index=1, breeches_width=62, shoe_direction=(0, 1),
-        )
+            d.circle(arm[0][0], arm[0][1], 15)
+            d.ellipse(arm[-1][0] + 6, arm[-1][1], 18, 14, 0.0)
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible

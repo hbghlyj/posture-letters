@@ -35,7 +35,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | I | **FAIL** | L 274.4, L 274.4, L 400.1, L 400.1 | 225.0 | 110.0 | limb 1 (leg) total 274.4 is -8.3% from 299.2 |
 | J | **FAIL** | L 272.1, L 272.1, L 363.6, L 258.9 | 430.0 | 110.0 | limb 1 (leg) total 272.1 is -9.0% from 299.2 |
 | K | **FAIL** | L 349.7, L 256.8, L 266.2, L 387.1 | 320.1 | 110.0 | limb 1 (leg) total 349.7 is +16.9% from 299.2 |
-| L | **FAIL** | L 339.3, L 339.3, L 515.0, L 515.0 | 280.0 | 110.0 | limb 1 (leg) total 339.3 is +13.4% from 299.2 |
+| L | **FAIL** | L 470.1, L 470.1, A 122.5, A 122.5 | 242.8 | 110.0 | limb 1 (leg) total 470.1 is +57.1% from 299.2 |
 | M | **FAIL** | L 508.0, L 508.0, L 993.0, L 987.4 | 535.6 | 110.0 | limb 1 (leg) total 508.0 is +69.8% from 299.2 |
 | N | **FAIL** | L 498.0, L 498.0, L 658.0, L 679.7 | 508.5 | 110.0 | limb 1 (leg) total 498.0 is +66.4% from 299.2 |
 | O | **FAIL** | L 696.2, L 696.2 | — | 124.0 | expected 4 measurable limbs; found 2 |
@@ -203,18 +203,19 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### L
-- limb 1 (leg) total 339.3 is +13.4% from 299.2
-- limb 1 thigh 188.9 is +22.9% from 153.7
-- limb 2 (leg) total 339.3 is +13.4% from 299.2
-- limb 2 thigh 188.9 is +22.9% from 153.7
-- limb 3 (leg) total 515.0 is +72.1% from 299.2
-- limb 3 thigh 265.0 is +72.5% from 153.7
-- limb 3 calf 250.0 is +71.8% from 145.6
-- limb 4 (leg) total 515.0 is +72.1% from 299.2
-- limb 4 thigh 265.0 is +72.5% from 153.7
-- limb 4 calf 250.0 is +71.8% from 145.6
-- torso 280.0 is +72.0% from 162.8
-- nearest-baseline classification gives 0 arm(s) and 4 leg(s)
+- limb 1 (leg) total 470.1 is +57.1% from 299.2
+- limb 1 thigh 236.1 is +53.7% from 153.7
+- limb 1 calf 234.0 is +60.8% from 145.6
+- limb 2 (leg) total 470.1 is +57.1% from 299.2
+- limb 2 thigh 236.1 is +53.7% from 153.7
+- limb 2 calf 234.0 is +60.8% from 145.6
+- limb 3 (arm) total 122.5 is -38.1% from 197.8
+- limb 3 upper arm 66.5 is -41.0% from 112.7
+- limb 3 forearm 56.0 is -34.2% from 85.1
+- limb 4 (arm) total 122.5 is -38.1% from 197.8
+- limb 4 upper arm 66.5 is -41.0% from 112.7
+- limb 4 forearm 56.0 is -34.2% from 85.1
+- torso 242.8 is +49.1% from 162.8
 
 ### M
 - limb 1 (leg) total 508.0 is +69.8% from 299.2
