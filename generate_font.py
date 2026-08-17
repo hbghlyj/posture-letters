@@ -1058,24 +1058,30 @@ def pose(letter: str) -> Drawer:
         d.cut_path([(419, 18), (412, 25), (404, 18)], 3.2, True)
 
     elif letter == "X":
+        # Source-like spread X: keep the legs reaching the lower corners, but
+        # pull the raised-arm terminals down/in so the sleeves no longer read as
+        # disproportionately long beside the legs and short torso.
         d.head(350, 455, 1)
-        d.torso([(350, 395), (350, 300)], 86, False)
-        d.limb([(340, 390), (225, 555), (85, 750)], 55, end="hand")
-        d.limb([(360, 390), (475, 555), (615, 750)], 55, end="hand")
+        d.torso([(350, 395), (350, 305)], 86, False)
+        d.limb([(340, 390), (258, 505), (190, 585)], 55, end="hand")
+        d.limb([(360, 390), (442, 505), (510, 585)], 55, end="hand")
         d.leg(
-            [(340, 300), (225, 180), (85, 45)], 60, knee_index=1, shoe_direction=(-1, 0)
+            [(340, 305), (215, 160), (70, 25)], 60, knee_index=1, shoe_direction=(-1, 0)
         )
         d.leg(
-            [(360, 300), (475, 180), (615, 45)], 60, knee_index=1, shoe_direction=(1, 0)
+            [(360, 305), (485, 160), (630, 25)], 60, knee_index=1, shoe_direction=(1, 0)
         )
 
     elif letter == "Y":
+        # Raised arms form the Y fork at a compact, normal sleeve length. The
+        # torso is shortened and the paired legs start higher so they carry the
+        # stem down to the baseline at a more natural leg-to-torso proportion.
         d.head(350, 490, 1)
-        d.torso([(350, 430), (350, 250)], 90, False)
-        d.limb([(335, 425), (225, 575), (90, 755)], 55, end="hand")
-        d.limb([(365, 425), (475, 575), (610, 755)], 55, end="hand")
-        d.leg([(350, 250), (325, 150), (315, 50)], 58, knee_index=1)
-        d.leg([(350, 250), (375, 150), (385, 50)], 58, knee_index=1)
+        d.torso([(350, 430), (350, 315)], 90, False)
+        d.limb([(335, 425), (260, 525), (195, 590)], 50, end="hand")
+        d.limb([(365, 425), (440, 525), (505, 590)], 50, end="hand")
+        d.leg([(338, 315), (330, 150), (320, -10)], 58, knee_index=1)
+        d.leg([(362, 315), (370, 150), (380, -10)], 58, knee_index=1)
 
     elif letter == "Z":
         d.head(530, 710, -1)

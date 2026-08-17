@@ -74,6 +74,8 @@ Every visible foot-ending leg now uses the print’s shared costume anatomy rath
 - **Q:** two inverted, short-breeched legs form the ring; side knee cuffs articulate the bends and tapered calves meet in small inward apex shoes. Its bottom face is inverted like O. The tail arm is shortened to a normal reach, begins inside a reinforced right shoulder socket, and terminates in a visible hand.
 - **R:** the planted shoe now projects clearly to the figure’s right, matching the crop instead of appearing reversed.
 - **T:** wide horizontal arms form the crossbar while two close legs descend vertically.
+- **X:** the raised arms are shortened to a normal diagonal reach, while the long legs still spread to the lower corners and retain the source-directed outward shoes.
+- **Y:** the raised arms form the fork at compact sleeve length; the torso is shorter and the paired legs lengthen into the stem so legs and torso read in proper proportion.
 - **W:** the outer knees are lowered to the baseline, where the two inner hands support the figure with visible index fingers and thumbs; the outer stockinged legs retain the source’s raised-foot topology.
 - The detailed A–I, K–T, V–Z mapping is recorded in `reference-crops/historical-pose-map.md`.
 
