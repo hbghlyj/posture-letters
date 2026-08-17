@@ -614,10 +614,10 @@ def pose(letter: str) -> Drawer:
         # Two standing figures act as the vertical sides of the H; their joined
         # hands at the centre form the horizontal crossbar. Each body is a
         # normally proportioned upright person seen in profile — head, torso,
-        # two planted legs — and the near arm leaves the shoulder, levels off,
-        # and runs dead straight to the clasp so the two arms read as one
-        # continuous horizontal bar spanning the stems.
-        bar_y = 520
+        # two planted legs. Only the front arm reaches across: it drops from the
+        # shoulder to a distinctly bent elbow, then the level forearm carries
+        # the crossbar into the clasped hands. The back arm stays at the side.
+        bar_y = 505
         for side in (-1, 1):
             cx = 350 - side * 210
             d.head(cx, 700, side)
@@ -625,31 +625,41 @@ def pose(letter: str) -> Drawer:
             d.torso(
                 [(cx, 636), (cx + side * 5, 545), (cx + side * 2, 430)], 78, True
             )
-            # Near arm: shoulder, a short drop to bar height, then a perfectly
-            # level forearm carrying the crossbar into the clasped hands.
-            arm = [
-                (cx + side * 26, 585),
-                (cx + side * 72, bar_y),
-                (cx + side * 140, bar_y),
-                (350 - side * 22, bar_y),
-            ]
-            d.path(arm, 38, True, False, track=False)
+            # Front arm, bent at the elbow. The upper arm hangs down and
+            # outward from the shoulder; the forearm turns sharply at the elbow
+            # and runs level to the centre, so the crossbar is formed only by
+            # the two clasped front arms.
+            shoulder = (cx + side * 22, 606)
+            elbow = (cx + side * 104, bar_y)
+            hand = (350 - side * 24, bar_y)
+            # Upper arm hangs down and slightly forward from the shoulder;
+            # the forearm turns roughly ninety degrees at the elbow and runs
+            # level to the clasp, so the crossbar stays perfectly horizontal.
+            d.path([shoulder, elbow], 40, False, False, track=False)
+            d.path([elbow, hand], 34, False, False, track=False)
+            # A joint ball keeps the sharp bend readable as an actual elbow.
+            d.circle(elbow[0], elbow[1], 23)
+            arm = [shoulder, elbow, hand]
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            # Elbow crease where the upper arm turns into the level forearm.
+            # Engraved crease on the outside of the bent elbow.
             d.cut_path([
-                (cx + side * 62, bar_y + 18), (cx + side * 78, bar_y),
-                (cx + side * 66, bar_y - 18),
+                (elbow[0] + side * 20, elbow[1] + 15),
+                (elbow[0] + side * 26, elbow[1] - 2),
+                (elbow[0] + side * 12, elbow[1] - 19),
             ], 5.0, True)
-            # Far arm resting straight down along the body's outer side.
-            back_arm = [
-                (cx - side * 26, 606), (cx - side * 34, 520), (cx - side * 32, 442)
-            ]
-            d.path(back_arm, 30, True, False, track=False)
-            d.circle(back_arm[-1][0], back_arm[-1][1], 17)
+            # Back arm: bent at the elbow too, but kept in against the body
+            # instead of joining the crossbar.
+            back_shoulder = (cx - side * 24, 600)
+            back_elbow = (cx - side * 40, 512)
+            back_hand = (cx - side * 14, 448)
+            d.path([back_shoulder, back_elbow], 32, False, False, track=False)
+            d.path([back_elbow, back_hand], 28, False, False, track=False)
+            d.circle(back_elbow[0], back_elbow[1], 17)
+            d.circle(back_hand[0], back_hand[1], 16)
             # Two legs per figure: near leg planted, far leg just behind it.
             d.leg(
                 [(cx - side * 15, 430), (cx - side * 22, 235), (cx - side * 26, 40)],

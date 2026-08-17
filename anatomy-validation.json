@@ -465,13 +465,12 @@
         {
           "index": 1,
           "classification": "arm",
-          "length": 195.63,
+          "length": 212.1,
           "segments": [
-            79.6,
-            68.0,
-            48.0
+            130.1,
+            82.0
           ],
-          "deviation_percent": -41.16
+          "deviation_percent": -36.21
         },
         {
           "index": 2,
@@ -496,13 +495,12 @@
         {
           "index": 4,
           "classification": "arm",
-          "length": 195.63,
+          "length": 212.1,
           "segments": [
-            79.6,
-            68.0,
-            48.0
+            130.1,
+            82.0
           ],
-          "deviation_percent": -41.16
+          "deviation_percent": -36.21
         },
         {
           "index": 5,
@@ -538,16 +536,18 @@
         "expected 4 measurable limbs; found 6",
         "expected 1 measurable torso; found 2",
         "expected 1 head; found 2",
-        "limb 1 (arm) total 195.6 is -41.2% from 332.5",
-        "limb 1 has 3 skeletal segments; expected upper/lower pair",
+        "limb 1 (arm) total 212.1 is -36.2% from 332.5",
+        "limb 1 upper arm 130.1 is -16.1% from 155.0",
+        "limb 1 forearm 82.0 is -53.8% from 177.5",
         "limb 2 (arm) total 390.2 is +17.3% from 332.5",
         "limb 2 upper arm 195.1 is +25.9% from 155.0",
         "limb 2 forearm 195.0 is +9.9% from 177.5",
         "limb 3 (arm) total 390.0 is +17.3% from 332.5",
         "limb 3 upper arm 195.0 is +25.8% from 155.0",
         "limb 3 forearm 195.0 is +9.9% from 177.5",
-        "limb 4 (arm) total 195.6 is -41.2% from 332.5",
-        "limb 4 has 3 skeletal segments; expected upper/lower pair",
+        "limb 4 (arm) total 212.1 is -36.2% from 332.5",
+        "limb 4 upper arm 130.1 is -16.1% from 155.0",
+        "limb 4 forearm 82.0 is -53.8% from 177.5",
         "limb 5 (arm) total 390.2 is +17.3% from 332.5",
         "limb 5 upper arm 195.1 is +25.9% from 155.0",
         "limb 5 forearm 195.0 is +9.9% from 177.5",
