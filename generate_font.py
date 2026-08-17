@@ -749,7 +749,7 @@ def pose(letter: str) -> Drawer:
         # arching over the crown and running right. The whole arch sits above
         # the torso's own end, so the limb reads clear of the trunk without
         # needing a seam (an engraved seam is cancelled where fills stack).
-        upper = [(158, 592), (118, 692), (300, 742), (582, 736)]
+        upper = [(158, 592), (146, 686), (316, 740), (512, 734)]
         d.path(upper[:2], 42, False, False, track=False)
         d.path(upper[1:], 38, True, False, track=False)
         segments, length = d.centerline_measurements(upper)
@@ -761,18 +761,18 @@ def pose(letter: str) -> Drawer:
         d.circle(upper[0][0], upper[0][1], 22)
         d.circle(upper[1][0], upper[1][1], 21, n=24)
         # Crease inside the elbow, on the underside of the arch.
-        d.cut_path([(112, 662), (146, 700), (188, 716)], 4.0, True)
+        d.cut_path([(140, 660), (172, 698), (214, 714)], 4.0, True)
         # Hand serif: the wrist breaks over a rounded joint and the hand hangs
         # straight down, giving the top-right corner a clean vertical terminal.
-        d.circle(582, 736, 20, n=24)
-        d.tapered_path([(584, 738), (592, 700), (598, 668)], [36, 31, 26], True)
-        d.ellipse(599, 660, 18, 15, 0.0)
+        d.circle(512, 734, 20, n=24)
+        d.tapered_path([(514, 736), (522, 698), (528, 666)], [36, 31, 26], True)
+        d.ellipse(529, 658, 18, 15, 0.0)
         for dx in (-11, -1, 9):
             d.polygon([
-                (599 + dx - 4, 656), (599 + dx + 4, 656),
-                (599 + dx + 3, 630), (599 + dx - 4, 630),
+                (529 + dx - 4, 654), (529 + dx + 4, 654),
+                (529 + dx + 3, 628), (529 + dx - 4, 628),
             ])
-        d.cut_path([(586, 706), (612, 702)], 3.2, False)
+        d.cut_path([(516, 704), (542, 700)], 3.2, False)
         # Head nestled under the arch, tilted forward, facing to her right.
         # No hat here: the crown and brim jam straight into the underside of
         # the arching arm in this tight corner (the same reason A and G go
@@ -781,12 +781,12 @@ def pose(letter: str) -> Drawer:
         # Middle prong: the left arm hangs down the flank, then the elbow
         # flexes forward and the forearm runs out horizontally. The bar height
         # is set so the two counters of the letter come out even.
-        bar_y = 416
-        shoulder = (206, 570)
-        elbow = (270, bar_y + 8)
-        d.path([shoulder, (258, 486), elbow], 38, True, False, track=False)
-        d.path([elbow, (430, bar_y)], 34, False, False, track=False)
-        mid_arm = [shoulder, elbow, (430, bar_y)]
+        bar_y = 414
+        shoulder = (200, 586)
+        elbow = (268, bar_y + 6)
+        d.path([shoulder, (250, 494), elbow], 38, True, False, track=False)
+        d.path([elbow, (470, bar_y)], 34, False, False, track=False)
+        mid_arm = [shoulder, elbow, (470, bar_y)]
         segments, length = d.centerline_measurements(mid_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
@@ -798,8 +798,8 @@ def pose(letter: str) -> Drawer:
             (elbow[0] + 20, elbow[1] + 16), (elbow[0] + 24, elbow[1]),
             (elbow[0] + 12, elbow[1] - 17),
         ], 4.0, True)
-        d.ellipse(442, bar_y, 17, 18, 0.0)
-        d.cut_path([(424, bar_y - 16), (424, bar_y + 16)], 3.4, False)
+        d.ellipse(482, bar_y, 17, 18, 0.0)
+        d.cut_path([(464, bar_y - 16), (464, bar_y + 16)], 3.4, False)
         # Lower prong: the thighs drop to the knees at the front, and from the
         # knees the shins lie flat along the ground running right.
         knee = (stem_x - 2, 118)
