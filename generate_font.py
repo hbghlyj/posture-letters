@@ -1490,11 +1490,13 @@ def pose(letter: str) -> Drawer:
         d.circle(436, 186, 22)
         tail_arm = [(436, 186), (468, 158), (502, 128), (532, 102), (558, 80)]
         d.tapered_path(tail_arm, [42, 38, 34, 30, 26], True)
-        # Engraved seam along the arm's underside where it passes the leg, so
-        # the two limbs stay legible instead of fusing into one wedge.
+        # Engraved seam along the arm's UPPER edge, which is where the leg
+        # actually overlaps it. Placed on the lower edge it cut into open
+        # silhouette instead of the shared boundary, so it read as a nick in
+        # the outline rather than separating the two limbs.
         d.cut_path([
-            (452, 156), (486, 126), (518, 100),
-        ], 5.0, True)
+            (446, 200), (478, 170), (510, 140),
+        ], 7.0, True)
         segments, length = d.centerline_measurements(tail_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
