@@ -716,42 +716,66 @@ def pose(letter: str) -> Drawer:
         ], 6.5, True)
 
     elif letter == "E":
-        # Historical seated E. Head and torso form the stem; the top and middle
-        # bars are arms. The broad lower leg lies straight along the baseline,
-        # while the slimmer near leg remains visibly separate just above it;
-        # both source-profile shoes turn upward at their anatomical endpoints.
-        d.head(160, 745, 1)
-        # Continue the stem directly into the lower leg centerline so the
-        # baseline stroke is a seamless seated body connection, not a floater.
-        d.torso([(160, 680), (160, 485), (160, 100)], 90, False)
-        # Both bars are arms and both run dead horizontal, matching F's
-        # construction: a sloping prong reads as a droop rather than a
-        # deliberate crossbar.
-        for bar_y, reach, width in ((648, 590, 46), (470, 486, 42)):
-            arm = [(182, bar_y), (380, bar_y), (reach, bar_y)]
-            d.path(arm, width, False, False, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
-            d.ellipse(reach + 12, bar_y, 20, width * 0.46, 0.0)
-            d.cut_path([
-                (reach - 4, bar_y - 14), (reach - 4, bar_y + 14),
-            ], 3.6, False)
-        # The two legs are brought close enough to overlap into a single
-        # baseline stroke. Held apart they read as a fourth horizontal bar and
-        # the E appears to have four prongs; touching, they read correctly as
-        # one leg drawn just behind the other, as the paired legs elsewhere do.
-        d.leg(
-            [(160, 116), (370, 116), (585, 116)], 56, knee_index=1,
-            shoe_direction=(0.55, 1.0)
-        )
-        d.leg(
-            [(168, 146), (366, 146), (560, 146)], 38, knee_index=1,
-            shoe_direction=(0.55, 1.0)
-        )
+        # Kneeling E built from coordinated limb extensions. The right arm
+        # rises vertically from the shoulder and curves over the top of the
+        # head, running horizontally right as the upper crossbar; the head is
+        # nestled underneath it, tilted forward and facing down into the body.
+        # The left arm reaches forward from mid-torso and bends about ninety
+        # degrees at the elbow, throwing the forearm out as the shorter middle
+        # prong. The figure kneels on its lower legs, and at the front base the
+        # limb bends up at the knee and extends horizontally along the ground
+        # as the long lower bar, its foot flexing sharply up at the ankle to
+        # make a vertical terminal at the bottom-right corner.
+        stem_x = 172
+        hip_y = 306
+        d.torso([(stem_x, hip_y), (stem_x, 452), (stem_x, 598)], 84, False)
+        # Upper bar: the right arm straight up, then over the head to the right.
+        upper = [(stem_x - 4, 592), (stem_x - 14, 700), (296, 744), (596, 744)]
+        d.path(upper[:2], 42, True, False, track=False)
+        d.path(upper[1:], 40, True, False, track=False)
+        segments, length = d.centerline_measurements(upper)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": upper,
+        })
+        d.circle(upper[0][0], upper[0][1], 21)
+        # Shoulder-to-overhead crease at the turn above the head.
+        d.cut_path([(148, 708), (170, 732), (202, 740)], 4.0, True)
+        d.ellipse(608, 744, 18, 20, 0.0)
+        d.cut_path([(588, 726), (588, 762)], 3.4, False)
+        # Head nestled under the upper bar, tilted forward and facing down.
+        d.head(stem_x + 44, 654, 1, -0.62)
+        # Middle prong: the left arm forward from mid-torso, ninety degrees at
+        # the elbow, forearm horizontal.
+        elbow = (stem_x + 34, 462)
+        d.path([(stem_x + 10, 540), elbow], 38, False, False, track=False)
+        d.path([elbow, (496, 462)], 36, False, False, track=False)
+        mid_arm = [(stem_x + 10, 540), elbow, (496, 462)]
+        segments, length = d.centerline_measurements(mid_arm)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": mid_arm,
+        })
+        d.circle(elbow[0], elbow[1], 20)
+        d.cut_path([
+            (elbow[0] + 18, elbow[1] + 16), (elbow[0] + 22, elbow[1]),
+            (elbow[0] + 10, elbow[1] - 17),
+        ], 4.0, True)
+        d.ellipse(508, 462, 17, 18, 0.0)
+        d.cut_path([(490, 446), (490, 478)], 3.4, False)
+        # Lower bar: kneeling thigh drops to the knee, then the limb bends up
+        # at the knee and runs horizontally right along the ground.
+        knee = (stem_x - 2, 118)
+        for spread, width, breeches in ((-16, 54, 62), (16, 42, 50)):
+            d.leg(
+                [(stem_x + spread * 0.4, hip_y), (knee[0] + spread * 0.5, knee[1]),
+                 (566 + spread, 104)],
+                width, knee_index=1, breeches_width=breeches, shoe_scale=0.0,
+            )
+        # Foot flexes sharply up at the ankle: the bottom-right terminal.
+        d.path([(570, 96), (590, 200)], 40, False, False, track=False)
+        d.ellipse(592, 212, 17, 19, 0.10)
+        d.cut_path([(566, 132), (596, 138)], 3.4, False)
 
     elif letter == "F":
         # Upright F built from both arms. Head, torso and two tightly parallel
