@@ -670,21 +670,45 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "F":
-        # Upright historical F: top and middle bars are arms; two close legs
-        # continue the body stem below the hips.
-        d.head(175, 745, 1)
-        # Hips sit at mid-stem so the legs below match the trunk in length.
-        d.torso([(175, 680), (175, 555), (175, 430)], 90, False)
-        d.limb([(190, 635), (390, 650), (600, 650)], 50, False, end="hand")
-        d.limb([(185, 470), (320, 420), (465, 420)], 48, False, end="hand")
-        # Both profile shoes point right in the historical standing pose.
+        # Upright F built from both arms. Head, torso and two tightly parallel
+        # legs make the vertical trunk; the near arm reaches straight out from
+        # the shoulder as the longer top bar, and the far arm crosses the front
+        # of the chest and reaches out lower down, dead parallel to it, as the
+        # slightly shorter middle bar. Both feet face forward at the base.
+        stem_x = 172
+        top_y = 646
+        mid_y = 470
+        d.head(stem_x, 748, 1)
+        d.torso([(stem_x, 684), (stem_x, 556), (stem_x, 428)], 86, False)
+        # Top bar: the near arm straight out from the shoulder line.
+        for bar_y, reach, width in ((top_y, 600, 46), (mid_y, 500, 42)):
+            arm = [(stem_x + 22, bar_y), (stem_x + 200, bar_y), (reach, bar_y)]
+            d.path(arm, width, False, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
+            # Open hand at the end of each prong.
+            d.ellipse(reach + 12, bar_y, 20, width * 0.46, 0.0)
+            d.cut_path([
+                (reach - 4, bar_y - 14), (reach - 4, bar_y + 14),
+            ], 3.6, False)
+        # The far arm crosses the chest before running out: a short engraved
+        # seam marks where it passes over the trunk.
+        d.cut_path([
+            (stem_x - 18, mid_y + 34), (stem_x + 4, mid_y + 12),
+            (stem_x + 8, mid_y - 16),
+        ], 4.2, True)
+        # Tightly parallel legs, both feet facing forward at the base.
         d.leg(
-            [(158, 432), (152, 245), (145, 62)], 50, knee_index=1,
-            breeches_width=56, shoe_direction=(1, 0)
+            [(stem_x - 18, 430), (stem_x - 22, 244), (stem_x - 26, 62)], 50,
+            knee_index=1, breeches_width=56, shoe_direction=(-0.35, -1)
         )
         d.leg(
-            [(192, 432), (198, 245), (205, 62)], 50, knee_index=1,
-            breeches_width=56, shoe_direction=(1, 0)
+            [(stem_x + 18, 430), (stem_x + 22, 244), (stem_x + 26, 62)], 50,
+            knee_index=1, breeches_width=56, shoe_direction=(0.35, -1)
         )
 
     elif letter == "G":
