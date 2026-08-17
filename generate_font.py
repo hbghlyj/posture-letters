@@ -581,15 +581,18 @@ def pose(letter: str) -> Drawer:
         # Upright historical F: top and middle bars are arms; two close legs
         # continue the body stem below the hips.
         d.head(175, 745, 1)
-        d.torso([(175, 680), (175, 490), (175, 300)], 90, False)
+        # Hips sit at mid-stem so the legs below match the trunk in length.
+        d.torso([(175, 680), (175, 555), (175, 430)], 90, False)
         d.limb([(190, 635), (390, 650), (600, 650)], 50, False, end="hand")
         d.limb([(185, 470), (320, 420), (465, 420)], 48, False, end="hand")
         # Both profile shoes point right in the historical standing pose.
         d.leg(
-            [(160, 305), (155, 175), (145, 65)], 50, knee_index=1, shoe_direction=(1, 0)
+            [(158, 432), (152, 245), (145, 62)], 50, knee_index=1,
+            breeches_width=56, shoe_direction=(1, 0)
         )
         d.leg(
-            [(190, 305), (195, 175), (205, 65)], 50, knee_index=1, shoe_direction=(1, 0)
+            [(192, 432), (198, 245), (205, 62)], 50, knee_index=1,
+            breeches_width=56, shoe_direction=(1, 0)
         )
 
     elif letter == "G":
@@ -913,7 +916,8 @@ def pose(letter: str) -> Drawer:
         # bending arms making the bowl. Both shoulder-to-hand routes now stay
         # near normal human arm length instead of stretching into rubbery arcs.
         d.head(165, 752, 1)
-        d.torso([(165, 690), (165, 500), (165, 295)], 88, False)
+        # Hips sit at mid-stem so the legs below match the trunk in length.
+        d.torso([(165, 690), (165, 555), (165, 425)], 88, False)
         upper_arm = [(190, 650), (275, 675), (350, 650), (415, 585), (440, 525)]
         lower_arm = [(175, 480), (275, 455), (365, 465), (445, 505)]
         for arm, main_width, wrist_width in (
@@ -942,10 +946,12 @@ def pose(letter: str) -> Drawer:
         # The crop shows the planted feet as an outward pair: left foot to the
         # left, near/right foot to the right.
         d.leg(
-            [(150, 300), (145, 175), (140, 60)], 52, knee_index=1, shoe_direction=(-1, 0)
+            [(148, 427), (143, 242), (138, 58)], 52, knee_index=1,
+            breeches_width=58, shoe_direction=(-1, 0)
         )
         d.leg(
-            [(180, 300), (185, 175), (195, 60)], 52, knee_index=1, shoe_direction=(1, 0)
+            [(182, 427), (188, 242), (195, 58)], 52, knee_index=1,
+            breeches_width=58, shoe_direction=(1, 0)
         )
 
     elif letter == "Q":
@@ -987,7 +993,8 @@ def pose(letter: str) -> Drawer:
     elif letter == "R":
         # P-like clasped-arm bowl with one planted leg and one stepped leg.
         d.head(165, 752, 1)
-        d.torso([(165, 690), (165, 500), (165, 295)], 88, False)
+        # Hips sit at mid-stem so the legs below match the trunk in length.
+        d.torso([(165, 690), (165, 555), (165, 425)], 88, False)
         d.limb([(190, 650), (425, 710), (555, 585), (450, 470), (175, 480)], 54, end="hand")
         d.leg(
             [(175, 300), (335, 220), (585, 55)], 62, knee_index=1, shoe_direction=(1, 0)
