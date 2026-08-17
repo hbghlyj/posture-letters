@@ -394,7 +394,7 @@ class Drawer:
 
     def head(
         self, x: float, y: float, facing: int = 1, tilt: float = 0,
-        mirror_details: bool = False,
+        mirror_details: bool = False, hat: bool = True,
     ) -> None:
         # Head, nose and a small cocked hat. ``tilt`` rotates the facial and
         # hat direction; ``mirror_details`` flips only their asymmetry while
@@ -411,7 +411,10 @@ class Drawer:
         nose_tip = pt(facing * 61, 0)
         nose_base_bottom = pt(facing * 43, -8)
         self.polygon([nose_base_top, nose_tip, nose_base_bottom])
-        self.hat(x, y, tilt, mirror_details=mirror_details)
+        # Poses whose heads sit in a tight corner can drop the brim: there it
+        # crowds the neighbouring limb instead of acting as a serif.
+        if hat:
+            self.hat(x, y, tilt, mirror_details=mirror_details)
         eye_x, eye_y = pt(facing * 20, 10)
         self.circle(eye_x, eye_y, 7, hole=True, n=12)
 
@@ -506,7 +509,8 @@ def pose(letter: str) -> Drawer:
             # Head turned toward the partner, above a torso that leans inward.
             # Each head turns toward the partner: the two figures look at one
             # another across the letter rather than away from it.
-            d.head(px(232), 552, side)
+            # No hat: the two brims meet at the apex and collide.
+            d.head(px(232), 552, side, hat=False)
             d.torso(
                 [(px(228), 496), (px(212), 418), (px(198), 336)], 72, True
             )
@@ -850,7 +854,8 @@ def pose(letter: str) -> Drawer:
                 (ankle[0] - 30, foot_y - 13), (ankle[0] - 30, foot_y + 13),
             ], 3.4, False)
         # The head is tucked into the crest, face turned down into the letter.
-        d.head(336, 668, 1, -math.pi / 2)
+        # No hat: the brim crowds the crest of the arch.
+        d.head(336, 668, 1, -math.pi / 2, hat=False)
 
     elif letter == "H":
         # Two standing figures act as the vertical sides of the H; their joined
@@ -1700,14 +1705,27 @@ def pose(letter: str) -> Drawer:
             ], 3.4, False)
         # Frontal squat: knees drawn up toward the chest, then the shins drop
         # vertically down the front of the body to the planted feet.
-        d.leg(
-            [(350 - 30, 222), (350 - 34, 300), (350 - 32, 56)], 58,
-            knee_index=1, breeches_width=76, shoe_direction=(-1, 0)
-        )
-        d.leg(
-            [(350 + 30, 222), (350 + 34, 300), (350 + 32, 56)], 58,
-            knee_index=1, breeches_width=76, shoe_direction=(1, 0)
-        )
+        for sign in (-1, 1):
+            d.leg(
+                [
+                    (350 + sign * 30, 222),
+                    (350 + sign * 34, 300),
+                    (350 + sign * 32, 56),
+                ],
+                58, knee_index=1, breeches_width=76,
+                shoe_direction=(sign, 0),
+            )
+            # The squat is a deep fold, so the drawn-up thigh and the shin
+            # below it are engraved apart; without this the whole column reads
+            # as one undifferentiated block rather than a folded leg.
+            d.cut_path([
+                (350 + sign * 8, 306), (350 + sign * 34, 316),
+                (350 + sign * 58, 306),
+            ], 5.0, True)
+            d.cut_path([
+                (350 + sign * 20, 248), (350 + sign * 22, 176),
+                (350 + sign * 20, 104),
+            ], 3.6, True)
 
     elif letter == "Z":
         # Side-profile Z: a dramatic backward lean over a deep kneel, with the
