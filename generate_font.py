@@ -1038,14 +1038,17 @@ def pose(letter: str) -> Drawer:
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-        # Elbow and sleeve creases, as on B.
-        d.cut_path([(284, 665), (307, 651), (322, 629)], 4.5, True)
-        d.cut_path([(278, 500), (299, 500), (318, 512)], 4.0, True)
-        # Clasped hands close the bowl at the right.
-        d.ellipse(360, 603, 22, 27, -0.25)
-        d.ellipse(352, 587, 20, 24, -0.25)
-        d.cut_path([(343, 615), (358, 607), (375, 612)], 4.5, True)
-        d.cut_path([(345, 601), (359, 594), (374, 600)], 4.5, True)
+        # Elbow and sleeve creases, as on B. They are kept short and well
+        # inside the limb so they read as engraving and never open a white
+        # gap through the bowl's outline.
+        d.cut_path([(288, 660), (303, 651), (314, 638)], 4.0, True)
+        d.cut_path([(284, 501), (299, 499), (312, 506)], 3.6, True)
+        # Clasped hands close the bowl at the right. The two palms overlap the
+        # arm ends generously so the loop stays one solid, continuous shape.
+        d.ellipse(356, 600, 26, 31, -0.25)
+        d.ellipse(347, 583, 24, 28, -0.25)
+        d.cut_path([(347, 612), (358, 606), (369, 610)], 4.0, True)
+        d.cut_path([(348, 598), (359, 593), (369, 597)], 4.0, True)
         d.leg(
             [(180, 428), (350, 250), (585, 55)], 62, knee_index=1, shoe_direction=(1, 0)
         )
