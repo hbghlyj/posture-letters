@@ -942,12 +942,18 @@ def pose(letter: str) -> Drawer:
         d.cut_path([
             (stem_x - 22, 620), (stem_x - 28, 528), (stem_x - 25, 444),
         ], 3.6, True)
-        # Kneeling near leg: thigh drops vertically to a knee on the ground,
-        # then the shin folds back along the floor.
+        # Kneeling near leg. A straight leg with a shoe under it just reads as
+        # standing, so the kneel is made explicit: the thigh drops vertically
+        # to a knee resting on the ground, then the shin turns a right angle
+        # and lies flat along the floor with the foot trailing behind.
+        knee = (stem_x - 16, 128)
         d.leg(
-            [(stem_x - 12, hip_y), (stem_x - 18, 246), (stem_x - 22, 86)], 52,
-            knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
+            [(stem_x - 12, hip_y), knee, (stem_x - 74, 96)], 52,
+            knee_index=1, breeches_width=58, shoe_direction=(-0.55, -0.84)
         )
+        # The kneecap itself sits on the ground: a rounded bulb at the corner
+        # makes the weight-bearing joint unmistakable.
+        d.ellipse(knee[0] + 8, knee[1] - 6, 32, 26, 0.0)
         # Lower diagonal: the far leg reaches well out to the right at a bent
         # knee, its foot planting to make the wide, elongated base.
         d.leg(

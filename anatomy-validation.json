@@ -749,12 +749,12 @@
         {
           "index": 2,
           "classification": "leg",
-          "length": 326.16,
+          "length": 350.27,
           "segments": [
-            166.1,
-            160.0
+            284.0,
+            66.2
           ],
-          "deviation_percent": 9.0
+          "deviation_percent": 17.06
         },
         {
           "index": 3,
@@ -779,9 +779,9 @@
         "limb 1 (leg) total 242.5 is -19.0% from 299.2",
         "limb 1 thigh 119.9 is -22.0% from 153.7",
         "limb 1 calf 122.6 is -15.8% from 145.6",
-        "limb 2 (leg) total 326.2 is +9.0% from 299.2",
-        "limb 2 thigh 166.1 is +8.1% from 153.7",
-        "limb 2 calf 160.0 is +10.0% from 145.6",
+        "limb 2 (leg) total 350.3 is +17.1% from 299.2",
+        "limb 2 thigh 284.0 is +84.8% from 153.7",
+        "limb 2 calf 66.2 is -54.5% from 145.6",
         "limb 3 (leg) total 479.1 is +60.1% from 299.2",
         "limb 3 thigh 224.7 is +46.2% from 153.7",
         "limb 3 calf 254.4 is +74.8% from 145.6",
