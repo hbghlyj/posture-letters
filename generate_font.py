@@ -660,8 +660,22 @@ def pose(letter: str) -> Drawer:
         # Continue the stem directly into the lower leg centerline so the
         # baseline stroke is a seamless seated body connection, not a floater.
         d.torso([(160, 680), (160, 485), (160, 100)], 90, False)
-        d.limb([(180, 640), (390, 650), (590, 650)], 50, False, end="hand")
-        d.limb([(180, 470), (330, 410), (455, 410)], 48, False, end="hand")
+        # Both bars are arms and both run dead horizontal, matching F's
+        # construction: a sloping prong reads as a droop rather than a
+        # deliberate crossbar.
+        for bar_y, reach, width in ((648, 590, 46), (470, 486, 42)):
+            arm = [(182, bar_y), (380, bar_y), (reach, bar_y)]
+            d.path(arm, width, False, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
+            d.ellipse(reach + 12, bar_y, 20, width * 0.46, 0.0)
+            d.cut_path([
+                (reach - 4, bar_y - 14), (reach - 4, bar_y + 14),
+            ], 3.6, False)
         d.leg(
             [(160, 100), (370, 100), (585, 100)], 58, knee_index=1, shoe_direction=(0.55, 1.0)
         )

@@ -307,22 +307,22 @@
         {
           "index": 1,
           "classification": "leg",
-          "length": 410.24,
+          "length": 408.0,
           "segments": [
-            210.2,
-            200.0
+            198.0,
+            210.0
           ],
-          "deviation_percent": 37.1
+          "deviation_percent": 36.35
         },
         {
           "index": 2,
           "classification": "leg",
-          "length": 286.55,
+          "length": 304.0,
           "segments": [
-            161.6,
-            125.0
+            198.0,
+            106.0
           ],
-          "deviation_percent": -4.23
+          "deviation_percent": 1.6
         },
         {
           "index": 3,
@@ -353,11 +353,11 @@
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 (leg) total 410.2 is +37.1% from 299.2",
-        "limb 1 thigh 210.2 is +36.8% from 153.7",
-        "limb 1 calf 200.0 is +37.4% from 145.6",
-        "limb 2 thigh 161.6 is +5.1% from 153.7",
-        "limb 2 calf 125.0 is -14.1% from 145.6",
+        "limb 1 (leg) total 408.0 is +36.4% from 299.2",
+        "limb 1 thigh 198.0 is +28.9% from 153.7",
+        "limb 1 calf 210.0 is +44.3% from 145.6",
+        "limb 2 thigh 198.0 is +28.9% from 153.7",
+        "limb 2 calf 106.0 is -27.2% from 145.6",
         "limb 3 (leg) total 425.0 is +42.0% from 299.2",
         "limb 3 thigh 210.0 is +36.7% from 153.7",
         "limb 3 calf 215.0 is +47.7% from 145.6",
