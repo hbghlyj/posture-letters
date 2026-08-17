@@ -36,7 +36,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | J | **FAIL** | L 272.1, L 272.1, L 363.6, L 258.9 | 430.0 | 110.0 | limb 1 (leg) total 272.1 is -9.0% from 299.2 |
 | K | **FAIL** | L 349.7, L 256.8, L 266.2, L 387.1 | 320.1 | 110.0 | limb 1 (leg) total 349.7 is +16.9% from 299.2 |
 | L | **FAIL** | L 339.3, L 339.3, L 515.0, L 515.0 | 280.0 | 110.0 | limb 1 (leg) total 339.3 is +13.4% from 299.2 |
-| M | **FAIL** | L 640.0, L 640.0 | — | 70.0 | expected 4 measurable limbs; found 2 |
+| M | **FAIL** | L 508.0, L 508.0, L 993.0, L 987.4 | 535.6 | 110.0 | limb 1 (leg) total 508.0 is +69.8% from 299.2 |
 | N | **FAIL** | L 498.0, L 498.0, L 658.0, L 679.7 | 508.5 | 110.0 | limb 1 (leg) total 498.0 is +66.4% from 299.2 |
 | O | **FAIL** | L 696.2, L 696.2 | — | 124.0 | expected 4 measurable limbs; found 2 |
 | P | **FAIL** | L 324.6, L 283.1, L 369.1, L 369.2 | 265.0 | 110.0 | limb 1 (leg) total 324.6 is +8.5% from 299.2 |
@@ -217,14 +217,20 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### M
-- expected 4 measurable limbs; found 2
-- expected 1 measurable torso(s); found 0
-- contains 2 unclassified composite body path(s): 433.0, 433.0
-- limb 1 (leg) total 640.0 is +113.9% from 299.2
-- limb 1 has 1 skeletal segments; expected upper/lower pair
-- limb 2 (leg) total 640.0 is +113.9% from 299.2
-- limb 2 has 1 skeletal segments; expected upper/lower pair
-- head 70.0 is -36.4% from 110.0
+- limb 1 (leg) total 508.0 is +69.8% from 299.2
+- limb 1 thigh 254.0 is +65.3% from 153.7
+- limb 1 calf 254.0 is +74.5% from 145.6
+- limb 2 (leg) total 508.0 is +69.8% from 299.2
+- limb 2 thigh 254.0 is +65.3% from 153.7
+- limb 2 calf 254.0 is +74.5% from 145.6
+- limb 3 (leg) total 993.0 is +231.9% from 299.2
+- limb 3 thigh 495.4 is +222.4% from 153.7
+- limb 3 calf 497.5 is +241.8% from 145.6
+- limb 4 (leg) total 987.4 is +230.0% from 299.2
+- limb 4 thigh 489.8 is +218.8% from 153.7
+- limb 4 calf 497.5 is +241.8% from 145.6
+- torso 535.6 is +229.0% from 162.8
+- nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### N
 - limb 1 (leg) total 498.0 is +66.4% from 299.2

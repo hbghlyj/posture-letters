@@ -955,78 +955,55 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "M":
-        # The source's deliberately impossible M: calf-shaped outer pillars
-        # rise to bent knees, then enormous thighs descend to the central dip.
-        # A distinct upward-facing head peers through that dip above two
-        # buttock lobes, which the paired hands visibly brace from beneath.
-        left_calf = [
-            (92, 710), (76, 625), (76, 520), (85, 405), (95, 300),
-            (90, 185), (88, 70), (126, 70), (130, 185), (139, 300),
-            (155, 405), (162, 520), (155, 625), (145, 710),
-        ]
-        right_calf = [(700 - x, y) for x, y in left_calf]
-        d.polygon(left_calf)
-        d.polygon(right_calf)
-        d.anatomy.append({"part": "limb", "segments": [640.0], "length": 640.0,
-                          "points": [(119, 710), (107, 70)]})
-        d.anatomy.append({"part": "limb", "segments": [640.0], "length": 640.0,
-                          "points": [(581, 710), (593, 70)]})
-        d.shoe(107, 70, (109, 150), (-1, 0))
-        d.shoe(593, 70, (591, 150), (1, 0))
-        # Gathered below-knee cuffs separate the vast breeched thighs from the
-        # source's already exaggerated stockinged calf pillars.
-        for knee_x in (122, 578):
-            d.ellipse(knee_x, 700, 39, 11)
-            d.cut_path([(knee_x - 28, 700), (knee_x + 28, 700)], 4.5, False)
-        # Fine interior cuts reinforce the modeled gastrocnemius and shin.
-        d.cut_path([(105, 590), (116, 510), (112, 425), (102, 345)], 6, True)
-        d.cut_path([(595, 590), (584, 510), (588, 425), (598, 345)], 6, True)
-        d.cut_path([(127, 520), (134, 440), (127, 365)], 4, True)
-        d.cut_path([(573, 520), (566, 440), (573, 365)], 4, True)
-
-        d.path([(122, 710), (180, 675), (235, 520), (300, 330)], 112, True, False)
-        d.path([(578, 710), (520, 675), (465, 520), (400, 330)], 112, True, False)
-
-        # Separate rounded lobes preserve a narrow central cleft rather than a
-        # generic single pelvis oval.
-        d.polygon([
-            (346, 315), (328, 330), (292, 326), (258, 305), (245, 270),
-            (258, 230), (300, 205), (340, 216), (346, 250),
-        ])
-        d.polygon([
-            (354, 315), (372, 330), (408, 326), (442, 305), (455, 270),
-            (442, 230), (400, 205), (360, 216), (354, 250),
-        ])
-        # The source leaves both hands pale against the dark central body.
-        # Model them as open negative-space palms on the outside of the two
-        # buttock lobes, then redraw black finger separations in each palm so
-        # they unmistakably read as hands cupping the two distinct lobes.
-        left_hand = [
-            (246, 286), (252, 302), (263, 309), (277, 307),
-            (287, 296), (282, 282), (268, 270), (252, 269),
-        ]
-        right_hand = [(700 - x, y) for x, y in left_hand]
-        d.polygon(left_hand, hole=True)
-        d.polygon(right_hand, hole=True)
-        for pts in (
-            [(254, 297), (264, 289), (276, 285)],
-            [(251, 289), (263, 282), (276, 279)],
-            [(446, 297), (436, 289), (424, 285)],
-            [(449, 289), (437, 282), (424, 279)],
-        ):
-            d.path(pts, 3, True, joints=False, track=False)
-
-        # A frontal cameo projects into the open central dip. Its pale face
-        # field, symmetric eyes, centered nose, and mouth remain legible at
-        # webfont sizes while the black rim joins the impossible M body.
-        d.path([(350, 365), (350, 378)], 12, True, joints=False, track=False)
-        d.ellipse(350, 400, 35, 29)
-        d.ellipse(350, 400, 27, 21, hole=True)
-        d.circle(341, 406, 3)
-        d.circle(359, 406, 3)
-        d.polygon([(350, 402), (346, 394), (354, 394)])
-        d.path([(342, 388), (350, 385), (358, 388)], 3, True, joints=False, track=False)
-        d.anatomy.append({"part": "head", "diameter": 70.0, "center": (350, 400)})
+        # Seated M built from the body's own hinges rather than an impossible
+        # split figure. The arms drop straight down behind the back as the left
+        # stem, locked at the shoulders to carry the torso's weight; the torso
+        # then leans back from the hips to make the inner down-slope into the
+        # central valley; the thighs pull up toward the chest and the knees
+        # flex deeply to throw the sharp apex; and the lower legs descend as
+        # the right stem. Hand and foot flatten into the two base serifs.
+        shoulder = (150, 646)
+        hips = (352, 150)
+        knee = (536, 610)
+        ankle = (610, 118)
+        # Left stem: both arms straight down behind the back, shoulders locked.
+        for sign, arm_x in ((-1, 116), (1, 168)):
+            arm = [(arm_x, 640), (arm_x, 386), (arm_x, 132)]
+            d.path(arm, 42 if sign < 0 else 34, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], 22)
+        # Left hand serif: bent horizontally at the wrist, pressed flat on the
+        # ground so it reads as the left-side base serif.
+        d.ellipse(140, 128, 40, 30, 0.0)
+        # Fingers splay outward to the left along the floor, mirroring the
+        # foot serif at the other base and giving the stem a true left serif.
+        for offset, y in ((0, 148), (0, 130), (0, 112), (2, 96)):
+            d.polygon([
+                (140 + offset, y + 9), (140 + offset, y - 9),
+                (140 + offset - 78, y - 7), (140 + offset - 78, y + 7),
+            ])
+        for y in (139, 121, 103):
+            d.cut_path([(70, y), (128, y)], 4.0, False)
+        # Head rides the top of the left peak, looking toward the knees.
+        d.head(142, 716, 1)
+        # Core incline: the torso leans back from the hips into the valley.
+        d.torso([hips, (248, 396), shoulder], 86, True)
+        # Knee apex and right stem: thighs pull up to deeply flexed knees, then
+        # the lower legs drop to the planted foot.
+        for spread, width in ((0, 58), (26, 50)):
+            d.leg(
+                [
+                    (hips[0] + spread * 0.6, hips[1] + spread * 0.4),
+                    (knee[0] + spread, knee[1]),
+                    (ankle[0] + spread, ankle[1]),
+                ],
+                width, knee_index=1, breeches_width=width * 1.34,
+                shoe_direction=(1, 0),
+            )
 
     elif letter == "N":
         # Dynamic back-bend. The straight arms are planted on the ground and
