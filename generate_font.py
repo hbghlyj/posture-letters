@@ -1571,11 +1571,59 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "Z":
-        d.head(530, 710, -1)
-        d.limb([(105, 705), (310, 705), (520, 690)], 58, False, end="hand")
-        d.torso([(500, 660), (380, 500), (260, 330), (150, 155)], 92)
-        d.leg([(160, 150), (350, 105), (600, 105)], 62, knee_index=1)
-        d.leg([(180, 180), (340, 150), (555, 150)], 50, knee_index=1)
+        # Side-profile Z: a dramatic backward lean over a deep kneel, with the
+        # arms thrown flat out in front. Both arms extend horizontally from the
+        # shoulders as the top bar, the hands held completely flat in line with
+        # the forearms so the stroke tapers to a thinner tip like a pen stroke.
+        # The torso leans back from the knees in one straight diagonal, with no
+        # bend at the waist, linking the top bar to the base. The shins and
+        # ankles lie flat on the floor as the bottom bar, and at its back end
+        # the heels and upturned toes lift into a small vertical foot serif.
+        shoulder = (516, 672)
+        knee = (166, 168)
+        d.head(576, 712, -1)
+        # Top bar: two flat arms tapering from shoulder to fingertip.
+        for spread, base_w in ((14, 56), (-14, 46)):
+            tip_x = 108 + (0 if spread > 0 else 18)
+            d.tapered_path(
+                [
+                    (shoulder[0] - 8, shoulder[1] + spread),
+                    (380, shoulder[1] + spread * 0.9),
+                    (250, shoulder[1] + spread * 0.8),
+                    (tip_x, shoulder[1] + spread * 0.7),
+                ],
+                [base_w, base_w * 0.82, base_w * 0.6, base_w * 0.34],
+                True,
+            )
+            arm = [
+                (shoulder[0] - 8, shoulder[1] + spread),
+                (tip_x, shoulder[1] + spread * 0.7),
+            ]
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(shoulder[0] - 8, shoulder[1] + spread, base_w // 2 + 2)
+            # Engraved wrist line where the flat hand continues the forearm.
+            d.cut_path([
+                (tip_x + 74, shoulder[1] + spread * 0.7 - 13),
+                (tip_x + 74, shoulder[1] + spread * 0.7 + 13),
+            ], 3.4, False)
+        # Diagonal spine: one straight lean from the shoulders back to the knees.
+        d.torso([shoulder, (340, 420), knee], 92, False)
+        # Bottom bar: shins and ankles flat along the floor, feet turning up at
+        # the back end as the serif.
+        for spread, width, breeches in ((-20, 56, 66), (18, 46, 54)):
+            d.leg(
+                [
+                    (knee[0] + spread * 0.4, knee[1] + spread * 0.5),
+                    (330 + spread, 118),
+                    (556 + spread, 108),
+                ],
+                width, knee_index=1, breeches_width=breeches,
+                shoe_direction=(0.28, 1.0),
+            )
 
     return d
 
