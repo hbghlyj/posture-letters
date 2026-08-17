@@ -685,11 +685,17 @@ def pose(letter: str) -> Drawer:
             d.cut_path([
                 (reach - 4, bar_y - 14), (reach - 4, bar_y + 14),
             ], 3.6, False)
+        # The two legs are brought close enough to overlap into a single
+        # baseline stroke. Held apart they read as a fourth horizontal bar and
+        # the E appears to have four prongs; touching, they read correctly as
+        # one leg drawn just behind the other, as the paired legs elsewhere do.
         d.leg(
-            [(160, 100), (370, 100), (585, 100)], 58, knee_index=1, shoe_direction=(0.55, 1.0)
+            [(160, 108), (370, 108), (585, 108)], 56, knee_index=1,
+            shoe_direction=(0.55, 1.0)
         )
         d.leg(
-            [(170, 175), (365, 175), (560, 175)], 36, knee_index=1, shoe_direction=(0.55, 1.0)
+            [(168, 150), (366, 150), (560, 150)], 38, knee_index=1,
+            shoe_direction=(0.55, 1.0)
         )
 
     elif letter == "F":
