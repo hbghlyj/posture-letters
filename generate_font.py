@@ -1226,53 +1226,58 @@ def pose(letter: str) -> Drawer:
             )
 
     elif letter == "N":
-        # Dynamic back-bend. The straight arms are planted on the ground and
-        # stand vertically to make the left stroke; the torso and thighs slope
-        # down-right from the shoulders to the knees as the diagonal; and the
-        # knees rest on the ground so both lower legs rise straight up into the
-        # air, forming the right stroke.
-        shoulder = (150, 640)
-        knee = (486, 130)
-        # Left stroke: two straight vertical arms bearing weight on the floor.
-        # The pair is spaced as on M, so both weight-bearing arm columns have
-        # the same stance rather than N's reading wider than M's.
-        for sign, arm_x in ((-1, 124), (1, 166)):
-            arm = [(arm_x, 640), (arm_x, 390), (arm_x, 142)]
-            d.path(arm, 34 if sign < 0 else 28, True, False, track=False)
+        # Upside-down back-bend. The figure hangs inverted: the hips are flexed
+        # at the top left so both legs drop straight to the floor as the left
+        # pillar, the torso then arches down and back in one long sweep from
+        # those hips to the shoulders at the lower right as the diagonal, and
+        # from there both arms stretch vertically up past the hanging head to
+        # make the right pillar. The head hangs straight down at the lower
+        # right, anchoring the point where the diagonal meets that bar.
+        hip = (156, 686)
+        shoulder = (540, 254)
+        # Left pillar: hips flexed, both legs straight down, knees locked and
+        # feet planted flat at the bottom.
+        for spread, width, breeches in ((-18, 52, 60), (18, 44, 52)):
+            d.leg(
+                [
+                    (hip[0] + spread * 0.4, hip[1] - 40),
+                    (hip[0] + spread, 380),
+                    (hip[0] + spread, 74),
+                ],
+                width, knee_index=1, breeches_width=breeches,
+                shoe_direction=(-1 if spread < 0 else 1, 0),
+            )
+        # Diagonal: one long backbend sweeping from the hips down to the
+        # shoulders on the right.
+        d.torso([hip, (348, 470), shoulder], 84, True)
+        # Right pillar: both arms straight up, parallel, past the hanging head.
+        for spread in (-20, 20):
+            arm = [
+                (shoulder[0] + spread * 0.4, shoulder[1] + 34),
+                (shoulder[0] + spread, 470),
+                (shoulder[0] + spread, 742),
+            ]
+            d.path(arm, 34 if spread < 0 else 28, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
             d.circle(arm[0][0], arm[0][1], 18)
-            # Flat supporting hand lying along the floor, as on M: the wrist
-            # bends and the fingers run out horizontally to the left, giving
-            # the base of the left stroke a proper serif.
-            d.ellipse(arm_x - 4, 116, 30, 24, 0.0)
-            for fy in (134, 116, 98):
+            # Hand flat at the top of the bar, fingers reaching up.
+            palm_x = arm[-1][0]
+            d.ellipse(palm_x, 756, 16, 18, 0.0)
+            for dx in (-10, -1, 8):
                 d.polygon([
-                    (arm_x - 6, fy + 8), (arm_x - 6, fy - 8),
-                    (arm_x - 86, fy - 7), (arm_x - 86, fy + 7),
+                    (palm_x + dx - 4, 762), (palm_x + dx + 4, 762),
+                    (palm_x + dx + 3, 788), (palm_x + dx - 4, 788),
                 ])
-            for fy in (125, 107):
-                d.cut_path([(arm_x - 16, fy), (arm_x - 78, fy)], 3.6, False)
-        # Head hangs back and down past the planted shoulders.
-        # The face looks left, as on L, rather than back across the diagonal.
-        # A neck ties the head to the shoulders; drawn at the old offset the
-        # head floated clear of the torso and read as detached.
-        d.path([(140, 664), (112, 716)], 40, False, False, track=False)
-        d.head(106, 730, -1, 0.34)
-        # Diagonal: the torso leans back from the chest down toward the floor.
-        d.torso([shoulder, (300, 430), (430, 216)], 82, True)
-        # Right stroke: knees on the ground, lower legs straight up in the air.
-        # The shin is kept shorter than the whole arm so the right stroke
-        # does not out-reach the weight-bearing left one.
-        for sign, foot_x in ((-1, 556), (1, 620)):
-            d.leg(
-                [(430, 216), (knee[0] + sign * 14, knee[1]), (foot_x, 610)],
-                54, knee_index=1, breeches_width=74,
-                shoe_direction=(0.62, 0.78),
-            )
+            d.cut_path([(palm_x - 13, 768), (palm_x + 13, 766)], 3.2, False)
+        # The head hangs straight down from the shoulders as the lower-right
+        # anchor, on a neck that keeps it attached to the torso.
+        d.path([(shoulder[0] - 6, shoulder[1] - 18), (550, 196)], 38,
+               False, False, track=False)
+        d.head(554, 154, 1, math.pi)
 
     elif letter == "O":
         # Backbend O. The figure leans back from standing until the body closes
