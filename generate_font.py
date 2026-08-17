@@ -738,15 +738,18 @@ def pose(letter: str) -> Drawer:
         # The trunk is shorter than before, while the thighs/calves lengthen so
         # shoulders, pelvis, knees, ankles, and feet align like the source person
         # rather than collapsing into a long column with abbreviated legs.
+        # Torso, arms and legs follow the font's own baseline ratios
+        # (arm 1.22x torso, leg 1.84x torso), so the glyph whose whole point is
+        # ordinary human balance actually measures like a normal figure.
         d.head(350, 742, 1)
-        d.torso([(350, 675), (350, 540), (350, 385)], 80, False)
+        d.torso([(350, 675), (350, 562), (350, 450)], 80, False)
         # Arms hang at the sides, slimmer than the trunk and set just clear of
         # it, so the shoulder-to-hand limb stays legible instead of fusing into
         # one slab. Engraved seams keep the separation readable at text sizes.
         for sign in (-1, 1):
             arm = [
-                (350 + sign * 52, 630), (350 + sign * 60, 500),
-                (350 + sign * 58, 390),
+                (350 + sign * 52, 638), (350 + sign * 62, 500),
+                (350 + sign * 60, 364),
             ]
             d.path(arm, 26, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
@@ -759,11 +762,11 @@ def pose(letter: str) -> Drawer:
             # held clear of both ends of the arm so it engraves the silhouette
             # instead of slicing the limb off the body.
             d.cut_path([
-                (350 + sign * 43, 596), (350 + sign * 49, 500),
-                (350 + sign * 47, 424),
+                (350 + sign * 43, 608), (350 + sign * 50, 500),
+                (350 + sign * 48, 396),
             ], 4.0, True)
-        d.leg([(335, 395), (330, 225), (325, 55)], 52, knee_index=1)
-        d.leg([(365, 395), (370, 225), (375, 55)], 52, knee_index=1)
+        d.leg([(335, 455), (330, 255), (325, 55)], 52, knee_index=1)
+        d.leg([(365, 455), (370, 255), (375, 55)], 52, knee_index=1)
 
     elif letter == "J":
         # Seated J. The torso and head rise straight up as the vertical stem,
