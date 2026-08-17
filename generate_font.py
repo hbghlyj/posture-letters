@@ -1060,12 +1060,21 @@ def pose(letter: str) -> Drawer:
     elif letter == "X":
         # Source-like spread X: keep the legs reaching the lower corners, but
         # pull the raised-arm terminals down/in so the sleeves no longer read as
-        # disproportionately long beside the legs and short torso. The arms are
-        # drawn noticeably slimmer than the torso so they read as limbs.
+        # disproportionately long beside the legs and short torso. The arms use
+        # a slim stroke and small hand so they never approach torso width.
         d.head(350, 455, 1)
         d.torso([(350, 395), (350, 305)], 86, False)
-        d.limb([(340, 390), (258, 505), (190, 585)], 40, end="hand")
-        d.limb([(360, 390), (442, 505), (510, 585)], 40, end="hand")
+        for arm in (
+            [(340, 390), (258, 505), (190, 585)],
+            [(360, 390), (442, 505), (510, 585)],
+        ):
+            d.path(arm, 32, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[-1][0], arm[-1][1], 18)
         d.leg(
             [(340, 305), (215, 160), (70, 25)], 60, knee_index=1, shoe_direction=(-1, 0)
         )
@@ -1077,11 +1086,20 @@ def pose(letter: str) -> Drawer:
         # Raised arms form the Y fork at a compact, normal sleeve length. The
         # torso is shortened and the paired legs start higher so they carry the
         # stem down to the baseline at a more natural leg-to-torso proportion.
-        # Arms stay noticeably slimmer than the torso.
+        # Arms use a slim stroke and small hand so they stay well under torso width.
         d.head(350, 490, 1)
         d.torso([(350, 430), (350, 315)], 90, False)
-        d.limb([(335, 425), (260, 525), (195, 590)], 38, end="hand")
-        d.limb([(365, 425), (440, 525), (505, 590)], 38, end="hand")
+        for arm in (
+            [(335, 425), (260, 525), (195, 590)],
+            [(365, 425), (440, 525), (505, 590)],
+        ):
+            d.path(arm, 30, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[-1][0], arm[-1][1], 17)
         d.leg([(338, 315), (330, 150), (320, -10)], 58, knee_index=1)
         d.leg([(362, 315), (370, 150), (380, -10)], 58, knee_index=1)
 
