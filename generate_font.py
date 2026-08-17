@@ -1165,9 +1165,11 @@ def pose(letter: str) -> Drawer:
         shoulder = (150, 640)
         knee = (486, 130)
         # Left stroke: two straight vertical arms bearing weight on the floor.
-        for sign, arm_x in ((-1, 116), (1, 178)):
+        # The pair is spaced as on M, so both weight-bearing arm columns have
+        # the same stance rather than N's reading wider than M's.
+        for sign, arm_x in ((-1, 116), (1, 168)):
             arm = [(arm_x, 640), (arm_x, 390), (arm_x, 142)]
-            d.path(arm, 40 if sign < 0 else 34, True, False, track=False)
+            d.path(arm, 42 if sign < 0 else 34, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
