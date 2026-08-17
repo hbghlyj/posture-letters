@@ -542,12 +542,14 @@ def pose(letter: str) -> Drawer:
             ], 3.6, True)
             # Outer leg: straight and firmly planted, carrying the lean.
             d.leg(
-                [(px(184), 326), (px(148), 176), (px(112), 32)], 50,
+                [(px(186), 326), (px(168), 176), (px(152), 32)], 50,
                 knee_index=1, breeches_width=58, shoe_direction=(-side, 0),
             )
             # Inner leg: set slightly forward with a gentle bend at the knee.
+            # The pair is kept close, as on H, so each figure stands on a
+            # tight two-leg base instead of a splayed stance.
             d.leg(
-                [(px(210), 326), (px(192), 174), (px(206), 32)], 48,
+                [(px(212), 326), (px(200), 174), (px(198), 32)], 48,
                 knee_index=1, breeches_width=56, shoe_direction=(-side, 0),
             )
         # Apex: the two flat hands meet in a sharp peak.
