@@ -543,14 +543,14 @@ def pose(letter: str) -> Drawer:
             # Outer leg: straight and firmly planted, carrying the lean.
             d.leg(
                 [(px(186), 326), (px(168), 176), (px(152), 32)], 50,
-                knee_index=1, breeches_width=58, shoe_direction=(-side, 0),
+                knee_index=1, breeches_width=58, shoe_direction=(side, 0),
             )
             # Inner leg: set slightly forward with a gentle bend at the knee.
             # The pair is kept close, as on H, so each figure stands on a
             # tight two-leg base instead of a splayed stance.
             d.leg(
                 [(px(212), 326), (px(200), 174), (px(198), 32)], 48,
-                knee_index=1, breeches_width=56, shoe_direction=(-side, 0),
+                knee_index=1, breeches_width=56, shoe_direction=(side, 0),
             )
         # Apex: the two flat hands meet in a sharp peak.
         d.polygon([
@@ -616,8 +616,34 @@ def pose(letter: str) -> Drawer:
         # arms over the top, and paired shins running right along the ground.
         d.torso([(205, 205), (165, 325), (180, 455), (235, 555)], 90, True)
         d.head(245, 555, 1, 0.18)
-        d.limb([(255, 585), (390, 675), (545, 600)], 46, True, end="hand")
-        d.limb([(235, 565), (375, 645), (525, 580)], 40, True, end="hand")
+        # The arms taper toward the wrist and finish in modelled hands rather
+        # than a round terminal: a plain circle at the tip came out wider than
+        # the forearm itself and read as a blob beside the tapered shins.
+        for arm, base_w in (
+            ([(255, 585), (390, 675), (545, 600)], 46),
+            ([(235, 565), (375, 645), (525, 580)], 40),
+        ):
+            d.tapered_path(
+                arm + [(arm[-1][0] + 4, arm[-1][1] - 6)],
+                [base_w, base_w * 0.92, base_w * 0.66, base_w * 0.52],
+                True,
+            )
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            wx, wy = arm[-1]
+            # Hand: a compact palm with fingers reaching on past the wrist.
+            d.ellipse(wx + 12, wy - 12, base_w * 0.40, base_w * 0.30, -0.55)
+            for dx, dy in ((10, -30), (20, -24), (26, -14)):
+                d.polygon([
+                    (wx + 2, wy - 10), (wx + dx, wy + dy),
+                    (wx + dx + 8, wy + dy + 5),
+                ])
+            d.cut_path([
+                (wx + 2, wy - 4), (wx + 12, wy - 14), (wx + 20, wy - 20),
+            ], 3.4, True)
         d.leg([(205, 210), (315, 115), (555, 105)], 58, knee_index=1)
         d.leg([(225, 210), (335, 145), (525, 140)], 46, knee_index=1)
 
