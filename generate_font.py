@@ -1108,56 +1108,65 @@ def pose(letter: str) -> Drawer:
             )
 
     elif letter == "O":
-        # Flat aerial O, closely following the 1782 construction. A broad,
-        # shallow shoulder base flows into two rounded arms; each arm keeps a
-        # visible outward elbow/knee-like joint so the loop reads as a body
-        # rather than an anonymous stroke. The hidden foreshortened torso
-        # leaves only its tiny paired feet.
-        d.path([(245, 188), (350, 174), (455, 188)], 88, True, True, track=False)
-        left_arm = [
-            (250, 195), (164, 255), (110, 405),
-            (98, 555), (228, 690), (310, 736),
-        ]
-        right_arm = [(700 - x, y) for x, y in left_arm]
-        # Taper each forearm into a narrower wrist rather than ending the ring
-        # in generic round terminals; this leaves room for a legible handclasp.
-        for arm in (left_arm, right_arm):
-            d.path(arm[:-1], 62, True, True, track=False)
-            d.path(arm[-2:], 44, True, True, track=False)
+        # Backbend O. The figure leans back from standing until the body closes
+        # into a ring: the deep continuous arch of the spine and torso makes the
+        # rounded crest at the top, the buttocks and the backward-sloping thighs
+        # and knees sweep down the left and tuck in at the ankles, and the upper
+        # back, neck and arms carry the right side down with the hair falling
+        # loosely along the outer perimeter. At the bottom the planted hands on
+        # the right and the shod feet on the left curve toward one another,
+        # leaving only a narrow gap to close the circle.
+        hip = (196, 546)
+        shoulder = (566, 520)
+        # Top curve: the arched spine sweeping hips-to-shoulders over the crest.
+        d.torso(
+            [hip, (270, 700), (382, 752), (496, 688), shoulder], 96, True
+        )
+        # Left side curve: thighs and knees sloping back and down, tucking in
+        # at the ankles to the planted shoes.
+        for spread, width in ((-16, 58), (18, 50)):
+            d.leg(
+                [
+                    (hip[0] + spread * 0.4, hip[1] - 30),
+                    (116 + spread, 320),
+                    (238 + spread, 92),
+                ],
+                width, knee_index=1, breeches_width=width * 1.3,
+                shoe_direction=(1, -0.24),
+            )
+        # Right side curve: neck and arms running down to the planted hands.
+        for spread, width in ((-16, 52), (16, 44)):
+            arm = [
+                (shoulder[0] + spread * 0.4, shoulder[1] - 28),
+                (628 + spread, 322),
+                (500 + spread, 118),
+            ]
+            d.path(arm, width, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-        # Visible articulated side joints: an outward bulb with a transverse
-        # cuff/cut marks the knee-like bend on both mirrored sides.
-        d.ellipse(96, 402, 36, 24, -0.22)
-        d.cut_path([(128, 378), (110, 408), (120, 438)], 6.0, True)
-        d.ellipse(604, 402, 36, 24, 0.22)
-        d.cut_path([(572, 378), (590, 408), (580, 438)], 6.0, True)
-        left_hand = [
-            (306, 730), (319, 725), (333, 731), (344, 740),
-            (357, 740), (365, 749), (357, 758), (345, 757),
-            (336, 750), (324, 759), (311, 752),
-        ]
-        right_hand = [(700 - x, y) for x, y in left_hand]
-        d.polygon(left_hand)
-        d.polygon(right_hand)
-        # An alternating seam makes the joined silhouette read as fingers
-        # wrapped around the opposite hand instead of two touching circles.
-        d.cut_path(
-            [(329, 748), (340, 754), (350, 747), (360, 754), (371, 748)],
-            4.5, True,
-        )
-        # Foreshortened shoes remain small but turn outward from their actual
-        # endpoints as separate bottom serif terminals.
-        d.ellipse(304, 238, 27, 11, 0.08)
-        d.circle(282, 237, 9)
-        d.ellipse(396, 238, 27, 11, -0.08)
-        d.circle(418, 237, 9)
-        # The head is inverted beneath the shoulders: mouth above eyes, hair
-        # below, and pupils lifted toward the ring's interior.
-        d.front_head(350, 108, 62, hair_down=True, upside_down=True, gaze_up=True)
+            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
+            # Elbow crease on the outside of the descending arm.
+            d.cut_path([
+                (642 + spread, 388), (650 + spread, 330),
+                (632 + spread, 276),
+            ], 4.0, True)
+        # Hands planted flat on the ground, fingers reaching toward the feet.
+        for spread, hy in ((-18, 132), (18, 96)):
+            hx = 500 + spread
+            d.ellipse(hx, hy, 25, 19, 0.0)
+            # Fingers spread forward along the floor toward the feet.
+            for dy in (-11, 0, 11):
+                d.polygon([
+                    (hx - 6, hy + dy + 5), (hx - 6, hy + dy - 5),
+                    (hx - 44, hy + dy - 4), (hx - 44, hy + dy + 4),
+                ])
+            d.cut_path([(hx - 12, hy - 15), (hx - 12, hy + 15)], 3.4, False)
+        # The head hangs back inside the ring beneath the arched shoulders,
+        # face turned up toward the crest, with the hair falling outward.
+        d.front_head(486, 596, 54, hair_down=True, upside_down=True, gaze_up=True)
 
     elif letter == "P":
         # Standing upright. Head, straight torso and closely planted legs
