@@ -557,34 +557,40 @@ def pose(letter: str) -> Drawer:
         d.circle(ball[0], ball[1], 13, hole=True)
 
     elif letter == "B":
-        # Upright left side with two shortened clasped arms making the upper
-        # bowl. The arms have a shoulder/elbow/hand span near normal anatomy.
-        # Below the pelvis the planted left leg stays separate, while the right
-        # thigh bends out to a visible knee and the shorter calf descends to a
-        # source-directed inward shoe for the lower B.
-        d.head(168, 752, 1)
-        d.torso([(170, 690), (170, 515), (180, 340)], 88, False)
-        upper_arm = [(195, 650), (285, 665), (350, 598)]
-        lower_arm = [(175, 560), (290, 540), (350, 598)]
-        for arm, width in ((upper_arm, 50), (lower_arm, 46)):
+        # Upright stem with two stacked bowls. The upper, smaller bowl is made
+        # by the two clasped arms; the lower, larger one by the leg, which
+        # sweeps out from the hip, curves down and back in, and plants its foot
+        # against the base of the stem so the bowl actually closes. The other
+        # leg stays straight under the body to carry the stem to the baseline.
+        stem_x = 168
+        d.head(stem_x, 752, 1)
+        d.torso([(stem_x, 690), (stem_x, 560), (stem_x, 430)], 84, False)
+        # Upper bowl: two shortened arms clasping at the right.
+        upper_arm = [(stem_x + 26, 656), (280, 672), (344, 604)]
+        lower_arm = [(stem_x + 8, 512), (284, 496), (344, 604)]
+        for arm, width in ((upper_arm, 46), (lower_arm, 42)):
             d.path(arm, width, True, True, track=False)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-        d.cut_path([(282, 662), (305, 648), (320, 626)], 4.5, True)
-        d.cut_path([(276, 550), (297, 547), (316, 556)], 4.0, True)
-        d.ellipse(355, 601, 22, 27, -0.25)
-        d.ellipse(347, 585, 20, 24, -0.25)
-        d.cut_path([(338, 613), (353, 605), (370, 610)], 4.5, True)
-        d.cut_path([(340, 599), (354, 592), (369, 598)], 4.5, True)
+        d.cut_path([(278, 668), (300, 654), (314, 632)], 4.2, True)
+        d.cut_path([(276, 504), (296, 502), (312, 512)], 3.8, True)
+        # Clasped hands close the upper bowl.
+        d.ellipse(348, 604, 25, 29, -0.25)
+        d.ellipse(340, 588, 23, 26, -0.25)
+        d.cut_path([(338, 616), (350, 610), (362, 614)], 4.0, True)
+        d.cut_path([(339, 602), (351, 597), (362, 601)], 4.0, True)
+        # Lower bowl: the leg swings out, curves down, and returns to the stem.
         d.leg(
-            [(175, 345), (162, 210), (170, 75)], 58, knee_index=1, shoe_direction=(1, 0)
+            [(stem_x + 20, 424), (392, 296), (214, 108)], 54,
+            knee_index=1, breeches_width=70, shoe_direction=(-0.96, -0.28),
         )
+        # Straight supporting leg keeps the stem running to the baseline.
         d.leg(
-            [(195, 345), (385, 280), (330, 95)],
-            58, knee_index=1, shoe_direction=(-1, 0)
+            [(stem_x - 12, 428), (stem_x - 18, 250), (stem_x - 22, 72)], 50,
+            knee_index=1, breeches_width=58, shoe_direction=(-1, 0),
         )
 
     elif letter == "C":

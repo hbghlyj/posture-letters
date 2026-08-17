@@ -25,7 +25,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | Glyph | Status | Limb totals | Torso | Head | Primary finding |
 |---|---|---|---:|---:|---|
 | A | **PASS** | A 202.8, A 192.8, L 302.7, L 295.8, A 202.8, A 192.8, L 302.7, L 295.8 | 162.8, 162.8 | 110.0, 110.0 | Within tolerance |
-| B | **FAIL** | A 184.6, A 200.2, L 270.9, L 393.8 | 350.3 | 110.0 | limb 1 (arm) total 184.6 is -6.7% from 197.8 |
+| B | **FAIL** | A 180.9, A 232.7, L 499.7, L 356.1 | 260.0 | 110.0 | limb 1 (arm) total 180.9 is -8.6% from 197.8 |
 | C | **FAIL** | L 334.4, L 324.7, L 385.6, L 317.8 | 371.5 | 110.0 | limb 1 (leg) total 334.4 is +11.8% from 299.2 |
 | D | **FAIL** | L 603.3, L 604.5, L 635.2 | 288.0 | 110.0 | expected 4 measurable limbs; found 3 |
 | E | **FAIL** | L 410.2, L 286.6, L 425.0, L 390.0 | 580.0 | 110.0 | limb 1 (leg) total 410.2 is +37.1% from 299.2 |
@@ -54,16 +54,18 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 ## Detailed flags
 
 ### B
-- limb 1 (arm) total 184.6 is -6.7% from 197.8
-- limb 1 upper arm 91.2 is -19.0% from 112.7
-- limb 1 forearm 93.3 is +9.6% from 85.1
-- limb 3 (leg) total 270.9 is -9.5% from 299.2
-- limb 3 thigh 135.6 is -11.7% from 153.7
-- limb 3 calf 135.2 is -7.1% from 145.6
-- limb 4 (leg) total 393.8 is +31.6% from 299.2
-- limb 4 thigh 200.8 is +30.7% from 153.7
-- limb 4 calf 193.0 is +32.6% from 145.6
-- torso 350.3 is +115.1% from 162.8
+- limb 1 (arm) total 180.9 is -8.6% from 197.8
+- limb 1 upper arm 87.5 is -22.4% from 112.7
+- limb 1 forearm 93.4 is +9.7% from 85.1
+- limb 2 (arm) total 232.7 is +17.6% from 197.8
+- limb 2 forearm 123.5 is +45.1% from 85.1
+- limb 3 (leg) total 499.7 is +67.0% from 299.2
+- limb 3 thigh 240.8 is +56.7% from 153.7
+- limb 3 calf 258.9 is +77.9% from 145.6
+- limb 4 (leg) total 356.1 is +19.0% from 299.2
+- limb 4 thigh 178.1 is +15.9% from 153.7
+- limb 4 calf 178.0 is +22.3% from 145.6
+- torso 260.0 is +59.7% from 162.8
 
 ### C
 - limb 1 (leg) total 334.4 is +11.8% from 299.2
