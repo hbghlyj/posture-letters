@@ -825,18 +825,54 @@ def pose(letter: str) -> Drawer:
             d.cut_path(pts, width, True)
 
     elif letter == "L":
-        # Seated profile: the head and shoulders lean back behind the pelvis;
-        # both straight legs extend on parallel horizontal centerlines.
-        d.head(170, 745, 1)
-        d.torso([(170, 680), (175, 485), (210, 210)], 90, False)
+        # Seated L: the spine is straight and strictly vertical, perpendicular
+        # to the ground, with the head facing forward in line with it. Both
+        # legs extend fully straight ahead along the floor to make the
+        # horizontal baseline, feet together and flexed to a right angle with
+        # the toes pointing straight up. The arms are raised completely
+        # overhead, parallel to the spine and spreading very slightly apart,
+        # ending in wide-open palms with the fingers pointing up.
+        hip_y = 118
+        d.torso([(186, hip_y), (186, 300), (186, 452)], 84, False)
+        d.head(186, 516, 1)
+        # Raised arms: they flank the head, rise parallel to the spine, and
+        # splay a little outward so the vertical stroke stays balanced.
+        for sign in (-1, 1):
+            arm = [
+                (186 + sign * 52, 462),
+                (186 + sign * 64, 570),
+                (186 + sign * 70, 668),
+            ]
+            d.path(arm, 34, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], 18)
+            # Wide-open palm with the fingers pointing at the ceiling.
+            palm_x, palm_y = arm[-1]
+            d.ellipse(palm_x, palm_y + 14, 20, 24, 0.0)
+            for offset in (-13, -4, 5, 14):
+                d.polygon([
+                    (palm_x + offset - 4, palm_y + 24),
+                    (palm_x + offset + 4, palm_y + 24),
+                    (palm_x + offset + 3, palm_y + 50),
+                    (palm_x + offset - 3, palm_y + 50),
+                ])
+            d.cut_path([
+                (palm_x - 14, palm_y + 30), (palm_x + 14, palm_y + 30),
+            ], 3.6, False)
+        # Both legs run straight ahead along the floor, feet together and
+        # flexed square so the toes point up at the end of the baseline.
         d.leg(
-            [(205, 165), (395, 165), (585, 165)], 62, knee_index=1, shoe_direction=(0.7, 1.0)
+            [(210, hip_y - 22), (400, hip_y - 22), (566, hip_y - 22)], 58,
+            knee_index=1, breeches_width=68, shoe_direction=(0, 1),
         )
         d.leg(
-            [(215, 205), (385, 205), (555, 205)], 50, knee_index=1, shoe_direction=(0.7, 1.0)
+            [(210, hip_y + 26), (400, hip_y + 26), (566, hip_y + 26)], 50,
+            knee_index=1, breeches_width=60, shoe_direction=(0, 1),
         )
-        d.limb([(175, 560), (205, 385), (230, 260)], 46, True, end="hand")
-        d.limb([(195, 550), (225, 400), (250, 285)], 38, True, end="hand")
 
     elif letter == "M":
         # The source's deliberately impossible M: calf-shaped outer pillars
