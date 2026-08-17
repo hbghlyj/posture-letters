@@ -507,22 +507,35 @@ def pose(letter: str) -> Drawer:
         d.limb([(165, 372), (325, 372), (505, 372)], 36, False, end="hand")
 
     elif letter == "B":
-        # Upright left side with a clasped-arm upper bowl. Below the pelvis the
-        # planted left leg stays separate, while the right thigh pushes far
-        # outward, rounds the knee, and curls inward again to draw the lower B.
+        # Upright left side with two shortened clasped arms making the upper
+        # bowl. The arms have a shoulder/elbow/hand span near normal anatomy.
+        # Below the pelvis the planted left leg stays separate, while the right
+        # thigh bends out to a visible knee and the shorter calf descends to a
+        # source-directed inward shoe for the lower B.
         d.head(168, 752, 1)
         d.torso([(170, 690), (170, 515), (180, 340)], 88, False)
-        d.limb([(195, 650), (435, 715), (555, 610), (470, 505), (180, 500)], 52, end="hand")
+        upper_arm = [(195, 650), (285, 665), (350, 598)]
+        lower_arm = [(175, 560), (290, 540), (350, 598)]
+        for arm, width in ((upper_arm, 50), (lower_arm, 46)):
+            d.path(arm, width, True, True, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+        d.cut_path([(282, 662), (305, 648), (320, 626)], 4.5, True)
+        d.cut_path([(276, 550), (297, 547), (316, 556)], 4.0, True)
+        d.ellipse(355, 601, 22, 27, -0.25)
+        d.ellipse(347, 585, 20, 24, -0.25)
+        d.cut_path([(338, 613), (353, 605), (370, 610)], 4.5, True)
+        d.cut_path([(340, 599), (354, 592), (369, 598)], 4.5, True)
         d.leg(
             [(175, 345), (162, 210), (170, 75)], 58, knee_index=1, shoe_direction=(1, 0)
         )
         d.leg(
-            [(195, 345), (335, 405), (470, 365), (535, 275),
-             (500, 165), (400, 80)],
-            64, knee_index=3, shoe_direction=(-1, 0)
+            [(195, 345), (385, 280), (330, 95)],
+            58, knee_index=1, shoe_direction=(-1, 0)
         )
-        d.circle(530, 603, 31)
-        d.circle(525, 275, 33)
 
     elif letter == "C":
         # Historical kneeling back-arch: face inside the upper-left opening,
@@ -805,12 +818,14 @@ def pose(letter: str) -> Drawer:
 
     elif letter == "O":
         # Flat aerial O, closely following the 1782 construction. A broad,
-        # shallow shoulder base flows into two continuously rounded outer arms;
-        # the hidden foreshortened torso leaves only its tiny paired feet.
+        # shallow shoulder base flows into two rounded arms; each arm keeps a
+        # visible outward elbow/knee-like joint so the loop reads as a body
+        # rather than an anonymous stroke. The hidden foreshortened torso
+        # leaves only its tiny paired feet.
         d.path([(245, 188), (350, 174), (455, 188)], 88, True, True, track=False)
         left_arm = [
-            (250, 195), (160, 242), (102, 350), (88, 475),
-            (132, 596), (232, 690), (310, 736),
+            (250, 195), (164, 255), (110, 405),
+            (98, 555), (228, 690), (310, 736),
         ]
         right_arm = [(700 - x, y) for x, y in left_arm]
         # Taper each forearm into a narrower wrist rather than ending the ring
@@ -823,6 +838,12 @@ def pose(letter: str) -> Drawer:
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
+        # Visible articulated side joints: an outward bulb with a transverse
+        # cuff/cut marks the knee-like bend on both mirrored sides.
+        d.ellipse(96, 402, 36, 24, -0.22)
+        d.cut_path([(128, 378), (110, 408), (120, 438)], 6.0, True)
+        d.ellipse(604, 402, 36, 24, 0.22)
+        d.cut_path([(572, 378), (590, 408), (580, 438)], 6.0, True)
         left_hand = [
             (306, 730), (319, 725), (333, 731), (344, 740),
             (357, 740), (365, 749), (357, 758), (345, 757),
@@ -908,9 +929,20 @@ def pose(letter: str) -> Drawer:
         # right shoulder mass, reinforce the socket, and continue outward as one
         # unbroken upper-arm/forearm route so the appendage cannot read detached.
         d.circle(414, 190, 29)
-        d.limb([(414, 190), (460, 130), (515, 65), (575, -5), (640, -70)], 48, True, end="hand")
-        d.ellipse(650, -79, 13, 5, -0.75)
-        d.ellipse(654, -66, 13, 5, -0.30)
+        tail_arm = [(414, 190), (448, 152), (490, 118), (525, 92), (552, 72)]
+        d.path(tail_arm, 46, True, True, track=False)
+        segments, length = d.centerline_measurements(tail_arm)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": tail_arm, "role": "Q-tail-arm",
+        })
+        # Compact tail hand with two visible supporting finger tips; the arm
+        # stops just outside the lower-right ring instead of stretching past
+        # the descender into a detached line.
+        d.ellipse(558, 66, 17, 22, -0.58)
+        d.polygon([(552, 54), (565, 43), (582, 38), (576, 50), (562, 59)])
+        d.polygon([(567, 62), (579, 56), (590, 63), (581, 72), (570, 69)])
+        d.cut_path([(555, 58), (563, 51), (573, 52)], 4.0, True)
 
     elif letter == "R":
         # P-like clasped-arm bowl with one planted leg and one stepped leg.
@@ -967,16 +999,63 @@ def pose(letter: str) -> Drawer:
         d.limb([(375, 190), (455, 345), (510, 500)], 44, True, end="hand")
 
     elif letter == "W":
-        # The print's four-stroke W: outer stockinged legs rise to high feet;
-        # red-sleeved arms descend from the centered shoulders to inner hands.
-        # With 27-unit palm radii, y=27 places both inner contacts exactly on
-        # the shared baseline instead of leaving the W visibly suspended.
+        # The print's four-stroke W: the inner red-sleeved arms reach to the
+        # shared baseline, while the outer stockinged legs bend at baseline
+        # knees and rise to high feet. The palms sit exactly on y=0, and their
+        # index fingers and thumbs are drawn as distinct supporting digits.
         d.head(350, 585, 1)
         d.torso([(350, 525), (350, 390)], 88, False)
-        d.limb([(320, 405), (260, 225), (205, 27)], 56, True, end="hand")
-        d.limb([(380, 405), (440, 225), (495, 27)], 56, True, end="hand")
-        d.leg([(315, 390), (175, 280), (90, 735)], 62, knee_index=1)
-        d.leg([(385, 390), (525, 280), (610, 735)], 62, knee_index=1)
+        left_arm = [(320, 405), (280, 225), (255, 72)]
+        right_arm = [(380, 405), (420, 225), (445, 72)]
+        for arm in (left_arm, right_arm):
+            d.path(arm, 54, True, True, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+        d.leg(
+            [(315, 390), (145, 0), (60, 725)], 62, knee_index=1,
+            shoe_direction=(-0.92, 0.40),
+        )
+        d.leg(
+            [(385, 390), (555, 0), (640, 725)], 62, knee_index=1,
+            shoe_direction=(0.92, 0.40),
+        )
+        # Draw the supporting hands after the outer legs so the fingertips stay
+        # visible. Each palm sits between the baseline knees; the index finger
+        # and thumb extend as two separate supports down to y=0.
+        d.polygon([
+            (242, 75), (258, 80), (275, 70), (272, 50),
+            (256, 42), (238, 52),
+        ])
+        d.polygon([
+            (239, 53), (230, 30), (213, 0), (229, 0),
+            (244, 26), (250, 54),
+        ])
+        d.polygon([
+            (267, 55), (278, 31), (297, 0), (304, 10),
+            (285, 31), (276, 60),
+        ])
+        d.cut_path([(252, 76), (252, 48), (258, 16)], 5.2, True)
+        d.cut_path([(223, 18), (233, 24), (240, 18)], 3.2, True)
+        d.cut_path([(281, 18), (288, 25), (296, 18)], 3.2, True)
+
+        d.polygon([
+            (458, 75), (442, 80), (425, 70), (428, 50),
+            (444, 42), (462, 52),
+        ])
+        d.polygon([
+            (461, 53), (470, 30), (487, 0), (471, 0),
+            (456, 26), (450, 54),
+        ])
+        d.polygon([
+            (433, 55), (422, 31), (403, 0), (396, 10),
+            (415, 31), (424, 60),
+        ])
+        d.cut_path([(448, 76), (448, 48), (442, 16)], 5.2, True)
+        d.cut_path([(477, 18), (467, 24), (460, 18)], 3.2, True)
+        d.cut_path([(419, 18), (412, 25), (404, 18)], 3.2, True)
 
     elif letter == "X":
         d.head(350, 455, 1)

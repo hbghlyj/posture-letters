@@ -61,7 +61,7 @@ Every visible foot-ending leg now uses the print’s shared costume anatomy rath
 ## Historical construction notes
 
 - **A:** a complete forward fold. Hips form the apex; full short breeches narrow through below-knee cuffs into engraved, muscular calf/shin contours on the right; both shoes turn left; the attached torso descends on the left to an inverted head; two horizontal arms grip the knees as the crossbar.
-- **B:** the left leg remains separately planted while the right leg bends outward at the thigh and curls inward below the knee to form the lower bowl.
+- **B:** the left leg remains separately planted while the right leg bends outward at a visible knee and curls inward on a shortened calf to form the lower bowl. Both upper loop arms are shortened to normal anatomical proportions.
 - **D / H:** only the asymmetric eye, nose, and cocked-hat details are horizontally mirrored; their attached heads and established body constructions remain fixed.
 - **E:** the broad baseline leg joins directly and seamlessly to the vertical seated torso, while the slimmer near leg remains separately visible above it.
 - **G:** a flat aerial open ring. The curved body and limbs leave a distinct right-side gap; the right hand returns horizontally inward as the G terminal, while the legs complete the lower loop.
@@ -69,12 +69,12 @@ Every visible foot-ending leg now uses the print’s shared costume anatomy rath
 - **K:** the upper arm drops to a clear elbow before its forearm rises into an attached hand serif; the thumb and index finger project sharply while the other three fingers fold into the palm. Full short breeches, below-knee cuffs, and long calf/shin cuts model both lower leg strokes.
 - **M:** the print’s deliberately impossible joke retains its upward face, pale cupping hands, paired buttocks, central cleft, cuffed muscular outer pillars, and outward shoes without the former hanging center appendage.
 - **N:** the inverted head and broad bent knee now share one ground plane. A human-length sleeve descends from the raised inner corner across the front of the blue body, with a narrow overlap halo and projecting hand that make the N diagonal explicit before the far calf rises to its shoe.
-- **O:** a recumbent aerial ring with smooth shoulder-to-elbow arcs. Its inverted bottom face looks upward, the apex hands visibly clasp, and only two small foreshortened feet remain above the hidden lower torso.
+- **O:** a recumbent aerial ring with smooth shoulder-to-elbow arcs and visible side knee/elbow joints. Its inverted bottom face looks upward, the apex hands visibly clasp, and only two small foreshortened feet remain above the hidden lower torso.
 - **P:** two shortened, separately contoured backward-bending arms—with explicit elbows, wrists, and clasped hands—form a compact upper loop at normal anatomical lengths. Gathered cuffs and modeled calves lead to the source-directed outward shoe pair.
-- **Q:** two inverted, short-breeched legs form the ring; side knee cuffs articulate the bends and tapered calves meet in small inward apex shoes. The tail arm begins inside a reinforced right shoulder socket and descends as one attached route.
+- **Q:** two inverted, short-breeched legs form the ring; side knee cuffs articulate the bends and tapered calves meet in small inward apex shoes. The tail arm is shortened to a normal reach, begins inside a reinforced right shoulder socket, and terminates in a visible hand.
 - **R:** the planted shoe now projects clearly to the figure’s right, matching the crop instead of appearing reversed.
 - **T:** wide horizontal arms form the crossbar while two close legs descend vertically.
-- **W:** both inner hand/contact terminals descend exactly to the baseline while the two outer stockinged legs retain the source’s raised-foot topology.
+- **W:** the outer knees are lowered to the baseline, where the two inner hands support the figure with visible index fingers and thumbs; the outer stockinged legs retain the source’s raised-foot topology.
 - The detailed A–I, K–T, V–Z mapping is recorded in `reference-crops/historical-pose-map.md`.
 
 ## Anatomical audit policy
