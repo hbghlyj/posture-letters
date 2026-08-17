@@ -590,16 +590,52 @@ def pose(letter: str) -> Drawer:
         d.leg([(225, 210), (335, 145), (525, 140)], 46, knee_index=1)
 
     elif letter == "D":
-        # Inverted circular fold from the print: head under the lower curve,
-        # torso on the right, one long leg over the top and down the left, and
-        # an arm reaching up to meet the foot.
-        # Mirror only the nose, eye, and cocked-hat asymmetry; the attached
-        # head circle and the circular body construction stay in place.
-        d.head(355, 105, 1, -math.pi / 2, mirror_details=True)
-        d.torso([(355, 165), (500, 220), (565, 385), (515, 570)], 96, True)
-        d.leg([(505, 575), (355, 680), (185, 650), (155, 500), (155, 345)], 62, knee_index=2)
-        d.limb([(340, 175), (230, 155), (145, 225), (155, 330)], 48, True, end="hand")
-        d.limb([(375, 180), (270, 190), (175, 250), (170, 325)], 38, True, end="hand")
+        # Deep backbend over a kneeling stance. Chest, hips and thighs stack
+        # into one straight upright line as the letter's stem, the head facing
+        # left at the sharp top-left corner. The arm sweeps up from the
+        # shoulder and arches dramatically back and down behind the torso to
+        # make the upper curve, while the lower legs fold back at the kneeling
+        # knees and rise to meet the descending hand, closing the belly.
+        stem_x = 168
+        hip = (stem_x, 356)
+        knee = (stem_x + 16, 108)
+        meet = (506, 322)
+        # Vertical spine: chest and hips.
+        d.torso([hip, (stem_x, 500), (stem_x, 644)], 86, False)
+        d.head(stem_x - 4, 710, -1)
+        # Thighs drop from the hips to the kneeling knees on the ground, then
+        # the lower legs fold sharply backward and rise to the enclosure point.
+        for sign, spread in ((-1, 0), (1, 26)):
+            d.leg(
+                [
+                    (stem_x + spread * 0.5, 350),
+                    (knee[0] + spread, knee[1]),
+                    (meet[0] - 44 + spread, meet[1] + 16),
+                ],
+                56, knee_index=1, breeches_width=74,
+                shoe_direction=(0.55, 0.84),
+            )
+        # Upper curve: the arm arches back over the top and down behind.
+        arm = [
+            (stem_x + 34, 640), (318, 730), (466, 646),
+            (536, 500), (492, 350),
+        ]
+        d.path(arm[:3], 46, True, False, track=False)
+        d.path(arm[2:], 40, True, False, track=False)
+        segments, length = d.centerline_measurements(arm)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": arm,
+        })
+        d.circle(arm[0][0], arm[0][1], 24)
+        # Elbow crease where the arch turns down behind the body.
+        d.cut_path([(470, 682), (500, 654), (516, 620)], 4.6, True)
+        # Enclosure point: the reaching hand closes on the raised feet.
+        d.ellipse(meet[0] - 22, meet[1] + 28, 28, 30, -0.45)
+        d.cut_path([
+            (meet[0] - 38, meet[1] + 42), (meet[0] - 20, meet[1] + 32),
+            (meet[0] - 6, meet[1] + 38),
+        ], 4.2, True)
 
     elif letter == "E":
         # Historical seated E. Head and torso form the stem; the top and middle

@@ -248,40 +248,38 @@
         {
           "index": 1,
           "classification": "leg",
-          "length": 663.7,
+          "length": 603.34,
           "segments": [
-            183.1,
-            172.6,
-            153.0,
-            155.0
+            242.5,
+            360.8
           ],
-          "deviation_percent": 121.81
+          "deviation_percent": 101.64
         },
         {
           "index": 2,
           "classification": "leg",
-          "length": 327.39,
+          "length": 604.54,
           "segments": [
-            111.8,
-            110.1,
-            105.5
+            243.7,
+            360.8
           ],
-          "deviation_percent": 9.41
+          "deviation_percent": 102.04
         },
         {
           "index": 3,
           "classification": "leg",
-          "length": 293.0,
+          "length": 635.23,
           "segments": [
-            105.5,
-            112.4,
-            75.2
+            146.8,
+            170.2,
+            161.9,
+            156.3
           ],
-          "deviation_percent": -2.08
+          "deviation_percent": 112.29
         }
       ],
       "torso_lengths": [
-        524.1
+        288.0
       ],
       "head_diameters": [
         110.0
@@ -289,12 +287,15 @@
       "composite_path_lengths": [],
       "issues": [
         "expected 4 measurable limbs; found 3",
-        "limb 1 (leg) total 663.7 is +121.8% from 299.2",
-        "limb 1 has 4 skeletal segments; expected upper/lower pair",
-        "limb 2 (leg) total 327.4 is +9.4% from 299.2",
-        "limb 2 has 3 skeletal segments; expected upper/lower pair",
-        "limb 3 has 3 skeletal segments; expected upper/lower pair",
-        "torso 524.1 is +221.9% from 162.8"
+        "limb 1 (leg) total 603.3 is +101.6% from 299.2",
+        "limb 1 thigh 242.5 is +57.8% from 153.7",
+        "limb 1 calf 360.8 is +147.9% from 145.6",
+        "limb 2 (leg) total 604.5 is +102.0% from 299.2",
+        "limb 2 thigh 243.7 is +58.6% from 153.7",
+        "limb 2 calf 360.8 is +147.9% from 145.6",
+        "limb 3 (leg) total 635.2 is +112.3% from 299.2",
+        "limb 3 has 4 skeletal segments; expected upper/lower pair",
+        "torso 288.0 is +76.9% from 162.8"
       ]
     },
     {
