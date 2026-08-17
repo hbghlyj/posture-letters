@@ -280,22 +280,34 @@ class Drawer:
         )
         # A short inset hem line defines the below-knee end without severing it.
         self.cut_path([
-            (knee[0] - nx * breeches * 0.30, knee[1] - ny * breeches * 0.30),
-            (knee[0] + nx * breeches * 0.30, knee[1] + ny * breeches * 0.30),
-        ], max(3.2, width * 0.07), False)
+            (knee[0] - nx * breeches * 0.20, knee[1] - ny * breeches * 0.20),
+            (knee[0] + nx * breeches * 0.20, knee[1] + ny * breeches * 0.20),
+        ], max(2.8, width * 0.055), False)
 
         # One engraved contour rides the outward belly of the calf and makes
         # the muscle readable even where two legs overlap at specimen scale.
         calf_points = [lower_profile[i] for i in (1, 2, 3)]
         calf_mid = calf_points[1]
+        # Pull the two ends toward the belly of the calf so the contour is a
+        # short interior stroke; a full-length one runs out to the ankle and
+        # knee edges and shreds the leg silhouette where limbs overlap.
+        calf_points = [
+            (
+                calf_mid[0] + (point[0] - calf_mid[0]) * 0.40,
+                calf_mid[1] + (point[1] - calf_mid[1]) * 0.40,
+            )
+            for point in calf_points
+        ]
         radial = (calf_mid[0] - 350, calf_mid[1] - 400)
         if nx * radial[0] + ny * radial[1] < 0:
             nx, ny = -nx, -ny
-        offsets = (width * 0.11, width * 0.19, width * 0.10)
+        # Offsets are deliberately conservative: the contour must stay inside
+        # the calf so it reads as engraving instead of notching the outline.
+        offsets = (width * 0.08, width * 0.14, width * 0.07)
         self.cut_path([
             (point[0] + nx * offset, point[1] + ny * offset)
             for point, offset in zip(calf_points, offsets)
-        ], max(3.0, width * 0.065), True)
+        ], max(2.6, width * 0.055), True)
 
         measured = anatomy_points if anatomy_points is not None else pts
         segments, measured_length = self.centerline_measurements(measured)
@@ -698,11 +710,13 @@ def pose(letter: str) -> Drawer:
                 "points": arm,
             })
             d.circle(arm[-1][0], arm[-1][1], 15)
-            # Seam between the arm and the trunk keeps the two readable.
+            # Seam between the arm and the trunk keeps the two readable. It is
+            # held clear of both ends of the arm so it engraves the silhouette
+            # instead of slicing the limb off the body.
             d.cut_path([
-                (350 + sign * 41, 624), (350 + sign * 48, 500),
-                (350 + sign * 46, 400),
-            ], 5.0, True)
+                (350 + sign * 43, 596), (350 + sign * 49, 500),
+                (350 + sign * 47, 424),
+            ], 4.0, True)
         d.leg([(335, 395), (330, 225), (325, 55)], 52, knee_index=1)
         d.leg([(365, 395), (370, 225), (375, 55)], 52, knee_index=1)
 

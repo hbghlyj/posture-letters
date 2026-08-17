@@ -38,9 +38,32 @@ def build_font_proof() -> None:
     im.save(ROOT / "font-proof.png")
 
 
+def build_glyph_sheet() -> None:
+    """Raster the glyph sheet from the compiled TTF.
+
+    Rendering through the font (rather than re-drawing the generator's raw
+    contours) is what the released files should show: the rasteriser applies
+    the TrueType nonzero fill rule, so overlapping limbs merge correctly and
+    engraved cuts read as fine lines instead of tearing the silhouette apart.
+    """
+    cols, rows = 7, 4
+    cell_w, cell_h = 210, 250
+    im = Image.new("RGB", (cols * cell_w, rows * cell_h), "white")
+    draw = ImageDraw.Draw(im)
+    face = font(200)
+    for index in range(26):
+        letter = chr(ord("A") + index)
+        col, row = index % cols, index // cols
+        box = (col * cell_w, row * cell_h, (col + 1) * cell_w, (row + 1) * cell_h)
+        centered(draw, box, letter, face, INK)
+    im.save(ROOT / "glyph-sheet.png")
+
+
 def main() -> None:
     build_font_proof()
     print("Built font-proof.png")
+    build_glyph_sheet()
+    print("Built glyph-sheet.png")
 
 
 if __name__ == "__main__":

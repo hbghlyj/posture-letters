@@ -28,7 +28,7 @@ Or declare only the compact WOFF2:
 - `posture-master.ttf` — desktop/installable font
 - `posture-master.css` — ready-to-use `@font-face` declaration
 - `index.html` — interactive, self-contained specimen
-- `glyph-sheet.svg` / `glyph-sheet.png` — A–Z visual overview
+- `glyph-sheet.svg` / `glyph-sheet.png` (rastered from the compiled TTF) — A–Z visual overview
 - `font-proof.png` — current-font raster overview
 - `generate_font.py` — reproducible font and SVG source generator
 - `build_proofs.py` — rebuilds the raster overview from the TTF
@@ -66,6 +66,7 @@ Every visible foot-ending leg now uses the print’s shared costume anatomy rath
 - **H:** rebuilt from a two-person reference: two figures stand straight in profile facing one another, each forming an upright stem with a head, vertical torso, and two planted legs. The two figures act as the vertical sides of the letter. Both arms are bent to a right angle at the elbow: the upper arm — shoulder to elbow — hangs strictly vertically downward and overlaps the figure's own pillar, and only the forearm turns out horizontally. The two front forearms meet and clasp at the centre, so the crossbar is made of forearms alone and sits exactly at elbow height. Each elbow carries a joint ball and an engraved crease wrapping from the vertical upper arm onto the horizontal forearm. The back arm repeats the same vertical-upper-arm bend but its forearm stays short and tucked in, taking no part in the bar.
 - **E:** the broad baseline leg joins directly and seamlessly to the vertical seated torso, while the slimmer near leg remains separately visible above it.
 - **G:** a flat aerial open ring. The curved body and limbs leave a distinct right-side gap; the right hand returns horizontally inward as the G terminal, while the legs complete the lower loop.
+- **Engraved detail (all glyphs):** knee hems, calf contours, and body seams are now held well inside the limb they model. Previously several ran out to the silhouette edge, where they notched the outline and made overlapping limbs look torn rather than engraved.
 - **I:** the source’s rigid straight posture now uses a realistic head, torso, thigh, calf, and arm ratio rather than an overlong trunk above abbreviated legs. The trunk is narrowed and the hanging arms are drawn slimmer and set just clear of it, with an engraved seam down each side, so shoulders, arms, and hands stay legible instead of fusing into one column.
 - **K:** the upper arm drops to a clear elbow before its forearm rises into an attached hand serif; the thumb and index finger project sharply while the other three fingers fold into the palm. Full short breeches, below-knee cuffs, and long calf/shin cuts model both lower leg strokes.
 - **M:** the print’s deliberately impossible joke retains its upward face, pale cupping hands, paired buttocks, central cleft, cuffed muscular outer pillars, and outward shoes without the former hanging center appendage.
