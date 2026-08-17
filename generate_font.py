@@ -682,9 +682,27 @@ def pose(letter: str) -> Drawer:
         # shoulders, pelvis, knees, ankles, and feet align like the source person
         # rather than collapsing into a long column with abbreviated legs.
         d.head(350, 742, 1)
-        d.torso([(350, 675), (350, 540), (350, 385)], 90, False)
-        d.limb([(318, 635), (308, 490), (305, 345)], 42, False, end="hand")
-        d.limb([(382, 635), (392, 490), (395, 345)], 42, False, end="hand")
+        d.torso([(350, 675), (350, 540), (350, 385)], 80, False)
+        # Arms hang at the sides, slimmer than the trunk and set just clear of
+        # it, so the shoulder-to-hand limb stays legible instead of fusing into
+        # one slab. Engraved seams keep the separation readable at text sizes.
+        for sign in (-1, 1):
+            arm = [
+                (350 + sign * 52, 630), (350 + sign * 60, 500),
+                (350 + sign * 58, 390),
+            ]
+            d.path(arm, 26, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[-1][0], arm[-1][1], 15)
+            # Seam between the arm and the trunk keeps the two readable.
+            d.cut_path([
+                (350 + sign * 41, 624), (350 + sign * 48, 500),
+                (350 + sign * 46, 400),
+            ], 5.0, True)
         d.leg([(335, 395), (330, 225), (325, 55)], 52, knee_index=1)
         d.leg([(365, 395), (370, 225), (375, 55)], 52, knee_index=1)
 

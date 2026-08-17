@@ -565,22 +565,22 @@
         {
           "index": 1,
           "classification": "arm",
-          "length": 290.38,
+          "length": 240.26,
           "segments": [
-            145.3,
-            145.0
+            130.2,
+            110.0
           ],
-          "deviation_percent": -12.67
+          "deviation_percent": -27.74
         },
         {
           "index": 2,
           "classification": "arm",
-          "length": 290.38,
+          "length": 240.26,
           "segments": [
-            145.3,
-            145.0
+            130.2,
+            110.0
           ],
-          "deviation_percent": -12.67
+          "deviation_percent": -27.74
         },
         {
           "index": 3,
@@ -611,12 +611,12 @@
       ],
       "composite_path_lengths": [],
       "issues": [
-        "limb 1 (arm) total 290.4 is -12.7% from 332.5",
-        "limb 1 upper arm 145.3 is -6.2% from 155.0",
-        "limb 1 forearm 145.0 is -18.3% from 177.5",
-        "limb 2 (arm) total 290.4 is -12.7% from 332.5",
-        "limb 2 upper arm 145.3 is -6.2% from 155.0",
-        "limb 2 forearm 145.0 is -18.3% from 177.5",
+        "limb 1 (arm) total 240.3 is -27.7% from 332.5",
+        "limb 1 upper arm 130.2 is -16.0% from 155.0",
+        "limb 1 forearm 110.0 is -38.0% from 177.5",
+        "limb 2 (arm) total 240.3 is -27.7% from 332.5",
+        "limb 2 upper arm 130.2 is -16.0% from 155.0",
+        "limb 2 forearm 110.0 is -38.0% from 177.5",
         "limb 3 upper arm 170.1 is +9.7% from 155.0",
         "limb 4 upper arm 170.1 is +9.7% from 155.0",
         "torso 290.0 is -43.4% from 512.1",
