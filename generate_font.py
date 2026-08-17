@@ -1226,13 +1226,58 @@ def pose(letter: str) -> Drawer:
               breeches_width=48)
 
     elif letter == "U":
-        # The historic print omitted U; this hanging bend puts it back.
-        d.head(350, 95, 1)
-        d.torso([(350, 155), (350, 255)], 88, False)
-        d.limb([(325, 205), (175, 180), (90, 360), (95, 730)], 58, end="hand")
-        d.limb([(375, 205), (525, 180), (610, 360), (605, 730)], 58, end="hand")
-        d.leg([(340, 250), (210, 260), (120, 430), (120, 725)], 58, knee_index=2)
-        d.leg([(360, 250), (490, 260), (580, 430), (580, 725)], 58, knee_index=2)
+        # Deep backbend performed lying down. The lower torso and glutes arch
+        # downward to the ground as the curved base, while the legs rise
+        # straight up on the left and the arms rise parallel to them on the
+        # right. Knees stay locked and the hands point at the sky, so the two
+        # limb pairs read as the letter's parallel bars.
+        hip = (140, 260)
+        shoulder = (560, 260)
+        # Curved bottom base: the arched spine sweeps from hips to shoulders,
+        # dipping to the floor between them.
+        d.torso(
+            [hip, (240, 120), (350, 86), (460, 120), shoulder], 92, True
+        )
+        # Left bar: both legs straight up from the hips, knees locked.
+        for spread, width in ((-16, 56), (14, 48)):
+            d.leg(
+                [
+                    (hip[0] + spread * 0.5, hip[1] + 34),
+                    (hip[0] + spread, 470),
+                    (hip[0] + spread, 706),
+                ],
+                width, knee_index=1, breeches_width=width * 1.28,
+                shoe_direction=(0, 1),
+            )
+        # Right bar: both arms vertical and parallel, hands pointing skyward.
+        for spread in (-14, 14):
+            arm = [
+                (shoulder[0] + spread * 0.5, shoulder[1] + 30),
+                (shoulder[0] + spread, 460),
+                (shoulder[0] + spread, 654),
+            ]
+            d.path(arm, 40 if spread < 0 else 34, True, False, track=False)
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], 21)
+            # Hand held flat with the fingers pointing straight up.
+            palm_x, palm_y = arm[-1]
+            d.ellipse(palm_x, palm_y + 14, 19, 22, 0.0)
+            for offset in (-11, -3, 5, 13):
+                d.polygon([
+                    (palm_x + offset - 3, palm_y + 26),
+                    (palm_x + offset + 3, palm_y + 26),
+                    (palm_x + offset + 2, palm_y + 50),
+                    (palm_x + offset - 2, palm_y + 50),
+                ])
+            d.cut_path([
+                (palm_x - 12, palm_y + 30), (palm_x + 12, palm_y + 30),
+            ], 3.4, False)
+        # The head hangs back beneath the arched shoulders.
+        d.head(556, 168, -1, math.pi)
 
     elif letter == "V":
         # Upside-down figure: the head is the low apex, legs spread to the two
