@@ -552,9 +552,14 @@ def pose(letter: str) -> Drawer:
         d.polygon([
             (350, apex_y + 16), (368, apex_y - 30), (332, apex_y - 30),
         ])
-        # The jointly held round object reads as the letter's crossbar.
-        d.circle(ball[0], ball[1], 36)
-        d.circle(ball[0], ball[1], 13, hole=True)
+        # The two hands clasp at the centre. This uses H's crossbar treatment —
+        # a solid ellipse split by one thin seam — rather than a circle with a
+        # punched centre, which read as a ring rather than gripped hands.
+        d.ellipse(ball[0], ball[1], 40, 28, 0.0)
+        d.cut_path([
+            (ball[0], ball[1] - 24), (ball[0] + 3, ball[1]),
+            (ball[0], ball[1] + 24),
+        ], 5.0, True)
 
     elif letter == "B":
         # B is the P/R stance carrying two loops. Head, upright torso and the
@@ -690,11 +695,11 @@ def pose(letter: str) -> Drawer:
         # the E appears to have four prongs; touching, they read correctly as
         # one leg drawn just behind the other, as the paired legs elsewhere do.
         d.leg(
-            [(160, 108), (370, 108), (585, 108)], 56, knee_index=1,
+            [(160, 116), (370, 116), (585, 116)], 56, knee_index=1,
             shoe_direction=(0.55, 1.0)
         )
         d.leg(
-            [(168, 150), (366, 150), (560, 150)], 38, knee_index=1,
+            [(168, 146), (366, 146), (560, 146)], 38, knee_index=1,
             shoe_direction=(0.55, 1.0)
         )
 
