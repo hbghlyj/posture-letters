@@ -465,12 +465,12 @@
         {
           "index": 1,
           "classification": "arm",
-          "length": 269.0,
+          "length": 235.0,
           "segments": [
-            105.0,
-            164.0
+            107.0,
+            128.0
           ],
-          "deviation_percent": -19.1
+          "deviation_percent": -29.32
         },
         {
           "index": 2,
@@ -495,12 +495,12 @@
         {
           "index": 4,
           "classification": "arm",
-          "length": 269.0,
+          "length": 235.0,
           "segments": [
-            105.0,
-            164.0
+            107.0,
+            128.0
           ],
-          "deviation_percent": -19.1
+          "deviation_percent": -29.32
         },
         {
           "index": 5,
@@ -536,18 +536,18 @@
         "expected 4 measurable limbs; found 6",
         "expected 1 measurable torso; found 2",
         "expected 1 head; found 2",
-        "limb 1 (arm) total 269.0 is -19.1% from 332.5",
-        "limb 1 upper arm 105.0 is -32.3% from 155.0",
-        "limb 1 forearm 164.0 is -7.6% from 177.5",
+        "limb 1 (arm) total 235.0 is -29.3% from 332.5",
+        "limb 1 upper arm 107.0 is -31.0% from 155.0",
+        "limb 1 forearm 128.0 is -27.9% from 177.5",
         "limb 2 (arm) total 390.2 is +17.3% from 332.5",
         "limb 2 upper arm 195.1 is +25.9% from 155.0",
         "limb 2 forearm 195.0 is +9.9% from 177.5",
         "limb 3 (arm) total 390.0 is +17.3% from 332.5",
         "limb 3 upper arm 195.0 is +25.8% from 155.0",
         "limb 3 forearm 195.0 is +9.9% from 177.5",
-        "limb 4 (arm) total 269.0 is -19.1% from 332.5",
-        "limb 4 upper arm 105.0 is -32.3% from 155.0",
-        "limb 4 forearm 164.0 is -7.6% from 177.5",
+        "limb 4 (arm) total 235.0 is -29.3% from 332.5",
+        "limb 4 upper arm 107.0 is -31.0% from 155.0",
+        "limb 4 forearm 128.0 is -27.9% from 177.5",
         "limb 5 (arm) total 390.2 is +17.3% from 332.5",
         "limb 5 upper arm 195.1 is +25.9% from 155.0",
         "limb 5 forearm 195.0 is +9.9% from 177.5",
