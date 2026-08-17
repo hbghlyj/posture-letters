@@ -866,15 +866,18 @@ def pose(letter: str) -> Drawer:
         # overhead, parallel to the spine and spreading very slightly apart,
         # ending in wide-open palms with the fingers pointing up.
         hip_y = 104
-        d.torso([(186, hip_y), (186, 310), (186, 486)], 84, False)
-        d.head(186, 552, 1)
+        # Torso, arms and legs are sized on the font's own baseline ratios
+        # (arm 1.22x torso, leg 1.84x torso) so this seated figure has the same
+        # build as the standing ones instead of a long trunk with stub arms.
+        d.torso([(186, hip_y), (186, 244), (186, 384)], 84, False)
+        d.head(186, 448, 1)
         # Raised arms: they flank the head, rise parallel to the spine, and
         # splay a little outward so the vertical stroke stays balanced.
         for sign in (-1, 1):
             arm = [
-                (186 + sign * 52, 496),
-                (186 + sign * 64, 612),
-                (186 + sign * 70, 716),
+                (186 + sign * 52, 370),
+                (186 + sign * 70, 558),
+                (186 + sign * 82, 708),
             ]
             d.path(arm, 34, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
@@ -902,11 +905,11 @@ def pose(letter: str) -> Drawer:
         # silhouette with no notch at the corner, and they reach far enough
         # right that the horizontal arm is proportional to a normal cap L.
         d.leg(
-            [(150, hip_y - 26), (390, hip_y - 26), (612, hip_y - 26)], 58,
+            [(142, hip_y - 26), (407, hip_y - 26), (657, hip_y - 26)], 58,
             knee_index=1, breeches_width=70, shoe_direction=(0, 1),
         )
         d.leg(
-            [(150, hip_y + 24), (390, hip_y + 24), (612, hip_y + 24)], 50,
+            [(142, hip_y + 24), (407, hip_y + 24), (657, hip_y + 24)], 50,
             knee_index=1, breeches_width=62, shoe_direction=(0, 1),
         )
 
