@@ -35,7 +35,7 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 | I | **FAIL** | L 274.4, L 274.4, L 400.1, L 400.1 | 225.0 | 110.0 | limb 1 (leg) total 274.4 is -7.1% from 295.2 |
 | J | **FAIL** | L 250.3, L 250.3, L 501.5, L 501.6 | 332.0 | 110.0 | limb 1 (leg) total 250.3 is -15.2% from 295.2 |
 | K | **FAIL** | L 294.0, L 290.0, L 308.3, L 338.0 | 92.1 | 110.0 | limb 2 thigh 143.0 is -5.8% from 151.8 |
-| L | **FAIL** | L 250.3, L 250.3, L 559.0, L 559.0 | 330.0 | 110.0 | limb 1 (leg) total 250.3 is -15.2% from 295.2 |
+| L | **FAIL** | A 216.3, A 216.3, L 581.1, L 581.1 | 242.0 | 110.0 | limb 1 (arm) total 216.3 is +9.3% from 197.8 |
 | M | **FAIL** | L 508.0, L 508.0, L 993.0, L 987.4 | 535.6 | 110.0 | limb 1 (leg) total 508.0 is +72.1% from 295.2 |
 | N | **FAIL** | L 572.2, L 572.2, L 454.4, L 454.4 | 578.0 | 110.0 | limb 1 (leg) total 572.2 is +93.8% from 295.2 |
 | O | **FAIL** | L 514.8, L 507.1, L 461.1, L 467.7 | 607.1 | 108.0 | limb 1 (leg) total 514.8 is +74.4% from 295.2 |
@@ -201,20 +201,17 @@ Measurements use source centerlines, not outline bounding boxes. No hidden fores
 - nearest-baseline classification gives 0 arm(s) and 4 leg(s)
 
 ### L
-- limb 1 (leg) total 250.3 is -15.2% from 295.2
-- limb 1 thigh 130.2 is -14.2% from 151.8
-- limb 1 calf 120.0 is -16.3% from 143.5
-- limb 2 (leg) total 250.3 is -15.2% from 295.2
-- limb 2 thigh 130.2 is -14.2% from 151.8
-- limb 2 calf 120.0 is -16.3% from 143.5
-- limb 3 (leg) total 559.0 is +89.3% from 295.2
-- limb 3 thigh 174.2 is +14.8% from 151.8
-- limb 3 calf 384.7 is +168.2% from 143.5
-- limb 4 (leg) total 559.0 is +89.4% from 295.2
-- limb 4 thigh 174.3 is +14.8% from 151.8
-- limb 4 calf 384.7 is +168.2% from 143.5
-- torso 330.0 is +102.7% from 162.8
-- nearest-baseline classification gives 0 arm(s) and 4 leg(s)
+- limb 1 (arm) total 216.3 is +9.3% from 197.8
+- limb 1 forearm 108.0 is +26.9% from 85.1
+- limb 2 (arm) total 216.3 is +9.3% from 197.8
+- limb 2 forearm 108.0 is +26.9% from 85.1
+- limb 3 (leg) total 581.1 is +96.8% from 295.2
+- limb 3 thigh 268.2 is +76.7% from 151.8
+- limb 3 calf 312.9 is +118.1% from 143.5
+- limb 4 (leg) total 581.1 is +96.8% from 295.2
+- limb 4 thigh 268.2 is +76.7% from 151.8
+- limb 4 calf 312.9 is +118.1% from 143.5
+- torso 242.0 is +48.6% from 162.8
 
 ### M
 - limb 1 (leg) total 508.0 is +72.1% from 295.2

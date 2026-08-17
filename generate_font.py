@@ -1173,17 +1173,22 @@ def pose(letter: str) -> Drawer:
         # plane, the shins and ankles stretching out along the floor as the
         # bottom bar. The feet finish the stroke as a serif, heels and toes
         # adding a slight vertical terminal.
+        # The hip is carried lower and the shin pulled in: previously the shin
+        # ran 385 units against a 174 thigh (a 2.2 ratio), so the horizontal
+        # bar was really one overlong lower leg. Femur and tibia are close to
+        # equal in a real leg, and the over-long torso is brought back toward
+        # the font's baseline at the same time.
         stem_x = 208
-        hip = (stem_x, 306)
-        d.torso([hip, (stem_x, 470), (stem_x, 636)], 84, False)
-        d.head(stem_x - 2, 700, -1)
+        hip = (stem_x, 400)
+        d.torso([hip, (stem_x, 521), (stem_x, 642)], 84, False)
+        d.head(stem_x - 2, 706, -1)
         # Arms hang along the sides, carried just clear of the trunk so the
         # shoulder-to-hand run stays legible against the stem.
         for sign in (-1, 1):
             arm = [
-                (stem_x + sign * 52, 616),
-                (stem_x + sign * 60, 486),
-                (stem_x + sign * 58, 366),
+                (stem_x + sign * 52, 620),
+                (stem_x + sign * 60, 512),
+                (stem_x + sign * 58, 404),
             ]
             d.path(arm, 26, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
@@ -1191,13 +1196,13 @@ def pose(letter: str) -> Drawer:
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.path([(stem_x + sign * 24, 634), arm[0]], 24, False, False,
+            d.path([(stem_x + sign * 24, 638), arm[0]], 24, False, False,
                    track=False)
             d.circle(arm[0][0], arm[0][1], 15)
             d.circle(arm[-1][0], arm[-1][1], 14)
             d.cut_path([
-                (stem_x + sign * 44, 596), (stem_x + sign * 50, 486),
-                (stem_x + sign * 48, 392),
+                (stem_x + sign * 44, 602), (stem_x + sign * 50, 512),
+                (stem_x + sign * 48, 428),
             ], 3.6, True)
         # The knees turn forward and bend right through: thighs vertical, then
         # shins running horizontally out along the floor to the right.
@@ -1206,7 +1211,7 @@ def pose(letter: str) -> Drawer:
                 [
                     (stem_x + spread * 0.5, hip[1]),
                     (stem_x + spread, 132),
-                    (592 + spread, 108),
+                    (520 + spread, 108),
                 ],
                 width, knee_index=1, breeches_width=breeches,
                 shoe_scale=0.0,
@@ -1216,7 +1221,7 @@ def pose(letter: str) -> Drawer:
             # through the ground: it tapers from the ankle to a rounded toe
             # with its sole flush to the shin's underside, and an engraved
             # ankle crease keeps it legible as a foot.
-            ax, ay = 592 + spread, 108
+            ax, ay = 520 + spread, 108
             # Kneeling on flat shins turns the foot over: the instep lies on
             # the floor and the SOLE faces upward. So the arch, the heel pad
             # and the toe pads are all modelled on the foot's upper surface,
