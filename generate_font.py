@@ -1480,15 +1480,27 @@ def pose(letter: str) -> Drawer:
         )
         # Left bar: both legs straight up from the hips, knees locked.
         for spread, width in ((-16, 56), (14, 48)):
+            ankle_x = hip[0] + spread
             d.leg(
                 [
                     (hip[0] + spread * 0.5, hip[1] + 34),
-                    (hip[0] + spread, 470),
-                    (hip[0] + spread, 706),
+                    (ankle_x, 470),
+                    (ankle_x, 690 if spread < 0 else 654),
                 ],
                 width, knee_index=1, breeches_width=width * 1.28,
-                shoe_direction=(0, 1),
+                shoe_scale=0.0,
             )
+            # The foot bends outward at the ankle and the toes run horizontally
+            # away from the bar, giving the left upright a terminal serif to
+            # answer the splayed fingers closing the right one.
+            foot_y = 700 if spread < 0 else 664
+            d.ellipse(ankle_x - 4, foot_y, width * 0.32, 17, 0.0)
+            d.path([(ankle_x - 4, foot_y + 4), (ankle_x - 58, foot_y + 8)],
+                   width * 0.44, False, False, track=False)
+            d.ellipse(ankle_x - 60, foot_y + 8, 12, width * 0.24, 0.0)
+            d.cut_path([
+                (ankle_x - 20, foot_y - 8), (ankle_x - 22, foot_y + 20),
+            ], 3.2, False)
         # Right bar: both arms vertical and parallel, hands pointing skyward.
         for spread in (-14, 14):
             arm = [
