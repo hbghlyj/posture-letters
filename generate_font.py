@@ -240,10 +240,36 @@ class Drawer:
         heel_top = ay + width * 0.42
         back = ax - sign * 30 * k
         toe = ax + sign * reach * 0.82
-        # Heel: a rounded mass at the back, deeper than the shin is thick and
-        # sitting squarely on the ground line.
+        # Heel bone: not a symmetric ball but a droplet. The calcaneus is
+        # full and round where it takes the weight — a broad, smooth outward
+        # curve low and to the rear of the foot — and from there it narrows
+        # steadily as it rises, tapering to a sharp narrow tip at the top
+        # where the Achilles runs up into the shin. The profile is
+        # deliberately asymmetrical: the back face bulges well out behind the
+        # ankle while the front face runs much straighter into the instep.
         heel_c = (back + sign * 15 * k, (ground + heel_top) * 0.5)
-        self.ellipse(heel_c[0], heel_c[1], 16 * k, (heel_top - ground) * 0.5)
+        depth = heel_top - ground
+        # The bone is tucked under the shin's own outline: its tip stops just
+        # below that edge, so it tapers away into the limb rather than
+        # breaking through the top of the bar as a spike. Each leg of a pair
+        # is a different width, so this is measured against the shin rather
+        # than fixed.
+        heel_h = (shin_top - ground) * 0.90
+        rear = 17.0 * k
+        front = 10.5 * k
+        left: list[Point] = []
+        right: list[Point] = []
+        for i in range(15):
+            u = i / 14.0
+            y = ground + heel_h * u
+            fall = (1.0 - u)
+            # Round off the very bottom so the bone curves onto the sole
+            # instead of ending in two square corners.
+            base = min(1.0, 0.46 + u / 0.15)
+            left.append((heel_c[0] - sign * rear * (fall ** 0.55) * base, y))
+            right.append((heel_c[0] + sign * front * (fall ** 1.15) * base, y))
+        # Closing at a single shared point makes the top a true sharp tip.
+        self.polygon(left + list(reversed(right)))
         # Body of the foot: one smooth taper from the heel, flush under the
         # ankle, sloping evenly forward and thinning to a point at the toe.
         self.tapered_path(
@@ -254,7 +280,7 @@ class Drawer:
                 (toe, ground + 2.5 * k),
             ],
             [
-                (heel_top - ground) * 0.94,
+                (shin_top - ground) * 0.86,
                 (shin_top - ground) * 0.90,
                 (shin_top - ground) * 0.44,
                 3.0 * k,
