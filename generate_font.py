@@ -1794,7 +1794,8 @@ def pose(letter: str) -> Drawer:
         # the flank, but it does so by eating the calcaneus, and past here the
         # heel stops reading as a heel at specimen scale.
         # Draw the shin as a separate filled shape (stops before foot region)
-        d.kneeling_shin(bar, 144, 52)
+        # The knee is at the heel position (back of the shin)
+        d.kneeling_shin(bar, 478, 52)
         # Draw the foot as a separate filled shape
         d.kneeling_foot(bar, 144, 52)
 
