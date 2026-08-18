@@ -570,50 +570,41 @@ class Drawer:
         upper surface continues the bar's own profile and its sole rests on
         the same ground line, so nothing steps above or below the bar.
 
-        Within that band it keeps a real foot's shape. The heel is not built
-        here — it is the rear end of the bar itself, so the weight-bearing
-        mass belongs to the band's contour instead of being a lump stuck onto
-        it. From the arch forward the outline simply runs on, sloping evenly
-        down and thinning to a point where the toe tip meets the floor.
-        Engraved ankle crease, hollow arch and toe clefts model the detail,
-        all kept well inside the silhouette so they can never notch the bar.
+        The foot's interior is cut out of the bar, leaving only the outline
+        as a border. The heel area remains solid; from the arch forward the
+        foot shape is defined by its outline alone — the top edge following
+        the bar's profile, the sole on the ground line, and the toe point
+        where they meet. This makes the foot immediately recognizable as a
+        distinct shape within the bar.
         """
         k = width / 52.0
         ground = profile.ground
         step = profile.step
-        # The engraving is spaced along the foot's own run, from the ankle out
-        # to the toe point, so it stays in proportion however long the foot
-        # is. Everything is placed forward of the leg strokes: where the leg
-        # and the bar overlap, the nonzero fill rule cancels a reverse contour
-        # outright, so a cut back there simply would not render.
         run = (profile.toe_x - ankle_x) * step
 
         def at(fraction: float) -> float:
             return ankle_x + step * run * fraction
 
-        # Ankle crease, where the shin hands over to the foot. It leans
-        # forward the way the front of an ankle does and is held well inside
-        # the profile at both ends so it can never notch the flat bar.
-        crease_x = at(0.10)
-        crease_top = profile.top(crease_x)
-        self.cut_path([
-            (crease_x + step * 3 * k, crease_top - 10 * k),
-            (crease_x - step * 4 * k, (ground + crease_top) * 0.5),
-            (crease_x + step * 3 * k, ground + 10 * k),
-        ], 3.0 * k, True)
-        # Arch: the shallow hollow lifted off the floor under the instep.
-        self.cut_path([
-            (at(0.24), ground + 4 * k),
-            (at(0.38), ground + 11 * k),
-            (at(0.52), ground + 4 * k),
-        ], 3.4 * k, True)
-        # Toe clefts, engraved down the sloping upper surface of the foot.
-        for i in range(2):
-            cx = at(0.62 + 0.16 * i)
-            self.cut_path([
-                (cx, profile.top(cx) - 7 * k),
-                (cx + step * run * 0.09, ground + (5 - 1.5 * i) * k),
-            ], 2.4 * k, False)
+        # Cut out the foot's interior, leaving only the outline as a border.
+        # The cut starts at the arch (leaving the heel solid) and follows the
+        # foot's shape inset from the edges. The border width is ~10 units,
+        # visible at glyph-sheet scale (~2 pixels).
+        border = 10.0 * k
+        cut_pts_top = []
+        cut_pts_bottom = []
+        # Sample the foot shape from arch to near the toe point
+        for frac_i in range(16):
+            frac = 0.25 + 0.65 * frac_i / 15.0  # 25% to 90% along foot
+            x = at(frac)
+            top = profile.top(x)
+            # Top edge inset from the bar's profile
+            cut_pts_top.append((x, top - border))
+            # Bottom edge inset from the ground line
+            cut_pts_bottom.append((x, ground + border))
+        # Create the hole: top edge forward, then bottom edge backward
+        hole_pts = cut_pts_top + list(reversed(cut_pts_bottom))
+        if len(hole_pts) >= 3:
+            self.polygon(hole_pts, hole=True)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
