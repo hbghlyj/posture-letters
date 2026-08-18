@@ -570,10 +570,10 @@ class Drawer:
         upper surface continues the bar's own profile and its sole rests on
         the same ground line, so nothing steps above or below the bar.
 
-        The foot remains solid filled, but its shape is outlined with a white
-        line (reverse-winding cut) that traces the foot's perimeter, making
-        it visible as a distinct form within the bar. The heel area with its
-        bulge is preserved.
+        Both the heel bulge and the foot shape are outlined with white lines
+        to make them visible as distinct forms within the bar. The heel bulge
+        (the rounded protrusion at the back) and the foot (from arch to toe)
+        are traced with outlines that preserve their complete shapes.
         """
         k = width / 52.0
         ground = profile.ground
@@ -583,35 +583,41 @@ class Drawer:
         def at(fraction: float) -> float:
             return ankle_x + step * run * fraction
 
-        # Outline the foot shape with a white line. The outline traces the
-        # foot's perimeter just inside the bar's edges, creating a border
-        # that makes the foot visible as a distinct shape. The outline starts
-        # at the arch (past the heel bulge) and follows the foot's profile
-        # to near the toe point.
-        outline_width = 4.0 * k
-        outline_pts = []
+        # Outline the complete foot shape including the heel bulge.
+        outline_width = 5.0 * k
         
-        # Top edge: follow the bar's profile from arch to toe
-        for frac_i in range(20):
-            frac = 0.15 + 0.75 * frac_i / 19.0  # 15% to 90% along foot
+        # Heel bulge outline: trace the heel's rounded protrusion at the back
+        # of the bar. The heel bulge is defined by the profile's heel_outline,
+        # which creates a rounded shape that swells backward and curves down
+        # to the ground. We trace this shape with an outline.
+        heel_outline = profile.heel_outline(rise=0, bulge=profile.heel_depth * 0.30, samples=16)
+        if heel_outline:
+            # Offset the outline inward from the heel bulge edge
+            heel_pts = []
+            for x, y in heel_outline:
+                # Move each point inward by half the outline width
+                heel_pts.append((x + step * outline_width / 2, y - outline_width / 2))
+            self.cut_path(heel_pts, outline_width, False)
+        
+        # Foot top edge: follow the bar's profile from arch to toe
+        foot_top_pts = []
+        for frac_i in range(24):
+            frac = 0.10 + 0.80 * frac_i / 23.0  # 10% to 90% along foot
             x = at(frac)
             top = profile.top(x)
-            outline_pts.append((x, top - outline_width / 2))
+            foot_top_pts.append((x, top - outline_width / 2))
+        self.cut_path(foot_top_pts, outline_width, False)
         
-        # Create a thin ribbon along the top edge
-        self.cut_path(outline_pts, outline_width, False)
-        
-        # Bottom edge: follow the ground line from toe back to arch
-        bottom_pts = []
-        for frac_i in range(16):
-            frac = 0.90 - 0.70 * frac_i / 15.0  # 90% back to 20%
+        # Foot bottom edge: follow the ground line from toe back to heel
+        foot_bottom_pts = []
+        for frac_i in range(20):
+            frac = 0.90 - 0.80 * frac_i / 19.0  # 90% back to 10%
             x = at(frac)
-            bottom_pts.append((x, ground + outline_width / 2))
+            foot_bottom_pts.append((x, ground + outline_width / 2))
+        self.cut_path(foot_bottom_pts, outline_width, False)
         
-        self.cut_path(bottom_pts, outline_width, False)
-        
-        # Ankle line: vertical line at the arch separating heel from foot
-        ankle_line_x = at(0.15)
+        # Ankle separator: line separating the heel bulge from the foot
+        ankle_line_x = at(0.10)
         ankle_top = profile.top(ankle_line_x)
         self.cut_path([
             (ankle_line_x, ankle_top - outline_width),
