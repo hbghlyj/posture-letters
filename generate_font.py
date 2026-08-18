@@ -217,7 +217,35 @@ class Drawer:
         # so the sole of the bar is that swell's own lowest line.
         ground = min(y for _, y in pts) - width * 0.61
         lower = [(x, ground) for x, _ in pts]
-        self.polygon(list(pts) + list(reversed(lower)))
+        # The band has to start somewhere, and squaring it off at the knee
+        # left a rectangular block jutting out of the back of the leg. The
+        # rear end is rounded off instead, on a quarter ellipse from the knee
+        # down to the ground, so the fill runs into the thigh as one
+        # continuous curve the way the joint itself does.
+        first = pts[0]
+        step = 1.0 if pts[-1][0] >= first[0] else -1.0
+        # Wide enough that the curve reaches back into the thigh's own
+        # outline, so the two blend rather than leaving a nick between them.
+        radius = min(width * 0.95, abs(first[1] - ground) * 1.5)
+        corner = [
+            (
+                first[0] + step * radius * (1.0 - math.cos(t)),
+                first[1] - (first[1] - ground) * math.sin(t),
+            )
+            for t in (i * math.pi / 16.0 for i in range(1, 9))
+        ]
+        self.polygon(list(pts) + list(reversed(lower[1:])) + corner[::-1])
+        # The band's top edge is the leg centreline, and the thigh stroke
+        # narrows just above it, leaving a small nick where the rounded corner
+        # hands over. A wedge spanning exactly that gap closes it, so the
+        # transition from bar to thigh is one unbroken curve. It is bounded by
+        # the corner itself, so nothing is added outside the leg.
+        self.polygon([
+            first,
+            (first[0] + step * radius * 0.62, first[1]),
+            corner[2],
+            corner[0],
+        ])
 
     def kneeling_foot(
         self, ax: float, ay: float, width: float, ground: float,
