@@ -98,6 +98,12 @@ Three defects introduced by the shared base/`BarProfile` restructuring. All thre
 
 **Z — seam at the knee.** Separately from the thinning above, a hairline of white ran from under the torso's end cap out into the bar, splitting the diagonal from the base. Three causes stacked: the two thighs started from points offset along the spread, leaving them 19 units apart at the corner where a tapered stroke is thinnest; the band's heel curve reaches full depth only over its first thirty units; and the torso's underside climbs away on the diagonal. Both thighs now start from inside the torso's own end cap, and a thin ribbon is laid along the seam — upper edge tracking the spine, lower edge on the band — closing it at every column. The ribbon is deliberately *not* a wedge anchored to the ground line: that fills the letter's open counter and squares off the corner, which is the shape rather than the defect.
 
+## L's floating bar
+
+**L**'s horizontal leg was seated on the wrong feature. The flipped base was registered by the lowest ink past `x > 300`, which was meant to name the shin — but inverting E's prong turns its heel serif (drawn rising off the floor) into the component's deepest point, so the whole stroke was hung from that tip and parked **57 units in the air**. Only the seat and a hard-coded corner fillet reached the ground, and that fillet was the "lump" under the leg: a wedge added to hide the gap the mis-seating opened.
+
+The registration window is now the shin run itself (`320 < x < 520`), so the bar rests on the baseline the way J's and Z's do. The hip follows it down (196 -> 134) so the trunk still meets the stroke, and the fillet is deleted along with the notch it patched. L keeps width 455 and yMin 72.
+
 ## W's baseline knees
 
 **W**'s two outer legs bend at knees that rest *on* the baseline, but their control points were authored at `y=0` — the centre of the joint, not its bottom. The knee mass and its breeches cuff therefore straddled the line and bulged **44 units underneath** as two rounded lobes. It was the only ink in the alphabet below the baseline, and the print does not show it: there all four strokes finish together on one line. The knee points now sit a joint radius above the line (`y=44`) so the bottom of the joint lands on it. W's `yMin` goes from -44 to 0, and the whole alphabet now spans `yMin` 0..87 with nothing below the baseline.

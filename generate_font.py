@@ -1789,8 +1789,11 @@ def pose(letter: str) -> Drawer:
         # thigh tops at the upper edge of the base rather than the lower.
         # The hip sits down on the bar now that the base is seated on the
         # floor, so the trunk meets the stroke instead of stopping short of
-        # it and leaving the letter in two disconnected pieces.
-        hip = (stem_x, 196)
+        # it and leaving the letter in two disconnected pieces. It follows the
+        # bar down: with the base resting on the baseline rather than hanging
+        # off its heel serif, a hip still set for the old height would leave
+        # the trunk ending in mid-air above the stroke.
+        hip = (stem_x, 134)
         d.torso([hip, (stem_x, 419), (stem_x, 642)], 84, False)
         d.head(stem_x - 2, 706, -1)
         # Arms hang along the sides, carried just clear of the trunk so the
@@ -1841,9 +1844,18 @@ def pose(letter: str) -> Drawer:
         # instead leaves every piece where it started and measures nothing.
         base_ys = [y for contour, _ in base.contours for _, y in contour]
         base_axis = min(base_ys) + max(base_ys)
+        # Register on the shin itself. ``x > 300`` was meant to name the bar,
+        # but after the flip the lowest ink past that line is not the shin —
+        # it is the heel serif, which E draws rising off the floor and which
+        # inverting turns into the component's deepest point. Seating the
+        # component on that tip parked the whole horizontal stroke 57 units
+        # in the air, leaving only the seat and the patched corner touching
+        # the ground. Naming the shin run explicitly puts the stroke that is
+        # supposed to be the bar on the baseline, the way J and Z do.
         bar_low = min(
             base_axis - y
-            for contour, _ in base.contours for x, y in contour if x > 300
+            for contour, _ in base.contours for x, y in contour
+            if 320 < x < 520
         )
         # Ahead of the trunk the clip follows the bar's own sole, so the
         # inverted thigh cannot hang below the stroke and read as a spur
@@ -1853,22 +1865,15 @@ def pose(letter: str) -> Drawer:
             d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
             floor_from=stem_x + 42,
         )
-        # The trunk runs down to the baseline but the bar's sole settles
-        # about fifty units higher, where the flipped prong puts it. Where the
-        # two meet the trunk's lower corner therefore stands clear underneath
-        # the bar and reads as a block hanging off the knee. This fillet
-        # closes the re-entrant angle between them: it runs from the foot's
-        # outer edge at the baseline up to the point where the bar's own
-        # underside starts, so the inside of the corner becomes one straight
-        # diagonal rather than a notch with a spur beside it. Both ends sit on
-        # strokes that are already drawn, so nothing is added outside the
-        # letter's silhouette.
-        d.polygon([
-            (stem_x + 33, BAR_GROUND),
-            (stem_x + 42, 129.0),
-            (stem_x + 20, 129.0),
-            (stem_x + 20, BAR_GROUND),
-        ])
+        # The corner fillet that used to sit here is gone with the cause it
+        # patched. It spanned the baseline up to y=129 because the bar's sole
+        # settled that high, so the trunk's foot stood clear underneath the
+        # stroke and the gap between them read as a block hanging off the
+        # knee. Now that the bar is registered on the shin it rests on the
+        # baseline itself, the trunk meets it along their shared edge, and
+        # there is no re-entrant angle left to fill: keeping the polygon would
+        # only re-add a wedge of ink under a stroke that is already flat on
+        # the ground.
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
