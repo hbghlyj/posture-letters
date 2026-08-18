@@ -570,10 +570,11 @@ class Drawer:
         upper surface continues the bar's own profile and its sole rests on
         the same ground line, so nothing steps above or below the bar.
 
-        Both the heel bulge and the foot shape are outlined with white lines
-        to make them visible as distinct forms within the bar. The heel bulge
-        (the rounded protrusion at the back) and the foot (from arch to toe)
-        are traced with outlines that preserve their complete shapes.
+        The foot shape is carved out of the bottom bar as an anatomically
+        correct silhouette: rounded heel bulge rising from the ground, arch
+        curving upward, ball of foot, and toes tapering down to the ground.
+        The foot interior is cut away (white), leaving only the outline
+        visible against the bar's filled body.
         """
         k = width / 52.0
         ground = profile.ground
@@ -583,46 +584,71 @@ class Drawer:
         def at(fraction: float) -> float:
             return ankle_x + step * run * fraction
 
-        # Outline the complete foot shape including the heel bulge.
-        outline_width = 5.0 * k
+        # Carve out the foot shape as an anatomically correct silhouette.
+        # The foot runs from the ankle (0%) to the toe (100%).
         
-        # Heel bulge outline: trace the heel's rounded protrusion at the back
-        # of the bar. The heel bulge is defined by the profile's heel_outline,
-        # which creates a rounded shape that swells backward and curves down
-        # to the ground. We trace this shape with an outline.
-        heel_outline = profile.heel_outline(rise=0, bulge=profile.heel_depth * 0.30, samples=16)
-        if heel_outline:
-            # Offset the outline inward from the heel bulge edge
-            heel_pts = []
-            for x, y in heel_outline:
-                # Move each point inward by half the outline width
-                heel_pts.append((x + step * outline_width / 2, y - outline_width / 2))
-            self.cut_path(heel_pts, outline_width, False)
+        # Build the foot outline as a closed polygon that will be cut out
+        # (reverse winding = hole). The outline follows anatomical features:
+        # - Heel: rounded bulge rising from ground at 0-15%
+        # - Arch: curves upward from ground at 15-45%
+        # - Ball: slight swelling at 45-65%
+        # - Toes: taper down to ground at 65-100%
         
-        # Foot top edge: follow the bar's profile from arch to toe
-        foot_top_pts = []
-        for frac_i in range(24):
-            frac = 0.10 + 0.80 * frac_i / 23.0  # 10% to 90% along foot
+        foot_outline = []
+        
+        # Start at ground level just behind the heel
+        heel_start_x = at(0.0)
+        foot_outline.append((heel_start_x, ground))
+        
+        # Heel bulge: rises up in a rounded curve
+        # The heel is prominent and rounded, rising to about 60% of foot height
+        for i in range(8):
+            frac = 0.0 + 0.15 * i / 7.0  # 0% to 15%
             x = at(frac)
-            top = profile.top(x)
-            foot_top_pts.append((x, top - outline_width / 2))
-        self.cut_path(foot_top_pts, outline_width, False)
+            # Heel rises in a smooth curve (sine-like)
+            rise_frac = i / 7.0
+            heel_height = math.sin(rise_frac * math.pi * 0.5) * 0.60
+            y = ground + (profile.top(x) - ground) * heel_height
+            foot_outline.append((x, y))
         
-        # Foot bottom edge: follow the ground line from toe back to heel
-        foot_bottom_pts = []
-        for frac_i in range(20):
-            frac = 0.90 - 0.80 * frac_i / 19.0  # 90% back to 10%
+        # Arch: curves upward, creating a concave hollow
+        # The arch rises to about 85% of foot height at its peak
+        for i in range(10):
+            frac = 0.15 + 0.30 * i / 9.0  # 15% to 45%
             x = at(frac)
-            foot_bottom_pts.append((x, ground + outline_width / 2))
-        self.cut_path(foot_bottom_pts, outline_width, False)
+            # Arch rises then falls slightly (bell curve)
+            arch_frac = i / 9.0
+            arch_height = 0.60 + 0.25 * math.sin(arch_frac * math.pi)
+            y = ground + (profile.top(x) - ground) * arch_height
+            foot_outline.append((x, y))
         
-        # Ankle separator: line separating the heel bulge from the foot
-        ankle_line_x = at(0.10)
-        ankle_top = profile.top(ankle_line_x)
-        self.cut_path([
-            (ankle_line_x, ankle_top - outline_width),
-            (ankle_line_x, ground + outline_width),
-        ], outline_width, False)
+        # Ball of foot: slight swelling
+        for i in range(6):
+            frac = 0.45 + 0.20 * i / 5.0  # 45% to 65%
+            x = at(frac)
+            # Ball maintains height with slight rise
+            ball_frac = i / 5.0
+            ball_height = 0.85 + 0.05 * math.sin(ball_frac * math.pi)
+            y = ground + (profile.top(x) - ground) * ball_height
+            foot_outline.append((x, y))
+        
+        # Toes: taper down to ground
+        for i in range(8):
+            frac = 0.65 + 0.35 * i / 7.0  # 65% to 100%
+            x = at(frac)
+            # Toes slope down to ground
+            toe_frac = i / 7.0
+            toe_height = 0.90 * (1.0 - toe_frac)
+            y = ground + (profile.top(x) - ground) * toe_height
+            foot_outline.append((x, y))
+        
+        # Close the polygon back along the ground
+        foot_outline.append((at(1.0), ground))
+        foot_outline.append((at(0.0), ground))
+        
+        # Cut out the foot shape (reverse winding creates a hole)
+        if len(foot_outline) >= 3:
+            self.polygon(foot_outline, hole=True)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
