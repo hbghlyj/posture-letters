@@ -571,8 +571,10 @@ class Drawer:
         the same ground line, so nothing steps above or below the bar.
 
         The foot shape is carved out of the bottom bar as an anatomically
-        correct silhouette: rounded heel bulge rising from the ground, arch
-        curving upward, ball of foot, and toes tapering down to the ground.
+        correct silhouette for a KNEELING position: the top of the foot
+        (dorsum) faces down toward the ground, and the sole faces up. The
+        carved profile shows the sole anatomy: rounded heel pad, arch
+        curving down then up, ball of foot, and toes tapering to the tip.
         The foot interior is cut away (white), leaving only the outline
         visible against the bar's filled body.
         """
@@ -584,15 +586,13 @@ class Drawer:
         def at(fraction: float) -> float:
             return ankle_x + step * run * fraction
 
-        # Carve out the foot shape as an anatomically correct silhouette.
+        # Carve out the foot shape showing sole anatomy (kneeling position).
         # The foot runs from the ankle (0%) to the toe (100%).
-        
-        # Build the foot outline as a closed polygon that will be cut out
-        # (reverse winding = hole). The outline follows anatomical features:
-        # - Heel: rounded bulge rising from ground at 0-15%
-        # - Arch: curves upward from ground at 15-45%
-        # - Ball: slight swelling at 45-65%
-        # - Toes: taper down to ground at 65-100%
+        # Profile represents the SOLE (facing up in kneeling position):
+        # - Heel pad: rounded bulge rising from ground (0-20%)
+        # - Arch: concave curve dipping down then up (20-50%)
+        # - Ball: slight swelling (50-70%)
+        # - Toes: taper down to ground (70-100%)
         
         foot_outline = []
         
@@ -600,46 +600,43 @@ class Drawer:
         heel_start_x = at(0.0)
         foot_outline.append((heel_start_x, ground))
         
-        # Heel bulge: rises up in a rounded curve
-        # The heel is prominent and rounded, rising to about 60% of foot height
-        for i in range(8):
-            frac = 0.0 + 0.15 * i / 7.0  # 0% to 15%
+        # Heel pad: rounded bulge (0-20%)
+        for i in range(9):
+            frac = i / 40.0  # 0 to 0.2
             x = at(frac)
-            # Heel rises in a smooth curve (sine-like)
-            rise_frac = i / 7.0
-            heel_height = math.sin(rise_frac * math.pi * 0.5) * 0.60
-            y = ground + (profile.top(x) - ground) * heel_height
+            # Heel rises smoothly (quadratic ease-in)
+            height = 0.55 * (1 - (1 - frac/0.2)**2) if frac <= 0.2 else 0.55
+            y = ground + (profile.top(x) - ground) * height
             foot_outline.append((x, y))
         
-        # Arch: curves upward, creating a concave hollow
-        # The arch rises to about 85% of foot height at its peak
-        for i in range(10):
-            frac = 0.15 + 0.30 * i / 9.0  # 15% to 45%
+        # Arch: concave curve (20-50%)
+        for i in range(13):
+            frac = 0.2 + i * 0.3 / 12.0  # 0.2 to 0.5
             x = at(frac)
-            # Arch rises then falls slightly (bell curve)
-            arch_frac = i / 9.0
-            arch_height = 0.60 + 0.25 * math.sin(arch_frac * math.pi)
-            y = ground + (profile.top(x) - ground) * arch_height
+            # Arch curves down then up (bezier-like)
+            t = (frac - 0.2) / 0.3
+            height = 0.55 - 0.20 * (4 * t * (1 - t)) + 0.10 * t
+            y = ground + (profile.top(x) - ground) * height
             foot_outline.append((x, y))
         
-        # Ball of foot: slight swelling
-        for i in range(6):
-            frac = 0.45 + 0.20 * i / 5.0  # 45% to 65%
+        # Ball of foot: slight swelling (50-70%)
+        for i in range(9):
+            frac = 0.5 + i * 0.2 / 8.0  # 0.5 to 0.7
             x = at(frac)
-            # Ball maintains height with slight rise
-            ball_frac = i / 5.0
-            ball_height = 0.85 + 0.05 * math.sin(ball_frac * math.pi)
-            y = ground + (profile.top(x) - ground) * ball_height
+            # Ball rises slightly
+            t = (frac - 0.5) / 0.2
+            height = 0.65 + 0.05 * (1 - (2*t - 1)**2)
+            y = ground + (profile.top(x) - ground) * height
             foot_outline.append((x, y))
         
-        # Toes: taper down to ground
-        for i in range(8):
-            frac = 0.65 + 0.35 * i / 7.0  # 65% to 100%
+        # Toes: taper down to ground (70-100%)
+        for i in range(13):
+            frac = 0.7 + i * 0.3 / 12.0  # 0.7 to 1.0
             x = at(frac)
-            # Toes slope down to ground
-            toe_frac = i / 7.0
-            toe_height = 0.90 * (1.0 - toe_frac)
-            y = ground + (profile.top(x) - ground) * toe_height
+            # Toes slope down to ground (power curve)
+            t = (frac - 0.7) / 0.3
+            height = 0.70 * (1 - t**1.5)
+            y = ground + (profile.top(x) - ground) * height
             foot_outline.append((x, y))
         
         # Close the polygon back along the ground
