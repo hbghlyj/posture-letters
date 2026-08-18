@@ -280,6 +280,12 @@ class BarProfile:
         Both ends of the curve are flat-tangent — at the leg, so it continues
         the back edge rather than stepping off it, and at the widest point,
         so the two halves meet without a crease.
+
+        The bulge is deliberately **small and local**: it is the calcaneus,
+        not a wedge under the whole ankle. It comes and goes within the height
+        of the heel itself, and by the time the outline reaches the floor it
+        has drawn most of the way back in, so the projection stays confined to
+        the heel area instead of running forward under the arch or up the leg.
         """
         # Start ``rise`` above the ankle and finish on the floor. That anchor
         # is set deliberately *inside* the leg rather than on its edge: the
@@ -292,9 +298,10 @@ class BarProfile:
         peak_at = (anchor_y - (self.heel_top + self.ground) * 0.5) / span
         # Where the outline sits at each end, as a fraction of the full swell.
         at_leg = min(0.5, rise * 0.5 / bulge)
-        # At the floor it is still standing well back from the stem, so the
-        # heel rolls onto the sole instead of pinching under the ankle.
-        at_floor = 0.62
+        # Pulled well in at the floor so the bone rolls onto the sole and the
+        # swell stays a compact heel rather than a broad skirt reaching
+        # forward along the bar.
+        at_floor = 0.30
         pts: list[Point] = []
         for i in range(samples + 1):
             t = i / samples
@@ -310,22 +317,55 @@ class BarProfile:
             ))
         return pts
 
+    # How far a flat-lying leg stroke may ride proud of the band's top edge.
+    # This is deliberately not zero: the calf is a real muscle belly and the
+    # print shows it, so the bar's upper outline is meant to carry that one
+    # soft swell. Clamping the strokes flat onto the profile erased it and
+    # left the whole run reading as a drawn stroke rather than a leg.
+    SWELL_ALLOWANCE = 12.0
+
+    def headroom(self, x: float) -> float:
+        """How far a leg stroke may ride proud of the edge at ``x``.
+
+        The allowance is not constant along the bar. It is full over the calf,
+        where the muscle belly is, and eases to nothing before the ankle: past
+        there the strokes are ending, and any headroom lets a squared-off
+        stroke tip poke through the profile as a step in the outline. Fading
+        it out means the calf keeps its swell while the run into the foot
+        stays governed entirely by the band.
+        """
+        travelled = (x - self.heel_x) * self.step
+        # Full allowance back over the calf, tapering away across the last
+        # third of the run up to the ankle.
+        fade_from = self.arch_s * 0.62
+        if travelled <= fade_from:
+            return self.SWELL_ALLOWANCE
+        span = max(1e-6, self.arch_s - fade_from)
+        u = min(1.0, (travelled - fade_from) / span)
+        ease = 1.0 - u * u * (3.0 - 2.0 * u)
+        return self.SWELL_ALLOWANCE * ease
+
     def cap(self, point: Point, tangent: Point, width: float) -> float:
-        """Hold a flat-lying stroke inside the bar's own top edge.
+        """Keep a flat-lying stroke close to the bar's top edge.
 
         Thigh and shin are tapered strokes that swell about their centrelines
         — the breeches at the top of the thigh, the calf below the knee — so a
-        limb laid along the floor pushes those swells up through the bar and
-        the letter grows lumps exactly where it should read as one flat
-        stroke. Along the flat run the bar's profile is the authority and the
-        strokes stay under it.
+        limb laid along the floor pushes those swells up through the bar. Left
+        alone they roll the outline up and down and put a step where the two
+        strokes meet; clamped hard onto the profile they vanish and the leg
+        stops reading as a leg.
+
+        So the profile sets a ceiling with headroom rather than a hard lid: a
+        stroke may stand up to ``SWELL_ALLOWANCE`` above the band's own edge
+        over the calf, which is enough for the muscle belly to show as one
+        soft rise but not enough for the breeches or a stroke end to reappear
+        as a lump. The sole is unaffected either way — it is the band's
+        straight underside, not these strokes.
 
         The cap is weighted by how level the stroke is running, not by an
-        arbitrary cut-off: a horizontal stroke spends its whole width on the
-        bar's depth and is fully governed, while the stroke climbing away into
-        the stem is left completely alone. Nothing is therefore trimmed with a
-        step, and the leg's own outline survives everywhere it is not the
-        silhouette of the bar.
+        arbitrary cut-off: a horizontal stroke is fully governed, while the
+        stroke climbing away into the stem is left completely alone. Nothing
+        is trimmed with a step.
         """
         x, y = point
         ceiling = self.ceiling(x)
@@ -340,7 +380,7 @@ class BarProfile:
             return width
         blend = min(1.0, (level - 0.55) / 0.30)
         blend = blend * blend * (3.0 - 2.0 * blend)
-        allowed = max(8.0, 2.0 * (ceiling - y))
+        allowed = max(8.0, 2.0 * (ceiling + self.headroom(x) - y))
         return width + (min(width, allowed) - width) * blend
 
 
@@ -426,8 +466,10 @@ class Drawer:
         """
         ground = profile.ground
         # How far the outline swells back past the line of the stem. Scaled
-        # off the bar's own depth so the heel stays in proportion to it.
-        bulge = profile.heel_depth * 0.72
+        # off the bar's own depth so the heel stays in proportion to it, and
+        # kept modest: this is a small isolated calcaneus bump at the back of
+        # the foot, not a broad mass carrying the whole ankle.
+        bulge = profile.heel_depth * 0.42
         heel = profile.heel_outline(anchor_rise, bulge)
         edge = profile.edge()
         # One closed loop, traced the whole way round: out of the leg and down
