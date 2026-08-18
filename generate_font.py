@@ -685,6 +685,7 @@ class Drawer:
         shoe_scale: float = 1.0,
         anatomy_points: list[Point] | None = None,
         bar: "BarProfile | None" = None,
+        draw_shin: bool = True,
     ) -> None:
         """Draw short breeches, a knee cuff, muscular calf, ankle, and shoe.
 
@@ -699,6 +700,10 @@ class Drawer:
         profile owns the silhouette and the leg's own swells are held inside
         it — otherwise the calf and the breeches push up through the stroke
         that is supposed to read as flat.
+        
+        ``draw_shin`` controls whether to draw the shin (lower leg) portion.
+        Set to False when the shin will be drawn separately (e.g., using
+        kneeling_shin() with a traced profile).
         """
         if not 0 < knee_index < len(pts) - 1:
             raise ValueError("A leg needs hip, interior knee, and ankle points")
@@ -716,11 +721,12 @@ class Drawer:
             [breeches * 0.94, breeches * 1.10, breeches * 1.02, breeches * 0.78],
             True, cap=bar,
         )
-        self.tapered_path(
-            lower_profile,
-            [width * 0.78, width * 0.90, width * 1.22, width * 0.82, width * 0.50],
-            True, cap=bar,
-        )
+        if draw_shin:
+            self.tapered_path(
+                lower_profile,
+                [width * 0.78, width * 0.90, width * 1.22, width * 0.82, width * 0.50],
+                True, cap=bar,
+            )
 
         # Thigh and shin are separate tapered strokes with flat ends, so at a
         # bent knee their two square ends leave a sharp beveled wedge. A joint
@@ -779,30 +785,31 @@ class Drawer:
             (knee[0] + nx * breeches * 0.20, knee[1] + ny * breeches * 0.20),
         ], max(2.8, width * 0.055), False)
 
-        # One engraved contour rides the outward belly of the calf and makes
-        # the muscle readable even where two legs overlap at specimen scale.
-        calf_points = [lower_profile[i] for i in (1, 2, 3)]
-        calf_mid = calf_points[1]
-        # Pull the two ends toward the belly of the calf so the contour is a
-        # short interior stroke; a full-length one runs out to the ankle and
-        # knee edges and shreds the leg silhouette where limbs overlap.
-        calf_points = [
-            (
-                calf_mid[0] + (point[0] - calf_mid[0]) * 0.40,
-                calf_mid[1] + (point[1] - calf_mid[1]) * 0.40,
-            )
-            for point in calf_points
-        ]
-        radial = (calf_mid[0] - 350, calf_mid[1] - 400)
-        if nx * radial[0] + ny * radial[1] < 0:
-            nx, ny = -nx, -ny
-        # Offsets are deliberately conservative: the contour must stay inside
-        # the calf so it reads as engraving instead of notching the outline.
-        offsets = (width * 0.08, width * 0.14, width * 0.07)
-        self.cut_path([
-            (point[0] + nx * offset, point[1] + ny * offset)
-            for point, offset in zip(calf_points, offsets)
-        ], max(2.6, width * 0.055), True)
+        if draw_shin:
+            # One engraved contour rides the outward belly of the calf and makes
+            # the muscle readable even where two legs overlap at specimen scale.
+            calf_points = [lower_profile[i] for i in (1, 2, 3)]
+            calf_mid = calf_points[1]
+            # Pull the two ends toward the belly of the calf so the contour is a
+            # short interior stroke; a full-length one runs out to the ankle and
+            # knee edges and shreds the leg silhouette where limbs overlap.
+            calf_points = [
+                (
+                    calf_mid[0] + (point[0] - calf_mid[0]) * 0.40,
+                    calf_mid[1] + (point[1] - calf_mid[1]) * 0.40,
+                )
+                for point in calf_points
+            ]
+            radial = (calf_mid[0] - 350, calf_mid[1] - 400)
+            if nx * radial[0] + ny * radial[1] < 0:
+                nx, ny = -nx, -ny
+            # Offsets are deliberately conservative: the contour must stay inside
+            # the calf so it reads as engraving instead of notching the outline.
+            offsets = (width * 0.08, width * 0.14, width * 0.07)
+            self.cut_path([
+                (point[0] + nx * offset, point[1] + ny * offset)
+                for point, offset in zip(calf_points, offsets)
+            ], max(2.6, width * 0.055), True)
 
         measured = anatomy_points if anatomy_points is not None else pts
         segments, measured_length = self.centerline_measurements(measured)
@@ -810,10 +817,11 @@ class Drawer:
             "part": "limb", "segments": segments, "length": measured_length,
             "points": measured,
         })
-        ankle = pts[-1]
-        self.shoe(
-            ankle[0], ankle[1], lower_profile[-2], shoe_direction, shoe_scale
-        )
+        if draw_shin:
+            ankle = pts[-1]
+            self.shoe(
+                ankle[0], ankle[1], lower_profile[-2], shoe_direction, shoe_scale
+            )
 
     def shoe(
         self, x: float, y: float, previous: Point, direction: Point | None = None,
@@ -1739,7 +1747,7 @@ def pose(letter: str) -> Drawer:
                     (144 - spread * 0.20, 112),
                 ],
                 width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar,
+                shoe_scale=0.0, bar=bar, draw_shin=False,
             )
         # The heel curve starts further up the shin than it did. Anchored low
         # it left the leg at x≈489 while the leg's own back edge there stands
@@ -1916,7 +1924,7 @@ def pose(letter: str) -> Drawer:
                     (ANKLE_X + spread, 104),
                 ],
                 width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar,
+                shoe_scale=0.0, bar=bar, draw_shin=False,
             )
         # Level the sole by filling the gap between the leg's underside and ground
         sole = []
@@ -2695,7 +2703,7 @@ def pose(letter: str) -> Drawer:
                     (584 + spread * 0.20, 112),
                 ],
                 width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar,
+                shoe_scale=0.0, bar=bar, draw_shin=False,
             )
         # Draw the shin as a separate filled shape (stops before foot region)
         d.kneeling_shin(bar, 200, 56)
