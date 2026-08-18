@@ -1,4 +1,4 @@
-"""Load foot and shin profiles from SVG files."""
+"""Load shin profile from SVG file."""
 import re
 from pathlib import Path
 
@@ -49,18 +49,11 @@ def load_profile_from_svg(svg_path):
     
     return normalized
 
-# Load profiles from SVG files
+# Load profile from SVG file
 ROOT = Path(__file__).resolve().parent
-FOOT_PROFILE = load_profile_from_svg(ROOT / 'foot_outline.svg')
 SHIN_PROFILE = load_profile_from_svg(ROOT / 'shin_outline.svg')
 
-# Reorder to start at heel/knee
-foot_heel_candidates = [(i, frac, height) for i, (frac, height) in enumerate(FOOT_PROFILE) 
-                        if frac < 0.05 and height < 0.2]
-if foot_heel_candidates:
-    foot_heel_idx = min(foot_heel_candidates, key=lambda x: x[1] + x[2])[0]
-    FOOT_PROFILE = FOOT_PROFILE[foot_heel_idx:] + FOOT_PROFILE[:foot_heel_idx]
-
+# Reorder to start at knee
 shin_knee_candidates = [(i, frac, height) for i, (frac, height) in enumerate(SHIN_PROFILE) 
                         if frac < 0.15 and height < 0.15]
 if shin_knee_candidates:

@@ -15,7 +15,7 @@ from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
-from profile_loader import FOOT_PROFILE, SHIN_PROFILE
+from profile_loader import SHIN_PROFILE
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -584,45 +584,6 @@ class Drawer:
             + list(reversed(edge))
         )
 
-    def kneeling_foot(
-        self, profile: BarProfile, ankle_x: float, width: float,
-    ) -> None:
-        """The foot at the front of a limb lying flat along the ground.
-
-        These kneeling legs put the whole lower limb on the floor, so the
-        letter's bottom bar has to read as one straight stroke. The foot is
-        therefore set flush with the shin rather than bent away from it: its
-        upper surface continues the bar's own profile and its sole rests on
-        the same ground line, so nothing steps above or below the bar.
-
-        The foot shape is carved out of the bottom bar as an anatomically
-        correct silhouette for a KNEELING position: the top of the foot
-        (dorsum) faces down toward the ground, and the sole faces up. The
-        carved profile shows the sole anatomy: rounded heel pad, arch
-        curving down then up, ball of foot, and toes tapering to the tip.
-        The foot interior is cut away (white), leaving only the outline
-        visible against the bar's filled body.
-        """
-        k = width / 52.0
-        ground = profile.ground
-        step = profile.step
-        run = (profile.toe_x - ankle_x) * step
-
-        def at(fraction: float) -> float:
-            return ankle_x + step * run * fraction
-
-        # Use the reordered FOOT_PROFILE which starts at the heel and forms
-        # a complete closed loop around the foot outline.
-        # Each point is (fraction_along_foot, height_from_ground).
-        
-        foot_outline = []
-        
-        # Add all points from FOOT_PROFILE
-        for frac, height in FOOT_PROFILE:
-            x = at(frac)
-            y = ground + (profile.top(x) - ground) * height
-            foot_outline.append((x, y))
-        
         # Draw the foot shape as filled geometry (not a cutout).
         # The shin has already been drawn separately and stopped before
         # the foot region, so the foot is its own filled shape.
@@ -639,8 +600,7 @@ class Drawer:
         upward, the calf muscle curves downward. The popliteal crease
         (skin fold behind the knee) is engraved as anatomical detail.
 
-        The shin is drawn as its own filled shape using SHIN_PROFILE,
-        separate from the foot which is drawn by kneeling_foot().
+        The shin is drawn as its own filled shape using SHIN_PROFILE.
         """
         k = width / 52.0
         ground = profile.ground
@@ -1796,8 +1756,6 @@ def pose(letter: str) -> Drawer:
         # Draw the shin as a separate filled shape (stops before foot region)
         # The knee is at the heel position (back of the shin)
         d.kneeling_shin(bar, 478, 52)
-        # Draw the foot as a separate filled shape
-        d.kneeling_foot(bar, 144, 52)
 
     elif letter == "K":
         # Cartwheel K: the figure balances sideways on one hand. The head lies
@@ -1943,8 +1901,7 @@ def pose(letter: str) -> Drawer:
         # Bottom bar: draw thigh and knee directly, then shin and foot separately.
         # Previously used kneeling_base() shared with E, but that doesn't use
         # the traced shin outline. Now draws thigh/knee with leg(), then shin
-        # with kneeling_shin() using traced SHIN_PROFILE, then foot with
-        # kneeling_foot() using traced FOOT_PROFILE.
+        # with kneeling_shin() using traced SHIN_PROFILE.
         bar = BarProfile(
             ground=BAR_GROUND, heel_x=246.0, arch_x=ANKLE_X, toe_x=665.0,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
@@ -1975,8 +1932,6 @@ def pose(letter: str) -> Drawer:
             d.polygon(sole + [(x, BAR_GROUND) for x, _ in reversed(sole)])
         # Draw the shin as a separate filled shape using traced SHIN_PROFILE
         d.kneeling_shin(bar, 246.0, 54)
-        # Draw the foot as a separate filled shape using traced FOOT_PROFILE
-        d.kneeling_foot(bar, ANKLE_X, 52)
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
         # settled that high, so the trunk's foot stood clear underneath the
@@ -2744,8 +2699,6 @@ def pose(letter: str) -> Drawer:
             )
         # Draw the shin as a separate filled shape (stops before foot region)
         d.kneeling_shin(bar, 200, 56)
-        # Draw the foot as a separate filled shape
-        d.kneeling_foot(bar, 200, 56)
         # Carry the limb's underside from the kneeling corner into the bar.
         #
         # Thigh and shin are separate tapered strokes that swell about their
@@ -2887,7 +2840,6 @@ def pose(letter: str) -> Drawer:
                 [(x, lo) for x, lo, _ in weld]
                 + [(x, hi) for x, _, hi in reversed(weld)]
             )
-        d.kneeling_foot(bar, 584, 56)
 
     return d
 
