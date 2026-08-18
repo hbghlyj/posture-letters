@@ -1939,75 +1939,28 @@ def pose(letter: str) -> Drawer:
                 (stem_x + sign * 44, 602), (stem_x + sign * 50, 512),
                 (stem_x + sign * 48, 428),
             ], 3.6, True)
-        # Bottom bar: E's lower prong, taken whole and turned upside down.
-        # The two letters now share one base component (``kneeling_base``)
-        # so their kneeling anatomy is defined in a single place.
-        #
-        # The flip is the point of the exercise and it is what the shape is
-        # built around, but it does invert the leg: E's prong rises into its
-        # heel serif at the right-hand end, so inverted that terminal drops
-        # instead, and the calf and breeches swap sides top to bottom.
-        #
-        # Seating it matters as much as flipping it. Registering the whole
-        # component by its lowest ink left the shin bar floating at
-        # mid-height, because after the flip the lowest ink is not the bar —
-        # it is E's thigh, which ran hip-downward and now runs down from the
-        # far side of the base. The bar is therefore registered on its own
-        # underside, measured over the run where the shin actually lies, so
-        # the stroke lands flat on the shared ground line the way every other
-        # glyph's base does. That drops the thigh past the baseline, and
-        # ``floor`` cuts it off flush there: it occupies the same column as
-        # the stem, so the trunk covers the join and nothing dips below the
-        # line the letter stands on.
-        base = kneeling_base(stem_x, hip[1])
-        # Mirror about the component's own global axis — the same one
-        # ``merge_transformed`` uses. Taking each contour about its own centre
-        # instead leaves every piece where it started and measures nothing.
-        base_ys = [y for contour, _ in base.contours for _, y in contour]
-        base_axis = min(base_ys) + max(base_ys)
-        # Register on the shin itself. ``x > 300`` was meant to name the bar,
-        # but after the flip the lowest ink past that line is not the shin —
-        # it is the heel serif, which E draws rising off the floor and which
-        # inverting turns into the component's deepest point. Seating the
-        # component on that tip parked the whole horizontal stroke 57 units
-        # in the air, leaving only the seat and the patched corner touching
-        # the ground. Naming the shin run explicitly puts the stroke that is
-        # supposed to be the bar on the baseline, the way J and Z do.
-        bar_low = min(
-            base_axis - y
-            for contour, _ in base.contours for x, y in contour
-            if 320 < x < 520
-        )
-        # Ahead of the trunk the clip follows the bar's own sole, so the
-        # inverted thigh cannot hang below the stroke and read as a spur
-        # dropping out of the knee. Behind that line it still clips to the
-        # baseline, where the trunk covers the cut.
-        merge_transformed(
-            d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
-            floor_from=stem_x + 42,
-        )
-        # Level the sole, and finish the stroke with a foot.
-        #
-        # Seating the component puts the shin's lowest point on the baseline,
-        # but the shin does not lie level: E draws the leg tapering from a
-        # deep knee to a shallow ankle, and the flip turns that taper upside
-        # down, so the underside sags away from the ground in a shallow arch
-        # — about twenty units at its worst, a quarter of the stroke's own
-        # depth — and the letter ends up balanced on the two points where the
-        # arch happens to touch. No offset can fix that, because the edge is
-        # sloped rather than displaced.
-        #
-        # Filling that crescent column by column does flatten the sole, but
-        # on its own it flattens the *whole* stroke: run out to the end of the
-        # component it swallows the ankle and buries the terminal, and L ends
-        # in a blunt slab where the other kneeling glyphs end in a foot. So
-        # the fill is stopped at the ankle, and the foot is drawn past it the
-        # way J and Z draw theirs — from a shared ``BarProfile``, whose top
-        # edge thins forward from the arch and runs out to a point at the toe.
+        # Bottom bar: draw thigh and knee directly, then shin and foot separately.
+        # Previously used kneeling_base() shared with E, but that doesn't use
+        # the traced shin outline. Now draws thigh/knee with leg(), then shin
+        # with kneeling_shin() using traced SHIN_PROFILE, then foot with
+        # kneeling_foot() using traced FOOT_PROFILE.
         bar = BarProfile(
             ground=BAR_GROUND, heel_x=246.0, arch_x=ANKLE_X, toe_x=665.0,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
+        # Draw thighs and knees (constrained by bar profile)
+        for spread, width, breeches in ((-16, 54, 62), (16, 42, 50)):
+            d.leg(
+                [
+                    (stem_x + spread * 0.4, hip[1]),
+                    (stem_x - 2 + spread * 0.5, 118),
+                    (KNEE_X + spread * 0.5, 108),
+                    (ANKLE_X + spread, 104),
+                ],
+                width, knee_index=2, breeches_width=breeches,
+                shoe_scale=0.0, bar=bar,
+            )
+        # Level the sole by filling the gap between the leg's underside and ground
         sole = []
         for index in range(49):
             x = 246.0 + (ANKLE_X - 246.0) * index / 48.0
@@ -2019,8 +1972,9 @@ def pose(letter: str) -> Drawer:
                 sole.append((x, min(lo for lo, _ in spans)))
         if sole:
             d.polygon(sole + [(x, BAR_GROUND) for x, _ in reversed(sole)])
-        # The foot is drawn by kneeling_foot() as a separate filled shape.
-        # The shin has already been drawn above and stops before the foot region.
+        # Draw the shin as a separate filled shape using traced SHIN_PROFILE
+        d.kneeling_shin(bar, 246.0, 54)
+        # Draw the foot as a separate filled shape using traced FOOT_PROFILE
         d.kneeling_foot(bar, ANKLE_X, 52)
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
