@@ -1435,7 +1435,7 @@ class Drawer:
         # Close the polygon (FOOT_PROFILE already forms a loop, but we need
         # to explicitly close it for the polygon)
         if len(foot_outline) >= 3:
-            self.polygon(foot_outline, hole=True)
+            self.polygon(foot_outline)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
