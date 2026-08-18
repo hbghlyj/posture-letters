@@ -1338,7 +1338,7 @@ class Drawer:
                 {"part": "composite_path", "segments": segments, "length": length, "points": pts}
             )
 
-    def flat_bar(self, profile: BarProfile, anchor_rise: float) -> None:
+    def flat_bar(self, profile: BarProfile, anchor_rise: float, stop_at: float = 1.0) -> None:
         """Fill the bar of a leg lying along the ground, heel to toe point.
 
         The kneeling glyphs put a whole lower limb on the floor, and the
@@ -1360,6 +1360,11 @@ class Drawer:
         heel differs: L and J turn up into a tall vertical stem, so the curve
         can start well inside it, while Z's leg runs away on a shallow
         diagonal and the curve has to start close to the bar to stay covered.
+        
+        ``stop_at`` is a fraction (0.0 to 1.0) specifying where to stop drawing
+        the bar along the heel-to-toe run. Use this to stop before the foot
+        region so the foot can be drawn separately as its own filled shape.
+        Default is 1.0 (draw all the way to the toe).
         """
         ground = profile.ground
         # How far the outline swells back past the line of the stem. Scaled
@@ -1381,10 +1386,23 @@ class Drawer:
         # the stroke, which is what the print shows.
         bulge = profile.heel_depth * 0.30
         heel = profile.heel_outline(anchor_rise, bulge)
-        edge = profile.edge()
+        # Sample the top edge only up to stop_at fraction
+        samples = int(96 * stop_at)
+        edge = [
+            (
+                profile.heel_x + profile.step * profile.toe_s * i / 96,
+                profile.top(profile.heel_x + profile.step * profile.toe_s * i / 96),
+            )
+            for i in range(samples)
+        ]
+        # Add the stopping point
+        stop_x = profile.heel_x + profile.step * profile.toe_s * stop_at
+        edge.append((stop_x, profile.top(stop_x)))
+        # Add ground point at stop location
+        edge.append((stop_x, ground))
         # One closed loop, traced the whole way round: out of the leg and down
-        # around the heel to the floor, forward along the sole to the toe
-        # point, then back along the top edge and in to close inside the limb.
+        # around the heel to the floor, forward along the sole to the stop point,
+        # then back along the top edge and in to close inside the limb.
         # The bulge is a stretch of this contour rather than a shape stuck on
         # the end of it, so it reads as the band's own rear end.
         self.polygon(
@@ -1432,10 +1450,11 @@ class Drawer:
             y = ground + (profile.top(x) - ground) * height
             foot_outline.append((x, y))
         
-        # Close the polygon (FOOT_PROFILE already forms a loop, but we need
-        # to explicitly close it for the polygon)
+        # Draw the foot shape as filled geometry (not a cutout).
+        # The shin/bar has already been drawn separately and stopped before
+        # the foot region, so the foot is its own filled shape.
         if len(foot_outline) >= 3:
-            self.polygon(foot_outline, hole=True)
+            self.polygon(foot_outline)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
@@ -2549,7 +2568,7 @@ def pose(letter: str) -> Drawer:
         # It is not carried further than this: the same move keeps flattening
         # the flank, but it does so by eating the calcaneus, and past here the
         # heel stops reading as a heel at specimen scale.
-        d.flat_bar(bar, anchor_rise=54.0)
+        d.flat_bar(bar, anchor_rise=54.0, stop_at=0.3)
         d.kneeling_foot(bar, 144, 52)
 
     elif letter == "K":
@@ -2773,16 +2792,8 @@ def pose(letter: str) -> Drawer:
                 sole.append((x, min(lo for lo, _ in spans)))
         if sole:
             d.polygon(sole + [(x, BAR_GROUND) for x, _ in reversed(sole)])
-        # The foot itself: ankle to toe point, sole on the same ground line so
-        # it continues the bar rather than stepping out of it. The heel end is
-        # already the shin behind it, so only the forward span is filled here.
-        toe_edge = [
-            point for point in bar.edge(64) if point[0] >= ANKLE_X - 1.0
-        ]
-        if toe_edge:
-            d.polygon(
-                toe_edge + [(x, BAR_GROUND) for x, _ in reversed(toe_edge)]
-            )
+        # The foot is drawn by kneeling_foot() as a separate filled shape.
+        # The shin has already been drawn above and stops before the foot region.
         d.kneeling_foot(bar, ANKLE_X, 52)
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
@@ -3549,7 +3560,7 @@ def pose(letter: str) -> Drawer:
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0, bar=bar,
             )
-        d.flat_bar(bar, anchor_rise=0.0)
+        d.flat_bar(bar, anchor_rise=0.0, stop_at=0.3)
         # Carry the limb's underside from the kneeling corner into the bar.
         #
         # Thigh and shin are separate tapered strokes that swell about their
