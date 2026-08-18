@@ -191,38 +191,49 @@ class BarProfile:
         # Work in distance-from-heel so both directions share one curve.
         self.arch_s = abs(arch_x - heel_x) or 1.0
         self.toe_s = abs(toe_x - heel_x) or 1.0
-        h0 = self.arch_s
         h1 = max(1e-6, self.toe_s - self.arch_s)
-        m0 = (arch_depth - heel_depth) / h0
         m1 = (0.0 - arch_depth) / h1
-        # Fritsch-Carlson tangents: the harmonic weighting at the arch is what
-        # keeps the curve monotone across the join instead of overshooting
-        # into a hollow just behind the toes.
-        if m0 * m1 > 0:
-            w1, w2 = 2 * h1 + h0, h1 + 2 * h0
-            arch_t = (w1 + w2) / (w1 / m0 + w2 / m1)
-        else:
-            arch_t = 0.0
-        self._spans = (
-            (0.0, h0, heel_depth, arch_depth, 0.0, arch_t),
-            (h0, h1, arch_depth, 0.0, arch_t, m1),
-        )
+        self._arch_span = (h1, m1)
 
     @property
     def heel_top(self) -> float:
         return self.ground + self.heel_depth
 
+    # The kneeling body sits over the back of its own bar, so the first
+    # stretch of the run is buried behind the stem, thigh and knee: in L
+    # roughly a fifth of the heel-to-arch distance never shows at all. The
+    # depth is therefore held at the full heel value across that stretch, so
+    # the deepest part of the band is still at full depth at the moment it
+    # emerges into daylight. Spending the taper inside the hidden zone was
+    # what made "deepest at the heel" impossible to see.
+    HEEL_HOLD = 0.22
+    # How the remaining drop is distributed. Above 1 it is front-loaded —
+    # steep as it leaves the heel, flattening into the arch — which pulls the
+    # band well clear of the calf before the muscle belly arrives. A straight
+    # ease put the profile's own depth at its highest right where the calf
+    # rises, so the two met and the bar read as uniform.
+    HEEL_FALLOFF = 2.2
+
     def depth(self, x: float) -> float:
         s = min(self.toe_s, max(0.0, (x - self.heel_x) * self.step))
-        s0, h, d0, d1, t0, t1 = self._spans[0 if s <= self._spans[1][0] else 1]
-        u = (s - s0) / h
+        if s <= self.arch_s:
+            plateau = self.arch_s * self.HEEL_HOLD
+            if s <= plateau:
+                return self.heel_depth
+            u = (s - plateau) / max(1e-6, self.arch_s - plateau)
+            fall = 1.0 - (1.0 - u) ** self.HEEL_FALLOFF
+            return self.heel_depth + (self.arch_depth - self.heel_depth) * fall
+        # Arch to toe: a Hermite run that leaves the arch level, so the
+        # handover from the span above shows no corner, and lands on the
+        # baseline at the toe point.
+        h1, m1 = self._arch_span
+        u = (s - self.arch_s) / h1
         u2 = u * u
         u3 = u2 * u
         return (
-            (2 * u3 - 3 * u2 + 1) * d0
-            + (u3 - 2 * u2 + u) * h * t0
-            + (-2 * u3 + 3 * u2) * d1
-            + (u3 - u2) * h * t1
+            (2 * u3 - 3 * u2 + 1) * self.arch_depth
+            + (-2 * u3 + 3 * u2) * 0.0
+            + (u3 - u2) * h1 * m1
         )
 
     def top(self, x: float) -> float:
@@ -335,14 +346,25 @@ class BarProfile:
         stays governed entirely by the band.
         """
         travelled = (x - self.heel_x) * self.step
-        # Full allowance back over the calf, tapering away across the last
-        # third of the run up to the ankle.
-        fade_from = self.arch_s * 0.62
-        if travelled <= fade_from:
-            return self.SWELL_ALLOWANCE
-        span = max(1e-6, self.arch_s - fade_from)
-        u = min(1.0, (travelled - fade_from) / span)
-        ease = 1.0 - u * u * (3.0 - 2.0 * u)
+        # The allowance is a window centred on the calf belly, not a blanket
+        # over the whole rear half of the bar. It ramps in behind the muscle,
+        # is full across it, and eases out before the ankle.
+        #
+        # Both edges matter. Without the fade-out a squared-off stroke tip
+        # near the foot pokes through as a step; without the fade-in the knee
+        # joint mass and the breeches cuff — which sit just behind the calf —
+        # keep their full height while the band tapers past them, and the
+        # outline steps where those shapes end.
+        centre = self.arch_s * 0.66
+        rise = self.arch_s * 0.16
+        fall = self.arch_s * 0.20
+        if travelled <= centre - rise or travelled >= centre + fall:
+            return 0.0
+        if travelled < centre:
+            u = (travelled - (centre - rise)) / rise
+        else:
+            u = 1.0 - (travelled - centre) / fall
+        ease = u * u * (3.0 - 2.0 * u)
         return self.SWELL_ALLOWANCE * ease
 
     def cap(self, point: Point, tangent: Point, width: float) -> float:
@@ -412,13 +434,27 @@ class Drawer:
             hole,
         )
 
-    def ellipse(self, x: float, y: float, rx: float, ry: float, angle: float = 0, hole: bool = False) -> None:
+    def ellipse(
+        self, x: float, y: float, rx: float, ry: float, angle: float = 0,
+        hole: bool = False, cap: "BarProfile | None" = None,
+    ) -> None:
         c, s = math.cos(angle), math.sin(angle)
         pts = []
         for i in range(20):
             t = 2 * math.pi * i / 20
             px, py = rx * math.cos(t), ry * math.sin(t)
             pts.append((x + px * c - py * s, y + px * s + py * c))
+        if cap is not None:
+            # Joint masses on a limb lying along the floor are part of the
+            # bar's silhouette, so they answer to its top edge like the
+            # strokes do. Without this a knee ball or breeches cuff keeps its
+            # full height while the band tapers past it, and the outline
+            # steps where the ellipse ends.
+            pts = [
+                (px, min(py, cap.top(px) + cap.headroom(px)))
+                if cap.ceiling(px) is not None else (px, py)
+                for px, py in pts
+            ]
         self.polygon(pts, hole)
 
     def path(
@@ -656,10 +692,10 @@ class Drawer:
             self.circle(knee[0], knee[1], joint_r, n=24)
         else:
             bx, by = bx / bn, by / bn
-            cap = (knee[0] + bx * joint_r * 0.16, knee[1] + by * joint_r * 0.16)
+            centre = (knee[0] + bx * joint_r * 0.16, knee[1] + by * joint_r * 0.16)
             self.ellipse(
-                cap[0], cap[1], joint_r * 0.98, joint_r * 1.04,
-                math.atan2(by, bx),
+                centre[0], centre[1], joint_r * 0.98, joint_r * 1.04,
+                math.atan2(by, bx), cap=bar,
             )
 
         next_point = lower_profile[1]
@@ -668,7 +704,8 @@ class Drawer:
         nx, ny = -dy / length, dx / length
         cuff_angle = math.atan2(dy, dx) + math.pi / 2
         self.ellipse(
-            knee[0], knee[1], breeches * 0.43, max(6.0, breeches * 0.105), cuff_angle
+            knee[0], knee[1], breeches * 0.43, max(6.0, breeches * 0.105),
+            cuff_angle, cap=bar,
         )
         # A short inset hem line defines the below-knee end without severing it.
         self.cut_path([
