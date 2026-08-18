@@ -78,13 +78,11 @@ The bar itself is **one band** rather than a run of separately swelling body par
 
 **L**'s bottom bar is **E**'s lower prong taken whole and turned upside down. The two letters share one base component, `kneeling_base()`, so the kneeling anatomy — thighs, grounded knees, flat shins, heel serif — is defined in a single place and E is unchanged by the refactor. `merge_transformed()` copies that component into a glyph, mirroring it about its own vertical centre and recomputing contour winding, since mirroring reverses signed area and an untransformed contour would punch a hole where it should fill.
 
-**This inversion has a known cost and is a deliberate, requested choice.** E's prong is drawn hip-downward and rises into its heel serif at the right-hand end, so inverting it:
+**Seating it matters as much as flipping it.** Registering the component by its lowest ink left the shin bar floating at mid-height with the legs continuing to the floor beneath it, because after the flip the lowest ink is not the bar — it is E's thigh, which ran hip-downward and now runs down from the far side of the base. The bar is therefore registered on **its own underside**, measured over the run where the shin actually lies, so the stroke lands flat on the shared ground line like every other glyph's base. L's hip drops to 196 so the trunk meets that stroke instead of stopping short and leaving the letter in two disconnected pieces.
 
-- drops that terminal instead of raising it, removing L's bottom-right corner serif;
-- swaps the calf and breeches top-to-bottom, so the muscle reads upside down;
-- turns E's vertical thigh into a column that hangs from the top of the base down to the floor. That column is intrinsic to the component — the thigh runs from the hip at y=400 to the knee at y=118 — so no amount of re-seating removes it.
+Seating the bar on the floor pushes the inverted thigh past the baseline, so `merge_transformed()` takes a `floor` argument that clips the component to the ground line: vertices below it are pulled onto it and a contour lying wholly beneath it is dropped rather than drawn as a degenerate slab. The thigh occupies the same column as the stem, so the trunk covers the join. Nothing dips below the line the letter stands on, and L keeps yMin 72.
 
-The net effect is that the bar sits at mid-height with limbs continuing below it, and at text sizes **L reads closer to an F or H than an L**. The bottom edge varies 214 units against the flat band's 0.0. L keeps yMin 72, so it still sits on the shared baseline.
+The inversion still carries its intrinsic costs: E's prong rises into its heel serif at the right-hand end, so inverted that terminal drops instead of rising, and the calf and breeches read upside down.
 
 The previous construction — a single flat `BarProfile` band with a heel bulge and forward taper, described below — remains in the history at commit `72d5663` and can be restored with `git revert`.
 

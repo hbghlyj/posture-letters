@@ -944,6 +944,7 @@ def kneeling_base(stem_x: float, hip_y: float) -> Drawer:
 def merge_transformed(
     target: Drawer, source: Drawer,
     flip: bool = False, dx: float = 0.0, dy: float = 0.0,
+    floor: float | None = None,
 ) -> None:
     """Copy a component into a glyph, optionally mirrored about its own axis.
 
@@ -953,6 +954,14 @@ def merge_transformed(
     mirroring reverses signed area, and a contour left as-is would punch a
     hole where it should fill. Tracked anatomy follows the same transform so
     the audit still measures the limb where it now sits.
+
+    ``floor`` clips the transformed component to a ground line. Seating an
+    inverted limb by its working edge can leave another part of it hanging
+    past the baseline — the flip turns a thigh that ran downward into one
+    that runs down from the far side — and a glyph may not dip below the
+    line it stands on. Vertices below the floor are pulled onto it, so the
+    overhang is cut off flush instead of the whole component being lifted
+    and the working edge floating clear of the ground.
     """
     ys = [y for contour, _ in source.contours for _, y in contour]
     if not ys:
@@ -963,8 +972,17 @@ def merge_transformed(
         x, y = point
         return (x + dx, (axis - y if flip else y) + dy)
 
+    def clip(point: Point) -> Point:
+        x, y = point
+        return (x, y) if floor is None else (x, max(y, floor))
+
     for contour, hole in source.contours:
-        target.polygon([move(p) for p in contour], hole)
+        moved = [clip(move(p)) for p in contour]
+        # A contour lying wholly under the floor collapses onto the line and
+        # would emit a degenerate slab; drop it rather than draw a sliver.
+        if floor is not None and max(y for _, y in moved) <= floor + 1e-6:
+            continue
+        target.polygon(moved, hole)
     for entry in source.anatomy:
         moved = dict(entry)
         if "points" in moved:
@@ -1678,8 +1696,11 @@ def pose(letter: str) -> Drawer:
         # trunk lands on the component instead of running past it to the
         # floor. E's prong is drawn hip-down, and inverting it puts those
         # thigh tops at the upper edge of the base rather than the lower.
-        hip = (stem_x, 372)
-        d.torso([hip, (stem_x, 507), (stem_x, 642)], 84, False)
+        # The hip sits down on the bar now that the base is seated on the
+        # floor, so the trunk meets the stroke instead of stopping short of
+        # it and leaving the letter in two disconnected pieces.
+        hip = (stem_x, 196)
+        d.torso([hip, (stem_x, 419), (stem_x, 642)], 84, False)
         d.head(stem_x - 2, 706, -1)
         # Arms hang along the sides, carried just clear of the trunk so the
         # shoulder-to-hand run stays legible against the stem.
@@ -1710,16 +1731,32 @@ def pose(letter: str) -> Drawer:
         # The flip is the point of the exercise and it is what the shape is
         # built around, but it does invert the leg: E's prong rises into its
         # heel serif at the right-hand end, so inverted that terminal drops
-        # instead, and the calf and breeches swap sides top to bottom. The
-        # component is therefore re-seated so its lowest ink — after the
-        # flip, the old upper outline — rests exactly on the shared ground
-        # line, keeping L on the same baseline as every other glyph.
+        # instead, and the calf and breeches swap sides top to bottom.
+        #
+        # Seating it matters as much as flipping it. Registering the whole
+        # component by its lowest ink left the shin bar floating at
+        # mid-height, because after the flip the lowest ink is not the bar —
+        # it is E's thigh, which ran hip-downward and now runs down from the
+        # far side of the base. The bar is therefore registered on its own
+        # underside, measured over the run where the shin actually lies, so
+        # the stroke lands flat on the shared ground line the way every other
+        # glyph's base does. That drops the thigh past the baseline, and
+        # ``floor`` cuts it off flush there: it occupies the same column as
+        # the stem, so the trunk covers the join and nothing dips below the
+        # line the letter stands on.
         base = kneeling_base(stem_x, hip[1])
-        flipped_low = min(
-            (min(y for _, y in c) + max(y for _, y in c)) - y
-            for c, _ in base.contours for _, y in c
+        # Mirror about the component's own global axis — the same one
+        # ``merge_transformed`` uses. Taking each contour about its own centre
+        # instead leaves every piece where it started and measures nothing.
+        base_ys = [y for contour, _ in base.contours for _, y in contour]
+        base_axis = min(base_ys) + max(base_ys)
+        bar_low = min(
+            base_axis - y
+            for contour, _ in base.contours for x, y in contour if x > 300
         )
-        merge_transformed(d, base, flip=True, dy=BAR_GROUND - flipped_low)
+        merge_transformed(
+            d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
+        )
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
