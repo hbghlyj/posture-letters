@@ -997,6 +997,38 @@ def kneeling_base(stem_x: float, hip_y: float) -> Drawer:
     return d
 
 
+def _column_spans(
+    contours: list[tuple[list[Point], bool]], x: float,
+) -> list[tuple[float, float]]:
+    """Vertical runs of ink at ``x`` under the nonzero fill rule.
+
+    The same scanline rule the renderer and the proof tools use, so a shape
+    fitted to a stroke's edge with this lands where the glyph actually has
+    ink rather than where its control points happen to sit.
+    """
+    crossings: list[tuple[float, int]] = []
+    for polygon, _ in contours:
+        count = len(polygon)
+        for index in range(count):
+            (x1, y1), (x2, y2) = polygon[index], polygon[(index + 1) % count]
+            if x1 == x2:
+                continue
+            if (x1 <= x < x2) or (x2 <= x < x1):
+                t = (x - x1) / (x2 - x1)
+                crossings.append((y1 + (y2 - y1) * t, 1 if x2 > x1 else -1))
+    crossings.sort()
+    spans: list[tuple[float, float]] = []
+    winding, start = 0, 0.0
+    for y, direction in crossings:
+        previous = winding
+        winding += direction
+        if previous == 0 and winding != 0:
+            start = y
+        elif previous != 0 and winding == 0:
+            spans.append((start, y))
+    return spans
+
+
 def merge_transformed(
     target: Drawer, source: Drawer,
     flip: bool = False, dx: float = 0.0, dy: float = 0.0,
@@ -1865,6 +1897,32 @@ def pose(letter: str) -> Drawer:
             d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
             floor_from=stem_x + 42,
         )
+        # Level the sole. Seating the component puts the shin's lowest point
+        # on the baseline, but the shin does not lie level: E draws the leg
+        # tapering from a deep knee to a shallow ankle, and the flip turns
+        # that taper upside down, so the underside sags away from the ground
+        # in a shallow arch — about twenty units at its worst, a quarter of
+        # the stroke's own depth — and the letter ends up balanced on the two
+        # points where the arch happens to touch. No offset can fix that,
+        # because the edge is sloped rather than displaced.
+        #
+        # This fills the crescent between that sagging edge and the ground,
+        # following the stroke's own underside column by column so the leg
+        # keeps the silhouette E drew and simply gains the flat sole it
+        # should have been resting on. Only the shin run is filled: the seat
+        # behind it already reaches the floor, and the heel serif ahead of it
+        # is meant to lift clear as the letter's bottom-right terminal.
+        sole = []
+        for index in range(65):
+            x = 246.0 + (528.0 - 246.0) * index / 64.0
+            spans = [
+                span for span in _column_spans(d.contours, x)
+                if span[0] < 260.0
+            ]
+            if spans:
+                sole.append((x, min(lo for lo, _ in spans)))
+        if sole:
+            d.polygon(sole + [(x, BAR_GROUND) for x, _ in reversed(sole)])
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
         # settled that high, so the trunk's foot stood clear underneath the
