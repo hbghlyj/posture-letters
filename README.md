@@ -74,6 +74,20 @@ The bar itself is **one band** rather than a run of separately swelling body par
 
 `Drawer.kneeling_foot()` sets the foot **flush with the shin**: its upper surface continues the bar's own profile and its sole rests on the same ground line, so nothing steps above or below the bar. Within that band it keeps a real foot's shape. The heel is no longer built here — it is the rear end of the bar itself, so the weight-bearing mass belongs to the band's contour instead of being a lump stuck onto it. This replaces the former engraved droplet calcaneus, which could not render reliably: at the ankle the levelled shin base, the foot taper and the sole all overlap, and under the nonzero fill rule a reverse contour is cancelled wherever two or more filled shapes stack. Building the heel into the silhouette sidesteps that problem entirely. From the arch forward the outline simply runs on, sloping evenly down and **thinning to a point where the toe tip meets the floor** (1.2 units deep three units short of the tip). Engraved ankle crease, hollow arch and two toe clefts model the detail; they are spaced along the foot's own run so they stay in proportion however long it is, and all sit forward of the leg strokes, where a cut will actually render. All three glyphs share the construction and land on the same baseline (yMin 72).
 
+## L's base: E's lower prong, inverted
+
+**L**'s bottom bar is **E**'s lower prong taken whole and turned upside down. The two letters share one base component, `kneeling_base()`, so the kneeling anatomy — thighs, grounded knees, flat shins, heel serif — is defined in a single place and E is unchanged by the refactor. `merge_transformed()` copies that component into a glyph, mirroring it about its own vertical centre and recomputing contour winding, since mirroring reverses signed area and an untransformed contour would punch a hole where it should fill.
+
+**This inversion has a known cost and is a deliberate, requested choice.** E's prong is drawn hip-downward and rises into its heel serif at the right-hand end, so inverting it:
+
+- drops that terminal instead of raising it, removing L's bottom-right corner serif;
+- swaps the calf and breeches top-to-bottom, so the muscle reads upside down;
+- turns E's vertical thigh into a column that hangs from the top of the base down to the floor. That column is intrinsic to the component — the thigh runs from the hip at y=400 to the knee at y=118 — so no amount of re-seating removes it.
+
+The net effect is that the bar sits at mid-height with limbs continuing below it, and at text sizes **L reads closer to an F or H than an L**. The bottom edge varies 214 units against the flat band's 0.0. L keeps yMin 72, so it still sits on the shared baseline.
+
+The previous construction — a single flat `BarProfile` band with a heel bulge and forward taper, described below — remains in the history at commit `72d5663` and can be restored with `git revert`.
+
 ## Historical construction notes
 
 - **A:** rebuilt as a two-person letter after the Mitelli engraving. A single folded body could not carry the shape at believable proportions, so two mirrored figures lean toward one another, each head turned inward so the pair look at each other across the letter, both bare-headed because the two hat brims would collide at the apex: each raises the inner arm straight to a sharp apex where the flat hands press together, and each lower arm bends gently at the elbow so the two hands clasp at hip level, forming the crossbar. The clasp uses H's treatment — a solid mass split by one thin seam — rather than a punched circle, which read as a ring rather than gripped hands. Each figure stands on a straight weight-bearing outer leg with the inner leg set slightly forward and softly bent, the pair kept close together as on H so each body has a tight two-leg base rather than a splayed stance, and both shoes turning outward as H's do.

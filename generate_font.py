@@ -914,6 +914,66 @@ class Drawer:
         return " ".join(bits)
 
 
+def kneeling_base(stem_x: float, hip_y: float) -> Drawer:
+    """E's lower prong: thighs to grounded knees, shins flat, heel serif.
+
+    Factored out so E and L build their base from one definition rather than
+    two parallel copies. It is drawn in E's own coordinates, keyed off the
+    stem, and returned as a standalone Drawer so a caller can transform the
+    whole component — L flips it — before merging it into the glyph.
+    """
+    d = Drawer()
+    knee = (stem_x - 2, 118)
+    for spread, width, breeches in ((-16, 54, 62), (16, 42, 50)):
+        d.leg(
+            [
+                (stem_x + spread * 0.4, hip_y),
+                (knee[0] + spread * 0.5, knee[1]),
+                (548 + spread, 104),
+            ],
+            width, knee_index=1, breeches_width=breeches, shoe_scale=0.0,
+        )
+    # Heel serif: the ankles flex up at the back of the base stroke and
+    # taper to a sharp point, the bottom-right terminal of the letter.
+    d.circle(552, 114, 26, n=24)
+    d.tapered_path([(552, 108), (568, 150), (580, 194)], [48, 38, 20], True)
+    d.cut_path([(534, 128), (566, 136)], 3.4, False)
+    return d
+
+
+def merge_transformed(
+    target: Drawer, source: Drawer,
+    flip: bool = False, dx: float = 0.0, dy: float = 0.0,
+) -> None:
+    """Copy a component into a glyph, optionally mirrored about its own axis.
+
+    ``flip`` turns the component upside down about its own vertical centre, so
+    it keeps its position rather than swinging away. Contours are re-emitted
+    through ``polygon`` so winding is recomputed for the new orientation —
+    mirroring reverses signed area, and a contour left as-is would punch a
+    hole where it should fill. Tracked anatomy follows the same transform so
+    the audit still measures the limb where it now sits.
+    """
+    ys = [y for contour, _ in source.contours for _, y in contour]
+    if not ys:
+        return
+    axis = min(ys) + max(ys)
+
+    def move(point: Point) -> Point:
+        x, y = point
+        return (x + dx, (axis - y if flip else y) + dy)
+
+    for contour, hole in source.contours:
+        target.polygon([move(p) for p in contour], hole)
+    for entry in source.anatomy:
+        moved = dict(entry)
+        if "points" in moved:
+            moved["points"] = [move(p) for p in moved["points"]]  # type: ignore[arg-type]
+        if "center" in moved:
+            moved["center"] = move(moved["center"])  # type: ignore[arg-type]
+        target.anatomy.append(moved)
+
+
 def pose(letter: str) -> Drawer:
     d = Drawer()
 
@@ -1221,19 +1281,9 @@ def pose(letter: str) -> Drawer:
         d.ellipse(482, bar_y, 17, 18, 0.0)
         d.cut_path([(464, bar_y - 16), (464, bar_y + 16)], 3.4, False)
         # Lower prong: the thighs drop to the knees at the front, and from the
-        # knees the shins lie flat along the ground running right.
-        knee = (stem_x - 2, 118)
-        for spread, width, breeches in ((-16, 54, 62), (16, 42, 50)):
-            d.leg(
-                [(stem_x + spread * 0.4, hip_y), (knee[0] + spread * 0.5, knee[1]),
-                 (548 + spread, 104)],
-                width, knee_index=1, breeches_width=breeches, shoe_scale=0.0,
-            )
-        # Heel serif: the ankles flex up at the back of the base stroke and
-        # taper to a sharp point, the bottom-right terminal of the letter.
-        d.circle(552, 114, 26, n=24)
-        d.tapered_path([(552, 108), (568, 150), (580, 194)], [48, 38, 20], True)
-        d.cut_path([(534, 128), (566, 136)], 3.4, False)
+        # knees the shins lie flat along the ground running right, finishing
+        # in the upward heel serif. L reuses this same component.
+        merge_transformed(d, kneeling_base(stem_x, hip_y))
     elif letter == "F":
         # Upright F built from both arms. Head, torso and two tightly parallel
         # legs make the vertical trunk; the near arm reaches straight out from
@@ -1624,8 +1674,12 @@ def pose(letter: str) -> Drawer:
         # equal in a real leg, and the over-long torso is brought back toward
         # the font's baseline at the same time.
         stem_x = 208
-        hip = (stem_x, 400)
-        d.torso([hip, (stem_x, 521), (stem_x, 642)], 84, False)
+        # The hip sits where the flipped base's thigh tops now are, so the
+        # trunk lands on the component instead of running past it to the
+        # floor. E's prong is drawn hip-down, and inverting it puts those
+        # thigh tops at the upper edge of the base rather than the lower.
+        hip = (stem_x, 372)
+        d.torso([hip, (stem_x, 507), (stem_x, 642)], 84, False)
         d.head(stem_x - 2, 706, -1)
         # Arms hang along the sides, carried just clear of the trunk so the
         # shoulder-to-hand run stays legible against the stem.
@@ -1649,32 +1703,23 @@ def pose(letter: str) -> Drawer:
                 (stem_x + sign * 44, 602), (stem_x + sign * 50, 512),
                 (stem_x + sign * 48, 428),
             ], 3.6, True)
-        # The knees turn forward and bend right through: thighs drop from the
-        # hips and the whole lower body pivots into the horizontal plane, so
-        # shins, ankles and feet lie along the floor as the bottom bar.
+        # Bottom bar: E's lower prong, taken whole and turned upside down.
+        # The two letters now share one base component (``kneeling_base``)
+        # so their kneeling anatomy is defined in a single place.
         #
-        # That bar is one band rather than a run of separately swelling body
-        # parts: its sole is a single ground line and its top edge is the
-        # profile, so the stroke is completely flat. The rear end under the
-        # stem is the heel, the depth thins forward through the arch, and the
-        # foot's own outline carries the taper out to a point at the toe.
-        bar = BarProfile(
-            ground=BAR_GROUND, heel_x=190, arch_x=538, toe_x=664,
-            heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
+        # The flip is the point of the exercise and it is what the shape is
+        # built around, but it does invert the leg: E's prong rises into its
+        # heel serif at the right-hand end, so inverted that terminal drops
+        # instead, and the calf and breeches swap sides top to bottom. The
+        # component is therefore re-seated so its lowest ink — after the
+        # flip, the old upper outline — rests exactly on the shared ground
+        # line, keeping L on the same baseline as every other glyph.
+        base = kneeling_base(stem_x, hip[1])
+        flipped_low = min(
+            (min(y for _, y in c) + max(y for _, y in c)) - y
+            for c, _ in base.contours for _, y in c
         )
-        for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
-            d.leg(
-                [
-                    (stem_x + spread * 0.5, hip[1]),
-                    (stem_x + spread, 126),
-                    (382 + spread * 0.30, 112),
-                    (538 + spread * 0.20, 112),
-                ],
-                width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar,
-            )
-        d.flat_bar(bar, anchor_rise=34.0)
-        d.kneeling_foot(bar, 538, 52)
+        merge_transformed(d, base, flip=True, dy=BAR_GROUND - flipped_low)
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
