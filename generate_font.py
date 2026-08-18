@@ -2593,7 +2593,16 @@ def pose(letter: str) -> Drawer:
         for spread, width, breeches in ((-20, 56, 66), (18, 46, 54)):
             d.leg(
                 [
-                    (knee[0] + spread * 0.4, knee[1] + spread * 0.5),
+                    # Both thighs start from inside the torso's own end cap
+                    # rather than from a point offset along the spread. Offset
+                    # starts put the two strokes 19 units apart at the corner,
+                    # and because a tapered stroke is at its thinnest where it
+                    # begins, neither reached the other: a hairline of white
+                    # ran between them and on into the bar, which read as a
+                    # seam splitting the diagonal from the base. Starting both
+                    # at the knee buries the join under the cap, where the
+                    # nonzero fill merges the strokes into one mass.
+                    (knee[0], knee[1]),
                     (330 + spread, 118),
                     (430 + spread * 0.30, 112),
                     (584 + spread * 0.20, 112),
@@ -2602,6 +2611,29 @@ def pose(letter: str) -> Drawer:
                 shoe_scale=0.0, bar=bar,
             )
         d.flat_bar(bar, anchor_rise=0.0)
+        # Close the corner between the diagonal and the bar. The thighs leave
+        # the knee as tapered strokes and the band's heel curve rises to full
+        # depth only over the first thirty units or so, so across the join the
+        # two never quite met: a hairline of white ran from under the torso's
+        # cap out into the bar and read as a seam splitting the letter's
+        # diagonal from its base. This wedge spans exactly that run — from
+        # inside the cap to where the band is already at depth — so the
+        # silhouette closes. It is bounded above by the thigh and below by the
+        # band, both of which are drawn here, so it adds no new outline.
+        # The fill is a thin ribbon laid along the seam itself, not a block
+        # filling the corner: its upper edge tracks the torso's underside as
+        # that climbs away on the diagonal, and its lower edge runs a short
+        # distance beneath, just far enough to reach the thighs and the band.
+        # A wedge anchored down at the ground line instead swallows the open
+        # counter and squares off the corner, which is the letter's shape
+        # rather than the defect.
+        upper, lower = [], []
+        for i in range(17):
+            x = knee[0] + (300 - knee[0]) * i / 16.0
+            spine = knee[1] + (x - knee[0]) * 1.4483
+            upper.append((x, spine + 6))
+            lower.append((x, bar.top(x) - 4))
+        d.polygon(upper + lower[::-1])
         d.kneeling_foot(bar, 584, 56)
 
     return d

@@ -96,7 +96,7 @@ Three defects introduced by the shared base/`BarProfile` restructuring. All thre
 
 **Z — bottom bar thinning.** The band was anchored at `heel_x=316`, seventy units ahead of where the torso actually lands. Between the kneeling corner and the band's start the bar was carried only by the tapering leg strokes: it necked to **35 units** against the band's 74 and its sole rode up to y=120 instead of resting on the floor. Starting the band at the corner (`heel_x=266`) fills that run — minimum thickness over the flat section is now 63.7 units on a dead-flat sole.
 
-The open counter between Z's diagonal and its bar is *not* part of this fix: it is present in the pre-restructuring geometry too, and closing it would weld the leg to the torso.
+**Z — seam at the knee.** Separately from the thinning above, a hairline of white ran from under the torso's end cap out into the bar, splitting the diagonal from the base. Three causes stacked: the two thighs started from points offset along the spread, leaving them 19 units apart at the corner where a tapered stroke is thinnest; the band's heel curve reaches full depth only over its first thirty units; and the torso's underside climbs away on the diagonal. Both thighs now start from inside the torso's own end cap, and a thin ribbon is laid along the seam — upper edge tracking the spine, lower edge on the band — closing it at every column. The ribbon is deliberately *not* a wedge anchored to the ground line: that fills the letter's open counter and squares off the corner, which is the shape rather than the defect.
 
 ## Historical construction notes
 
