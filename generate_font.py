@@ -339,12 +339,46 @@ class Drawer:
         )
 
         # Thigh and shin are separate tapered strokes with flat ends, so at a
-        # bent knee their two square ends leave a sharp beveled wedge. A round
-        # joint mass at the knee point fills that wedge, giving the outline the
+        # bent knee their two square ends leave a sharp beveled wedge. A joint
+        # mass at the knee point fills that wedge and gives the outline the
         # continuous curve of a real knee instead of a blocky corner.
+        #
+        # A plain circle sized to the widest limb overfills a shallow bend: it
+        # protrudes past both strokes and the knee reads as a ball stuck on
+        # the leg. How much fill the bevel actually needs depends on the angle
+        # of the bend, so the mass is sized from that angle and drawn as an
+        # ellipse aligned to the limb — long along the leg, tight across it —
+        # so it swells over the kneecap without bulging out sideways.
         knee = pts[knee_index]
-        joint_r = max(width, breeches * 0.82) * 0.52
-        self.circle(knee[0], knee[1], joint_r, n=24)
+        before = self.polyline_point(upper, 0.86)
+        after = lower_profile[1]
+        v1 = (before[0] - knee[0], before[1] - knee[1])
+        v2 = (after[0] - knee[0], after[1] - knee[1])
+        n1 = math.hypot(*v1) or 1.0
+        n2 = math.hypot(*v2) or 1.0
+        cosine = (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)
+        bend = math.acos(max(-1.0, min(1.0, cosine)))
+        # A straight leg (bend = pi) needs nothing; a right angle needs a mass
+        # about as wide as the limb. Half the exterior angle drives the fill.
+        fill = math.sin(max(0.0, (math.pi - bend)) * 0.5)
+        limb = max(width, breeches * 0.82)
+        joint_r = limb * (0.40 + 0.24 * fill)
+        # The kneecap sits on the outside of the bend, so the mass is offset
+        # along the outward bisector and its long axis runs across the leg,
+        # square to that bisector: it swells over the joint the way a knee
+        # does without ballooning out to either side of the limb.
+        bx = -(v1[0] / n1 + v2[0] / n2)
+        by = -(v1[1] / n1 + v2[1] / n2)
+        bn = math.hypot(bx, by)
+        if bn < 1e-6:
+            self.circle(knee[0], knee[1], joint_r, n=24)
+        else:
+            bx, by = bx / bn, by / bn
+            cap = (knee[0] + bx * joint_r * 0.16, knee[1] + by * joint_r * 0.16)
+            self.ellipse(
+                cap[0], cap[1], joint_r * 0.98, joint_r * 1.04,
+                math.atan2(by, bx),
+            )
 
         next_point = lower_profile[1]
         dx, dy = next_point[0] - knee[0], next_point[1] - knee[1]
