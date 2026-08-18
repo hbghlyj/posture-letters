@@ -247,29 +247,71 @@ class Drawer:
         # where the Achilles runs up into the shin. The profile is
         # deliberately asymmetrical: the back face bulges well out behind the
         # ankle while the front face runs much straighter into the instep.
-        heel_c = (back + sign * 15 * k, (ground + heel_top) * 0.5)
-        depth = heel_top - ground
-        # The bone is tucked under the shin's own outline: its tip stops just
-        # below that edge, so it tapers away into the limb rather than
-        # breaking through the top of the bar as a spike. Each leg of a pair
-        # is a different width, so this is measured against the shin rather
-        # than fixed.
-        heel_h = (shin_top - ground) * 0.90
-        rear = 17.0 * k
-        front = 10.5 * k
-        left: list[Point] = []
-        right: list[Point] = []
-        for i in range(15):
-            u = i / 14.0
-            y = ground + heel_h * u
-            fall = (1.0 - u)
-            # Round off the very bottom so the bone curves onto the sole
-            # instead of ending in two square corners.
-            base = min(1.0, 0.46 + u / 0.15)
-            left.append((heel_c[0] - sign * rear * (fall ** 0.55) * base, y))
-            right.append((heel_c[0] + sign * front * (fall ** 1.15) * base, y))
-        # Closing at a single shared point makes the top a true sharp tip.
-        self.polygon(left + list(reversed(right)))
+        #
+        # The bone lies inside the ankle and the bar around it has to stay
+        # flat, so a filled mass would be invisible here. It is engraved
+        # instead, as a closed ring: the droplet is punched as a reverse
+        # contour and a slightly smaller copy of the same droplet is filled
+        # back inside it, leaving only its outline cut into the ink.
+        # Sitting the bone a little above the ground line keeps its rounded
+        # base inside the ink, so it never dips through the flat sole.
+        heel_c = (back + sign * 22 * k, ground + 15 * k)
+        # Tall enough that the bulge clears the shin's upper edge and the
+        # bone is actually seen, but built from a smooth curve so it reads as
+        # a rounded heel rather than a spike.
+        heel_h = (shin_top - ground) * 1.10
+        rear, front = 23.0 * k, 16.0 * k
+
+        def droplet(inset: float) -> list[Point]:
+            """The droplet outline, optionally shrunk about its own centre."""
+            cx = heel_c[0]
+            cy = heel_c[1] + heel_h * 0.42
+            pts: list[Point] = []
+            for i in range(17):
+                u = i / 16.0
+                fall = 1.0 - u
+                base = min(1.0, 0.46 + u / 0.15)
+                # The bone leans forward as it rises, following the Achilles
+                # up into the shin instead of standing straight on the sole.
+                lean = sign * heel_h * 0.26 * u * u
+                pts.append((
+                    heel_c[0] + lean - sign * rear * (fall ** 0.55) * base,
+                    heel_c[1] + heel_h * u,
+                ))
+            for i in range(16, -1, -1):
+                u = i / 16.0
+                fall = 1.0 - u
+                base = min(1.0, 0.46 + u / 0.15)
+                lean = sign * heel_h * 0.26 * u * u
+                pts.append((
+                    heel_c[0] + lean + sign * front * (fall ** 1.30) * base,
+                    heel_c[1] + heel_h * u,
+                ))
+            if inset >= 1.0:
+                return pts
+            return [
+                (cx + (x - cx) * inset, cy + (y - cy) * inset)
+                for x, y in pts
+            ]
+
+        # NOTE: a reverse contour is cancelled wherever two or more filled
+        # shapes stack, and at the ankle the levelled shin base, the foot
+        # taper and the sole all overlap — so an engraved outline alone will
+        # not render here. The bone is therefore given real silhouette: the
+        # droplet is filled and rides proud of the shin's own top edge, so its
+        # rounded back and tapering tip are cut into the profile of the bar.
+        self.polygon(droplet(1.0))
+        # Round the apex and blend it into the shin, so the emerging bone is a
+        # smooth heel curve on the profile rather than a pair of points.
+        apex = (
+            heel_c[0] + sign * heel_h * 0.26 + sign * 2 * k,
+            heel_c[1] + heel_h * 0.90,
+        )
+        self.circle(apex[0], apex[1], 7.0 * k, n=18)
+        self.tapered_path(
+            [apex, (ax + sign * 10 * k, shin_top - 3 * k)],
+            [13.0 * k, 9.0 * k], False,
+        )
         # Body of the foot: one smooth taper from the heel, flush under the
         # ankle, sloping evenly forward and thinning to a point at the toe.
         self.tapered_path(
