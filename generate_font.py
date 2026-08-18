@@ -570,12 +570,10 @@ class Drawer:
         upper surface continues the bar's own profile and its sole rests on
         the same ground line, so nothing steps above or below the bar.
 
-        The foot's interior is cut out of the bar, leaving only the outline
-        as a border. The heel area remains solid; from the arch forward the
-        foot shape is defined by its outline alone — the top edge following
-        the bar's profile, the sole on the ground line, and the toe point
-        where they meet. This makes the foot immediately recognizable as a
-        distinct shape within the bar.
+        The foot remains solid filled, but its shape is outlined with a white
+        line (reverse-winding cut) that traces the foot's perimeter, making
+        it visible as a distinct form within the bar. The heel area with its
+        bulge is preserved.
         """
         k = width / 52.0
         ground = profile.ground
@@ -585,26 +583,40 @@ class Drawer:
         def at(fraction: float) -> float:
             return ankle_x + step * run * fraction
 
-        # Cut out the foot's interior, leaving only the outline as a border.
-        # The cut starts at the arch (leaving the heel solid) and follows the
-        # foot's shape inset from the edges. The border width is ~10 units,
-        # visible at glyph-sheet scale (~2 pixels).
-        border = 10.0 * k
-        cut_pts_top = []
-        cut_pts_bottom = []
-        # Sample the foot shape from arch to near the toe point
-        for frac_i in range(16):
-            frac = 0.25 + 0.65 * frac_i / 15.0  # 25% to 90% along foot
+        # Outline the foot shape with a white line. The outline traces the
+        # foot's perimeter just inside the bar's edges, creating a border
+        # that makes the foot visible as a distinct shape. The outline starts
+        # at the arch (past the heel bulge) and follows the foot's profile
+        # to near the toe point.
+        outline_width = 4.0 * k
+        outline_pts = []
+        
+        # Top edge: follow the bar's profile from arch to toe
+        for frac_i in range(20):
+            frac = 0.15 + 0.75 * frac_i / 19.0  # 15% to 90% along foot
             x = at(frac)
             top = profile.top(x)
-            # Top edge inset from the bar's profile
-            cut_pts_top.append((x, top - border))
-            # Bottom edge inset from the ground line
-            cut_pts_bottom.append((x, ground + border))
-        # Create the hole: top edge forward, then bottom edge backward
-        hole_pts = cut_pts_top + list(reversed(cut_pts_bottom))
-        if len(hole_pts) >= 3:
-            self.polygon(hole_pts, hole=True)
+            outline_pts.append((x, top - outline_width / 2))
+        
+        # Create a thin ribbon along the top edge
+        self.cut_path(outline_pts, outline_width, False)
+        
+        # Bottom edge: follow the ground line from toe back to arch
+        bottom_pts = []
+        for frac_i in range(16):
+            frac = 0.90 - 0.70 * frac_i / 15.0  # 90% back to 20%
+            x = at(frac)
+            bottom_pts.append((x, ground + outline_width / 2))
+        
+        self.cut_path(bottom_pts, outline_width, False)
+        
+        # Ankle line: vertical line at the arch separating heel from foot
+        ankle_line_x = at(0.15)
+        ankle_top = profile.top(ankle_line_x)
+        self.cut_path([
+            (ankle_line_x, ankle_top - outline_width),
+            (ankle_line_x, ground + outline_width),
+        ], outline_width, False)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
