@@ -98,6 +98,18 @@ Three defects introduced by the shared base/`BarProfile` restructuring. All thre
 
 **Z — seam at the knee.** Separately from the thinning above, a hairline of white ran from under the torso's end cap out into the bar, splitting the diagonal from the base. Three causes stacked: the two thighs started from points offset along the spread, leaving them 19 units apart at the corner where a tapered stroke is thinnest; the band's heel curve reaches full depth only over its first thirty units; and the torso's underside climbs away on the diagonal. Both thighs now start from inside the torso's own end cap, and a thin ribbon is laid along the seam — upper edge tracking the spine, lower edge on the band — closing it at every column. The ribbon is deliberately *not* a wedge anchored to the ground line: that fills the letter's open counter and squares off the corner, which is the shape rather than the defect.
 
+## Knee smoothness, measured against L
+
+L is the smooth one of the three kneeling glyphs, and the reason is structural rather than a matter of tuning: its trunk ends in a round cap that sits **in** the corner, so a single arc owns the whole turn. Its rear flank falls in one decelerating curve — x=219 at y=74 easing to 166 by y=134 and holding — and it is **strictly monotone**, never reversing anywhere between stem and floor. Sampling the flank every two units, L's worst tangent break is **1.50** and its mean **0.079**.
+
+Both faults in J and Z were the same class: two arcs competing for one corner, handing over mid-turn.
+
+**Z — the arcs clipped.** Climbing the rear flank the outline followed the heel out to x≈176, then the trunk's cap took over at y=122 and the edge jumped ten units inward in a single step: a break of **4.50**, three times L's. Neither moving the heel anchor nor resizing the bulge helps, because the fault is the handover itself rather than the size of either arc — and filling the corner in columns cannot work, since on a flank this steep one column crosses both arcs at once. A joint mass spanning the handover gives Z the single dominant radius L gets from its cap; its offset and radius were swept against the tangent metric under the constraint that the sole stays on the baseline. Break **4.50 → 2.00**, mean **0.412 → 0.274**, and the flank is now a smooth decelerating curve.
+
+**J — the flank waisted.** The heel curve left the leg at x≈489 while the leg's own back edge there stands at ≈496, so the swell began seven units *inside* the limb. The outline ran out to the heel's peak, pulled back into a waist where the band ended, then swelled out again as the leg resumed — a double reversal against L's monotone fall. Starting the curve higher up the shin (`anchor_rise` 34 → 54) lets it leave along the limb's own edge: mean **0.256 → 0.232**, with J's worst break at **0.50**, already better than L's own 1.50.
+
+J is deliberately not pushed further. Raising `anchor_rise` keeps flattening the flank — 84 reaches a mean of 0.195 — but it does so by eating the calcaneus, and the heel bump is a required feature that has to survive downsampling. Adding a knee mass to J, which is what fixed Z, makes it worse: every offset and radius tried deepened the reversal from 10 units to 13 or more. `heel_x=478` is likewise already optimal; 490 and above triple the worst break.
+
 ## Z's knee: welding the graze
 
 Two faults remained where Z's diagonal folds onto its bar, both too fine to see except under magnification.

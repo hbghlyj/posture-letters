@@ -1715,7 +1715,19 @@ def pose(letter: str) -> Drawer:
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0, bar=bar,
             )
-        d.flat_bar(bar, anchor_rise=34.0)
+        # The heel curve starts further up the shin than it did. Anchored low
+        # it left the leg at x≈489 while the leg's own back edge there stands
+        # at ≈496, so the swell began seven units *inside* the limb: climbing
+        # the flank the outline ran out to the heel's peak, pulled back into a
+        # waist where the band ended, then swelled out again as the leg
+        # resumed — a double reversal, where L's flank is strictly monotone
+        # from the stem to the floor. Starting the curve higher lets it leave
+        # along the limb's own edge instead of stepping off it, which takes
+        # the mean tangent break from 0.256 to 0.232 and shallows the waist.
+        # It is not carried further than this: the same move keeps flattening
+        # the flank, but it does so by eating the calcaneus, and past here the
+        # heel stops reading as a heel at specimen scale.
+        d.flat_bar(bar, anchor_rise=54.0)
         d.kneeling_foot(bar, 144, 52)
 
     elif letter == "K":
@@ -2751,6 +2763,30 @@ def pose(letter: str) -> Drawer:
                  for x, _ in joint]
                 + joint[::-1]
             )
+        # Give the knee a joint mass, the way L's corner has one.
+        #
+        # L is the smooth one of the three kneeling glyphs and the reason is
+        # structural: its trunk ends in a round cap that sits *in* the corner,
+        # so a single arc owns the whole turn and the rear flank falls in one
+        # decelerating curve — x=219 at y=74 easing to 166 by y=134 — with a
+        # worst tangent break of 1.5 and a mean of 0.11.
+        #
+        # Z had two arcs competing for that corner instead. Climbing the rear
+        # flank the outline followed the heel out to x≈176, then the trunk's
+        # cap took over at y=122 and the edge jumped ten units inward in a
+        # single step: a break of 4.5, three times L's, and the one place the
+        # joint read as two parts pushed together rather than a limb bending.
+        # Neither moving the heel anchor nor resizing the bulge helps, because
+        # the step is where the two arcs hand over, not how big either is.
+        #
+        # A joint mass spanning the handover gives the corner the single
+        # dominant radius L gets from its cap: it covers the last of the heel
+        # and the first of the cap, so the flank crosses between them on the
+        # mass's own arc. Sized and placed by sweeping both against the
+        # tangent metric, this is the best that keeps the sole on the
+        # baseline — the break falls from 4.5 to 2.0 and the mean from 0.41
+        # to 0.25, against L's 1.5 and 0.11.
+        d.ellipse(knee[0] + 20.0, knee[1] - 36.0, 60.0, 60.0, 0.0)
         # Round the back of the knee, where the torso's cap meets the heel.
         #
         # The trunk ends in a round cap of its own half-width, and its lowest
