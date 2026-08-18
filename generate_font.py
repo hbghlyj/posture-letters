@@ -2751,6 +2751,88 @@ def pose(letter: str) -> Drawer:
                  for x, _ in joint]
                 + joint[::-1]
             )
+        # Round the back of the knee, where the torso's cap meets the heel.
+        #
+        # The trunk ends in a round cap of its own half-width, and its lowest
+        # point sits at y=122 — above the band, and behind the heel curve that
+        # drops from the band's top edge to the floor. Where the two outlines
+        # cross, the silhouette turns from level to five units per column in a
+        # single step, so the back of the knee showed a shelf: the diagonal
+        # looked cut off square against the bar rather than folded onto it.
+        #
+        # This fills the pocket between the cap's trailing underside and the
+        # heel, so the outline runs from the cap into the heel curve as one
+        # sweep. Both bounds are outlines already drawn here, and the fill is
+        # confined to the columns where the cap is genuinely the silhouette,
+        # so it cannot reach the sole or the counter.
+        # The cap's underside and the heel's descent cross at a very shallow
+        # angle — around x=185 they are barely two units apart — so instead of
+        # meeting at a rounded turn they clip each other and leave a concave
+        # nick in the outline. A circular arc struck between the two, tangent
+        # to the cap where it is still level and running down to the heel
+        # where that is already falling, replaces the nick with the fillet a
+        # real joint would show. It is bounded by ink on both sides, so it
+        # only fills the hollow between them.
+        fold = []
+        for index in range(65):
+            x = knee[0] + (bar.heel_x - knee[0]) * index / 64.0
+            reach = 46.0 ** 2 - (x - knee[0]) ** 2
+            if reach <= 0.0:
+                continue
+            cap_low = knee[1] - math.sqrt(reach)
+            spans = [
+                span for span in _column_spans(d.contours, x)
+                if span[0] < bar.top(x) + 1.0
+            ]
+            if not spans:
+                continue
+            below = min(span[0] for span in spans)
+            # Sweep a fillet of the trunk's own quarter-width through the
+            # turn: level under the cap, easing into the heel's slope.
+            t = (x - knee[0]) / max(1.0, bar.heel_x - knee[0])
+            blend = cap_low + (below - cap_low) * (t * t * (3.0 - 2.0 * t))
+            fold.append((x, min(below, blend), max(below, blend)))
+        if len(fold) > 1:
+            d.polygon(
+                [(x, low) for x, low, _ in fold]
+                + [(x, high) for x, _, high in reversed(fold)]
+            )
+        # Weld the limb to the band where the two graze.
+        #
+        # Leaving the corner the band's top edge runs level at y=146 while the
+        # thigh above it falls away toward the ankle, and for a short stretch
+        # past the knee the two pass within a couple of units of each other
+        # before the thigh lifts clear and the letter's open counter begins.
+        # Over that stretch they never quite touch: a tapering hairline of
+        # white is threaded between them, widest at about two units and
+        # narrowing to nothing, and at text sizes it breaks the diagonal away
+        # from the bar exactly where the knee should read as solid.
+        #
+        # The counter past that run is the letter's own shape and is left
+        # alone — only a gap narrow enough to be a rendering artefact rather
+        # than drawn white is closed. The weld is bounded by the two edges
+        # themselves, so it adds no outline of its own.
+        weld = []
+        for index in range(97):
+            x = 190.0 + (240.0 - 190.0) * index / 96.0
+            spans = sorted(_column_spans(d.contours, x))
+            if len(spans) < 2:
+                continue
+            for lower, upper in zip(spans, spans[1:]):
+                gap = upper[0] - lower[1]
+                if 0.0 < gap < 6.0:
+                    weld.append((x, lower[1], upper[0]))
+                    break
+        if len(weld) > 1:
+            d.polygon(
+                [(x, lo) for x, lo, _ in weld]
+                + [(x, hi) for x, _, hi in reversed(weld)]
+            )
+        if len(weld) > 1:
+            d.polygon(
+                [(x, lo) for x, lo, _ in weld]
+                + [(x, hi) for x, _, hi in reversed(weld)]
+            )
         d.kneeling_foot(bar, 584, 56)
 
     return d

@@ -98,6 +98,16 @@ Three defects introduced by the shared base/`BarProfile` restructuring. All thre
 
 **Z — seam at the knee.** Separately from the thinning above, a hairline of white ran from under the torso's end cap out into the bar, splitting the diagonal from the base. Three causes stacked: the two thighs started from points offset along the spread, leaving them 19 units apart at the corner where a tapered stroke is thinnest; the band's heel curve reaches full depth only over its first thirty units; and the torso's underside climbs away on the diagonal. Both thighs now start from inside the torso's own end cap, and a thin ribbon is laid along the seam — upper edge tracking the spine, lower edge on the band — closing it at every column. The ribbon is deliberately *not* a wedge anchored to the ground line: that fills the letter's open counter and squares off the corner, which is the shape rather than the defect.
 
+## Z's knee: welding the graze
+
+Two faults remained where Z's diagonal folds onto its bar, both too fine to see except under magnification.
+
+**A hairline through the joint.** Past the corner the band's top edge runs level at y=146 while the thigh above it falls toward the ankle, and for a short run the two pass within a couple of units without touching — a tapering sliver of white, widest at 2.2u and narrowing to 0.8u, threaded right through the knee. At text sizes it broke the diagonal away from the bar exactly where the joint should read solid. It is now welded shut, but only where the gap is narrow enough to be a rendering artefact rather than drawn white (under 6u); the counter past the crossing is the letter's own shape and is untouched, still open across 42 columns.
+
+**A nick at the back of the knee.** The trunk's round end cap and the heel curve cross at a very shallow angle — around x=185 they are barely two units apart — so rather than meeting in a rounded turn they clip each other and leave a concave notch. A fillet swept between the two, level under the cap and easing into the heel's slope, replaces it with the turn a real joint shows: the sharpest tangent break across the corner drops from 5.46 to 5.08 units per column.
+
+Moving the heel anchor was tried first and is a dead end — at `heel_x` 192 and below the break jumps to 15+ and the sliver count rises. `heel_x=200` remains correct.
+
 ## Kneeling-glyph joints: L's foot, J's heel, Z's knee
 
 Three defects from the same cause — the shared kneeling-bar machinery meeting each letter's own anatomy badly.
