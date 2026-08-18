@@ -690,24 +690,24 @@
         {
           "index": 3,
           "classification": "leg",
-          "length": 451.66,
+          "length": 462.75,
           "segments": [
             174.2,
             130.5,
-            147.0
+            158.0
           ],
-          "deviation_percent": 52.99
+          "deviation_percent": 56.74
         },
         {
           "index": 4,
           "classification": "leg",
-          "length": 497.89,
+          "length": 508.04,
           "segments": [
             174.3,
             179.4,
-            144.2
+            154.4
           ],
-          "deviation_percent": 68.65
+          "deviation_percent": 72.09
         }
       ],
       "torso_lengths": [
@@ -724,9 +724,9 @@
         "limb 2 (leg) total 250.3 is -15.2% from 295.2",
         "limb 2 thigh 130.2 is -14.2% from 151.8",
         "limb 2 calf 120.0 is -16.3% from 143.5",
-        "limb 3 (leg) total 451.7 is +53.0% from 295.2",
+        "limb 3 (leg) total 462.7 is +56.7% from 295.2",
         "limb 3 has 3 skeletal segments; expected upper/lower pair",
-        "limb 4 (leg) total 497.9 is +68.6% from 295.2",
+        "limb 4 (leg) total 508.0 is +72.1% from 295.2",
         "limb 4 has 3 skeletal segments; expected upper/lower pair",
         "torso 332.0 is +103.9% from 162.8",
         "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
@@ -821,24 +821,24 @@
         {
           "index": 3,
           "classification": "leg",
-          "length": 619.38,
+          "length": 620.09,
           "segments": [
             274.1,
             187.9,
-            157.3
+            158.0
           ],
-          "deviation_percent": 109.8
+          "deviation_percent": 110.04
         },
         {
           "index": 4,
           "classification": "leg",
-          "length": 590.15,
+          "length": 590.09,
           "segments": [
             274.2,
             161.5,
-            154.5
+            154.4
           ],
-          "deviation_percent": 99.9
+          "deviation_percent": 99.88
         }
       ],
       "torso_lengths": [
@@ -853,9 +853,9 @@
         "limb 1 forearm 108.0 is +26.9% from 85.1",
         "limb 2 (arm) total 216.3 is +9.3% from 197.8",
         "limb 2 forearm 108.0 is +26.9% from 85.1",
-        "limb 3 (leg) total 619.4 is +109.8% from 295.2",
+        "limb 3 (leg) total 620.1 is +110.0% from 295.2",
         "limb 3 has 3 skeletal segments; expected upper/lower pair",
-        "limb 4 (leg) total 590.2 is +99.9% from 295.2",
+        "limb 4 (leg) total 590.1 is +99.9% from 295.2",
         "limb 4 has 3 skeletal segments; expected upper/lower pair",
         "torso 242.0 is +48.6% from 162.8"
       ]
@@ -1746,24 +1746,24 @@
         {
           "index": 3,
           "classification": "leg",
-          "length": 428.65,
+          "length": 429.0,
           "segments": [
             158.2,
             114.4,
-            156.0
+            156.3
           ],
-          "deviation_percent": 45.2
+          "deviation_percent": 45.31
         },
         {
           "index": 4,
           "classification": "leg",
-          "length": 426.9,
+          "length": 426.45,
           "segments": [
             185.8,
             88.0,
-            153.1
+            152.7
           ],
-          "deviation_percent": 44.6
+          "deviation_percent": 44.45
         }
       ],
       "torso_lengths": [
@@ -1778,9 +1778,9 @@
         "limb 1 has 1 skeletal segments; expected upper/lower pair",
         "limb 2 (leg) total 382.0 is +29.4% from 295.2",
         "limb 2 has 1 skeletal segments; expected upper/lower pair",
-        "limb 3 (leg) total 428.7 is +45.2% from 295.2",
+        "limb 3 (leg) total 429.0 is +45.3% from 295.2",
         "limb 3 has 3 skeletal segments; expected upper/lower pair",
-        "limb 4 (leg) total 426.9 is +44.6% from 295.2",
+        "limb 4 (leg) total 426.5 is +44.5% from 295.2",
         "limb 4 has 3 skeletal segments; expected upper/lower pair",
         "torso 613.6 is +276.9% from 162.8",
         "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"

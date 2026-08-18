@@ -215,7 +215,13 @@ class Drawer:
         k = width / 52.0
         heel_x = ax - sign * 8 * k
         toe_x = ax + sign * 96 * k
-        sole = ground + 4 * k
+        # Ankle: a joint mass carrying the end of the shin into the heel. The
+        # shin meets the foot at whatever height the pose puts the ankle, so
+        # without it a low ankle leaves a notch between the two.
+        self.tapered_path(
+            [(ax, ay), (heel_x, ground + 20 * k)],
+            [width * 0.60, width * 0.72], False,
+        )
         # Sole and heel: the outline running from the back of the heel along
         # the floor to the ball, with the heel rounded up behind the ankle.
         self.ellipse(heel_x, ground + 19 * k, 19 * k, 20 * k, 0.0)
@@ -258,12 +264,16 @@ class Drawer:
             (ax + sign * 30 * k, ground + 11 * k),
             (ax + sign * 48 * k, ground + 2 * k),
         ], 4.6 * k, True)
-        # Ankle crease: the tendon line where the shin enters the foot.
+        # Ankle crease: the tendon line where the shin enters the foot. It is
+        # scaled to the height the ankle actually sits at, so a low ankle on a
+        # shallow shin does not push the cut up out through the silhouette.
+        rise = max(16.0, ay - ground)
+        step = min(11.0 * k, rise * 0.20)
         self.cut_path([
-            (ax - sign * 15 * k, ay - 12 * k),
-            (ax - sign * 5 * k, ay - 30 * k),
-            (ax + sign * 3 * k, ay - 48 * k),
-        ], 3.6 * k, True)
+            (ax - sign * 9 * k, ay - step * 0.4),
+            (ax - sign * 2 * k, ay - step * 1.3),
+            (ax + sign * 4 * k, ay - step * 2.2),
+        ], 3.2 * k, True)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
@@ -1189,12 +1199,12 @@ def pose(letter: str) -> Drawer:
                     (stem_x + spread * 0.5, hip[1]),
                     (stem_x + spread, 126),
                     (300 - spread * 0.30, 104),
-                    (196 - spread * 0.20, 206),
+                    (150 - spread * 0.20, 148),
                 ],
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            ax, ay = 196 - spread * 0.20, 206
+            ax, ay = 150 - spread * 0.20, 148
             d.kneeling_foot(ax, ay, width, 80, -1, 150)
 
     elif letter == "K":
@@ -1342,12 +1352,12 @@ def pose(letter: str) -> Drawer:
                     (stem_x + spread * 0.5, hip[1]),
                     (stem_x + spread, 126),
                     (382 + spread * 0.30, 104),
-                    (500 + spread * 0.20, 206),
+                    (532 + spread * 0.20, 148),
                 ],
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            ax, ay = 500 + spread * 0.20, 206
+            ax, ay = 532 + spread * 0.20, 148
             d.kneeling_foot(ax, ay, width, 80, 1, 150)
 
     elif letter == "M":
@@ -2063,12 +2073,12 @@ def pose(letter: str) -> Drawer:
                     (knee[0] + spread * 0.4, knee[1] + spread * 0.5),
                     (330 + spread, 114),
                     (430 + spread * 0.30, 104),
-                    (546 + spread * 0.20, 206),
+                    (578 + spread * 0.20, 148),
                 ],
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            ax, ay = 546 + spread * 0.20, 206
+            ax, ay = 578 + spread * 0.20, 148
             d.kneeling_foot(ax, ay, width, 80, 1, 150)
 
     return d
