@@ -198,76 +198,97 @@ class Drawer:
                 {"part": "composite_path", "segments": segments, "length": length, "points": pts}
             )
 
+    def flat_shin_base(
+        self, pts: list[Point], width: float,
+    ) -> None:
+        """Level the underside of a leg that is lying along the ground.
+
+        Thigh and shin are drawn as tapered strokes that swell about their own
+        centrelines — the breeches at the top of the thigh, the calf on the
+        lower leg — so a leg laid flat rolls up and down underneath and the
+        letter's bottom bar comes out wavy, with a step where the two strokes
+        meet. This fills the band between the leg's centreline and one ground
+        line for the whole horizontal run, so the underside reads as a single
+        straight edge sitting on the baseline. Nothing is added above the
+        centreline, so the natural upper outline — the calf swell, the knee,
+        the breeches — is left exactly as drawn.
+        """
+        # The calf is drawn at up to 1.22x the leg width about its centreline,
+        # so the sole of the bar is that swell's own lowest line.
+        ground = min(y for _, y in pts) - width * 0.61
+        lower = [(x, ground) for x, _ in pts]
+        self.polygon(list(pts) + list(reversed(lower)))
+
     def kneeling_foot(
         self, ax: float, ay: float, width: float, ground: float,
         sign: int = 1, reach: float = 96, lift: float = 74,
     ) -> None:
-        """A pointed foot balanced on its toe tip.
+        """The foot at the end of a shin lying flat along the ground.
 
-        In these kneeling poses the knee is turned down onto the floor and the
-        shin rises behind it, so the ankle and heel are carried well above the
-        ground and the foot hangs from them in full plantar flexion. Only the
-        tip of the foot touches the floor: the toes are the single point of
-        support, and the ball, arch, heel and ankle are all stacked above it,
-        as a foot en pointe. The foot is drawn from that raised ankle down to
-        the planted tip — heel raised at the back, instep stretched taut over
-        the front of the ankle, and the toes curling under to the contact.
+        These kneeling legs put the shin flat on the floor, so the letter's
+        bottom bar has to read as one straight stroke. The foot is therefore
+        set flush with the shin rather than bent away from it: its sole rests
+        on the same ground line the shin's underside does, so nothing steps
+        below the bar. Within that band it keeps a real foot's profile — the
+        heel is the heaviest part, carried a little deeper than the shin is
+        thick, and from there the upper surface slopes evenly forward and the
+        foot thins all the way to a point where the toe tip meets the floor.
         """
         k = width / 52.0
-        rise = max(24.0, ay - ground)
-        # The toe tip: the single point of contact, set forward of the ankle
-        # by roughly a third of the height it is carrying.
-        tip = (ax + sign * rise * 0.36, ground)
-        # Heel: raised behind and above the ankle, clear of the floor.
-        heel = (ax - sign * 22 * k, ay + 4 * k)
-        self.ellipse(heel[0], heel[1], 20 * k, 22 * k, 0.0)
-        # Achilles and the back of the foot, carrying the shin into the heel.
-        self.tapered_path(
-            [(ax, ay + 8 * k), heel],
-            [width * 0.62, width * 0.70], False,
-        )
-        # The body of the foot: ankle down the stretched instep to the ball,
-        # tapering as it descends toward the point of contact.
-        ball = (
-            tip[0] - sign * rise * 0.10,
-            ground + rise * 0.26,
-        )
+        # The heel stands proud of the shin, which ends at half its width.
+        shin_top = ay + width * 0.25
+        heel_top = ay + width * 0.42
+        back = ax - sign * 30 * k
+        toe = ax + sign * reach * 0.82
+        # Heel: a rounded mass at the back, deeper than the shin is thick and
+        # sitting squarely on the ground line.
+        heel_c = (back + sign * 15 * k, (ground + heel_top) * 0.5)
+        self.ellipse(heel_c[0], heel_c[1], 16 * k, (heel_top - ground) * 0.5)
+        # Body of the foot: one smooth taper from the heel, flush under the
+        # ankle, sloping evenly forward and thinning to a point at the toe.
         self.tapered_path(
             [
-                (ax - sign * 4 * k, ay + 2 * k),
-                (ax + sign * rise * 0.13, ground + rise * 0.60),
-                ball,
+                (heel_c[0], heel_c[1]),
+                (ax + sign * 4 * k, ground + (shin_top - ground) * 0.46),
+                (ax + sign * 44 * k, ground + 15 * k),
+                (toe, ground + 2.5 * k),
             ],
-            [width * 0.76, width * 0.58, width * 0.42], True,
+            [
+                (heel_top - ground) * 0.94,
+                (shin_top - ground) * 0.90,
+                (shin_top - ground) * 0.44,
+                3.0 * k,
+            ],
+            True,
         )
-        # Ball of the foot, the knuckle the toes fold under.
-        self.ellipse(ball[0], ball[1], 17 * k, 15 * k, 0.0)
-        # Toes: the digits curl down and forward off the ball into a single
-        # blunt tip on the floor. They are drawn as one tapering mass with
-        # engraved clefts rather than separate strokes, because at this scale
-        # four splayed digits on a pointed foot read as fringe, not toes.
-        self.tapered_path(
-            [ball, ((ball[0] + tip[0]) * 0.5, (ball[1] + ground) * 0.5), tip],
-            [width * 0.40, width * 0.32, width * 0.20], True,
-        )
-        self.ellipse(tip[0], ground + 7 * k, 11 * k, 9 * k, 0.0)
+        # Sole: the straight edge that keeps the whole foot on the bar's
+        # ground line, so the taper never lifts off it or dips below it.
+        self.polygon([
+            (back + sign * 4 * k, ground),
+            (toe, ground),
+            (toe - sign * 4 * k, ground + 4 * k),
+            (back + sign * 4 * k, ground + 20 * k),
+        ])
+        # Ankle: the crease where the shin enters the foot, kept well inside
+        # the silhouette so it can never notch the flat bar.
+        self.cut_path([
+            (ax + sign * 2 * k, shin_top - 7 * k),
+            (ax - sign * 5 * k, (ground + shin_top) * 0.5),
+            (ax + sign * 2 * k, ground + 8 * k),
+        ], 3.0 * k, True)
+        # Arch: the shallow hollow lifted off the floor under the instep.
+        self.cut_path([
+            (ax + sign * 22 * k, ground + 4 * k),
+            (ax + sign * 38 * k, ground + 10 * k),
+            (ax + sign * 54 * k, ground + 4 * k),
+        ], 3.4 * k, True)
+        # Toe clefts, engraved along the sloping upper surface of the foot.
         for i in range(2):
+            cx = ax + sign * (58 + 14 * i) * k
             self.cut_path([
-                (ball[0] + sign * (2 + 5 * i) * k, ball[1] - 9 * k),
-                (tip[0] - sign * (7 - 4 * i) * k, ground + (13 - 3 * i) * k),
-            ], 2.6 * k, False)
-        # Arch: the hollow under the instep, engraved between heel and ball.
-        self.cut_path([
-            (ax - sign * 4 * k, ay - 14 * k),
-            (ax + sign * rise * 0.11, ground + rise * 0.50),
-            (ball[0] - sign * 5 * k, ball[1] + 11 * k),
-        ], 3.8 * k, True)
-        # Ankle crease: the tendon line where the shin enters the raised foot.
-        self.cut_path([
-            (ax - sign * 15 * k, ay + 10 * k),
-            (ax - sign * 6 * k, ay - 2 * k),
-            (ax + sign * 2 * k, ay - 15 * k),
-        ], 3.2 * k, True)
+                (cx, ground + (15 - 4 * i) * k),
+                (cx + sign * 12 * k, ground + (5 - 1.5 * i) * k),
+            ], 2.4 * k, False)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
@@ -1193,13 +1214,17 @@ def pose(letter: str) -> Drawer:
                     (stem_x + spread * 0.5, hip[1]),
                     (stem_x + spread, 126),
                     (300 - spread * 0.30, 104),
-                    (170 - spread * 0.20, 190),
+                    (144 - spread * 0.20, 104),
                 ],
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            ax, ay = 170 - spread * 0.20, 190
-            d.kneeling_foot(ax, ay, width, 80, -1, 150)
+            d.flat_shin_base([
+                (stem_x + spread, 126), (300 - spread * 0.30, 104),
+                (144 - spread * 0.20, 104),
+            ], width)
+            ax, ay = 144 - spread * 0.20, 104
+            d.kneeling_foot(ax, ay, width, ay - width * 0.61, -1, 150)
 
     elif letter == "K":
         # Cartwheel K: the figure balances sideways on one hand. The head lies
@@ -1346,13 +1371,17 @@ def pose(letter: str) -> Drawer:
                     (stem_x + spread * 0.5, hip[1]),
                     (stem_x + spread, 126),
                     (382 + spread * 0.30, 104),
-                    (512 + spread * 0.20, 190),
+                    (538 + spread * 0.20, 104),
                 ],
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            ax, ay = 512 + spread * 0.20, 190
-            d.kneeling_foot(ax, ay, width, 80, 1, 150)
+            d.flat_shin_base([
+                (stem_x + spread, 126), (382 + spread * 0.30, 104),
+                (538 + spread * 0.20, 104),
+            ], width)
+            ax, ay = 538 + spread * 0.20, 104
+            d.kneeling_foot(ax, ay, width, ay - width * 0.61, 1, 150)
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
@@ -2067,13 +2096,17 @@ def pose(letter: str) -> Drawer:
                     (knee[0] + spread * 0.4, knee[1] + spread * 0.5),
                     (330 + spread, 114),
                     (430 + spread * 0.30, 104),
-                    (558 + spread * 0.20, 190),
+                    (584 + spread * 0.20, 104),
                 ],
                 width, knee_index=2, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            ax, ay = 558 + spread * 0.20, 190
-            d.kneeling_foot(ax, ay, width, 80, 1, 150)
+            d.flat_shin_base([
+                (330 + spread, 114), (430 + spread * 0.30, 104),
+                (584 + spread * 0.20, 104),
+            ], width)
+            ax, ay = 584 + spread * 0.20, 104
+            d.kneeling_foot(ax, ay, width, ay - width * 0.61, 1, 150)
 
     return d
 
