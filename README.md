@@ -98,6 +98,16 @@ Three defects introduced by the shared base/`BarProfile` restructuring. All thre
 
 **Z — seam at the knee.** Separately from the thinning above, a hairline of white ran from under the torso's end cap out into the bar, splitting the diagonal from the base. Three causes stacked: the two thighs started from points offset along the spread, leaving them 19 units apart at the corner where a tapered stroke is thinnest; the band's heel curve reaches full depth only over its first thirty units; and the torso's underside climbs away on the diagonal. Both thighs now start from inside the torso's own end cap, and a thin ribbon is laid along the seam — upper edge tracking the spine, lower edge on the band — closing it at every column. The ribbon is deliberately *not* a wedge anchored to the ground line: that fills the letter's open counter and squares off the corner, which is the shape rather than the defect.
 
+## Kneeling-glyph joints: L's foot, J's heel, Z's knee
+
+Three defects from the same cause — the shared kneeling-bar machinery meeting each letter's own anatomy badly.
+
+**L had no foot.** Rebuilding L's base from E's flipped prong brought over E's *heel serif*, a spike, where L needs a foot; the sole-levelling fill was then run to the end of the component, flattening the ankle and terminal into one blunt slab ending at x=590. The fill now stops at the ankle and the foot is drawn past it from a `BarProfile`, as J and Z do, carrying the stroke out to a toe point at x=665 with the arch and toe clefts engraved.
+
+**J's heel jutted out of the shin.** The heel swell starts on the limb's own back edge, so once it is wider than the limb it begins *outside* the leg and has to travel back in to reach the floor. At `heel_depth * 0.62` its widest point was x≈524 against a back edge of x≈499 — two dozen units proud, with a concave notch beneath it. At `0.30` the swell still reads as a heel but stays inside the stroke.
+
+**Z's knee joined at the wrong place.** Thigh and shin swell about their own centrelines, so their undersides meet in a step (y≈98 to y≈114). The band normally hides that, but Z's was registered at x=266 with a top edge at y=146 — above both, so the step stayed exposed, and the band's vertical rear face landed in open space beyond the knee and cut a twenty-unit cliff across the underside. The heel is tucked back to x=200 so that face is buried inside the thigh, and the gap between the limb's underside and the band is filled from the ink actually present, column by column. The open counter is untouched.
+
 ## L's floating bar
 
 **L**'s horizontal leg was seated on the wrong feature. The flipped base was registered by the lowest ink past `x > 300`, which was meant to name the shin — but inverting E's prong turns its heel serif (drawn rising off the floor) into the component's deepest point, so the whole stroke was hung from that tip and parked **57 units in the air**. Only the seat and a hard-coded corner fillet reached the ground, and that fillet was the "lump" under the leg: a wedge added to hide the gap the mis-seating opened.

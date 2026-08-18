@@ -534,9 +534,18 @@ class Drawer:
         # whole ankle, but it has to survive the specimen sheet: there a glyph
         # is rastered at roughly five font units per pixel, so a bulge that
         # measured a plausible-looking 16 units came out barely three pixels
-        # proud of the ankle and simply vanished. Sized so the bump clears the
-        # waist above it by a margin that still reads once reduced.
-        bulge = profile.heel_depth * 0.62
+        # proud of the ankle and simply vanished.
+        #
+        # It cannot be sized off legibility alone, though. The swell starts on
+        # the limb's own back edge, so once it is wider than the limb the
+        # curve begins *outside* the leg and has to travel back in to reach
+        # the floor. On J that put the widest point at x≈524 against a back
+        # edge of x≈499 — a bulge two dozen units proud of the shin, with a
+        # concave notch under it where the outline cut back, reading as a
+        # block bolted onto the leg rather than the leg's own heel. Held to
+        # the limb's width the swell still shows as a heel but stays part of
+        # the stroke, which is what the print shows.
+        bulge = profile.heel_depth * 0.30
         heel = profile.heel_outline(anchor_rise, bulge)
         edge = profile.edge()
         # One closed loop, traced the whole way round: out of the leg and down
@@ -1897,24 +1906,31 @@ def pose(letter: str) -> Drawer:
             d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
             floor_from=stem_x + 42,
         )
-        # Level the sole. Seating the component puts the shin's lowest point
-        # on the baseline, but the shin does not lie level: E draws the leg
-        # tapering from a deep knee to a shallow ankle, and the flip turns
-        # that taper upside down, so the underside sags away from the ground
-        # in a shallow arch — about twenty units at its worst, a quarter of
-        # the stroke's own depth — and the letter ends up balanced on the two
-        # points where the arch happens to touch. No offset can fix that,
-        # because the edge is sloped rather than displaced.
+        # Level the sole, and finish the stroke with a foot.
         #
-        # This fills the crescent between that sagging edge and the ground,
-        # following the stroke's own underside column by column so the leg
-        # keeps the silhouette E drew and simply gains the flat sole it
-        # should have been resting on. Only the shin run is filled: the seat
-        # behind it already reaches the floor, and the heel serif ahead of it
-        # is meant to lift clear as the letter's bottom-right terminal.
+        # Seating the component puts the shin's lowest point on the baseline,
+        # but the shin does not lie level: E draws the leg tapering from a
+        # deep knee to a shallow ankle, and the flip turns that taper upside
+        # down, so the underside sags away from the ground in a shallow arch
+        # — about twenty units at its worst, a quarter of the stroke's own
+        # depth — and the letter ends up balanced on the two points where the
+        # arch happens to touch. No offset can fix that, because the edge is
+        # sloped rather than displaced.
+        #
+        # Filling that crescent column by column does flatten the sole, but
+        # on its own it flattens the *whole* stroke: run out to the end of the
+        # component it swallows the ankle and buries the terminal, and L ends
+        # in a blunt slab where the other kneeling glyphs end in a foot. So
+        # the fill is stopped at the ankle, and the foot is drawn past it the
+        # way J and Z draw theirs — from a shared ``BarProfile``, whose top
+        # edge thins forward from the arch and runs out to a point at the toe.
+        bar = BarProfile(
+            ground=BAR_GROUND, heel_x=246.0, arch_x=ANKLE_X, toe_x=665.0,
+            heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
+        )
         sole = []
-        for index in range(65):
-            x = 246.0 + (528.0 - 246.0) * index / 64.0
+        for index in range(49):
+            x = 246.0 + (ANKLE_X - 246.0) * index / 48.0
             spans = [
                 span for span in _column_spans(d.contours, x)
                 if span[0] < 260.0
@@ -1923,6 +1939,17 @@ def pose(letter: str) -> Drawer:
                 sole.append((x, min(lo for lo, _ in spans)))
         if sole:
             d.polygon(sole + [(x, BAR_GROUND) for x, _ in reversed(sole)])
+        # The foot itself: ankle to toe point, sole on the same ground line so
+        # it continues the bar rather than stepping out of it. The heel end is
+        # already the shin behind it, so only the forward span is filled here.
+        toe_edge = [
+            point for point in bar.edge(64) if point[0] >= ANKLE_X - 1.0
+        ]
+        if toe_edge:
+            d.polygon(
+                toe_edge + [(x, BAR_GROUND) for x, _ in reversed(toe_edge)]
+            )
+        d.kneeling_foot(bar, ANKLE_X, 52)
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
         # settled that high, so the trunk's foot stood clear underneath the
@@ -2656,8 +2683,16 @@ def pose(letter: str) -> Drawer:
         # units against the band's 74 and its sole rode up to y=120 instead of
         # resting on the floor, which reads as a thin, notched section beside
         # the knee. Starting the band at the corner fills that run.
+        #
+        # 266 was still too far forward. The band's rear end is a vertical
+        # face, so wherever it starts the silhouette drops to the floor in one
+        # step; put that face out at 266 and it landed in open space beyond
+        # the knee, cutting a cliff twenty units deep across the underside
+        # just where the limb should be flowing into the bar. Tucked back
+        # under the corner the face is buried inside the thigh and the leg
+        # runs down into the band continuously, which is what the print shows.
         bar = BarProfile(
-            ground=BAR_GROUND, heel_x=266, arch_x=584, toe_x=710,
+            ground=BAR_GROUND, heel_x=200, arch_x=584, toe_x=710,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
         for spread, width, breeches in ((-20, 56, 66), (18, 46, 54)):
@@ -2681,29 +2716,41 @@ def pose(letter: str) -> Drawer:
                 shoe_scale=0.0, bar=bar,
             )
         d.flat_bar(bar, anchor_rise=0.0)
-        # Close the corner between the diagonal and the bar. The thighs leave
-        # the knee as tapered strokes and the band's heel curve rises to full
-        # depth only over the first thirty units or so, so across the join the
-        # two never quite met: a hairline of white ran from under the torso's
-        # cap out into the bar and read as a seam splitting the letter's
-        # diagonal from its base. This wedge spans exactly that run — from
-        # inside the cap to where the band is already at depth — so the
-        # silhouette closes. It is bounded above by the thigh and below by the
-        # band, both of which are drawn here, so it adds no new outline.
-        # The fill is a thin ribbon laid along the seam itself, not a block
-        # filling the corner: its upper edge tracks the torso's underside as
-        # that climbs away on the diagonal, and its lower edge runs a short
-        # distance beneath, just far enough to reach the thighs and the band.
-        # A wedge anchored down at the ground line instead swallows the open
-        # counter and squares off the corner, which is the letter's shape
-        # rather than the defect.
-        upper, lower = [], []
-        for i in range(17):
-            x = knee[0] + (300 - knee[0]) * i / 16.0
-            spine = knee[1] + (x - knee[0]) * 1.4483
-            upper.append((x, spine + 6))
-            lower.append((x, bar.top(x) - 4))
-        d.polygon(upper + lower[::-1])
+        # Carry the limb's underside from the kneeling corner into the bar.
+        #
+        # Thigh and shin are separate tapered strokes that swell about their
+        # own centrelines, so where they meet their two undersides do not line
+        # up: the thigh's runs down to about y=98 and the shin's picks up
+        # again at about y=114, leaving a step in the silhouette right at the
+        # joint. On the other kneeling glyphs the band hides that step, but
+        # here it cannot — the bar is registered at x=266 and its top edge
+        # sits at y=146, well *above* both, so the mismatch stays exposed
+        # underneath the band and the knee reads as two components pushed
+        # together at the wrong angle rather than one limb bending.
+        #
+        # Filling between the leg's own underside and the band's top edge
+        # closes it. The lower edge is sampled off whatever ink is actually
+        # there, column by column, so it follows the thigh down, across the
+        # joint and onto the shin without inventing an outline of its own;
+        # the upper edge is the band, which the strokes already reach. The
+        # run stops where the band takes over the silhouette, so the open
+        # counter above the bar is untouched.
+        joint = []
+        for index in range(65):
+            x = knee[0] + (360.0 - knee[0]) * index / 64.0
+            spans = [
+                span for span in _column_spans(d.contours, x)
+                if span[0] < bar.top(x) + 1.0
+            ]
+            if not spans:
+                continue
+            joint.append((x, min(span[0] for span in spans)))
+        if joint:
+            d.polygon(
+                [(x, min(bar.top(x), knee[1] + (x - knee[0]) * 1.4483 + 6))
+                 for x, _ in joint]
+                + joint[::-1]
+            )
         d.kneeling_foot(bar, 584, 56)
 
     return d
