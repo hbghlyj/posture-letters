@@ -530,9 +530,13 @@ class Drawer:
         ground = profile.ground
         # How far the outline swells back past the line of the stem. Scaled
         # off the bar's own depth so the heel stays in proportion to it, and
-        # kept modest: this is a small isolated calcaneus bump at the back of
-        # the foot, not a broad mass carrying the whole ankle.
-        bulge = profile.heel_depth * 0.42
+        # It is still a compact calcaneus rather than a mass carrying the
+        # whole ankle, but it has to survive the specimen sheet: there a glyph
+        # is rastered at roughly five font units per pixel, so a bulge that
+        # measured a plausible-looking 16 units came out barely three pixels
+        # proud of the ankle and simply vanished. Sized so the bump clears the
+        # waist above it by a margin that still reads once reduced.
+        bulge = profile.heel_depth * 0.62
         heel = profile.heel_outline(anchor_rise, bulge)
         edge = profile.edge()
         # One closed loop, traced the whole way round: out of the leg and down
@@ -1849,6 +1853,22 @@ def pose(letter: str) -> Drawer:
             d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
             floor_from=stem_x + 42,
         )
+        # The trunk runs down to the baseline but the bar's sole settles
+        # about fifty units higher, where the flipped prong puts it. Where the
+        # two meet the trunk's lower corner therefore stands clear underneath
+        # the bar and reads as a block hanging off the knee. This fillet
+        # closes the re-entrant angle between them: it runs from the foot's
+        # outer edge at the baseline up to the point where the bar's own
+        # underside starts, so the inside of the corner becomes one straight
+        # diagonal rather than a notch with a spur beside it. Both ends sit on
+        # strokes that are already drawn, so nothing is added outside the
+        # letter's silhouette.
+        d.polygon([
+            (stem_x + 33, BAR_GROUND),
+            (stem_x + 42, 129.0),
+            (stem_x + 20, 129.0),
+            (stem_x + 20, BAR_GROUND),
+        ])
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
@@ -2558,8 +2578,16 @@ def pose(letter: str) -> Drawer:
         # heel at the back under the kneeling corner, thinning forward through
         # the arch and carried to a point at the toe. The top surface of the
         # foot is therefore continuous with the shin and the stroke is flat.
+        #
+        # The heel is registered at the kneeling corner itself, not forward of
+        # it. Anchored at 316 the band began seventy units ahead of where the
+        # torso actually lands, so between the corner and the band's start the
+        # bar was carried only by the tapering leg strokes: it necked to 35
+        # units against the band's 74 and its sole rode up to y=120 instead of
+        # resting on the floor, which reads as a thin, notched section beside
+        # the knee. Starting the band at the corner fills that run.
         bar = BarProfile(
-            ground=BAR_GROUND, heel_x=316, arch_x=584, toe_x=710,
+            ground=BAR_GROUND, heel_x=266, arch_x=584, toe_x=710,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
         for spread, width, breeches in ((-20, 56, 66), (18, 46, 54)):

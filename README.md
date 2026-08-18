@@ -88,13 +88,15 @@ The previous construction — a single flat `BarProfile` band with a heel bulge 
 
 ## Kneeling-bar regression fixes
 
-Three defects introduced by the shared base/`BarProfile` restructuring, each with a different root cause.
+Three defects introduced by the shared base/`BarProfile` restructuring. All three were reported from `glyph-sheet.png`, where a glyph is rastered at roughly **five font units per pixel** — a scale at which a geometrically correct feature can still disappear.
 
-**J — heel bump invisible.** The heel geometry was correct in isolation (peaking 31 units behind its anchor) but the anchor sat too far forward. J's rear thigh is set at spread +20 and carries full breeches, so the leg's own back edge stands at x≈499 while the heel bulged only to x≈464 — the bump was *recessed 35 units inside the limb above it* and read as a notch rather than a heel. The heel is now registered on the back of the widest leg (`heel_x` 434 → 478) so it clears that edge, projecting 14 units proud of the ankle waist.
+**J — heel bump invisible.** Two compounding causes. The heel was anchored ahead of the leg's own back edge, so the bulge sat *recessed inside* the limb above it and read as a notch; `heel_x` moves from 434 to 478 to clear it. But that alone left the bump only 16 units proud of the ankle waist — about three pixels on the sheet, which vanishes under downsampling. The calcaneus is sized from `heel_depth * 0.62` rather than `* 0.42` so it now stands 28 units (≈5.6px) proud and survives reduction.
 
-**L — protrusion below the knee.** `merge_transformed`'s `floor` clip kept the glyph inside its box but only cut at the baseline, so the inverted thigh still hung *below the bar* just past the stem, reading as a spur dropping out of the knee. `floor_from` now raises the clip to the component's own sole ahead of a given x. The sole is sampled from a short window clear of the stem — the spur lies behind it and the heel serif, which legitimately drops to the floor, lies beyond it, so neither corrupts the measurement. Largest downward step in the underside is now 0.0 units.
+**L — protrusion below the knee.** The trunk runs down to the baseline, but the flipped prong puts the bar's sole about fifty units higher. Where they met, the trunk's lower corner stood clear underneath the bar and read as a block hanging off the knee. A fillet closes that re-entrant angle, running from the foot's outer edge at the baseline up to where the bar's underside starts, so the inside of the corner is one diagonal rather than a notch with a spur beside it. Ink below the bar's sole right of the trunk is now 0.5 units.
 
-**Z — bottom bar thinning.** The calf headroom window is sized as a fraction of the heel-to-arch run, and on Z's geometry it opened at x=450, by which point the band had already tapered to its minimum. The bar pinched to a 58.8-unit waist and then the window inflated it back to 65.9 — a dip-and-bulge instead of a taper. The window's ramp-in is widened (0.16 → 0.30 of the run) and `BarProfile` now accepts an explicit `calf_x` so the swell can be anchored to the muscle's real position rather than assumed. Largest re-thickening drops from ~15 units to 0.44.
+**Z — bottom bar thinning.** The band was anchored at `heel_x=316`, seventy units ahead of where the torso actually lands. Between the kneeling corner and the band's start the bar was carried only by the tapering leg strokes: it necked to **35 units** against the band's 74 and its sole rode up to y=120 instead of resting on the floor. Starting the band at the corner (`heel_x=266`) fills that run — minimum thickness over the flat section is now 63.7 units on a dead-flat sole.
+
+The open counter between Z's diagonal and its bar is *not* part of this fix: it is present in the pre-restructuring geometry too, and closing it would weld the leg to the torso.
 
 ## Historical construction notes
 
