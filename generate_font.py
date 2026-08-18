@@ -575,8 +575,12 @@ class Drawer:
         mass belongs to the band's contour instead of being a lump stuck onto
         it. From the arch forward the outline simply runs on, sloping evenly
         down and thinning to a point where the toe tip meets the floor.
-        Engraved ankle crease, hollow arch and toe clefts model the detail,
-        all kept well inside the silhouette so they can never notch the bar.
+
+        The foot is carved out of the bar with prominent engraved detail:
+        a clear ankle crease separating shin from foot, a deep arch hollow
+        under the instep, toe bumps on the upper edge, and toe clefts between
+        them. All cuts are sized to survive glyph-sheet reduction (~5 font
+        units per pixel) so the foot reads as a foot at every scale.
         """
         k = width / 52.0
         ground = profile.ground
@@ -594,26 +598,80 @@ class Drawer:
         # Ankle crease, where the shin hands over to the foot. It leans
         # forward the way the front of an ankle does and is held well inside
         # the profile at both ends so it can never notch the flat bar.
+        # Widened to survive glyph-sheet reduction: previously 3.0k, now 6k,
+        # so it renders at roughly 1.2 pixels rather than vanishing.
         crease_x = at(0.10)
         crease_top = profile.top(crease_x)
         self.cut_path([
-            (crease_x + step * 3 * k, crease_top - 10 * k),
-            (crease_x - step * 4 * k, (ground + crease_top) * 0.5),
-            (crease_x + step * 3 * k, ground + 10 * k),
-        ], 3.0 * k, True)
-        # Arch: the shallow hollow lifted off the floor under the instep.
+            (crease_x + step * 5 * k, crease_top - 12 * k),
+            (crease_x - step * 6 * k, (ground + crease_top) * 0.5),
+            (crease_x + step * 5 * k, ground + 12 * k),
+        ], 6.0 * k, True)
+        # Arch: the hollow lifted off the floor under the instep. Deepened
+        # and widened so it reads as a real concavity rather than a faint
+        # scratch. The peak is now nearly at the bar's own top edge, which
+        # makes the arch unmistakable.
+        arch_peak_x = at(0.36)
         self.cut_path([
-            (at(0.24), ground + 4 * k),
-            (at(0.38), ground + 11 * k),
-            (at(0.52), ground + 4 * k),
-        ], 3.4 * k, True)
-        # Toe clefts, engraved down the sloping upper surface of the foot.
-        for i in range(2):
-            cx = at(0.62 + 0.16 * i)
+            (at(0.20), ground + 5 * k),
+            (at(0.28), ground + 16 * k),
+            (arch_peak_x, profile.top(arch_peak_x) - 8 * k),
+            (at(0.44), ground + 16 * k),
+            (at(0.54), ground + 5 * k),
+        ], 6.0 * k, True)
+        # Toe bumps: rounded protrusions on the upper edge of the foot where
+        # the toes sit. These are filled shapes added on top of the bar's
+        # profile, pushing the outline up to make the foot immediately
+        # recognizable. Placed from 55% to 85% along the foot's run, where
+        # the bar is thinning toward the toe point. Four toes, decreasing in
+        # size toward the little toe. Each bump protrudes clearly above the
+        # bar's profile (roughly 8-12 units, or 1.6-2.4 pixels at glyph-sheet
+        # scale) so they survive reduction.
+        for i in range(4):
+            frac = 0.55 + 0.10 * i
+            cx = at(frac)
+            top = profile.top(cx)
+            # Each bump is an ellipse sitting on the bar's top edge, protruding
+            # above it. Size decreases toward the little toe. The vertical
+            # radius is sized so the bump protrudes well above the profile.
+            bump_rx = (8.0 - 1.5 * i) * k
+            bump_ry = (6.0 - 1.0 * i) * k
+            # Center the bump so its top is bump_ry above the bar's profile
+            bump_cy = top + bump_ry * 0.5
+            self.ellipse(cx, bump_cy, bump_rx, bump_ry, 0.0)
+        # Toe clefts: engraved lines between the toe bumps, running down the
+        # sloping upper surface of the foot. Widened from 2.4k to 4.5k so
+        # they survive reduction.
+        for i in range(3):
+            cx = at(0.63 + 0.10 * i)
+            top = profile.top(cx)
             self.cut_path([
-                (cx, profile.top(cx) - 7 * k),
-                (cx + step * run * 0.09, ground + (5 - 1.5 * i) * k),
-            ], 2.4 * k, False)
+                (cx, top - 4 * k),
+                (cx + step * run * 0.06, ground + (4 - 1.0 * i) * k),
+            ], 4.5 * k, False)
+        # Instep line: a continuous engraved line running along the top of
+        # the foot from the ankle forward, well inside the bar's own profile.
+        # It defines the foot's upper surface and separates the foot from the
+        # shin portion of the bar. Placed about a third of the way down from
+        # the top edge to the sole, so it cannot notch the bar's silhouette.
+        instep_pts = []
+        for frac_i in range(10):
+            frac = 0.05 + 0.75 * frac_i / 9.0
+            x = at(frac)
+            top = profile.top(x)
+            mid = (top + ground) * 0.5
+            instep_pts.append((x, mid + (top - ground) * 0.15))
+        self.cut_path(instep_pts, 4.0 * k, True)
+        # Sole muscle line: a second engraved line running along the lower
+        # third of the foot, defining the sole's thickness and the ball of
+        # the foot.
+        sole_pts = []
+        for frac_i in range(8):
+            frac = 0.10 + 0.60 * frac_i / 7.0
+            x = at(frac)
+            top = profile.top(x)
+            sole_pts.append((x, ground + (top - ground) * 0.25))
+        self.cut_path(sole_pts, 3.5 * k, True)
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
