@@ -2390,12 +2390,19 @@ def pose(letter: str) -> Drawer:
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
+        # The knees rest ON the baseline, so their control points sit a joint
+        # radius above it rather than on it. Authored at y=0 the knee mass and
+        # its cuff straddled the line and bulged 44 units underneath as two
+        # rounded lobes — the only ink in the alphabet below the baseline,
+        # and not something the print shows: there all four strokes finish
+        # together on one line. Lifting the point puts the bottom of the joint
+        # on y=0 instead of its centre.
         d.leg(
-            [(315, 430), (150, 0), (74, 606)], 62, knee_index=1,
+            [(315, 430), (150, 44), (74, 606)], 62, knee_index=1,
             shoe_direction=(-0.92, 0.40),
         )
         d.leg(
-            [(385, 430), (550, 0), (626, 606)], 62, knee_index=1,
+            [(385, 430), (550, 44), (626, 606)], 62, knee_index=1,
             shoe_direction=(0.92, 0.40),
         )
         # Draw the supporting hands after the outer legs so the fingertips stay
