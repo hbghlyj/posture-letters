@@ -319,24 +319,24 @@
         {
           "index": 3,
           "classification": "leg",
-          "length": 558.69,
+          "length": 558.4,
           "segments": [
             188.0,
-            150.7,
+            150.3,
             220.0
           ],
-          "deviation_percent": 89.24
+          "deviation_percent": 89.15
         },
         {
           "index": 4,
           "classification": "leg",
-          "length": 574.65,
+          "length": 574.37,
           "segments": [
             188.0,
-            150.7,
+            150.3,
             236.0
           ],
-          "deviation_percent": 94.65
+          "deviation_percent": 94.55
         }
       ],
       "torso_lengths": [
@@ -352,9 +352,9 @@
         "limb 2 (leg) total 381.5 is +29.2% from 295.2",
         "limb 2 thigh 179.4 is +18.2% from 151.8",
         "limb 2 calf 202.1 is +40.9% from 143.5",
-        "limb 3 (leg) total 558.7 is +89.2% from 295.2",
+        "limb 3 (leg) total 558.4 is +89.1% from 295.2",
         "limb 3 has 3 skeletal segments; expected upper/lower pair",
-        "limb 4 (leg) total 574.7 is +94.6% from 295.2",
+        "limb 4 (leg) total 574.4 is +94.6% from 295.2",
         "limb 4 has 3 skeletal segments; expected upper/lower pair",
         "torso 292.0 is +79.3% from 162.8",
         "nearest-baseline classification gives 0 arm(s) and 4 leg(s)"
@@ -821,24 +821,24 @@
         {
           "index": 3,
           "classification": "leg",
-          "length": 412.94,
+          "length": 412.56,
           "segments": [
             78.1,
-            114.9,
+            114.4,
             220.0
           ],
-          "deviation_percent": 39.87
+          "deviation_percent": 39.74
         },
         {
           "index": 4,
           "classification": "leg",
-          "length": 428.86,
+          "length": 428.47,
           "segments": [
             78.0,
-            114.9,
+            114.4,
             236.0
           ],
-          "deviation_percent": 45.26
+          "deviation_percent": 45.13
         }
       ],
       "torso_lengths": [
@@ -853,9 +853,9 @@
         "limb 1 forearm 108.0 is +26.9% from 85.1",
         "limb 2 (arm) total 216.3 is +9.3% from 197.8",
         "limb 2 forearm 108.0 is +26.9% from 85.1",
-        "limb 3 (leg) total 412.9 is +39.9% from 295.2",
+        "limb 3 (leg) total 412.6 is +39.7% from 295.2",
         "limb 3 has 3 skeletal segments; expected upper/lower pair",
-        "limb 4 (leg) total 428.9 is +45.3% from 295.2",
+        "limb 4 (leg) total 428.5 is +45.1% from 295.2",
         "limb 4 has 3 skeletal segments; expected upper/lower pair",
         "torso 446.0 is +173.9% from 162.8"
       ]

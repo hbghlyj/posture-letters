@@ -86,6 +86,16 @@ The inversion still carries its intrinsic costs: E's prong rises into its heel s
 
 The previous construction — a single flat `BarProfile` band with a heel bulge and forward taper, described below — remains in the history at commit `72d5663` and can be restored with `git revert`.
 
+## Kneeling-bar regression fixes
+
+Three defects introduced by the shared base/`BarProfile` restructuring, each with a different root cause.
+
+**J — heel bump invisible.** The heel geometry was correct in isolation (peaking 31 units behind its anchor) but the anchor sat too far forward. J's rear thigh is set at spread +20 and carries full breeches, so the leg's own back edge stands at x≈499 while the heel bulged only to x≈464 — the bump was *recessed 35 units inside the limb above it* and read as a notch rather than a heel. The heel is now registered on the back of the widest leg (`heel_x` 434 → 478) so it clears that edge, projecting 14 units proud of the ankle waist.
+
+**L — protrusion below the knee.** `merge_transformed`'s `floor` clip kept the glyph inside its box but only cut at the baseline, so the inverted thigh still hung *below the bar* just past the stem, reading as a spur dropping out of the knee. `floor_from` now raises the clip to the component's own sole ahead of a given x. The sole is sampled from a short window clear of the stem — the spur lies behind it and the heel serif, which legitimately drops to the floor, lies beyond it, so neither corrupts the measurement. Largest downward step in the underside is now 0.0 units.
+
+**Z — bottom bar thinning.** The calf headroom window is sized as a fraction of the heel-to-arch run, and on Z's geometry it opened at x=450, by which point the band had already tapered to its minimum. The bar pinched to a 58.8-unit waist and then the window inflated it back to 65.9 — a dip-and-bulge instead of a taper. The window's ramp-in is widened (0.16 → 0.30 of the run) and `BarProfile` now accepts an explicit `calf_x` so the swell can be anchored to the muscle's real position rather than assumed. Largest re-thickening drops from ~15 units to 0.44.
+
 ## Historical construction notes
 
 - **A:** rebuilt as a two-person letter after the Mitelli engraving. A single folded body could not carry the shape at believable proportions, so two mirrored figures lean toward one another, each head turned inward so the pair look at each other across the letter, both bare-headed because the two hat brims would collide at the apex: each raises the inner arm straight to a sharp apex where the flat hands press together, and each lower arm bends gently at the elbow so the two hands clasp at hip level, forming the crossbar. The clasp uses H's treatment — a solid mass split by one thin seam — rather than a punched circle, which read as a ring rather than gripped hands. Each figure stands on a straight weight-bearing outer leg with the inner leg set slightly forward and softly bent, the pair kept close together as on H so each body has a tight two-leg base rather than a splayed stance, and both shoes turning outward as H's do.

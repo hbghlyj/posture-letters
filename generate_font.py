@@ -188,6 +188,7 @@ class BarProfile:
     def __init__(
         self, ground: float, heel_x: float, arch_x: float, toe_x: float,
         heel_depth: float = 74.0, arch_depth: float = 50.0,
+        calf_x: float | None = None,
     ) -> None:
         self.ground = ground
         self.heel_x = heel_x
@@ -203,6 +204,14 @@ class BarProfile:
         h1 = max(1e-6, self.toe_s - self.arch_s)
         m1 = (0.0 - arch_depth) / h1
         self._arch_span = (h1, m1)
+        # Where the calf's muscle belly sits along the run. The glyph knows
+        # this from its own leg centreline, so it is passed in rather than
+        # assumed to be a fixed fraction of the heel-to-arch distance —
+        # bars of different lengths otherwise put the swell in the wrong place.
+        self.calf_s = (
+            self.arch_s * 0.66 if calf_x is None
+            else abs(calf_x - heel_x)
+        )
 
     @property
     def heel_top(self) -> float:
@@ -364,8 +373,17 @@ class BarProfile:
         # joint mass and the breeches cuff — which sit just behind the calf —
         # keep their full height while the band tapers past them, and the
         # outline steps where those shapes end.
-        centre = self.arch_s * 0.66
-        rise = self.arch_s * 0.16
+        #
+        # The window is placed against the calf's *own* position rather than
+        # a fixed fraction of the run. The leg strokes are laid out in glyph
+        # coordinates, so on a bar whose heel-to-arch distance differs from
+        # L's the fractional window drifts off the muscle: on Z it used to
+        # open only after the band had already tapered away, pinching the bar
+        # to a waist and then inflating it again past the muscle. Anchoring
+        # the window to ``calf_s`` keeps the swell over the belly on every
+        # glyph, so the bar thins once, evenly, from heel to toe.
+        centre = self.calf_s
+        rise = self.arch_s * 0.30
         fall = self.arch_s * 0.20
         if travelled <= centre - rise or travelled >= centre + fall:
             return 0.0
@@ -979,6 +997,7 @@ def merge_transformed(
     target: Drawer, source: Drawer,
     flip: bool = False, dx: float = 0.0, dy: float = 0.0,
     floor: float | None = None,
+    floor_from: float | None = None,
 ) -> None:
     """Copy a component into a glyph, optionally mirrored about its own axis.
 
@@ -996,6 +1015,14 @@ def merge_transformed(
     line it stands on. Vertices below the floor are pulled onto it, so the
     overhang is cut off flush instead of the whole component being lifted
     and the working edge floating clear of the ground.
+
+    ``floor_from`` raises that clip to the component's own underside ahead of
+    the given x. Clipping at the baseline alone keeps the glyph inside its
+    box but still lets the inverted thigh hang *below the bar* just past the
+    stem, which reads as a spur dropping out of the knee. Past ``floor_from``
+    the clip follows the bar's sole instead of the baseline, so the underside
+    of the stroke stays a single clean line and the overhang is confined to
+    the column the trunk covers.
     """
     ys = [y for contour, _ in source.contours for _, y in contour]
     if not ys:
@@ -1006,9 +1033,27 @@ def merge_transformed(
         x, y = point
         return (x + dx, (axis - y if flip else y) + dy)
 
+    # The bar's underside just ahead of the trunk, which is the line the
+    # stroke should keep. It is sampled from the shin's own contour over a
+    # short window clear of the stem: the spur being trimmed lies behind that
+    # window, so it cannot define the line it is measured against, and the
+    # heel serif at the far end — which legitimately drops to the floor — is
+    # outside it too.
+    sole = None
+    if floor_from is not None:
+        window = [
+            (axis - y if flip else y) + dy
+            for contour, _ in source.contours for x, y in contour
+            if floor_from + 60 < (x + dx) < floor_from + 200
+        ]
+        sole = min(window) if window else None
+
     def clip(point: Point) -> Point:
         x, y = point
-        return (x, y) if floor is None else (x, max(y, floor))
+        limit = floor
+        if sole is not None and x > floor_from:
+            limit = sole if limit is None else max(limit, sole)
+        return (x, y) if limit is None else (x, max(y, limit))
 
     for contour, hole in source.contours:
         moved = [clip(move(p)) for p in contour]
@@ -1602,9 +1647,17 @@ def pose(letter: str) -> Drawer:
         # Mirror of L's bottom bar, running left instead of right: one band on
         # a single ground line, deepest at the heel under the stem, thinning
         # forward through the arch, and taken out to a point at the toe.
+        #
+        # The heel is registered on the back of the widest leg rather than on
+        # the stem centre. J's rear thigh is set out at spread +20 and carries
+        # full breeches, so its outer edge stands at x≈499; a heel anchored
+        # further forward bulged only to x≈464 and sat *inside* that edge,
+        # reading as a notch under the leg instead of a heel behind it. Put
+        # the anchor on the leg's own back edge and the bulge clears it.
         bar = BarProfile(
-            ground=BAR_GROUND, heel_x=434, arch_x=144, toe_x=18,
+            ground=BAR_GROUND, heel_x=478, arch_x=144, toe_x=18,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
+            calf_x=241,
         )
         for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
             d.leg(
@@ -1788,8 +1841,13 @@ def pose(letter: str) -> Drawer:
             base_axis - y
             for contour, _ in base.contours for x, y in contour if x > 300
         )
+        # Ahead of the trunk the clip follows the bar's own sole, so the
+        # inverted thigh cannot hang below the stroke and read as a spur
+        # dropping out of the knee. Behind that line it still clips to the
+        # baseline, where the trunk covers the cut.
         merge_transformed(
             d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
+            floor_from=stem_x + 42,
         )
 
     elif letter == "M":
