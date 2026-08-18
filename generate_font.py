@@ -29,6 +29,15 @@ BAR_HEEL_DEPTH = 74.0
 BAR_ARCH_DEPTH = 50.0
 # The one ground line those bars sit on, shared so L, J and Z land together.
 BAR_GROUND = 72.0
+# Where the kneeling base's ankles sit. E's lower prong is one long shin
+# running from a grounded knee out to the ankle, so this value is effectively
+# the shin's length, and therefore the width of the prong. L shares it.
+ANKLE_X = 548.0
+# Where the grounded knee sits along that run. The femur and tibia divide the
+# prong's horizontal reach between them, so this sets the shin's length: far
+# enough forward that shin and thigh come out close to equal, as a real leg
+# and the print's seated figure both are.
+KNEE_X = 320.0
 
 Point = tuple[float, float]
 
@@ -923,21 +932,46 @@ def kneeling_base(stem_x: float, hip_y: float) -> Drawer:
     whole component — L flips it — before merging it into the glyph.
     """
     d = Drawer()
-    knee = (stem_x - 2, 118)
+    # The knee is carried forward along the floor rather than tucked under the
+    # hip. With it directly beneath the stem the prong was one enormous shin —
+    # 370-386 units against a 188 thigh, a ratio near 2.0, which the audit
+    # flagged as the worst limb in the font and which the print does not show:
+    # the source figure sits with the legs extended, shin and thigh roughly
+    # comparable. This is the same fault L was rebuilt for.
+    #
+    # Advancing the knee splits the horizontal run between femur and tibia
+    # instead of making the tibia carry all of it, so the proportions come
+    # back into range while the prong keeps its full reach and the letter its
+    # width. It also matches the grounded-knee construction L, J and Z use.
+    # The thigh keeps its original vertical drop from the hip to the floor,
+    # because that drop is the letter's own left edge: run diagonally to a
+    # forward knee it peels the stem away below the middle prong and E stops
+    # having a straight spine or a bottom-left corner. So the leg is given a
+    # third point — hip, floor, grounded knee, raised ankle — exactly the
+    # four-point form L, J and Z use with ``knee_index=2``.
+    ankles = []
     for spread, width, breeches in ((-16, 54, 62), (16, 42, 50)):
+        ankle = (ANKLE_X + spread, 104)
+        ankles.append(ankle)
         d.leg(
             [
                 (stem_x + spread * 0.4, hip_y),
-                (knee[0] + spread * 0.5, knee[1]),
-                (548 + spread, 104),
+                (stem_x - 2 + spread * 0.5, 118),
+                (KNEE_X + spread * 0.5, 108),
+                ankle,
             ],
-            width, knee_index=1, breeches_width=breeches, shoe_scale=0.0,
+            width, knee_index=2, breeches_width=breeches, shoe_scale=0.0,
         )
     # Heel serif: the ankles flex up at the back of the base stroke and
-    # taper to a sharp point, the bottom-right terminal of the letter.
-    d.circle(552, 114, 26, n=24)
-    d.tapered_path([(552, 108), (568, 150), (580, 194)], [48, 38, 20], True)
-    d.cut_path([(534, 128), (566, 136)], 3.4, False)
+    # taper to a sharp point, the bottom-right terminal of the letter. It is
+    # placed relative to the outermost ankle so it travels with the foot
+    # rather than sitting at a fixed coordinate.
+    toe = max(x for x, _ in ankles)
+    d.circle(toe - 12, 114, 26, n=24)
+    d.tapered_path(
+        [(toe - 12, 108), (toe + 4, 150), (toe + 16, 194)], [48, 38, 20], True,
+    )
+    d.cut_path([(toe - 30, 128), (toe + 2, 136)], 3.4, False)
     return d
 
 
