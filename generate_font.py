@@ -1801,10 +1801,12 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "W":
-        # Editorial yoga-alphabet W, imported like L. Lying on the back with
-        # the head and shoulders at the base, both legs splayed wide into a
-        # broad V and both arms raised together in the centre with the palms
-        # pressed, giving the three peaks of the W.
+        # Reference-conditioned reconstruction of the 1782 W topology,
+        # imported like L. The gymnast hinges forward so the compact head and
+        # shoulders make the centre peak. Arms overlap the long inner thighs;
+        # concealed grounded knees make uncarved low vertices; naturally
+        # shorter calves rise to forward-facing ankles, then the pointed feet
+        # turn modestly outward at the outer terminals.
         pts = YOGA_W_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
