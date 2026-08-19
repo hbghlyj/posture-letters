@@ -1,7 +1,7 @@
 """Traced silhouette outline for the J glyph. Editorial yoga-alphabet J traced from reference-crops/two-way-stretch/image_89bd1753.png through a reference-conditioned clean silhouette: both straight joined legs form the single tall right stem, the flexed feet make a short upper serif, the hips, back, and merged arms sweep through the broad bottom hook, and the naturally upright profile head and smooth neck make its compact lower-left terminal. Flattened via OpenCV exterior-contour trace and resampled to about 3px of arc length. Coordinates are in image pixel space, y-down. generate_font.py scales and flips them into font units the same way as L.
 """
 
-YOGA_J_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (168.00, 16.00),
     (165.58, 17.42),
     (163.17, 18.83),
@@ -569,5 +569,5 @@ YOGA_J_OUTLINE_POINTS = [
     (171.00, 16.00),
 ]
 
-YOGA_J_HOLES = [
+HOLES = [
 ]

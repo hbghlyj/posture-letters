@@ -7,7 +7,7 @@ Coordinates are in the SVG pixel space, y-down, one point roughly every
 3px of arc length. generate_font.py scales and flips them into font units.
 """
 
-UPRIGHT_TORSO_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (421.24, 97.34),
     (423.36, 99.46),
     (425.42, 101.64),
@@ -1353,3 +1353,5 @@ UPRIGHT_TORSO_OUTLINE_POINTS = [
     (416.53, 93.60),
     (418.92, 95.43),
 ]
+
+HOLES = []

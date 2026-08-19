@@ -10,7 +10,7 @@ generate_font.py scales and flips them into font units
 the same way as L.
 """
 
-YOGA_F_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (117.92, 16.00),
     (115.21, 16.69),
     (112.49, 17.38),
@@ -573,5 +573,5 @@ YOGA_F_OUTLINE_POINTS = [
     (120.92, 16.00)
 ]
 
-YOGA_F_HOLES = [
+HOLES = [
 ]

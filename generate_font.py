@@ -15,32 +15,7 @@ from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
 from profile_loader import LOWER_LIMB_OUTLINE_POINTS
-from upright_torso_outline_points import UPRIGHT_TORSO_OUTLINE_POINTS
-from yoga_d_outline_points import YOGA_D_HOLES, YOGA_D_OUTLINE_POINTS
-from yoga_h_outline_points import YOGA_H_HOLES, YOGA_H_OUTLINE_POINTS
-from yoga_i_outline_points import YOGA_I_HOLES, YOGA_I_OUTLINE_POINTS
-from yoga_j_outline_points import YOGA_J_HOLES, YOGA_J_OUTLINE_POINTS
-from yoga_y_outline_points import YOGA_Y_HOLES, YOGA_Y_OUTLINE_POINTS
-from yoga_k_outline_points import YOGA_K_HOLES, YOGA_K_OUTLINE_POINTS
-from yoga_m_outline_points import YOGA_M_HOLES, YOGA_M_OUTLINE_POINTS
-from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
-from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
-from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
-from yoga_q_outline_points import YOGA_Q_HOLES, YOGA_Q_OUTLINE_POINTS
-from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
-from yoga_s_outline_points import YOGA_S_HOLES, YOGA_S_OUTLINE_POINTS
-from yoga_t_outline_points import YOGA_T_HOLES, YOGA_T_OUTLINE_POINTS
-from yoga_u_outline_points import YOGA_U_HOLES, YOGA_U_OUTLINE_POINTS
-from yoga_z_outline_points import YOGA_Z_HOLES, YOGA_Z_OUTLINE_POINTS
-from yoga_a_outline_points import YOGA_A_HOLES, YOGA_A_OUTLINE_POINTS
-from yoga_b_outline_points import YOGA_B_HOLES, YOGA_B_OUTLINE_POINTS
-from yoga_c_outline_points import YOGA_C_HOLES, YOGA_C_OUTLINE_POINTS
-from yoga_e_outline_points import YOGA_E_HOLES, YOGA_E_OUTLINE_POINTS
-from yoga_f_outline_points import YOGA_F_HOLES, YOGA_F_OUTLINE_POINTS
-from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
-from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
-from yoga_w_outline_points import YOGA_W_HOLES, YOGA_W_OUTLINE_POINTS
-from yoga_x_outline_points import YOGA_X_HOLES, YOGA_X_OUTLINE_POINTS
+from outline_points import LETTERS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -1247,7 +1222,7 @@ def pose(letter: str) -> Drawer:
         # down and outward as the diagonals, and the folded torso and
         # reaching arms lie across the middle as the crossbar, enclosing a
         # triangular counter.
-        pts = YOGA_A_OUTLINE_POINTS
+        pts, holes = LETTERS["A"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1261,7 +1236,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_A_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
 
@@ -1269,7 +1244,7 @@ def pose(letter: str) -> Drawer:
         # Editorial yoga-alphabet B, imported like L. Seen from behind:
         # the standing leg and torso are the stem, the hand-on-hip
         # elbow is the upper bowl, and the bent knee is the lower bowl.
-        pts = YOGA_B_OUTLINE_POINTS
+        pts, holes = LETTERS["B"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1283,14 +1258,14 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_B_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "C":
         # Editorial yoga-alphabet C, imported like L. A kneeling
         # backbend: shins on the floor, thighs the left stem, arched
         # torso and thrown-back head opening to the right.
-        pts = YOGA_C_OUTLINE_POINTS
+        pts, holes = LETTERS["C"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1304,7 +1279,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_C_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "D":
@@ -1316,7 +1291,7 @@ def pose(letter: str) -> Drawer:
         # photo faces this way; the first import was mirrored.
         # Same import path as L: one closed outline (plus the natural
         # counter) scaled uniformly onto BAR_GROUND.
-        pts = YOGA_D_OUTLINE_POINTS
+        pts, holes = LETTERS["D"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, right, top, bottom = min(xs), max(xs), min(ys), max(ys)
@@ -1330,7 +1305,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_D_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "E":
@@ -1338,7 +1313,7 @@ def pose(letter: str) -> Drawer:
         # upright spine as the stem, the raised arm above the head as the
         # top bar, the forward arm at chest height as the middle bar, and
         # the folded legs along the floor as the bottom bar.
-        pts = YOGA_E_OUTLINE_POINTS
+        pts, holes = LETTERS["E"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1352,7 +1327,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_E_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "F":
@@ -1360,7 +1335,7 @@ def pose(letter: str) -> Drawer:
         # straight leg as the stem, both arms extended forward at the top
         # as the upper bar, and the folded lifted leg — thigh forward,
         # shin tucked down — as the middle bar.
-        pts = YOGA_F_OUTLINE_POINTS
+        pts, holes = LETTERS["F"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1374,14 +1349,14 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_F_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "G":
         # Editorial yoga-alphabet G / Vrischikasana (scorpion), imported
         # like L. An inverted backbend: arms and hanging head at the
         # bottom, arched torso the bowl, feet the spur.
-        pts = YOGA_G_OUTLINE_POINTS
+        pts, holes = LETTERS["G"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1395,7 +1370,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_G_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "H":
@@ -1403,7 +1378,7 @@ def pose(letter: str) -> Drawer:
         # is the crossbar; the raised leg above and the kneeling shin below
         # make the left stem; the raised arm above and the planted arm
         # below make the right stem.
-        pts = YOGA_H_OUTLINE_POINTS
+        pts, holes = LETTERS["H"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1417,7 +1392,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_H_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "I":
@@ -1425,7 +1400,7 @@ def pose(letter: str) -> Drawer:
         # the legs pressed together as the stem, both arms raised and crossed
         # above the head so the forearms and open hands make the top serif,
         # and the feet turned outward to make the bottom serif.
-        pts = YOGA_I_OUTLINE_POINTS
+        pts, holes = LETTERS["I"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1439,7 +1414,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_I_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "J":
@@ -1448,7 +1423,7 @@ def pose(letter: str) -> Drawer:
         # short top serif. Hips, back, and merged arms sweep through the open
         # bottom hook; its naturally upright profile head and smooth neck make
         # the compact lower-left terminal without closing the counter.
-        pts = YOGA_J_OUTLINE_POINTS
+        pts, holes = LETTERS["J"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1462,7 +1437,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_J_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "K":
@@ -1470,7 +1445,7 @@ def pose(letter: str) -> Drawer:
         # over a kneeling leg is the vertical stem, the raised arm is the
         # upper diagonal, and the extended straight leg is the lower
         # diagonal.
-        pts = YOGA_K_OUTLINE_POINTS
+        pts, holes = LETTERS["K"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1484,7 +1459,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_K_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "L":
@@ -1501,7 +1476,7 @@ def pose(letter: str) -> Drawer:
         # contour is scaled uniformly from SVG pixel space (y-down) into font
         # units (y-up), seated on the shared kneeling ground line BAR_GROUND
         # and reaching the same 788-unit cap height as the previous L.
-        pts = UPRIGHT_TORSO_OUTLINE_POINTS
+        pts = LETTERS["L"][0]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1518,7 +1493,7 @@ def pose(letter: str) -> Drawer:
         # behind, the two raised knees making the peaks, the calves dropping
         # to flat feet as the outer stems, and the thighs sloping down and
         # inward to the hanging hips to make the central V.
-        pts = YOGA_M_OUTLINE_POINTS
+        pts, holes = LETTERS["M"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1532,7 +1507,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_M_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
 
@@ -1541,7 +1516,7 @@ def pose(letter: str) -> Drawer:
         # crop. A straight supporting arm and planted hand make the left stem;
         # the profile head, chest, waist, abdomen, and pelvis descend as the
         # organic diagonal; and the joined raised leg makes the right stem.
-        pts = YOGA_N_OUTLINE_POINTS
+        pts, holes = LETTERS["N"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1555,14 +1530,14 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_N_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "O":
         # Editorial yoga-alphabet O, imported like L. A full bow whose
         # raised feet and both grasping arms close a ring, with a large
         # natural counter.
-        pts = YOGA_O_OUTLINE_POINTS
+        pts, holes = LETTERS["O"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1576,14 +1551,14 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_O_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "P":
         # Editorial yoga-alphabet P, imported like L. A standing
         # backbend whose planted legs are the stem and whose arched
         # torso, hanging head and clasped hands close the bowl.
-        pts = YOGA_P_OUTLINE_POINTS
+        pts, holes = LETTERS["P"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1597,7 +1572,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_P_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "Q":
@@ -1605,7 +1580,7 @@ def pose(letter: str) -> Drawer:
         # raised feet and grasping arm close the ring, while the other
         # arm plants on the floor as the tail. The print's inverted
         # ring is replaced because this pose is more legible as a Q.
-        pts = YOGA_Q_OUTLINE_POINTS
+        pts, holes = LETTERS["Q"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1619,14 +1594,14 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_Q_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "R":
         # Editorial yoga-alphabet R, imported like L. The same standing
         # backbend as P, with the front leg stepped forward as the
         # diagonal of the letter.
-        pts = YOGA_R_OUTLINE_POINTS
+        pts, holes = LETTERS["R"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1640,7 +1615,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_R_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "S":
@@ -1649,7 +1624,7 @@ def pose(letter: str) -> Drawer:
         # as the lower terminal; thighs rise at lower right; the backbend and
         # profile head form the middle curve; closely overlapped arms continue
         # overhead into the upper-right terminal.
-        pts = YOGA_S_OUTLINE_POINTS
+        pts, holes = LETTERS["S"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1663,14 +1638,14 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_S_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "T":
         # Editorial yoga-alphabet T, imported like L. Standing upright
         # seen from behind: legs together as the vertical stem, both arms
         # stretched straight out level with the shoulders as the bar.
-        pts = YOGA_T_OUTLINE_POINTS
+        pts, holes = LETTERS["T"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1684,7 +1659,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_T_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "U":
@@ -1694,7 +1669,7 @@ def pose(letter: str) -> Drawer:
         # hips and torso make the bowl, and joined legs rise as the
         # right stem to pointed feet. The profile head sits on the left
         # stem without closing the open counter.
-        pts = YOGA_U_OUTLINE_POINTS
+        pts, holes = LETTERS["U"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1708,14 +1683,14 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_U_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "V":
         # Editorial yoga-alphabet V, imported like L from two-way-stretch/V.png.
         # Two equal legs rise from a compact buttocks apex as the strokes of
         # a capital V; outward-turned shod feet are the upper terminals.
-        pts = YOGA_V_OUTLINE_POINTS
+        pts, holes = LETTERS["V"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1729,7 +1704,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_V_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "W":
@@ -1740,7 +1715,7 @@ def pose(letter: str) -> Drawer:
         # shorter calves stay visibly slimmer than the muscular thighs as they
         # taper to forward-facing ankles, then the pointed feet
         # turn modestly outward at the outer terminals.
-        pts = YOGA_W_OUTLINE_POINTS
+        pts, holes = LETTERS["W"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1754,7 +1729,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_W_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
 
@@ -1763,7 +1738,7 @@ def pose(letter: str) -> Drawer:
         # from behind: legs spread into an inverted V with both feet on the
         # floor, torso folded down so the head hangs at the centre, and both
         # arms stretched up and out to the upper corners.
-        pts = YOGA_X_OUTLINE_POINTS
+        pts, holes = LETTERS["X"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1777,7 +1752,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_X_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
 
@@ -1785,7 +1760,7 @@ def pose(letter: str) -> Drawer:
         # Editorial yoga-alphabet Y, imported like L. A headstand with
         # the torso as the stem and the two legs split wide into a V as
         # the arms of the letter.
-        pts = YOGA_Y_OUTLINE_POINTS
+        pts, holes = LETTERS["Y"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1799,7 +1774,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_Y_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "Z":
@@ -1807,7 +1782,7 @@ def pose(letter: str) -> Drawer:
         # arms reaching horizontally at head height as the top bar, the
         # leaning torso and thighs as the diagonal, and the shins and
         # feet flat along the floor as the bottom bar.
-        pts = YOGA_Z_OUTLINE_POINTS
+        pts, holes = LETTERS["Z"]
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1821,7 +1796,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in YOGA_Z_HOLES:
+        for hole in holes:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     return d

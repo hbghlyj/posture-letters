@@ -8,7 +8,7 @@ Coordinates are in image pixel space, y-down. generate_font.py scales
 and flips them into font units.
 """
 
-YOGA_D_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (478.00, 20.00),
     (475.88, 22.12),
     (475.00, 24.76),
@@ -931,7 +931,7 @@ YOGA_D_OUTLINE_POINTS = [
     (481.00, 20.00)
 ]
 
-YOGA_D_HOLES = [
+HOLES = [
     [
         (306.00, 264.00),
         (308.59, 263.00),

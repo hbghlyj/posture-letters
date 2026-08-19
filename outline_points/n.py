@@ -1,7 +1,7 @@
 """Traced silhouette outline for the N glyph. Editorial yoga-alphabet N traced from reference-crops/two-way-stretch/N.png through a reference-conditioned clean silhouette: a planted straight arm makes the left stem, the naturally aligned profile head and anatomically curved torso descend diagonally into the low hips, and the joined raised leg makes the tall right stem. The planted hand and rounded hip share a baseline while the chest, waist, abdomen, and pelvis give the diagonal organic contours rather than a ruled bar. Flattened via OpenCV exterior-contour trace and resampled to about 3px of arc length. Coordinates are in image pixel space, y-down. generate_font.py scales and flips them into font units the same way as L.
 """
 
-YOGA_N_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (206.00, 16.00),
     (205.00, 18.59),
     (204.00, 21.18),
@@ -737,5 +737,5 @@ YOGA_N_OUTLINE_POINTS = [
     (209.00, 16.00),
 ]
 
-YOGA_N_HOLES = [
+HOLES = [
 ]

@@ -9,7 +9,7 @@ are in image pixel space, y-down. generate_font.py scales
 and flips them into font units the same way as L.
 """
 
-YOGA_B_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (109.00, 16.00),
     (106.42, 17.00),
     (103.88, 18.12),
@@ -732,7 +732,7 @@ YOGA_B_OUTLINE_POINTS = [
     (112.00, 16.00)
 ]
 
-YOGA_B_HOLES = [
+HOLES = [
     [
         (145.00, 495.00),
         (147.41, 494.41),

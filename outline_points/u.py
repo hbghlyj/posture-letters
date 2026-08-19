@@ -1,7 +1,7 @@
 """Traced silhouette outline for the U glyph. Editorial yoga-alphabet U traced from reference-crops/two-way-stretch/image_6a52f7c6.png: a side-profile gymnast lying on the back with a rounded hip-and-torso bowl, both arms rising as the left stem and ending in a compact inward hand serif, and both joined legs rising as the right stem to pointed feet. The naturally aligned profile head sits on the left stem without closing the open U counter. Flattened via OpenCV exterior-contour trace and resampled to about 3px of arc length. Coordinates are in image pixel space, y-down. generate_font.py scales and flips them into font units the same way as L.
 """
 
-YOGA_U_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (134.00, 16.00),
     (131.59, 17.41),
     (129.17, 18.83),
@@ -866,5 +866,5 @@ YOGA_U_OUTLINE_POINTS = [
     (136.59, 17.00),
 ]
 
-YOGA_U_HOLES = [
+HOLES = [
 ]

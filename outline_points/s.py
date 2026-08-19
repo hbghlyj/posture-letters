@@ -10,7 +10,7 @@ trace and resampled to about 3 px of arc length. Coordinates are in image pixel
 space, y-down. generate_font.py scales and flips them into font units.
 """
 
-YOGA_S_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (543.00, 123.00),
     (540.41, 124.00),
     (537.83, 125.00),
@@ -1469,4 +1469,4 @@ YOGA_S_OUTLINE_POINTS = [
     (543.02, 123.00),
 ]
 
-YOGA_S_HOLES = []
+HOLES = []

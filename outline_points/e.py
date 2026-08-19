@@ -1,6 +1,6 @@
 """Traced outline of the yoga E silhouette: kneeling side view facing right, shins flat on the floor as the bottom bar, spine vertical as the stem, head tucked low, one arm folded so the forearm lies horizontally above the head as the top bar, the other forearm projecting forward at chest height as the shorter middle prong."""
 
-YOGA_E_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (224.47, 16.00),
     (223.26, 18.50),
     (220.76, 19.71),
@@ -839,5 +839,5 @@ YOGA_E_OUTLINE_POINTS = [
     (227.47, 16.00)
 ]
 
-YOGA_E_HOLES = [
+HOLES = [
 ]

@@ -1,7 +1,7 @@
 """Traced silhouette outline for the V glyph. Editorial yoga-alphabet V traced from reference-crops/two-way-stretch/V.png through a reference-conditioned clean silhouette: two equal legs rise from a compact rounded buttocks apex as the two strokes of a capital V, with natural thigh-to-calf taper and outward-turned shod feet as the upper terminals. Flattened via OpenCV exterior-contour trace and resampled to about 3px of arc length. Coordinates are in image pixel space, y-down. generate_font.py scales and flips them into font units the same way as L.
 """
 
-YOGA_V_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (83.00, 16.00),
     (80.41, 17.00),
     (77.42, 17.00),
@@ -635,5 +635,5 @@ YOGA_V_OUTLINE_POINTS = [
     (85.71, 16.71),
 ]
 
-YOGA_V_HOLES = [
+HOLES = [
 ]

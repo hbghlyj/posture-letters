@@ -37,7 +37,7 @@ Or declare only the compact WOFF2:
 - `build_specimen.py` — rebuilds the self-contained specimen
 - `cut_reference.py` — optional helper for older print-cell crops
 - `reference-crops/` — pose references, including modern gymnast studies in `two-way-stretch/`
-- `upright_torso_outline_points.py` — L's flattened trace contour consumed by the generator
+- `outline_points/` — A–Z traced silhouette contours consumed by the generator
 - `validate_anatomy.py` — source-centerline proportion audit
 - `anatomy-validation.md` / `.json` — readable and machine-readable audit results
 
@@ -77,7 +77,7 @@ The bar itself is **one band** rather than a run of separately swelling body par
 
 **L** is no longer assembled from the shared body-part primitives. Its whole letterform is a **single traced contour** imported from `vector_kneeling_upright_torso.svg` — a VTracer spline trace of `vector_kneeling_upright_torso.png`, a flat vector silhouette of a female figure in strict side profile, high-kneeling with the **upper torso perfectly upright and vertical** (head with a low bun, straight erect spine, arm relaxed at the side) and the shin and pointed foot lying flat along the floor to the right. The figure's own anatomy supplies the letter: the vertical trunk is the stem and the grounded lower leg is the bottom bar, so no synthetic strokes, hats, shoes, or engraved cuts are layered on top of the trace.
 
-The flattened outline lives in `upright_torso_outline_points.py` (one point roughly every 3px of arc length, in SVG pixel space). `generate_font.py` scales it uniformly into font units, flips it y-up, seats it on the shared kneeling ground line (`BAR_GROUND`, y=72), and stretches it to the same 788-unit cap height as the previous L. Because the glyph is one closed silhouette it opts out of the hat-and-shoe serif system, the breeches/calf system, and the anatomical audit's limb counting; the sections below that mention L describe the **superseded primitive construction**, retained in Git history.
+The flattened outline lives in `outline_points/l.py` (one point roughly every 3px of arc length, in SVG pixel space). `generate_font.py` scales it uniformly into font units, flips it y-up, seats it on the shared kneeling ground line (`BAR_GROUND`, y=72), and stretches it to the same 788-unit cap height as the previous L. Because the glyph is one closed silhouette it opts out of the hat-and-shoe serif system, the breeches/calf system, and the anatomical audit's limb counting; the sections below that mention L describe the **superseded primitive construction**, retained in Git history.
 
 ## L's base: E's lower prong, inverted (superseded)
 

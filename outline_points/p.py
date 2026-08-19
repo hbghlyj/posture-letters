@@ -9,7 +9,7 @@ image pixel space, y-down. generate_font.py scales and flips
 them into font units the same way as L.
 """
 
-YOGA_P_OUTLINE_POINTS = [
+OUTLINE_POINTS = [
     (297.00, 16.00),
     (294.41, 17.00),
     (291.41, 17.00),
@@ -868,7 +868,7 @@ YOGA_P_OUTLINE_POINTS = [
     (300.00, 16.00)
 ]
 
-YOGA_P_HOLES = [
+HOLES = [
     [
         (272.00, 178.00),
         (274.59, 177.00),
