@@ -1983,121 +1983,124 @@ def pose(letter: str) -> Drawer:
         ])
 
     elif letter == "M":
-        # Seated M built from the body's own hinges rather than an impossible
-        # split figure. The arms drop straight down behind the back as the left
-        # stem, locked at the shoulders to carry the torso's weight; the torso
-        # then leans back from the hips to make the inner down-slope into the
-        # central valley; the thighs pull up toward the chest and the knees
-        # flex deeply to throw the sharp apex; and the lower legs descend as
-        # the right stem. Hand and foot flatten into the two base serifs.
-        shoulder = (150, 646)
-        hips = (352, 150)
-        knee = (536, 610)
-        ankle = (610, 118)
-        # Left stem: both arms straight down behind the back, shoulders locked.
-        for sign, arm_x in ((-1, 124), (1, 166)):
-            arm = [(arm_x, 640), (arm_x, 386), (arm_x, 132)]
-            d.path(arm, 34 if sign < 0 else 28, True, False, track=False)
-            segments, length = d.centerline_measurements(arm)
+        # Print's M: two legs only. Stockinged calves are the outer
+        # stems, breeched thighs the inner V, paired buttocks and a
+        # small hatless face sit in the valley, and the hands cup the
+        # sit. The previous build put a cocked hat on the left peak and
+        # used arms as the left stem, which the print does not show.
+        # Drawn as separate tapers so the sharp knee fold does not spawn
+        # a limb-width ball on each peak. The sit is the crotch of the
+        # two thighs, not a sack hung under a pointed V.
+        sit = (350, 312)
+        for sign in (-1, 1):
+            hip = (sit[0] + sign * 22, sit[1] + 8)
+            knee = (350 + sign * 182, 698)
+            ankle = (350 + sign * 204, 74)
+            thigh = [hip, knee]
+            shin = [knee, (350 + sign * 196, 380), ankle]
+            d.tapered_path(thigh, [98, 76], True)
+            d.tapered_path(shin, [58, 68, 40], True)
+            segments, length = d.centerline_measurements(thigh + shin[1:])
             d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
+                "part": "limb", "segments": [
+                    math.dist(thigh[0], thigh[1]),
+                    math.dist(shin[0], shin[1]) + math.dist(shin[1], shin[2]),
+                ], "length": length, "points": [hip, knee, ankle],
             })
-            d.circle(arm[0][0], arm[0][1], 18)
-        # Left hand serif: bent horizontally at the wrist, pressed flat on the
-        # ground so it reads as the left-side base serif.
-        d.ellipse(140, 128, 40, 30, 0.0)
-        # Fingers splay outward to the left along the floor, mirroring the
-        # foot serif at the other base and giving the stem a true left serif.
-        for offset, y in ((0, 148), (0, 130), (0, 112), (2, 96)):
-            d.polygon([
-                (140 + offset, y + 9), (140 + offset, y - 9),
-                (140 + offset - 78, y - 7), (140 + offset - 78, y + 7),
-            ])
-        for y in (139, 121, 103):
-            d.cut_path([(70, y), (128, y)], 4.0, False)
-        # Head rides the top of the left peak, looking toward the knees.
-        d.head(142, 716, 1)
-        # Core incline: the torso leans back from the hips into the valley.
-        d.torso([hips, (248, 396), shoulder], 86, True)
-        # Knee apex and right stem: thighs pull up to deeply flexed knees, then
-        # the lower legs drop to the planted foot.
-        for spread, width in ((0, 58), (26, 50)):
-            d.leg(
-                [
-                    (hips[0] + spread * 0.6, hips[1] + spread * 0.4),
-                    (knee[0] + spread, knee[1]),
-                    (ankle[0] + spread, ankle[1]),
-                ],
-                width, knee_index=1, breeches_width=width * 1.34,
-                shoe_direction=(1, 0),
-            )
+            # Rounded kneecap, sized to the limb, not a ball on a stick.
+            d.ellipse(knee[0], knee[1] + 6, 34, 30, 0.0)
+            d.ellipse(knee[0], knee[1] - 4, 30, 8, 0.0)
+            d.cut_path([
+                (knee[0] - sign * 16, knee[1] - 2),
+                (knee[0] + sign * 16, knee[1] - 4),
+            ], 3.2, False)
+            d.shoe(ankle[0], ankle[1], shin[1], (sign, -0.06), 0.92)
+        # Paired buttocks are the valley floor.
+        d.ellipse(318, sit[1] - 6, 48, 40, 0.22)
+        d.ellipse(382, sit[1] - 6, 48, 40, -0.22)
+        d.ellipse(350, sit[1] - 18, 54, 32, 0.0)
+        d.cut_path([(350, sit[1] + 16), (350, sit[1] - 36)], 5.0, False)
+        # Small hatless face nestled in the dip, looking up.
+        d.front_head(350, sit[1] + 28, 32, hair_down=False, hat=False,
+                     gaze_up=True)
+        # Hands cup the underside of the sit.
+        for sign in (-1, 1):
+            hx, hy = 350 + sign * 52, sit[1] - 36
+            d.ellipse(hx, hy, 20, 15, sign * 0.28)
+            for dx, dy in ((-4, -12), (4, -16), (10, -8)):
+                d.polygon([
+                    (hx, hy),
+                    (hx + sign * dx, hy + dy),
+                    (hx + sign * (dx + 5), hy + dy + 4),
+                ])
 
     elif letter == "N":
-        # Upside-down back-bend. The figure hangs inverted: the hips are flexed
-        # at the top left so both legs drop straight to the floor as the left
-        # pillar, the torso then arches down and back in one long sweep from
-        # those hips to the shoulders at the lower right as the diagonal, and
-        # from there both arms stretch vertically up past the hanging head to
-        # make the right pillar. The head hangs straight down at the lower
-        # right, anchoring the point where the diagonal meets that bar.
-        hip = (156, 686)
-        shoulder = (540, 254)
-        # Pelvis. The torso stroke ends in a round cap of its own half-width,
-        # which is far narrower than the pair of thighs where they leave it, so
-        # the two legs used to step out sideways from the trunk in a hard
-        # notch. A pelvic mass spanning the full width of both thigh tops
-        # carries the trunk into the legs as one continuous buttock-and-hip
-        # curve, which is what the flexed hip of an inverted body shows.
-        d.ellipse(hip[0] + 5, hip[1] - 4, 43, 46, 0.0)
-        d.ellipse(hip[0] + 5, hip[1] - 26, 41, 40, 0.0)
-        d.ellipse(hip[0] + 4, hip[1] - 48, 37, 34, 0.0)
-        # Left pillar: hips flexed, both legs straight down, knees locked and
-        # feet planted flat at the bottom.
-        for spread, width, breeches in ((-18, 52, 60), (18, 44, 52)):
-            d.leg(
-                [
-                    (hip[0] + spread * 0.4, hip[1] - 40),
-                    (hip[0] + spread, 380),
-                    (hip[0] + spread, 74),
-                ],
-                width, knee_index=1, breeches_width=breeches,
-                # Both feet point right: the body faces that way, arching over
-                # to the shoulders and hanging head at the lower right, so
-                # splaying one foot back to the left contradicts the pose.
-                shoe_direction=(1, 0),
-            )
-        # Diagonal: one long backbend sweeping from the hips down to the
-        # shoulders on the right.
-        d.torso([(hip[0] + 16, hip[1] - 16), (348, 470), shoulder], 84, True)
-        # Right pillar: both arms straight up, parallel, past the hanging head.
-        for spread in (-20, 20):
-            arm = [
-                (shoulder[0] + spread * 0.4, shoulder[1] + 34),
-                (shoulder[0] + spread, 470),
-                (shoulder[0] + spread, 742),
+        # Print's N: a piked headstand, not inverted legs-left / arms-right.
+        # The head sits on the ground at the lower-left; the coat is the
+        # left stem up to a rounded hip; the thighs run the diagonal down
+        # to a grounded knee; the calf rises as the right stem to a shoe
+        # at the top. One sleeve lies along the diagonal with a hand.
+        hip = (198, 672)
+        knee = (540, 132)
+        ankle = (568, 712)
+        # Head on the ground at the foot of the left stem. No hat: the
+        # print is hair and a face, not a cocked brim.
+        d.head(186, 128, -1, 0.10, hat=False)
+        d.ellipse(170, 72, 46, 18, 0.06)
+        # Collar / cuff mass at the neck, the print's white ruff.
+        d.ellipse(192, 178, 36, 20, 0.04)
+        # Left stem: torso up to the hip.
+        spine = [(190, 186), (188, 430), (194, 640), hip]
+        d.tapered_path(spine, [80, 84, 94, 108], True)
+        segments, length = d.centerline_measurements(spine)
+        d.anatomy.append({
+            "part": "torso", "segments": segments, "length": length,
+            "points": spine,
+        })
+        # One elongated breech at the top-left, not two stacked balls.
+        d.ellipse(186, 690, 64, 46, -0.55)
+        # Diagonal thighs. Two close together for weight; tracked as legs.
+        for spread, breeches in ((0, 92), (16, 76)):
+            thigh = [
+                (hip[0] + 12 + spread * 0.25, hip[1] - 16),
+                (knee[0] - 10 + spread * 0.3, knee[1] + 20),
             ]
-            d.path(arm, 34 if spread < 0 else 28, True, False, track=False)
-            segments, length = d.centerline_measurements(arm)
+            d.tapered_path(thigh, [breeches, breeches * 0.80], True)
+            segments, length = d.centerline_measurements(
+                [thigh[0], knee, (ankle[0], ankle[1])]
+            )
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
-                "points": arm,
+                "points": [thigh[0], knee, (ankle[0], ankle[1])],
             })
-            d.circle(arm[0][0], arm[0][1], 18)
-            # Hand flat at the top of the bar, fingers reaching up.
-            palm_x = arm[-1][0]
-            d.ellipse(palm_x, 756, 16, 18, 0.0)
-            for dx in (-10, -1, 8):
-                d.polygon([
-                    (palm_x + dx - 4, 762), (palm_x + dx + 4, 762),
-                    (palm_x + dx + 3, 788), (palm_x + dx - 4, 788),
-                ])
-            d.cut_path([(palm_x - 13, 768), (palm_x + 13, 766)], 3.2, False)
-        # The head hangs straight down from the shoulders as the lower-right
-        # anchor, on a neck that keeps it attached to the torso.
-        d.path([(shoulder[0] - 6, shoulder[1] - 18), (550, 196)], 38,
-               False, False, track=False)
-        d.head(554, 154, 1, math.pi)
+        # Grounded knee — the print's lower-right corner.
+        d.ellipse(knee[0] + 2, knee[1] + 12, 46, 38, 0.35)
+        # Right stem: a real calf, thick enough to match the left stem.
+        shin = [
+            (knee[0] + 6, knee[1] + 28),
+            (ankle[0] - 4, 420),
+            ankle,
+        ]
+        d.tapered_path(shin, [62, 72, 44], True)
+        d.shoe(ankle[0] - 4, ankle[1] + 6, shin[1], (-0.55, 0.84), 1.02)
+        # Foreground sleeve held just above the thigh so the hand reads.
+        shoulder = (228, 624)
+        hand = (418, 352)
+        arm = [shoulder, (318, 500), hand]
+        d.tapered_path(arm, [40, 34, 26], True)
+        segments, length = d.centerline_measurements(arm)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": arm,
+        })
+        d.circle(shoulder[0], shoulder[1], 20)
+        d.ellipse(hand[0] + 12, hand[1] - 4, 18, 14, -0.50)
+        for dx, dy in ((10, -16), (20, -10), (26, 0)):
+            d.polygon([
+                (hand[0] + 4, hand[1] - 2),
+                (hand[0] + dx, hand[1] + dy),
+                (hand[0] + dx + 6, hand[1] + dy + 5),
+            ])
 
     elif letter == "O":
         # Backbend O. The figure leans back from standing until the body closes
@@ -3010,6 +3013,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 # Reordered SHIN_PROFILE - starts at knee (frac near 0, height near 0)
-
-
 
