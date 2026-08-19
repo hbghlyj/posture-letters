@@ -2284,48 +2284,61 @@ def pose(letter: str) -> Drawer:
         d.cut_path([(513, 68), (530, 54), (540, 38)], 3.2, True)
 
     elif letter == "S":
-        # Lying S. The naturally longer lower limbs sweep the biggest curve:
-        # the legs and lower torso rise and then arch forward to make the
-        # elongated upper hook, the feet pointing up and to the right. The hips
-        # flex sharply so the thighs run diagonally down and back as the
-        # letter's spine, and the upper torso, neck and head curl along the
-        # floor to the left, the head resting at the very bottom facing up to
-        # close the lower hook.
-        hip = (250, 500)
-        shoulder = (470, 286)
-        # Upper hook: hips lift, then the long legs arch forward and right.
-        for spread, width in ((-16, 56), (14, 48)):
-            d.leg(
-                [
-                    (hip[0] + spread * 0.4, hip[1]),
-                    (356 + spread * 0.5, 700),
-                    (596 + spread * 0.4, 640),
-                ],
-                width, knee_index=1, breeches_width=width * 1.28,
-                shoe_direction=(0.7, 0.72),
-            )
-        # Diagonal spine: thighs and trunk carry the centre line down-left.
-        d.torso([hip, (352, 392), shoulder], 90, True)
-        # Lower hook: chest, neck and head curl along the floor to the left.
-        d.path([shoulder, (430, 122), (216, 96)], 82, True, False, track=False)
-        # The head rests at the very bottom of the lower hook facing upward:
-        # a quarter-turn puts the nose and eye on the vertical, so the face
-        # looks up out of the letter rather than back along the floor.
-        d.head(154, 110, 1, math.pi / 2)
-        # Arms fold in against the chest, following the lower curve.
-        for sign in (-1, 1):
+        # Print's S: the arms sweep the upper hook, the head sits in the
+        # upper-left opening facing right, the torso is the diagonal spine,
+        # and the legs carry the lower hook left to the shoes. The previous
+        # build inverted that — legs on top, head on the floor, arms as two
+        # nubs tucked into the lower curve.
+        shoulder = (248, 488)
+        hip = (498, 278)
+        # Upper hook: both arms leave the shoulder, arch over the head and
+        # run out to the right, tapering to a reaching hand.
+        for spread, width in ((16, 50), (-14, 40)):
             arm = [
-                (shoulder[0] - 12, shoulder[1] - 44 + sign * 10),
-                (416 + sign * 6, 190 + sign * 14),
-                (346 + sign * 4, 148 + sign * 16),
+                (shoulder[0] + 10, shoulder[1] + 22 + spread * 0.3),
+                (300 + spread, 660 + spread * 0.12),
+                (470 + spread * 0.5, 742 + spread * 0.08),
+                (618 + spread * 0.2, 668 + spread * 0.3),
             ]
-            d.path(arm, 30, True, False, track=False)
+            d.tapered_path(
+                arm, [width, width * 0.90, width * 0.70, width * 0.48], True,
+            )
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[-1][0], arm[-1][1], 16)
+            d.circle(arm[0][0], arm[0][1], width * 0.46)
+            wx, wy = arm[-1]
+            d.ellipse(wx + 12, wy - 6, 18, 14, -0.40)
+            for dx, dy in ((10, -20), (20, -14), (26, -6)):
+                d.polygon([
+                    (wx + 4, wy - 4), (wx + dx, wy + dy),
+                    (wx + dx + 6, wy + dy + 5),
+                ])
+        # Head in the upper-left opening, facing right, clear of the arm
+        # arch. No hat: the brim would jam the underside of the sleeve.
+        d.path([(shoulder[0] - 4, shoulder[1] + 18), (214, 548)], 36,
+               False, False, track=False)
+        d.head(198, 592, 1, -0.18, hat=False)
+        # Diagonal spine, bent so the letter is an S-curve rather than a
+        # zigzag: chest turns down, waist eases into the hip.
+        d.torso([shoulder, (360, 400), (470, 330), hip], 88, True)
+        # Hip mass rounds the lower-right bulge of the S.
+        d.ellipse(hip[0] + 16, hip[1] - 4, 48, 44, 0.55)
+        d.ellipse(hip[0] + 4, hip[1] - 28, 40, 34, 0.35)
+        # Lower hook: thigh continues the curve down through the bulge,
+        # knee on the floor, shin left to the shoe.
+        for spread, width, breeches in ((-10, 56, 70), (16, 46, 56)):
+            d.leg(
+                [
+                    (hip[0] + 8 + spread * 0.3, hip[1] - 20),
+                    (400 + spread, 108),
+                    (148 + spread * 0.25, 74),
+                ],
+                width, knee_index=1, breeches_width=breeches,
+                shoe_direction=(-1, -0.12),
+            )
 
     elif letter == "T":
         # Upright T. The straight spine, narrow hips and tightly closed legs
