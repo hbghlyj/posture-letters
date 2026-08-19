@@ -27,18 +27,18 @@ Or declare only the compact WOFF2:
 
 ## Included files
 
-- `posture-master.woff2` — preferred modern web font
-- `posture-master.woff` — legacy web-font fallback
-- `posture-master.ttf` — desktop/installable font
-- `posture-master.css` — ready-to-use `@font-face` declaration
-- `glyph-sheet.svg` — A–Z visual overview
-- `generate_font.py` — builds the TTF/WOFF/WOFF2 files and `glyph-sheet.svg`
-- `trace_silhouette.py` — OpenCV tracer for A–Z except L
-- `outline_points/` — A–Z traced contours consumed by the generator
-- `assets/silhouettes/` — source rasters for those contours
-- `assets/*_gymnast_photo.png` — photographic sources for B, C, F, H, J, O, P, Q, R, S, U, V, W, X, and Y
-- `assets/n_poster_crop.png` — enlarged 2 Way Stretch N cell
-- `assets/two-way-stretch-alphabet.jpg` — the poster that crop came from
+- [`posture-master.woff2`](posture-master.woff2) — preferred modern web font
+- [`posture-master.woff`](posture-master.woff) — legacy web-font fallback
+- [`posture-master.ttf`](posture-master.ttf) — desktop/installable font
+- [`posture-master.css`](posture-master.css) — ready-to-use `@font-face` declaration
+- [`glyph-sheet.svg`](glyph-sheet.svg) — A–Z visual overview
+- [`generate_font.py`](generate_font.py) — builds the TTF/WOFF/WOFF2 files and [`glyph-sheet.svg`](glyph-sheet.svg)
+- [`trace_silhouette.py`](trace_silhouette.py) — OpenCV tracer for A–Z except L
+- [`outline_points/`](outline_points/) — A–Z traced contours consumed by the generator
+- [`assets/silhouettes/`](assets/silhouettes/) — source rasters for those contours
+- [`assets/`](assets/) `*_gymnast_photo.png` — photographic sources for B, C, F, H, J, O, P, Q, R, S, U, V, W, X, and Y
+- [`n_poster_crop.png`](assets/n_poster_crop.png) — enlarged 2 Way Stretch N cell
+- [`two-way-stretch-alphabet.jpg`](assets/two-way-stretch-alphabet.jpg) — the poster that crop came from
 
 ## Character coverage
 
