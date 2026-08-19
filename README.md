@@ -36,7 +36,7 @@ Or declare only the compact WOFF2:
 - `trace_silhouette.py` — OpenCV tracer for A–Z except L
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
-- `assets/j_gymnast_photo.png`, `assets/s_gymnast_photo.png`, `assets/u_gymnast_photo.png`, `assets/v_gymnast_photo.png`, `assets/w_gymnast_photo.png` — photographic sources for J, S, U, V, and W
+- `assets/*_gymnast_photo.png` — photographic sources for A, B, C, F, G, H, J, O, P, Q, R, S, U, V, W, X, and Y
 - `assets/n_poster_crop.png` — enlarged 2 Way Stretch N cell
 - `assets/two-way-stretch-alphabet.jpg` — the poster that crop came from
 
@@ -64,24 +64,24 @@ python generate_font.py
 
 ## Letter notes
 
-- **A** — standing wide-legged forward fold: lifted hips the apex, spread legs the diagonals, folded torso and arms the crossbar.
-- **B** — from behind: standing leg and torso the stem, hand-on-hip elbow the upper bowl, bent knee the lower bowl.
-- **C** — kneeling backbend, thighs the left stem, arched torso and thrown-back head opening right.
+- **A** — from `assets/a_gymnast_photo.png`. Standing wide-legged forward fold: lifted hips the apex, spread legs the diagonals, folded torso and arms the crossbar.
+- **B** — from `assets/b_gymnast_photo.png`. From behind: standing leg and torso the stem, hand-on-hip elbow the upper bowl, bent knee the lower bowl.
+- **C** — from `assets/c_gymnast_photo.png`. Kneeling backbend, thighs the left stem, arched torso and thrown-back head opening right.
 - **D** — kneeling camel: thighs the stem, thrown-back head the top of the bowl, hands on the heels. The import is mirrored to face the conventional D.
 - **E** — kneeling: upright spine the stem, raised arm the top bar, forward arm the middle bar, folded legs the bottom bar.
-- **F** — standing on one straight leg; both arms the top bar; folded lifted leg the middle bar.
-- **G** — inverted scorpion: arms and hanging head at the bottom, arched torso the bowl, feet the spur.
-- **H** — horizontal torso the crossbar; raised leg and kneeling shin the left stem; raised and planted arms the right stem.
+- **F** — from `assets/f_gymnast_photo.png`. Standing on one straight leg; both arms the top bar; folded lifted leg the middle bar.
+- **G** — from `assets/g_gymnast_photo.png`. Inverted scorpion: arms and hanging head at the bottom, arched torso the bowl, feet the spur.
+- **H** — from `assets/h_gymnast_photo.png`. Horizontal torso the crossbar; raised leg and kneeling shin the left stem; raised and planted arms the right stem.
 - **I** — legs pressed together the stem; crossed arms and open hands the top serif; feet turned out the bottom serif.
 - **J** — from `assets/j_gymnast_photo.png`. Joined legs the tall right stem, flexed feet a short top serif, hips/back/arms the open bottom hook, upright profile head the lower-left terminal.
 - **K** — kneeling upright torso the stem, raised arm the upper diagonal, extended straight leg the lower diagonal.
 - **L** — from `assets/silhouettes/l.png` / `l.svg`. High-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar.
 - **M** — folded double from behind: raised knees the peaks, calves the outer stems, thighs sloping in to hanging hips the central V.
 - **N** — from `assets/n_poster_crop.png`. Planted arm the left stem, organic torso the diagonal, raised leg the right stem.
-- **O** — full bow whose raised feet and grasping arms close a ring, with a large natural counter.
-- **P** — standing backbend: planted legs the stem; arched torso, hanging head, and clasped hands the bowl.
-- **Q** — prone bow: raised feet and grasping arm close the ring; the other arm plants as the tail.
-- **R** — the same standing backbend as P, with the front leg stepped forward as the diagonal.
+- **O** — from `assets/o_gymnast_photo.png`. Full bow whose raised feet and grasping arms close a ring, with a large natural counter.
+- **P** — from `assets/p_gymnast_photo.png`. Standing backbend: planted legs the stem; arched torso, hanging head, and clasped hands the bowl.
+- **Q** — from `assets/q_gymnast_photo.png`. Prone bow: raised feet and grasping arm close the ring; the other arm plants as the tail.
+- **R** — from `assets/r_gymnast_photo.png`. The same standing backbend as P, with the front leg stepped forward as the diagonal.
 - **S** — side-profile gymnast: grounded shins the lower terminal, backbend and head the middle curve, overlapped arms the upper hook.
 - **T** — standing from behind: legs together the stem, both arms level with the shoulders the bar.
 - **U** — from `assets/u_gymnast_photo.png` (trace `assets/silhouettes/u.png`). Arms the left stem with an inward hand serif, hips the bowl, joined legs the right stem to pointed feet; profile head on the left stem, counter left open.
