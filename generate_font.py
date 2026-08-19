@@ -24,6 +24,9 @@ from rajakapotasana_outline_points import (
 )
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 from yoga_h_outline_points import YOGA_H_HOLES, YOGA_H_OUTLINE_POINTS
+from yoga_i_outline_points import YOGA_I_HOLES, YOGA_I_OUTLINE_POINTS
+from yoga_j_outline_points import YOGA_J_HOLES, YOGA_J_OUTLINE_POINTS
+from yoga_y_outline_points import YOGA_Y_HOLES, YOGA_Y_OUTLINE_POINTS
 from yoga_k_outline_points import YOGA_K_HOLES, YOGA_K_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
@@ -1424,83 +1427,46 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "I":
-        # Neutral rigid stance, rebuilt around a realistic seven-head figure.
-        # The trunk is shorter than before, while the thighs/calves lengthen so
-        # shoulders, pelvis, knees, ankles, and feet align like the source person
-        # rather than collapsing into a long column with abbreviated legs.
-        # Torso, arms and legs follow the font's own baseline ratios
-        # (arm 1.22x torso, leg 1.84x torso), so the glyph whose whole point is
-        # ordinary human balance actually measures like a normal figure.
-        d.head(350, 742, 1)
-        d.torso([(350, 675), (350, 562), (350, 450)], 80, False)
-        # Arms hang at the sides, slimmer than the trunk and set just clear of
-        # it, so the shoulder-to-hand limb stays legible instead of fusing into
-        # one slab. Engraved seams keep the separation readable at text sizes.
-        for sign in (-1, 1):
-            arm = [
-                (350 + sign * 52, 638), (350 + sign * 62, 500),
-                (350 + sign * 60, 364),
-            ]
-            d.path(arm, 26, True, False, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[-1][0], arm[-1][1], 15)
-            # Seam between the arm and the trunk keeps the two readable. It is
-            # held clear of both ends of the arm so it engraves the silhouette
-            # instead of slicing the limb off the body.
-            d.cut_path([
-                (350 + sign * 43, 608), (350 + sign * 50, 500),
-                (350 + sign * 48, 396),
-            ], 4.0, True)
-        d.leg([(335, 455), (330, 255), (325, 55)], 52, knee_index=1)
-        d.leg([(365, 455), (370, 255), (375, 55)], 52, knee_index=1)
+        # Editorial yoga-alphabet I, imported like L. A headstand with
+        # both legs pressed together into one tall vertical column, the
+        # crown of the head and the forearms making the base.
+        pts = YOGA_I_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_I_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "J":
-        # Kneeling side profile facing right. Head, neck and upright torso
-        # align vertically as the straight main stem. At the base the knees
-        # turn forward and bend sharply so the lower legs — shins, ankles and
-        # feet — swing diagonally upward and backward behind the body, making
-        # the upward-turning hook. The arms hang straight down the sides,
-        # blending into the vertical line of the stem.
-        stem_x = 452
-        torso_width = 84
-        # Cut torso at hip to avoid overlap with thigh in lower limb outline
-        hip = (stem_x, 300)
-        d.torso([hip, (stem_x, 466), (stem_x, 632)], torso_width, False)
-        d.head(stem_x + 2, 696, 1)
-        for sign in (-1, 1):
-            arm = [
-                (stem_x + sign * 52, 612),
-                (stem_x + sign * 60, 482),
-                (stem_x + sign * 58, 362),
-            ]
-            d.path(arm, 26, True, False, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.path([(stem_x + sign * 24, 630), arm[0]], 24, False, False,
-                   track=False)
-            d.circle(arm[0][0], arm[0][1], 15)
-            d.circle(arm[-1][0], arm[-1][1], 14)
-            d.cut_path([
-                (stem_x + sign * 44, 592), (stem_x + sign * 50, 482),
-                (stem_x + sign * 48, 388),
-            ], 3.6, True)
-        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
-        # The outline is scaled to match the torso width for seamless integration
-        # Mirror of L's bottom bar, running left instead of right
-        bar = BarProfile(
-            ground=BAR_GROUND, heel_x=478, arch_x=144, toe_x=18,
-            heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
-            calf_x=241,
-        )
-        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
-        d.kneeling_shin(bar, 478, 52, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
+        # Editorial yoga-alphabet J, imported like L. A shoulderstand:
+        # torso and legs rise as the vertical column, and the head and
+        # shoulders lying flat on the floor make the hook at the foot.
+        pts = YOGA_J_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_J_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "K":
         # Editorial yoga-alphabet K, imported like L. The upright torso
@@ -1958,50 +1924,25 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "Y":
-        # Standing Y, matching the print: a normally proportioned upright
-        # figure with both arms raised in a V. The previous build was a
-        # frontal squat — knees up, a short thick column — which the print
-        # does not show. The head sits in the fork, the raised arms are the
-        # two branches, and the standing legs are the stem.
-        d.head(350, 698, 1, hat=False)
-        d.path([(350, 638), (350, 668)], 52, False, False, track=False)
-        d.torso([(350, 638), (350, 544), (350, 450)], 80, False)
-        for sign in (-1, 1):
-            tip = (350 + sign * 236, 792)
-            arm = [
-                (350 + sign * 38, 618),
-                (350 + sign * 128, 708),
-                tip,
-            ]
-            d.tapered_path(arm, [38, 33, 28], True)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], 20)
-            # Open palm facing up and slightly out, as in the print.
-            d.ellipse(tip[0] + sign * 6, tip[1] + 12, 18, 15, sign * 0.35)
-            for dx, dy in ((-10, 16), (-2, 22), (7, 21), (14, 15)):
-                d.polygon([
-                    (tip[0] + sign * dx - 4, tip[1] + dy),
-                    (tip[0] + sign * dx + 4, tip[1] + dy),
-                    (tip[0] + sign * dx + 3, tip[1] + dy + 24),
-                    (tip[0] + sign * dx - 3, tip[1] + dy + 24),
-                ])
-            d.cut_path([
-                (tip[0] + sign * 2 - 12, tip[1] + 18),
-                (tip[0] + sign * 2 + 12, tip[1] + 18),
-            ], 3.2, False)
-        # Standing legs, same ratio as I, feet flaring as stem serifs.
-        d.leg(
-            [(332, 455), (328, 255), (324, 55)], 50,
-            knee_index=1, breeches_width=56, shoe_direction=(-1, 0),
-        )
-        d.leg(
-            [(368, 455), (372, 255), (376, 55)], 50,
-            knee_index=1, breeches_width=56, shoe_direction=(1, 0),
-        )
+        # Editorial yoga-alphabet Y, imported like L. A headstand with
+        # the torso as the stem and the two legs split wide into a V as
+        # the arms of the letter.
+        pts = YOGA_Y_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_Y_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "Z":
         # Editorial yoga-alphabet Z, imported like L. Kneeling with both
