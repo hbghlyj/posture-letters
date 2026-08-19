@@ -33,6 +33,8 @@ Or declare only the compact WOFF2:
 - `posture-master.css` — ready-to-use `@font-face` declaration
 - `glyph-sheet.svg` — A–Z visual overview
 - `generate_font.py` — builds the TTF/WOFF/WOFF2 files and `glyph-sheet.svg`
+- `trace_silhouette.py` — OpenCV tracer for A–Z except L
+- [VTracer 0.6.12](https://github.com/visioncortex/vtracer) — cubic-spline tracer used only for L (`assets/silhouettes/l.svg`)
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
 - `assets/j_gymnast_photo.png`, `assets/s_gymnast_photo.png`, `assets/w_gymnast_photo.png` — photographic sources for J, S, and W
@@ -50,7 +52,14 @@ Period, comma, and hyphen are plain marks (a disc, a disc with a tail, a dash). 
 
 ## How a letter is built
 
-Each capital lives as `outline_points/{a–z}.py`, exporting `OUTLINE_POINTS` and `HOLES`. Matching rasters sit in `assets/silhouettes/`; L also keeps its VTracer SVG there. `generate_font.py` imports `LETTERS` from the package, scales each contour uniformly to cap height 788, seats it on `BAR_GROUND` (y=72), and gives every glyph 72 units of sidebearing. Advances are proportional and uncapped, so wide poses such as V, W, and Q can exceed the em.
+Each capital lives as `outline_points/{a–z}.py`, exporting `OUTLINE_POINTS` and `HOLES`. Matching rasters sit in `assets/silhouettes/`.
+
+Two tracers produced those contours:
+
+- **`trace_silhouette.py`** (A–Z except L) — Otsu-threshold the raster, keep the largest component, scale the longest side to 480 with a 16px margin, take the OpenCV exterior contour, and resample it to about 3px. Points sit in that canonical 480-box, so a tall letter’s first point is near `y=16`.
+- **[VTracer 0.6.12](https://github.com/visioncortex/vtracer)** (L only) — fitted cubics to `assets/silhouettes/l.png` and wrote `l.svg`. That spline was flattened to a polyline in the original 768×1376 image space, so L’s steps vary and its coordinates are not padded to 16.
+
+Both paths end as the same kind of polygon. `generate_font.py` imports `LETTERS` from the package, scales each contour uniformly to cap height 788, seats it on `BAR_GROUND` (y=72), and gives every glyph 72 units of sidebearing. Advances are proportional and uncapped, so wide poses such as V, W, and Q can exceed the em.
 
 Punctuation is still drawn with a few simple primitives (`path`, `torso`, `circle`). Rebuild with:
 
