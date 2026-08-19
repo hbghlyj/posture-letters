@@ -1805,7 +1805,8 @@ def pose(letter: str) -> Drawer:
         # imported like L. The gymnast hinges forward so the compact head and
         # shoulders make the centre peak. Arms overlap the long inner thighs;
         # concealed grounded knees make uncarved low vertices; naturally
-        # shorter calves rise to forward-facing ankles, then the pointed feet
+        # shorter calves stay visibly slimmer than the muscular thighs as they
+        # taper to forward-facing ankles, then the pointed feet
         # turn modestly outward at the outer terminals.
         pts = YOGA_W_OUTLINE_POINTS
         xs = [x for x, _ in pts]
