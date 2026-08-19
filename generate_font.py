@@ -1693,9 +1693,12 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "U":
-        # Editorial yoga-alphabet U, imported like L. A cobra with both
-        # shins lifted: raised feet the left stem, hips the bowl, lifted
-        # torso and planted arms the right stem.
+        # Editorial yoga-alphabet U, imported like L from
+        # image_6a52f7c6.png. A side-profile gymnast on the back: arms
+        # rise as the left stem with an inward hand serif, the rounded
+        # hips and torso make the bowl, and joined legs rise as the
+        # right stem to pointed feet. The profile head sits on the left
+        # stem without closing the open counter.
         pts = YOGA_U_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]

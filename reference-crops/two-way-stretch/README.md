@@ -35,11 +35,16 @@ Crops kept here:
   elbow and the head tucked low beneath the top forearm, which closes
   the stem-to-top-bar junction and reads better at text sizes. The crop
   is kept here for provenance and comparison.
-- `U.png` - row 4, second cell. Lying on the back with the rounded back
-  and hips on the floor as the bowl, both legs pressed together and
-  raised vertically as one stem and both arms extended vertically as
-  the other, the flexed feet and the open flat hands making the two
-  serifs at equal height.
+- `U.png` - photographic study matching the current U construction: a
+  side-profile gymnast lying on the back, arms rising as one stem and
+  joined legs rising as the other, with a rounded hip-and-torso bowl.
+- `image_6a52f7c6.png` - current high-resolution silhouette source for
+  the shipped U. Both arms rise as the left stem and finish in a compact
+  inward hand serif; the rounded hips and torso make the bowl; both
+  joined legs rise as the right stem to pointed feet. The profile head
+  sits on the left stem without closing the open counter, and both stems
+  reach the same height. Trace this file rather than the softer poster
+  crop.
 - `image_fc2e377e.png` - previous high-resolution photographic reference
   for J, retained for provenance. Its joined upright legs and compact
   lower-left terminal informed the superseded trace, but its pointed feet
