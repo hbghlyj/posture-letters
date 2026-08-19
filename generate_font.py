@@ -371,8 +371,8 @@ def pose(letter: str) -> Drawer:
 
 
     elif letter == "N":
-        # Editorial yoga-alphabet N, imported like L from the 2 Way Stretch
-        # crop. A straight supporting arm and planted hand make the left stem;
+        # Editorial yoga-alphabet N, imported like L from
+        # assets/n_poster_crop.png. A straight supporting arm and planted hand make the left stem;
         # the profile head, chest, waist, abdomen, and pelvis descend as the
         # organic diagonal; and the joined raised leg makes the right stem.
         pts, holes = LETTERS["N"]

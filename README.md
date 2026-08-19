@@ -37,7 +37,8 @@ Or declare only the compact WOFF2:
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
 - `assets/j_gymnast_photo.png`, `assets/s_gymnast_photo.png`, `assets/u_gymnast_photo.png`, `assets/v_gymnast_photo.png`, `assets/w_gymnast_photo.png` — photographic sources for J, S, U, V, and W
-- `reference-crops/two-way-stretch/` — the 2 Way Stretch poster and the N crop
+- `assets/n_poster_crop.png` — enlarged 2 Way Stretch N cell
+- `assets/two-way-stretch-alphabet.jpg` — the poster that crop came from
 
 ## Character coverage
 
@@ -77,7 +78,7 @@ python generate_font.py
 - **K** — kneeling upright torso the stem, raised arm the upper diagonal, extended straight leg the lower diagonal.
 - **L** — from `assets/silhouettes/l.png` / `l.svg`. High-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar.
 - **M** — folded double from behind: raised knees the peaks, calves the outer stems, thighs sloping in to hanging hips the central V.
-- **N** — from `reference-crops/two-way-stretch/N.png`. Planted arm the left stem, organic torso the diagonal, raised leg the right stem.
+- **N** — from `assets/n_poster_crop.png`. Planted arm the left stem, organic torso the diagonal, raised leg the right stem.
 - **O** — full bow whose raised feet and grasping arms close a ring, with a large natural counter.
 - **P** — standing backbend: planted legs the stem; arched torso, hanging head, and clasped hands the bowl.
 - **Q** — prone bow: raised feet and grasping arm close the ring; the other arm plants as the tail.
