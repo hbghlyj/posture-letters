@@ -36,7 +36,6 @@ Or declare only the compact WOFF2:
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
 - `assets/j_gymnast_photo.png`, `assets/s_gymnast_photo.png`, `assets/w_gymnast_photo.png` — photographic sources for J, S, and W
-- `assets/u_silhouette.png` — pre-canonical silhouette source for U
 - `reference-crops/` — pose references, including modern studies in `two-way-stretch/`
 
 ## Character coverage
@@ -81,7 +80,7 @@ python generate_font.py
 - **R** — the same standing backbend as P, with the front leg stepped forward as the diagonal.
 - **S** — side-profile gymnast: grounded shins the lower terminal, backbend and head the middle curve, overlapped arms the upper hook.
 - **T** — standing from behind: legs together the stem, both arms level with the shoulders the bar.
-- **U** — from `assets/u_silhouette.png`. Arms the left stem with an inward hand serif, hips the bowl, joined legs the right stem to pointed feet; profile head on the left stem, counter left open.
+- **U** — from `assets/silhouettes/u.png`. Arms the left stem with an inward hand serif, hips the bowl, joined legs the right stem to pointed feet; profile head on the left stem, counter left open.
 - **V** — from `reference-crops/two-way-stretch/V.png`. Two equal legs rise from a compact buttocks apex; outward-turned shod feet are the upper terminals.
 - **W** — forward-hinged gymnast: head and shoulders the centre peak, arms overlapping thighs as inner strokes, shorter slimmer calves as outer strokes. Hands conceal the grounded knees; pointed feet turn modestly outward. One contour, no carved notch.
 - **X** — wide forward fold from behind: legs an inverted V, head hanging at the centre, arms to the upper corners.

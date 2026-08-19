@@ -38,7 +38,7 @@ Crops kept here:
 - `U.png` - photographic study matching the current U construction: a
   side-profile gymnast lying on the back, arms rising as one stem and
   joined legs rising as the other, with a rounded hip-and-torso bowl.
-  The traced silhouette source now lives at `assets/u_silhouette.png`.
+  The traced silhouette is `assets/silhouettes/u.png`.
 - `V.png` - current high-resolution photographic reference for the
   shipped V. Two equal legs rise from a compact rounded buttocks apex
   as the strokes of a capital V, with natural thigh-to-calf taper and
