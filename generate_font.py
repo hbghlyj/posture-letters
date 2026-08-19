@@ -27,6 +27,7 @@ from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
+from yoga_u_outline_points import YOGA_U_HOLES, YOGA_U_OUTLINE_POINTS
 from yoga_b_outline_points import YOGA_B_HOLES, YOGA_B_OUTLINE_POINTS
 from yoga_c_outline_points import YOGA_C_HOLES, YOGA_C_OUTLINE_POINTS
 from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
@@ -2056,75 +2057,25 @@ def pose(letter: str) -> Drawer:
               breeches_width=48, shoe_direction=(1, 0))
 
     elif letter == "U":
-        # Editorial U (the 1782 print has no U). A lying backbend still
-        # makes the letter: legs the left bar, arched spine the bowl, arms
-        # the right bar. The previous build hung an inverted hatted head
-        # off the lower-right and stuck long horizontal feet off the left
-        # stem, so the glyph read as a lopsided horseshoe with junk on
-        # both sides rather than a U. Head tucks into the counter; both
-        # stems are the same height and similar weight; feet point up to
-        # answer the hands.
-        hip = (198, 328)
-        shoulder = (502, 328)
-        # A long flat run at the bottom so the offset inner edge is a U,
-        # not the V a single apex vertex pinches into.
-        d.torso(
-            [hip, (222, 210), (258, 128), (310, 80), (390, 80), (442, 128),
-             (478, 210), shoulder],
-            86, True,
-        )
-        # Extra fill rounds the inner bottom if the ribbon still creases.
-        d.ellipse(350, 122, 74, 36, 0.0)
-        # Hip mass stays inside the left join so the stem does not sprout
-        # a sideways bulge.
-        d.ellipse(hip[0] + 6, hip[1] - 8, 40, 36, 0.15)
-        # Head tucked into the shoulder pocket of the counter, facing in.
-        # No hat: the brim was what spiked out of the silhouette.
-        d.path([(shoulder[0] - 18, shoulder[1] - 4), (468, 278)], 38,
-               False, False, track=False)
-        d.head(458, 258, -1, 0.25, hat=False)
-        # Left bar: both legs straight up, same height, compact shoes
-        # pointing up as the terminal.
-        for spread, width, breeches in ((-16, 54, 64), (16, 48, 56)):
-            ankle = (hip[0] + spread, 708)
-            d.leg(
-                [
-                    (hip[0] + spread * 0.4, hip[1] + 28),
-                    (hip[0] + spread, 520),
-                    ankle,
-                ],
-                width, knee_index=1, breeches_width=breeches,
-                shoe_scale=0.0,
+        # Editorial yoga-alphabet U, imported like L. A cobra with both
+        # shins lifted: raised feet the left stem, hips the bowl, lifted
+        # torso and planted arms the right stem.
+        pts = YOGA_U_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-            d.shoe(ankle[0], ankle[1], (hip[0] + spread, 520), (0.0, 1.0), 0.70)
-        # Right bar: both arms vertical, held apart by a real gap so they
-        # stay two limbs, thickened so the stems match.
-        for spread, width in ((-18, 46), (18, 40)):
-            tip = (shoulder[0] + spread, 688)
-            arm = [
-                (shoulder[0] + spread * 0.4, shoulder[1] + 26),
-                (shoulder[0] + spread, 510),
-                tip,
-            ]
-            d.tapered_path(arm, [width, width * 0.90, width * 0.72], True)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], width * 0.48)
-            # Hand flat, fingers up — the right-hand terminal.
-            d.ellipse(tip[0], tip[1] + 12, 16, 18, 0.0)
-            for offset in (-10, -3, 4, 11):
-                d.polygon([
-                    (tip[0] + offset - 3, tip[1] + 20),
-                    (tip[0] + offset + 3, tip[1] + 20),
-                    (tip[0] + offset + 2, tip[1] + 44),
-                    (tip[0] + offset - 2, tip[1] + 44),
-                ])
-            d.cut_path([
-                (tip[0] - 12, tip[1] + 22), (tip[0] + 12, tip[1] + 22),
-            ], 3.2, False)
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_U_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "V":
         # Editorial yoga-alphabet V, imported like L. A V-sit / boat on

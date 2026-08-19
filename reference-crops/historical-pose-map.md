@@ -26,6 +26,7 @@ This map records the visible construction of each figure. Historical fidelity ta
 | R | Editorial yoga-alphabet R. The same standing backbend as P, with the front leg stepped forward as the diagonal. Replaces the print's I-stem plus looping arm and kicked leg. |
 | S | Lying pose in which the longer lower limbs sweep the biggest open curves. The legs and lower torso extend up and then arch forward, forming the elongated upper hook and top terminal with the feet pointing up and to the right. Sharp flexion at the hips angles the thighs diagonally down and back to carry the centre line across the middle. The spine, upper torso and head curl along the floor to the left, the head resting at the very bottom facing upward as the lower baseline hook. |
 | T | Upright figure. The straight spine, narrow hips and tightly closed legs align vertically down the centre as the pillar. Both arms extend straight out to the sides at a perfect ninety degrees from the shoulders, forming one continuous horizontal top line. At the ends of the bar the wrists flex downward so the hands point down, mimicking the hanging terminals of a classic typographic T, and the feet flare slightly outward at the base as foot serifs. |
+| U | Editorial yoga-alphabet U (the 1782 print has no U). A cobra with both shins lifted: raised feet are the left stem, hips on the floor the bowl, lifted torso and planted arms the right stem. |
 | V | Editorial yoga-alphabet V. A V-sit / boat on the sit bones: raised legs are one stroke, the leaning torso and head the other. Replaces the print's inverted figure with the head at the apex. |
 | W | Upright centered head. The torso splits into the two inner descending strokes; arms reach all the way to two shared-baseline inner hand/contact points, while two long legs rise vertically at the outer sides, creating the four-stroke W. |
 | X | Spread-eagle Vitruvian diagonal. Head and short torso occupy the center; both arms rise diagonally to the upper corners and both legs spread diagonally to the lower corners. Arms and legs share one limb width, clearly under the torso, and the raised hands are open with splayed fingers. |
@@ -57,7 +58,7 @@ Across A–Z, hats and shoes now act as anatomical serif terminals: cocked-hat b
 
 ## Editorial letters
 
-- **J** and **U** do not occur in the print and therefore cannot be claimed as exact historical reconstructions.
+- **J** and **U** do not occur in the print. **U** is now a yoga-alphabet cobra with lifted shins rather than a 1782 source pose.
 - **A** replaces the print's two-person Mitelli pose with a vertically flipped Paripurna Navasana (full boat). It is an editorial interpolation, not a 1782 source pose.
 - **C** replaces the print's kneeling C-arch with a yoga-alphabet kneeling backbend. It is an editorial interpolation, not a 1782 source pose.
 - **D** replaces the print's impossible ring backbend with Ustrasana (camel pose). It is an editorial interpolation, not a 1782 source pose.
