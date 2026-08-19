@@ -23,6 +23,7 @@ from rajakapotasana_outline_points import (
     RAJAKAPOTASANA_OUTLINE_POINTS,
 )
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
+from yoga_h_outline_points import YOGA_H_HOLES, YOGA_H_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
@@ -1398,90 +1399,26 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "H":
-        # Two standing figures act as the vertical sides of the H; their joined
-        # hands at the centre form the horizontal crossbar. Each body is a
-        # normally proportioned upright person seen in profile — head, torso,
-        # two planted legs. Both arms are bent at the elbow. The upper arm
-        # (shoulder to elbow) hangs vertically downward along the figure's own
-        # pillar, carried proud of it so the limb stays visible rather than
-        # merging into the torso; only the forearms turn out horizontally at
-        # elbow height and clasp at the centre, so the crossbar is made of
-        # forearms alone and sits exactly at the elbows.
-        # Upper arm and forearm are held to the same length, as in a real
-        # skeleton: the shoulder and the bar are both dropped and the two
-        # figures stand closer together, which shortens the crossbar and
-        # lowers it while keeping the two segments equal.
-        shoulder_y = 590
-        bar_y = 486
-        for side in (-1, 1):
-            cx = 350 - side * 190
-            d.head(cx, 700, side)
-            # Upright torso: shoulders below the head, waist, then hips.
-            d.torso(
-                [(cx, 636), (cx + side * 5, 545), (cx + side * 2, 430)], 78, True
+        # Editorial yoga-alphabet H, imported like L. The horizontal torso
+        # is the crossbar; the raised leg above and the kneeling shin below
+        # make the left stem; the raised arm above and the planted arm
+        # below make the right stem.
+        pts = YOGA_H_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-            # Front arm, bent to a right angle at the elbow. The upper arm is
-            # strictly vertical: it drops from the shoulder straight down the
-            # front of the body, overlapping the pillar. At elbow height the
-            # forearm turns out horizontally and runs to the clasp, so the
-            # crossbar is carried by the forearms alone.
-            # The vertical upper arm is carried on the front face of the body,
-            # far enough out that it projects past the torso edge. An engraved
-            # line cannot separate them here — under the TrueType nonzero rule
-            # a single reverse contour cannot cut through two stacked filled
-            # shapes — so the arm is held visibly proud of the pillar and its
-            # own silhouette does the work instead.
-            arm_x = cx + side * 62
-            shoulder = (arm_x, shoulder_y)
-            elbow = (arm_x, bar_y)
-            hand = (350 - side * 24, bar_y)
-            # Deltoid wedge ties the offset arm back into the shoulder so the
-            # limb stays attached while remaining a separate silhouette below.
-            d.path([(cx + side * 12, 622), shoulder], 34, False, False, track=False)
-            d.path([shoulder, elbow], 36, False, False, track=False)
-            d.path([elbow, hand], 34, False, False, track=False)
-            # A shoulder ball roots the vertical upper arm at the joint.
-            d.circle(shoulder[0], shoulder[1], 20)
-            # A joint ball keeps the right-angle bend readable as an elbow.
-            d.circle(elbow[0], elbow[1], 22)
-            arm = [shoulder, elbow, hand]
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            # Engraved crease around the outside of the bent elbow, wrapping
-            # from the vertical upper arm onto the horizontal forearm.
-            d.cut_path([
-                (elbow[0] + side * 21, elbow[1] + 20),
-                (elbow[0] + side * 25, elbow[1] + 2),
-                (elbow[0] + side * 12, elbow[1] - 20),
-            ], 5.0, True)
-            # Back arm: bent at the elbow too, but kept in against the body
-            # instead of joining the crossbar.
-            # Far arm, likewise held proud of the back of the pillar so the
-            # shoulder-to-elbow run stays visible on that side too.
-            back_arm_x = cx - side * 56
-            back_shoulder = (back_arm_x, 586)
-            back_elbow = (back_arm_x, 492)
-            back_hand = (back_arm_x + side * 42, 492)
-            d.path([(cx - side * 12, 622), back_shoulder], 28, False, False, track=False)
-            d.path([back_shoulder, back_elbow], 30, False, False, track=False)
-            d.path([back_elbow, back_hand], 26, False, False, track=False)
-            d.circle(back_shoulder[0], back_shoulder[1], 16)
-            d.circle(back_elbow[0], back_elbow[1], 16)
-            # Two legs per figure: near leg planted, far leg just behind it.
-            d.leg(
-                [(cx - side * 15, 430), (cx - side * 22, 235), (cx - side * 26, 40)],
-                52, knee_index=1, shoe_direction=(side, 0),
-            )
-            d.leg(
-                [(cx + side * 15, 430), (cx + side * 18, 235), (cx + side * 20, 40)],
-                52, knee_index=1, shoe_direction=(side, 0),
-            )
-        # Clasped hands at the centre of the crossbar.
-        d.ellipse(350, bar_y, 38, 26, 0.0)
-        d.cut_path([(350, bar_y - 23), (353, bar_y), (350, bar_y + 23)], 5.0, True)
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_H_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "I":
         # Neutral rigid stance, rebuilt around a realistic seven-head figure.
