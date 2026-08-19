@@ -42,6 +42,7 @@ from yoga_f_outline_points import YOGA_F_HOLES, YOGA_F_OUTLINE_POINTS
 from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
 from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
 from yoga_w_outline_points import YOGA_W_HOLES, YOGA_W_OUTLINE_POINTS
+from yoga_x_outline_points import YOGA_X_HOLES, YOGA_X_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -1852,38 +1853,27 @@ def pose(letter: str) -> Drawer:
 
 
     elif letter == "X":
-        # Spread-eagle X in the Vitruvian diagonal pose: head at center, arms
-        # raised to the upper corners and legs spread to the lower corners. Arms
-        # and legs are both limbs and share a similar width; both are visibly
-        # slimmer than the torso. The raised hands are open with spread fingers.
-        d.head(350, 440, 1)
-        d.torso([(350, 380), (350, 300)], 86, False)
-        left_arm = [(338, 395), (250, 555), (130, 690)]
-        right_arm = [(362, 395), (450, 555), (570, 690)]
-        for arm in (left_arm, right_arm):
-            d.path(arm, 44, True, False, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-        # Open raised hands with fingers splayed toward the upper corners.
-        for x, y, s in ((130, 690, -1), (570, 690, 1)):
-            d.ellipse(x, y, 22, 15, s * 0.55)
-            for dx, dy in (
-                (-18, 10), (-20, 0), (-16, -9), (-8, -15), (2, -15),
-            ):
-                d.polygon([
-                    (x - s * 6, y + 4),
-                    (x + s * dx, y + dy),
-                    (x + s * (dx + 4), y + dy + 3),
-                ])
-        d.leg(
-            [(338, 300), (225, 170), (70, 45)], 60, knee_index=1, shoe_direction=(-1, 0)
-        )
-        d.leg(
-            [(362, 300), (475, 170), (630, 45)], 60, knee_index=1, shoe_direction=(1, 0)
-        )
+        # Editorial yoga-alphabet X, imported like L. A wide forward fold seen
+        # from behind: legs spread into an inverted V with both feet on the
+        # floor, torso folded down so the head hangs at the centre, and both
+        # arms stretched up and out to the upper corners.
+        pts = YOGA_X_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_X_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
+
 
     elif letter == "Y":
         # Editorial yoga-alphabet Y, imported like L. A headstand with
