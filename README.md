@@ -45,10 +45,6 @@ Or declare only the compact WOFF2:
 - A–Z
 - a–z aliases (same outlines as uppercase)
 - space
-- period, comma, exclamation mark, question mark, hyphen
-- en dash and em dash aliases (same as hyphen)
-
-Period, comma, and hyphen are plain marks (a disc, a disc with a tail, a dash). Exclamation and question marks use solid dots rather than heads, which read as figures at that size.
 
 ## How a letter is built
 
@@ -61,7 +57,7 @@ Two tracers produced those contours:
 
 Both paths end as the same kind of polygon. `generate_font.py` imports `LETTERS` from the package, scales each contour uniformly to cap height 788, seats it on `BAR_GROUND` (y=72), and gives every glyph 72 units of sidebearing. Advances are proportional and uncapped, so wide poses such as V, W, and Q can exceed the em.
 
-Punctuation is still drawn with a few simple primitives (`path`, `torso`, `circle`). Rebuild with:
+Rebuild with:
 
 ```bash
 python generate_font.py

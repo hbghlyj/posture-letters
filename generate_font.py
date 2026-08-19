@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Build Posture Master, a deliberately bendy human-alphabet display font.
 
-Most letterforms are traced from modern gymnast and yoga photographs.
-Punctuation still uses a few body-part primitives.
+Letterforms are traced from modern gymnast and yoga photographs.
 """
 from __future__ import annotations
 
-import math
 from pathlib import Path
 from typing import Iterable
 
@@ -36,55 +34,6 @@ def area(poly: list[Point]) -> float:
     ) / 2
 
 
-def catmull_rom(points: list[Point], steps: int = 10) -> list[Point]:
-    if len(points) < 3:
-        return points
-    padded = [points[0], *points, points[-1]]
-    out: list[Point] = []
-    for i in range(1, len(padded) - 2):
-        p0, p1, p2, p3 = padded[i - 1 : i + 3]
-        for j in range(steps):
-            t = j / steps
-            t2, t3 = t * t, t * t * t
-            x = 0.5 * (
-                2 * p1[0]
-                + (-p0[0] + p2[0]) * t
-                + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2
-                + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3
-            )
-            y = 0.5 * (
-                2 * p1[1]
-                + (-p0[1] + p2[1]) * t
-                + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2
-                + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3
-            )
-            out.append((x, y))
-    out.append(points[-1])
-    return out
-
-
-def ribbon(points: list[Point], width: float, smooth: bool = True) -> list[Point]:
-    pts = catmull_rom(points, 8) if smooth and len(points) >= 3 else points
-    clean: list[Point] = []
-    for p in pts:
-        if not clean or math.dist(p, clean[-1]) > 0.01:
-            clean.append(p)
-    if len(clean) < 2:
-        return []
-    half = width / 2
-    left: list[Point] = []
-    right: list[Point] = []
-    for i, (x, y) in enumerate(clean):
-        p0 = clean[max(0, i - 1)]
-        p1 = clean[min(len(clean) - 1, i + 1)]
-        dx, dy = p1[0] - p0[0], p1[1] - p0[1]
-        length = math.hypot(dx, dy) or 1
-        nx, ny = -dy / length, dx / length
-        left.append((x + nx * half, y + ny * half))
-        right.append((x - nx * half, y - ny * half))
-    return left + list(reversed(right))
-
-
 class Drawer:
     def __init__(self) -> None:
         self.contours: list[tuple[list[Point], bool]] = []
@@ -98,31 +47,6 @@ class Drawer:
         if (area(poly) > 0) != should_be_positive:
             poly.reverse()
         self.contours.append((poly, hole))
-
-    def circle(self, x: float, y: float, r: float, hole: bool = False, n: int = 20) -> None:
-        self.polygon(
-            [(x + r * math.cos(2 * math.pi * i / n), y + r * math.sin(2 * math.pi * i / n)) for i in range(n)],
-            hole,
-        )
-
-    def path(
-        self,
-        pts: list[Point],
-        width: float = 52,
-        smooth: bool = True,
-        joints: bool = True,
-    ) -> None:
-        poly = ribbon(pts, width, smooth)
-        if poly:
-            self.polygon(poly)
-        if joints:
-            for x, y in pts:
-                self.circle(x, y, width / 2)
-
-    def torso(
-        self, pts: list[Point], width: float = 88, smooth: bool = True, joints: bool = True
-    ) -> None:
-        self.path(pts, width, smooth, joints)
 
     def to_glyph(self, dx: float = 0.0):
         """Build the TrueType glyph, optionally shifted along x.
@@ -737,45 +661,17 @@ def pose(letter: str) -> Drawer:
     return d
 
 
-def punctuation(name: str) -> Drawer:
-    d = Drawer()
-    if name == "period":
-        # Plain solid disc, matching the dot used by ! and ?.
-        d.circle(350, 90, 55)
-    elif name == "comma":
-        # Plain disc with a descending tail — no hat, nose, or eye.
-        d.circle(340, 90, 55)
-        d.path([(355, 55), (330, -15), (285, -65)], 36)
-    elif name == "exclam":
-        # Plain solid disc dot and a straight vertical stroke.
-        d.circle(350, 90, 55)
-        d.torso([(350, 720), (350, 250)], 80, False)
-        d.circle(350, 760, 34)
-    elif name == "question":
-        d.circle(350, 90, 55)
-        d.path([(170, 620), (250, 750), (455, 730), (530, 600), (470, 475), (355, 400), (350, 260)], 72)
-        d.circle(170, 620, 28)
-    elif name == "hyphen":
-        # A plain horizontal dash — no head or limb anatomy needed.
-        d.path([(180, 380), (520, 380)], 52, False, joints=False)
-    return d
-
-
 def notdef() -> Drawer:
     d = Drawer()
     d.polygon([(70, 0), (70, 800), (630, 800), (630, 0)])
     d.polygon([(140, 90), (560, 90), (560, 710), (140, 710)], hole=True)
-    d.path([(190, 160), (510, 640)], 55, False)
-    d.path([(190, 640), (510, 160)], 55, False)
     return d
 
 
 def build_font() -> tuple[dict[str, Drawer], Path]:
     letters = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-    punct_names = ["period", "comma", "exclam", "question", "hyphen"]
-    order = [".notdef", "space", *letters, *punct_names]
+    order = [".notdef", "space", *letters]
     drawings: dict[str, Drawer] = {letter: pose(letter) for letter in letters}
-    drawings.update({name: punctuation(name) for name in punct_names})
     drawings[".notdef"] = notdef()
 
     def ink_bounds(name: str) -> tuple[float, float] | None:
@@ -795,18 +691,7 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
 
     cmap = {ord(ch): ch for ch in letters}
     cmap.update({ord(ch.lower()): ch for ch in letters})
-    cmap.update(
-        {
-            ord(" "): "space",
-            ord("."): "period",
-            ord(","): "comma",
-            ord("!"): "exclam",
-            ord("?"): "question",
-            ord("-"): "hyphen",
-            0x2013: "hyphen",
-            0x2014: "hyphen",
-        }
-    )
+    cmap[ord(" ")] = "space"
 
     fb = FontBuilder(UPM, isTTF=True)
     fb.setupGlyphOrder(order)
@@ -842,7 +727,7 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
             "fullName": "Posture Master Regular",
             "psName": "PostureMaster-Regular",
             "version": "Version 1.000",
-            "description": "A comic body alphabet with anatomical hat-and-shoe serifs.",
+            "description": "A comic display alphabet in which bodies form the letters.",
             "designer": "Designed on Arena.ai from modern gymnast and yoga references",
             "licenseDescription": "Original generated outlines; free to use and modify.",
         }
