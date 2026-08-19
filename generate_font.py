@@ -28,6 +28,7 @@ from yoga_i_outline_points import YOGA_I_HOLES, YOGA_I_OUTLINE_POINTS
 from yoga_j_outline_points import YOGA_J_HOLES, YOGA_J_OUTLINE_POINTS
 from yoga_y_outline_points import YOGA_Y_HOLES, YOGA_Y_OUTLINE_POINTS
 from yoga_k_outline_points import YOGA_K_HOLES, YOGA_K_OUTLINE_POINTS
+from yoga_m_outline_points import YOGA_M_HOLES, YOGA_M_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
@@ -1519,56 +1520,28 @@ def pose(letter: str) -> Drawer:
         ])
 
     elif letter == "M":
-        # Print's M: two legs only. Stockinged calves are the outer
-        # stems, breeched thighs the inner V, paired buttocks and a
-        # small hatless face sit in the valley, and the hands cup the
-        # sit. The previous build put a cocked hat on the left peak and
-        # used arms as the left stem, which the print does not show.
-        # Drawn as separate tapers so the sharp knee fold does not spawn
-        # a limb-width ball on each peak. The sit is the crotch of the
-        # two thighs, not a sack hung under a pointed V.
-        sit = (350, 312)
-        for sign in (-1, 1):
-            hip = (sit[0] + sign * 22, sit[1] + 8)
-            knee = (350 + sign * 182, 698)
-            ankle = (350 + sign * 204, 74)
-            thigh = [hip, knee]
-            shin = [knee, (350 + sign * 196, 380), ankle]
-            d.tapered_path(thigh, [98, 76], True)
-            d.tapered_path(shin, [58, 68, 40], True)
-            segments, length = d.centerline_measurements(thigh + shin[1:])
-            d.anatomy.append({
-                "part": "limb", "segments": [
-                    math.dist(thigh[0], thigh[1]),
-                    math.dist(shin[0], shin[1]) + math.dist(shin[1], shin[2]),
-                ], "length": length, "points": [hip, knee, ankle],
-            })
-            # Rounded kneecap, sized to the limb, not a ball on a stick.
-            d.ellipse(knee[0], knee[1] + 6, 34, 30, 0.0)
-            d.ellipse(knee[0], knee[1] - 4, 30, 8, 0.0)
-            d.cut_path([
-                (knee[0] - sign * 16, knee[1] - 2),
-                (knee[0] + sign * 16, knee[1] - 4),
-            ], 3.2, False)
-            d.shoe(ankle[0], ankle[1], shin[1], (sign, -0.06), 0.92)
-        # Paired buttocks are the valley floor.
-        d.ellipse(318, sit[1] - 6, 48, 40, 0.22)
-        d.ellipse(382, sit[1] - 6, 48, 40, -0.22)
-        d.ellipse(350, sit[1] - 18, 54, 32, 0.0)
-        d.cut_path([(350, sit[1] + 16), (350, sit[1] - 36)], 5.0, False)
-        # Small hatless face nestled in the dip, looking up.
-        d.front_head(350, sit[1] + 28, 32, hair_down=False, hat=False,
-                     gaze_up=True)
-        # Hands cup the underside of the sit.
-        for sign in (-1, 1):
-            hx, hy = 350 + sign * 52, sit[1] - 36
-            d.ellipse(hx, hy, 20, 15, sign * 0.28)
-            for dx, dy in ((-4, -12), (4, -16), (10, -8)):
-                d.polygon([
-                    (hx, hy),
-                    (hx + sign * dx, hy + dy),
-                    (hx + sign * (dx + 5), hy + dy + 4),
-                ])
+        # Editorial yoga-alphabet M, imported like L, following the 1782
+        # print's own M: a figure folded completely double and seen from
+        # behind, the two raised knees making the peaks, the calves dropping
+        # to flat feet as the outer stems, and the thighs sloping down and
+        # inward to the hanging hips to make the central V.
+        pts = YOGA_M_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_M_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
+
 
     elif letter == "N":
         # Editorial yoga-alphabet N, imported like L. A backbend / bridge
