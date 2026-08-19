@@ -1,4 +1,4 @@
-"""Load shin outline and profile from extracted files."""
+"""Load lower limb outline from SVG file."""
 import re
 from pathlib import Path
 
@@ -37,8 +37,4 @@ def load_outline_from_svg(svg_path):
 
 # Load full lower limb outline from SVG file (thigh + knee + shin + foot)
 ROOT = Path(__file__).resolve().parent
-SHIN_OUTLINE_POINTS = load_outline_from_svg(ROOT / 'lower_limb_outline.svg')
-
-# Load the top edge profile
-# This file contains SHIN_PROFILE_TOP which is the normalized top edge
-exec(open(ROOT / 'shin_profile_top_new.py').read())
+LOWER_LIMB_OUTLINE_POINTS = load_outline_from_svg(ROOT / 'lower_limb_outline.svg')

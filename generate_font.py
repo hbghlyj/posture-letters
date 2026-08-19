@@ -15,7 +15,7 @@ from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
-from profile_loader import SHIN_OUTLINE_POINTS, SHIN_PROFILE_TOP
+from profile_loader import LOWER_LIMB_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -595,7 +595,7 @@ class Drawer:
     ) -> None:
         """The lower limb (thigh + knee + shin + foot) in kneeling position.
 
-        Uses the complete lower limb outline from SHIN_OUTLINE_POINTS, which
+        Uses the complete lower limb outline from LOWER_LIMB_OUTLINE_POINTS, which
         contains the thigh, knee bend, shin, and foot as one continuous shape.
         The outline is transformed so that:
         - The thigh top connects to the hip
@@ -654,7 +654,7 @@ class Drawer:
         
         # Transform the outline
         shin_outline = []
-        for x, y in SHIN_OUTLINE_POINTS:
+        for x, y in LOWER_LIMB_OUTLINE_POINTS:
             # Normalize to [0, 1]
             norm_x = (x - original_x_min) / original_width
             norm_y = (y - original_y_min) / original_height
