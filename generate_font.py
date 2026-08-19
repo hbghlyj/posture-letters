@@ -2376,18 +2376,52 @@ def pose(letter: str) -> Drawer:
         # Hip mass rounds the lower-right bulge of the S.
         d.ellipse(hip[0] + 16, hip[1] - 4, 48, 44, 0.55)
         d.ellipse(hip[0] + 4, hip[1] - 28, 40, 34, 0.35)
-        # Lower hook: thigh continues the curve down through the bulge,
-        # knee on the floor, shin left to the shoe.
-        for spread, width, breeches in ((-10, 56, 70), (16, 46, 56)):
-            d.leg(
-                [
-                    (hip[0] + 8 + spread * 0.3, hip[1] - 20),
-                    (400 + spread, 108),
-                    (148 + spread * 0.25, 74),
-                ],
-                width, knee_index=1, breeches_width=breeches,
-                shoe_direction=(-1, -0.12),
+        # Lower hook: thighs drop through the bulge to a grounded knee;
+        # the shin+foot is J's traced sitting limb, running left — the
+        # print's stocking and shoe, not a blunt sausage.
+        knee = (408, 118)
+        for spread, width, breeches in ((-8, 56, 70), (14, 46, 56)):
+            thigh = [
+                (hip[0] + 8 + spread * 0.3, hip[1] - 20),
+                (knee[0] + spread * 0.2, knee[1] - 4),
+            ]
+            d.tapered_path(thigh, [breeches * 0.98, breeches * 0.80], True)
+            segments, length = d.centerline_measurements(
+                [thigh[0], knee, (148, 74)]
             )
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": [thigh[0], knee, (148, 74)],
+            })
+        thigh_width = 400.0 - 131.0
+        uniform_scale = 84.0 / thigh_width
+        shin_src = [(x, y) for x, y in LOWER_LIMB_OUTLINE_POINTS if x >= 410.0]
+        src_x0 = min(x for x, _ in shin_src)
+        src_y1 = max(y for _, y in shin_src)
+        # Flip: J's bar runs left from the knee, same as this hook.
+        shin_outline = []
+        for x, y in shin_src:
+            new_x = knee[0] + 8 - (x - src_x0) * uniform_scale
+            new_y = BAR_GROUND + (src_y1 - y) * uniform_scale
+            shin_outline.append((new_x, new_y))
+        if shin_outline:
+            d.polygon([
+                (x, min(BAR_GROUND + 108, max(BAR_GROUND, y)))
+                for x, y in shin_outline
+            ])
+        d.ellipse(knee[0] - 6, BAR_GROUND + 42, 40, 36, -0.15)
+        d.cut_path([
+            (knee[0] - 12, knee[1] + 18),
+            (knee[0] - 24, knee[1] + 4),
+            (knee[0] - 16, knee[1] - 10),
+        ], 3.6, True)
+        # Weld the thigh into J's bar so the hook does not nick.
+        d.polygon([
+            (knee[0] - 8, knee[1] + 36),
+            (knee[0] - 56, BAR_GROUND + 64),
+            (knee[0] - 100, BAR_GROUND + 58),
+            (knee[0] - 36, knee[1] + 8),
+        ])
 
     elif letter == "T":
         # Upright T. The straight spine, narrow hips and tightly closed legs
