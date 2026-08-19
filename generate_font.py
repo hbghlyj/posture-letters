@@ -2401,74 +2401,75 @@ def pose(letter: str) -> Drawer:
               breeches_width=48, shoe_direction=(1, 0))
 
     elif letter == "U":
-        # Deep backbend performed lying down. The lower torso and glutes arch
-        # downward to the ground as the curved base, while the legs rise
-        # straight up on the left and the arms rise parallel to them on the
-        # right. Knees stay locked and the hands point at the sky, so the two
-        # limb pairs read as the letter's parallel bars.
-        hip = (140, 260)
-        shoulder = (560, 260)
-        # Curved bottom base: the arched spine sweeps from hips to shoulders,
-        # dipping to the floor between them.
+        # Editorial U (the 1782 print has no U). A lying backbend still
+        # makes the letter: legs the left bar, arched spine the bowl, arms
+        # the right bar. The previous build hung an inverted hatted head
+        # off the lower-right and stuck long horizontal feet off the left
+        # stem, so the glyph read as a lopsided horseshoe with junk on
+        # both sides rather than a U. Head tucks into the counter; both
+        # stems are the same height and similar weight; feet point up to
+        # answer the hands.
+        hip = (198, 328)
+        shoulder = (502, 328)
+        # A long flat run at the bottom so the offset inner edge is a U,
+        # not the V a single apex vertex pinches into.
         d.torso(
-            [hip, (240, 120), (350, 86), (460, 120), shoulder], 92, True
+            [hip, (222, 210), (258, 128), (310, 80), (390, 80), (442, 128),
+             (478, 210), shoulder],
+            86, True,
         )
-        # Left bar: both legs straight up from the hips, knees locked.
-        for spread, width in ((-16, 56), (14, 48)):
-            ankle_x = hip[0] + spread
+        # Extra fill rounds the inner bottom if the ribbon still creases.
+        d.ellipse(350, 122, 74, 36, 0.0)
+        # Hip mass stays inside the left join so the stem does not sprout
+        # a sideways bulge.
+        d.ellipse(hip[0] + 6, hip[1] - 8, 40, 36, 0.15)
+        # Head tucked into the shoulder pocket of the counter, facing in.
+        # No hat: the brim was what spiked out of the silhouette.
+        d.path([(shoulder[0] - 18, shoulder[1] - 4), (468, 278)], 38,
+               False, False, track=False)
+        d.head(458, 258, -1, 0.25, hat=False)
+        # Left bar: both legs straight up, same height, compact shoes
+        # pointing up as the terminal.
+        for spread, width, breeches in ((-16, 54, 64), (16, 48, 56)):
+            ankle = (hip[0] + spread, 708)
             d.leg(
                 [
-                    (hip[0] + spread * 0.5, hip[1] + 34),
-                    (ankle_x, 470),
-                    (ankle_x, 690 if spread < 0 else 654),
+                    (hip[0] + spread * 0.4, hip[1] + 28),
+                    (hip[0] + spread, 520),
+                    ankle,
                 ],
-                width, knee_index=1, breeches_width=width * 1.28,
+                width, knee_index=1, breeches_width=breeches,
                 shoe_scale=0.0,
             )
-            # The foot bends outward at the ankle and the toes run horizontally
-            # away from the bar, giving the left upright a terminal serif to
-            # answer the splayed fingers closing the right one.
-            foot_y = 700 if spread < 0 else 664
-            d.ellipse(ankle_x - 4, foot_y, width * 0.32, 17, 0.0)
-            d.path([(ankle_x - 4, foot_y + 4), (ankle_x - 58, foot_y + 8)],
-                   width * 0.44, False, False, track=False)
-            d.ellipse(ankle_x - 60, foot_y + 8, 12, width * 0.24, 0.0)
-            d.cut_path([
-                (ankle_x - 20, foot_y - 8), (ankle_x - 22, foot_y + 20),
-            ], 3.2, False)
-        # Right bar: both arms vertical and parallel, hands pointing skyward.
-        # The two arms are separately drawn shapes stacked on each other, so an
-        # engraved seam is cancelled by the layer beneath under the nonzero
-        # fill rule. They are held apart with a real gap instead, as H's arms
-        # are, and each is slimmed so the pair still reads as one bar.
-        for spread in (-19, 19):
+            d.shoe(ankle[0], ankle[1], (hip[0] + spread, 520), (0.0, 1.0), 0.70)
+        # Right bar: both arms vertical, held apart by a real gap so they
+        # stay two limbs, thickened so the stems match.
+        for spread, width in ((-18, 46), (18, 40)):
+            tip = (shoulder[0] + spread, 688)
             arm = [
-                (shoulder[0] + spread * 0.5, shoulder[1] + 30),
-                (shoulder[0] + spread, 460),
-                (shoulder[0] + spread, 654),
+                (shoulder[0] + spread * 0.4, shoulder[1] + 26),
+                (shoulder[0] + spread, 510),
+                tip,
             ]
-            d.path(arm, 30 if spread < 0 else 27, True, False, track=False)
+            d.tapered_path(arm, [width, width * 0.90, width * 0.72], True)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[0][0], arm[0][1], 21)
-            # Hand held flat with the fingers pointing straight up.
-            palm_x, palm_y = arm[-1]
-            d.ellipse(palm_x, palm_y + 14, 19, 22, 0.0)
-            for offset in (-11, -3, 5, 13):
+            d.circle(arm[0][0], arm[0][1], width * 0.48)
+            # Hand flat, fingers up — the right-hand terminal.
+            d.ellipse(tip[0], tip[1] + 12, 16, 18, 0.0)
+            for offset in (-10, -3, 4, 11):
                 d.polygon([
-                    (palm_x + offset - 3, palm_y + 26),
-                    (palm_x + offset + 3, palm_y + 26),
-                    (palm_x + offset + 2, palm_y + 50),
-                    (palm_x + offset - 2, palm_y + 50),
+                    (tip[0] + offset - 3, tip[1] + 20),
+                    (tip[0] + offset + 3, tip[1] + 20),
+                    (tip[0] + offset + 2, tip[1] + 44),
+                    (tip[0] + offset - 2, tip[1] + 44),
                 ])
             d.cut_path([
-                (palm_x - 12, palm_y + 30), (palm_x + 12, palm_y + 30),
-            ], 3.4, False)
-        # The head hangs back beneath the arched shoulders.
-        d.head(556, 168, -1, math.pi)
+                (tip[0] - 12, tip[1] + 22), (tip[0] + 12, tip[1] + 22),
+            ], 3.2, False)
 
     elif letter == "V":
         # Upside-down figure: the head is the low apex, legs spread to the two
