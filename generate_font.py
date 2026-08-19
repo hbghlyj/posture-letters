@@ -601,7 +601,8 @@ class Drawer:
         (skin fold behind the knee) is engraved as anatomical detail.
 
         The shin is drawn as its own filled shape using SHIN_OUTLINE_POINTS,
-        which is a 2D outline transformed to fit the shin region.
+        which is a 2D outline transformed to fit the shin region while
+        preserving the original aspect ratio (2:1 width:height).
         """
         k = width / 52.0
         ground = profile.ground
@@ -613,29 +614,48 @@ class Drawer:
         # Get the bar height at knee and ankle
         bar_height_knee = profile.top(knee_x)
         bar_height_ankle = profile.top(ankle_x)
+        
+        # Calculate available space
+        available_width = abs(run)
+        available_height_knee = bar_height_knee - ground
+        available_height_ankle = bar_height_ankle - ground
+        avg_available_height = (available_height_knee + available_height_ankle) / 2
+        
+        # Original shin outline dimensions (from shin_outline.svg)
+        # Path bounding box: width=1223, height=611, aspect ratio=2.0
+        original_width = 1223.0
+        original_height = 611.0
+        
+        # Calculate uniform scale factor to preserve aspect ratio
+        # Use the smaller scale to ensure the shin fits within both dimensions
+        scale_x = available_width / original_width
+        scale_y = avg_available_height / original_height
+        uniform_scale = min(scale_x, scale_y)
+        
+        # Calculate the actual dimensions after uniform scaling
+        scaled_width = original_width * uniform_scale
+        scaled_height = original_height * uniform_scale
+        
+        # Calculate offsets to center the shin
+        # Horizontally: center within the run
+        x_offset = knee_x + (available_width - scaled_width) / 2 * step
+        # Vertically: align bottom with ground
+        y_offset = ground
 
-        # Draw the shin shape using SHIN_PROFILE_TOP as a 1D profile.
-        # The profile gives the height of the top edge at each fraction along the shin.
-        # We create a polygon that goes from knee to ankle along the top edge,
-        # then back from ankle to knee along the ground.
-        
-        shin_top = []
-        shin_bottom = []
-        
-        # Build the top edge
-        for frac, height in SHIN_PROFILE_TOP:
-            x = knee_x + step * frac * abs(run)
-            bar_height = bar_height_knee + frac * (bar_height_ankle - bar_height_knee)
-            y = ground + height * (bar_height - ground)
-            shin_top.append((x, y))
-        
-        # Build the bottom edge (at ground level, reversed)
-        for frac, height in reversed(SHIN_PROFILE_TOP):
-            x = knee_x + step * frac * abs(run)
-            shin_bottom.append((x, ground))
-        
-        # Combine to form a closed polygon
-        shin_outline = shin_top + shin_bottom
+        # Transform SHIN_OUTLINE_POINTS to fit the shin region
+        shin_outline = []
+        for x, y in SHIN_OUTLINE_POINTS:
+            # Normalize to [0, 1] based on original bounding box
+            # Original bbox: x=[131, 1354], y=[0, 611]
+            norm_x = (x - 131.0) / original_width
+            norm_y = (y - 0.0) / original_height
+            
+            # Apply uniform scale and position
+            new_x = x_offset + norm_x * scaled_width * step
+            # Invert y (SVG y goes down, we want y to go up from ground)
+            new_y = y_offset + (1.0 - norm_y) * scaled_height
+            
+            shin_outline.append((new_x, new_y))
         
         # Draw the shin shape as filled geometry
         if len(shin_outline) >= 3:
