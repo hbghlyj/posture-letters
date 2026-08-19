@@ -89,4 +89,4 @@ python generate_font.py
 | **W** | [`w_gymnast_photo.png`](assets/w_gymnast_photo.png) | Head and shoulders the centre peak, arms overlapping thighs as inner strokes, shorter slimmer calves as outer strokes. Hands conceal the grounded knees; pointed feet turn modestly outward. One contour, no carved notch. |
 | **X** | [`x_gymnast_photo.png`](assets/x_gymnast_photo.png) | Wide forward fold from behind: legs an inverted V, head hanging at the centre, arms to the upper corners. |
 | **Y** | [`y_gymnast_photo.png`](assets/y_gymnast_photo.png) | Headstand: torso the stem, split legs the V. |
-| **Z** | [`silhouettes/z.png`](assets/silhouettes/z.png) | Kneeling: both arms the top bar, leaning torso and thighs the diagonal, shins and feet the bottom bar. |
+| **Z** | [`z_gymnast_photo.png`](assets/z_gymnast_photo.png), [`silhouettes/z.png`](assets/silhouettes/z.png) | Kneeling: both arms the top bar, leaning torso and thighs the diagonal, shins and feet the bottom bar. |
