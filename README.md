@@ -36,7 +36,7 @@ Or declare only the compact WOFF2:
 - `trace_silhouette.py` — OpenCV tracer for A–Z except L
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
-- `assets/*_gymnast_photo.png` — photographic sources for B, C, F, H, J, P, Q, R, S, U, V, W, X, and Y
+- `assets/*_gymnast_photo.png` — photographic sources for B, C, F, H, J, O, P, Q, R, S, U, V, W, X, and Y
 - `assets/n_poster_crop.png` — enlarged 2 Way Stretch N cell
 - `assets/two-way-stretch-alphabet.jpg` — the poster that crop came from
 
