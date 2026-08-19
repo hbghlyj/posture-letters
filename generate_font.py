@@ -1288,50 +1288,69 @@ def pose(letter: str) -> Drawer:
         ], 5.0, True)
 
     elif letter == "B":
-        # B is the P/R stance carrying two loops. Head, upright torso and the
-        # perfectly straight standing leg make the vertical stem on the left;
-        # the near arm loops out from the shoulder in a smooth rubbery curve
-        # and tucks back to rest its hand at the waist, closing the upper bowl;
-        # and the other leg lifts, bends outward at the knee in a curved arc
-        # and tucks back so its foot rests against the standing ankle, closing
-        # the lower bowl. The far arm hangs straight down the opposite side.
-        stem_x = 168
-        hip_y = 452
-        d.head(stem_x - 2, 752, 1)
-        d.torso([(stem_x, 690), (stem_x, 570), (stem_x, hip_y)], 86, False)
-        # Passive far arm, blending into the stem.
-        far_arm = [(stem_x - 30, 654), (stem_x - 38, 570), (stem_x - 34, 492)]
-        d.path(far_arm, 28, True, False, track=False)
-        d.circle(far_arm[-1][0], far_arm[-1][1], 15)
-        # Upper loop: the same rubbery arm curve used on P and R, kept a little
-        # smaller so the two bowls stack rather than compete.
-        loop = [
-            (stem_x + 26, 664), (288, 686), (382, 638),
-            (406, 560), (356, 502), (248, 476),
-        ]
-        d.path(loop, 44, True, False, track=False)
-        segments, length = d.centerline_measurements(loop)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": loop,
-        })
-        d.circle(loop[0][0], loop[0][1], 23)
-        d.cut_path([(364, 660), (388, 636), (396, 608)], 4.4, True)
-        # Hand closes the upper loop at the waist.
-        d.ellipse(238, 480, 27, 23, 0.18)
-        d.cut_path([(224, 494), (242, 485), (257, 491)], 4.0, True)
-        # Standing leg: perfectly straight, continuing the stem to the baseline.
+        # Print's B: a crouched standing figure, not an I-stem with a hat
+        # on top. The head sits at the upper-left — the cocked hat is the
+        # top-left of the letter — and both arms loop out to clasp at the
+        # right, closing the upper bowl. The standing leg is the left stem;
+        # the other leg lifts, bows out at the knee and tucks its foot back
+        # onto the toe beside the standing ankle, closing the lower bowl.
+        # The previous build used one rubbery arm to the waist and left the
+        # far arm hanging unused, which the print does not show.
+        stem_x = 210
+        hip_y = 400
+        d.head(stem_x - 2, 636, 1, -0.06)
+        d.path([(stem_x + 6, 580), (stem_x + 4, 598)], 50, False, False, track=False)
+        d.torso([(stem_x + 6, 576), (stem_x - 6, 488), (stem_x + 6, hip_y)], 86, True)
+        # Hip / breech bulge on the left of the stem, as in the print.
+        d.ellipse(stem_x - 16, hip_y + 12, 44, 48, 0.30)
+        d.ellipse(stem_x, hip_y - 6, 38, 36, 0.12)
+        # Upper bowl: both arms. The high arm leaves the shoulder below the
+        # head, rises to hat height and turns down to the clasp. The low
+        # arm leaves the chest and rises to meet it, so the two bowls of
+        # the B stack instead of the upper one swallowing the letter.
+        shoulder = (stem_x + 42, 586)
+        clasp = (438, 528)
+        upper_draw = [shoulder, (318, 662), (416, 652), clasp]
+        lower_draw = [(stem_x + 30, 536), (328, 498), (392, 504), clasp]
+        d.tapered_path(upper_draw, [44, 38, 34, 28], True)
+        d.tapered_path(lower_draw, [42, 36, 32, 28], True)
+        upper_arm = [shoulder, (360, 658), clasp]
+        lower_arm = [(stem_x + 30, 536), (348, 500), clasp]
+        for arm, root_r in ((upper_arm, 22), (lower_arm, 20)):
+            segments, length = d.centerline_measurements(arm)
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": arm,
+            })
+            d.circle(arm[0][0], arm[0][1], root_r)
+        d.circle(416, 646, 17)
+        d.circle(348, 502, 16)
+        d.cut_path([(408, 664), (426, 646), (420, 624)], 3.6, True)
+        d.cut_path([(334, 516), (354, 500), (350, 482)], 3.4, True)
+        # Clasped hands: a solid mass split by one thin seam, as on A/H.
+        d.ellipse(clasp[0] + 12, clasp[1] + 2, 28, 24, 0.70)
+        d.cut_path([
+            (clasp[0] - 2, clasp[1] + 18),
+            (clasp[0] + 14, clasp[1] + 2),
+            (clasp[0] + 10, clasp[1] - 16),
+        ], 4.4, True)
+        # Standing leg: crouched, slightly bent. Shoe points right.
         d.leg(
-            [(stem_x - 14, hip_y), (stem_x - 18, 254), (stem_x - 22, 58)], 52,
-            knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
+            [(stem_x - 12, hip_y + 4), (stem_x - 26, 232), (stem_x + 8, 66)], 52,
+            knee_index=1, breeches_width=62, shoe_direction=(1, -0.08),
         )
-        # Lower loop: the lifted leg bows out at the knee and tucks its foot
-        # back against the standing ankle.
-        lifted = [(stem_x + 20, hip_y - 8), (404, 306), (214, 128)]
+        # Lower bowl: thigh bows out almost level, knee is the lower-right
+        # bulge, calf comes back so the foot stands on the toe beside the
+        # standing shoe.
+        lifted_hip = (stem_x + 30, hip_y + 4)
+        lifted_knee = (444, 268)
+        lifted_ankle = (296, 78)
         d.leg(
-            lifted, 54, knee_index=1, breeches_width=68,
-            shoe_direction=(-0.98, -0.20),
+            [lifted_hip, (344, 368), lifted_knee, lifted_ankle],
+            56, knee_index=2, breeches_width=74, shoe_scale=0.0,
+            anatomy_points=[lifted_hip, lifted_knee, lifted_ankle],
         )
+        d.shoe(lifted_ankle[0], lifted_ankle[1], lifted_knee, (0.58, -0.81), 0.64)
 
     elif letter == "C":
         # Historical kneeling back-arch: face inside the upper-left opening,
@@ -2870,4 +2889,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 # Reordered SHIN_PROFILE - starts at knee (frac near 0, height near 0)
+
+
 
