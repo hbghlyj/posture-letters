@@ -30,6 +30,7 @@ from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
 from yoga_u_outline_points import YOGA_U_HOLES, YOGA_U_OUTLINE_POINTS
 from yoga_b_outline_points import YOGA_B_HOLES, YOGA_B_OUTLINE_POINTS
 from yoga_c_outline_points import YOGA_C_HOLES, YOGA_C_OUTLINE_POINTS
+from yoga_f_outline_points import YOGA_F_HOLES, YOGA_F_OUTLINE_POINTS
 from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
 from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
 
@@ -1428,67 +1429,26 @@ def pose(letter: str) -> Drawer:
         d.shoe(near_ankle[0], near_ankle[1], near_knee, (0.62, 0.78), 0.86)
         d.shoe(far_ankle[0], far_ankle[1], far_knee, (0.70, 0.72), 0.78)
     elif letter == "F":
-        # Standing F on I's body ratios. The previous build had a 256 torso
-        # over 368-unit legs and two rubber arms (406 and 306) — the top one
-        # nearly twice a real arm, the middle one almost at the hip. The print
-        # is an ordinary standing figure: hips near mid-stem, a normal reach
-        # for the top prong, and a short forearm across the chest for the
-        # middle one.
-        stem_x = 172
-        hip_y = 450
-        d.head(stem_x, 742, 1)
-        d.torso([(stem_x, 675), (stem_x, 562), (stem_x, hip_y)], 80, False)
-        # Top prong: a real arm straight out from the shoulder. Length matches
-        # I's hanging arm (~274) instead of stretching past 400.
-        top_y = 638
-        top_reach = stem_x + 296
-        top_arm = [(stem_x + 22, top_y), (stem_x + 160, top_y), (top_reach, top_y)]
-        d.path(top_arm, 42, False, False, track=False)
-        segments, length = d.centerline_measurements(top_arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": top_arm,
-        })
-        d.circle(top_arm[0][0], top_arm[0][1], 23)
-        # Hand at the tip, fingers slightly down as in the print — a serif
-        # without turning the bar into T's hanging terminal.
-        d.ellipse(top_reach + 10, top_y - 4, 20, 16, -0.15)
-        d.tapered_path(
-            [(top_reach + 6, top_y - 2), (top_reach + 14, top_y - 22),
-             (top_reach + 16, top_y - 38)],
-            [22, 16, 11], True,
-        )
-        d.cut_path([(top_reach - 6, top_y - 12), (top_reach - 6, top_y + 12)], 3.4, False)
-        # Middle prong: the far arm crosses the chest and throws only the
-        # forearm out, so the bar sits at chest height and stays short —
-        # the print's hand barely clears the torso.
-        mid_y = 548
-        mid_reach = stem_x + 168
-        mid_arm = [(stem_x + 18, mid_y), (stem_x + 92, mid_y), (mid_reach, mid_y)]
-        d.path(mid_arm, 36, False, False, track=False)
-        segments, length = d.centerline_measurements(mid_arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": mid_arm,
-        })
-        d.circle(mid_arm[0][0], mid_arm[0][1], 19)
-        d.ellipse(mid_reach + 8, mid_y, 16, 15, 0.0)
-        d.cut_path([(mid_reach - 6, mid_y - 12), (mid_reach - 6, mid_y + 12)], 3.2, False)
-        # Seam where the far arm crosses the trunk.
-        d.cut_path([
-            (stem_x - 16, mid_y + 28), (stem_x + 4, mid_y + 8),
-            (stem_x + 8, mid_y - 14),
-        ], 4.0, True)
-        # Legs match I: ~400 units, hip at 450, so the trunk is no longer
-        # longer than the thigh. Feet flare as serifs, like I, P and T.
-        d.leg(
-            [(stem_x - 18, 455), (stem_x - 22, 255), (stem_x - 26, 55)], 50,
-            knee_index=1, breeches_width=56, shoe_direction=(-1, 0)
-        )
-        d.leg(
-            [(stem_x + 18, 455), (stem_x + 22, 255), (stem_x + 26, 55)], 50,
-            knee_index=1, breeches_width=56, shoe_direction=(1, 0)
-        )
+        # Editorial yoga-alphabet F, imported like L. Standing on one
+        # straight leg as the stem, both arms extended forward at the top
+        # as the upper bar, and the folded lifted leg — thigh forward,
+        # shin tucked down — as the middle bar.
+        pts = YOGA_F_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_F_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "G":
         # Editorial yoga-alphabet G / Vrischikasana (scorpion), imported
