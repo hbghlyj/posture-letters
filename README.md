@@ -43,7 +43,6 @@ Or declare only the compact WOFF2:
 ## Character coverage
 
 - A–Z
-- a–z aliases (same outlines as uppercase)
 - space
 
 ## How a letter is built

@@ -691,7 +691,6 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
     glyphs["space"] = TTGlyphPen(None).glyph()
 
     cmap = {ord(ch): ch for ch in letters}
-    cmap.update({ord(ch.lower()): ch for ch in letters})
     cmap[ord(" ")] = "space"
 
     fb = FontBuilder(UPM, isTTF=True)
