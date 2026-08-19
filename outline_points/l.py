@@ -1,7 +1,7 @@
 """Traced silhouette outline for the L glyph.
 
-Single closed contour flattened from vector_kneeling_upright_torso.svg
-(VTracer binary spline trace of vector_kneeling_upright_torso.png: a
+Single closed contour flattened from assets/silhouettes/l.svg
+(VTracer binary spline trace of assets/silhouettes/l.png: a
 kneeling female figure in side profile with an upright vertical torso).
 Coordinates are in the SVG pixel space, y-down, one point roughly every
 3px of arc length. generate_font.py scales and flips them into font units.

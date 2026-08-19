@@ -50,7 +50,7 @@ Period, comma, and hyphen are plain marks (a disc, a disc with a tail, a dash). 
 
 ## How a letter is built
 
-Each capital lives as `outline_points/{a–z}.py`, exporting `OUTLINE_POINTS` and `HOLES`. Matching rasters sit in `assets/silhouettes/` (there is no L raster; L’s contour was traced from a kneeling side-profile silhouette). `generate_font.py` imports `LETTERS` from the package, scales each contour uniformly to cap height 788, seats it on `BAR_GROUND` (y=72), and gives every glyph 72 units of sidebearing. Advances are proportional and uncapped, so wide poses such as V, W, and Q can exceed the em.
+Each capital lives as `outline_points/{a–z}.py`, exporting `OUTLINE_POINTS` and `HOLES`. Matching rasters sit in `assets/silhouettes/`; L also keeps its VTracer SVG there. `generate_font.py` imports `LETTERS` from the package, scales each contour uniformly to cap height 788, seats it on `BAR_GROUND` (y=72), and gives every glyph 72 units of sidebearing. Advances are proportional and uncapped, so wide poses such as V, W, and Q can exceed the em.
 
 Punctuation is still drawn with a few simple primitives (`path`, `torso`, `circle`). Rebuild with:
 
@@ -71,7 +71,7 @@ python generate_font.py
 - **I** — legs pressed together the stem; crossed arms and open hands the top serif; feet turned out the bottom serif.
 - **J** — from `assets/j_gymnast_photo.png`. Joined legs the tall right stem, flexed feet a short top serif, hips/back/arms the open bottom hook, upright profile head the lower-left terminal.
 - **K** — kneeling upright torso the stem, raised arm the upper diagonal, extended straight leg the lower diagonal.
-- **L** — high-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar.
+- **L** — from `assets/silhouettes/l.png` / `l.svg`. High-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar.
 - **M** — folded double from behind: raised knees the peaks, calves the outer stems, thighs sloping in to hanging hips the central V.
 - **N** — from `reference-crops/two-way-stretch/N.png`. Planted arm the left stem, organic torso the diagonal, raised leg the right stem.
 - **O** — full bow whose raised feet and grasping arms close a ring, with a large natural counter.

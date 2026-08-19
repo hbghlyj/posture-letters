@@ -400,7 +400,7 @@ def pose(letter: str) -> Drawer:
     elif letter == "L":
         # Kneeling side profile, imported as a traced silhouette rather than
         # assembled from body-part primitives. The outline is VTracer's spline
-        # trace of vector_kneeling_upright_torso.png — a female figure in
+        # trace of assets/silhouettes/l.png — a female figure in
         # strict side profile, high-kneeling with the upper torso perfectly
         # upright and vertical (head with a low bun, straight erect spine, arm
         # relaxed at the side), the shin and pointed foot lying flat along the
