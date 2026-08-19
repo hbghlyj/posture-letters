@@ -26,6 +26,7 @@ from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
+from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -2304,17 +2305,24 @@ def pose(letter: str) -> Drawer:
             ], 3.2, False)
 
     elif letter == "V":
-        # Upside-down figure: the head is the low apex, legs spread to the two
-        # top corners, and the arms lie along and grip the rising legs. As in
-        # Q, the inverted head keeps its face upright and the gaze lifted, so
-        # the figure looks up out of the apex rather than down into it.
-        d.front_head(350, 108, 58, hair_down=True, upside_down=True,
-                     gaze_up=True)
-        d.torso([(350, 165), (350, 285)], 90, False)
-        d.leg([(340, 285), (225, 500), (105, 745)], 64, knee_index=1)
-        d.leg([(360, 285), (475, 500), (595, 745)], 64, knee_index=1)
-        d.limb([(325, 190), (245, 345), (190, 500)], 44, True, end="hand")
-        d.limb([(375, 190), (455, 345), (510, 500)], 44, True, end="hand")
+        # Editorial yoga-alphabet V, imported like L. A V-sit / boat on
+        # the sit bones: raised legs one stroke, leaning torso the other.
+        pts = YOGA_V_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_V_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "W":
         # Print's W: a folded figure whose four strokes are one body. Head
