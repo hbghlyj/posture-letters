@@ -591,13 +591,13 @@ class Drawer:
             self.polygon(foot_outline)
 
     def kneeling_shin(
-        self, profile: BarProfile, knee_x: float, width: float,
+        self, profile: BarProfile, knee_x: float, width: float, torso_width: float = 84.0,
     ) -> None:
         """The lower limb (thigh + knee + shin + foot) in kneeling position.
 
         Uses the complete lower limb outline from LOWER_LIMB_OUTLINE_POINTS, which
         contains the thigh, knee bend, shin, and foot as one continuous shape.
-        The outline is transformed so that:
+        The outline is scaled to match the torso width and positioned so that:
         - The thigh top connects to the hip
         - The knee is at ground level
         - The shin lies flat on the ground from knee to ankle
@@ -623,30 +623,39 @@ class Drawer:
         original_width = original_x_max - original_x_min
         original_height = original_y_max - original_y_min
         
-        # Target dimensions
-        # The shin portion (x~400-1000 in original) should span from knee_x to ankle_x
-        # The thigh portion (x~131-400 in original) should connect to the hip
-        # The foot portion (x~1000-1354 in original) should extend from ankle_x
-        
-        # For now, use uniform scaling to fit the entire outline
-        # Scale to fit the available width (knee to ankle + some extra for thigh and foot)
-        target_width = abs(run) * 1.5  # Extra space for thigh and foot
-        target_height = profile.top(knee_x) - ground  # Available height
-        
-        # Use uniform scaling to preserve aspect ratio
-        scale_x = target_width / original_width
-        scale_y = target_height / original_height
-        uniform_scale = min(scale_x, scale_y)
+        # Scale to match torso width
+        # The top edge width of the lower limb outline is 1223.0 units
+        # We scale it to match the torso width for seamless integration
+        top_edge_width = 1223.0
+        uniform_scale = torso_width / top_edge_width
         
         # Calculate the actual dimensions after scaling
         scaled_width = original_width * uniform_scale
         scaled_height = original_height * uniform_scale
         
         # Position the outline
+        # The thigh top in the original outline is around x=131, y=249 (top-left of thigh)
+        # We want this to connect to the hip
         # The knee in the original outline is around x=400
         # We want the knee to be at knee_x in the glyph
         original_knee_x = 400.0
-        knee_offset_x = knee_x - (original_knee_x - original_x_min) * uniform_scale * step
+        original_thigh_top_x = 131.0
+        original_thigh_top_y = 249.0
+        
+        # Calculate offset so thigh top connects to hip
+        # The hip is at (stem_x, hip_y) in the glyph
+        # We need to know the hip position - it's passed implicitly via knee_x and the bar profile
+        # For L, the hip is at (208, 134) and knee_x is 246
+        # The thigh top should connect to the hip
+        
+        # Calculate the scaled position of the thigh top
+        scaled_thigh_top_x = (original_thigh_top_x - original_x_min) * uniform_scale
+        scaled_thigh_top_y = (original_thigh_top_y - original_y_min) * uniform_scale
+        
+        # The knee should be at knee_x, ground level
+        # Calculate offset based on knee position
+        scaled_knee_x = (original_knee_x - original_x_min) * uniform_scale
+        knee_offset_x = knee_x - scaled_knee_x * step
         
         # The ground in the original outline is around y=611 (bottom)
         # We want the ground to be at 'ground' in the glyph
@@ -1907,24 +1916,13 @@ def pose(letter: str) -> Drawer:
         # plane, the shins and ankles stretching out along the floor as the
         # bottom bar. The feet finish the stroke as a serif, heels and toes
         # adding a slight vertical terminal.
-        # The hip is carried lower and the shin pulled in: previously the shin
-        # ran 385 units against a 174 thigh (a 2.2 ratio), so the horizontal
-        # bar was really one overlong lower leg. Femur and tibia are close to
-        # equal in a real leg, and the over-long torso is brought back toward
-        # the font's baseline at the same time.
         stem_x = 208
-        # The hip sits where the flipped base's thigh tops now are, so the
-        # trunk lands on the component instead of running past it to the
-        # floor. E's prong is drawn hip-down, and inverting it puts those
-        # thigh tops at the upper edge of the base rather than the lower.
-        # The hip sits down on the bar now that the base is seated on the
-        # floor, so the trunk meets the stroke instead of stopping short of
-        # it and leaving the letter in two disconnected pieces. It follows the
-        # bar down: with the base resting on the baseline rather than hanging
-        # off its heel serif, a hip still set for the old height would leave
-        # the trunk ending in mid-air above the stroke.
+        torso_width = 84
+        # The hip sits where the lower limb outline connects
+        # Cut the torso at the hip to avoid overlap with the thigh in the lower limb outline
         hip = (stem_x, 134)
-        d.torso([hip, (stem_x, 419), (stem_x, 642)], 84, False)
+        # Draw torso from hip up to head (cut at hip to avoid duplicate knee)
+        d.torso([hip, (stem_x, 419), (stem_x, 642)], torso_width, False)
         d.head(stem_x - 2, 706, -1)
         # Arms hang along the sides, carried just clear of the trunk so the
         # shoulder-to-hand run stays legible against the stem.
@@ -1948,40 +1946,14 @@ def pose(letter: str) -> Drawer:
                 (stem_x + sign * 44, 602), (stem_x + sign * 50, 512),
                 (stem_x + sign * 48, 428),
             ], 3.6, True)
-        # Bottom bar: draw thigh and knee directly, then shin and foot separately.
-        # Previously used kneeling_base() shared with E, but that doesn't use
-        # the traced shin outline. Now draws thigh/knee with leg(), then shin
-        # with kneeling_shin() using traced SHIN_PROFILE.
+        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
+        # The outline is scaled to match the torso width for seamless integration
         bar = BarProfile(
             ground=BAR_GROUND, heel_x=246.0, arch_x=ANKLE_X, toe_x=665.0,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
-        # Draw thighs and knees (constrained by bar profile)
-        for spread, width, breeches in ((-16, 54, 62), (16, 42, 50)):
-            d.leg(
-                [
-                    (stem_x + spread * 0.4, hip[1]),
-                    (stem_x - 2 + spread * 0.5, 118),
-                    (KNEE_X + spread * 0.5, 108),
-                    (ANKLE_X + spread, 104),
-                ],
-                width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar, draw_shin=False,
-            )
-        # Level the sole by filling the gap between the leg's underside and ground
-        sole = []
-        for index in range(49):
-            x = 246.0 + (ANKLE_X - 246.0) * index / 48.0
-            spans = [
-                span for span in _column_spans(d.contours, x)
-                if span[0] < 260.0
-            ]
-            if spans:
-                sole.append((x, min(lo for lo, _ in spans)))
-        if sole:
-            d.polygon(sole + [(x, BAR_GROUND) for x, _ in reversed(sole)])
-        # Draw the shin as a separate filled shape using traced SHIN_PROFILE
-        d.kneeling_shin(bar, 246.0, 54)
+        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
+        d.kneeling_shin(bar, 246.0, 54, torso_width=torso_width)
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
         # settled that high, so the trunk's foot stood clear underneath the
