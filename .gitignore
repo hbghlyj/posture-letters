@@ -1,8 +1,4 @@
 .venv/
 __pycache__/
 
-# Generated validation reports (see validate_anatomy.py)
-anatomy-validation.md
-anatomy-validation.json
-font-proof.png
 image-search/
