@@ -36,6 +36,7 @@ from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
 from yoga_t_outline_points import YOGA_T_HOLES, YOGA_T_OUTLINE_POINTS
 from yoga_u_outline_points import YOGA_U_HOLES, YOGA_U_OUTLINE_POINTS
 from yoga_z_outline_points import YOGA_Z_HOLES, YOGA_Z_OUTLINE_POINTS
+from yoga_a_outline_points import YOGA_A_HOLES, YOGA_A_OUTLINE_POINTS
 from yoga_b_outline_points import YOGA_B_HOLES, YOGA_B_OUTLINE_POINTS
 from yoga_c_outline_points import YOGA_C_HOLES, YOGA_C_OUTLINE_POINTS
 from yoga_e_outline_points import YOGA_E_HOLES, YOGA_E_OUTLINE_POINTS
@@ -1245,34 +1246,28 @@ def pose(letter: str) -> Drawer:
     d = Drawer()
 
     if letter == "A":
-        # Editorial Paripurna Navasana (full boat), imported like L and
-        # then flipped vertically so the sit bones become the apex of
-        # the A. The source silhouette is a woman balanced on the sit
-        # bones, torso leaning back, both legs raised straight, both
-        # hands grasping the knees. After the flip the head and feet
-        # land on the baseline and the clasped knees read as the bar.
-        pts = NAVASANA_OUTLINE_POINTS
+        # Editorial yoga-alphabet A, imported like L. A standing wide-legged
+        # forward fold: the lifted hips are the apex, the two spread legs run
+        # down and outward as the diagonals, and the folded torso and
+        # reaching arms lie across the middle as the crossbar, enclosing a
+        # triangular counter.
+        pts = YOGA_A_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
-        left, right, top, bottom = min(xs), max(xs), min(ys), max(ys)
-        # The boat is much wider than it is tall. Scaling it to L/D's
-        # 788 cap made the head hang out of the glyph-sheet cell. Fit
-        # the width to the other wide letters (~X) instead; height
-        # follows, still seated on BAR_GROUND.
-        target_width = 780.0
-        scale = target_width / (right - left)
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
 
         def placed(x: float, y: float) -> Point:
-            # Extra vertical flip vs L: image-bottom (the sit) goes to
-            # the cap, image-top (head and feet) goes to BAR_GROUND.
             return (
                 SIDEBEARING + (x - left) * scale,
-                BAR_GROUND + (y - top) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in NAVASANA_HOLES:
+        for hole in YOGA_A_HOLES:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
+
 
     elif letter == "B":
         # Editorial yoga-alphabet B, imported like L. Seen from behind:
