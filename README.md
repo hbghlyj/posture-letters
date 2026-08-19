@@ -34,7 +34,7 @@ Or declare only the compact WOFF2:
 - [`trace_silhouette.py`](trace_silhouette.py) — OpenCV tracer for A–Z except L
 - [`outline_points/`](outline_points/) — A–Z traced contours consumed by the generator
 - [`assets/silhouettes/`](assets/silhouettes/) — source rasters for those contours
-- [`assets/`](assets/) `*_gymnast_photo.png` — photographic sources for B, C, F, H, J, O, P, Q, R, S, U, V, W, X, Y, and Z
+- [`assets/`](assets/) `*_gymnast_photo.png` — photographic sources for B, C, D, F, H, J, O, P, Q, R, S, U, V, W, X, Y, and Z
 - [`n_poster_crop.png`](assets/n_poster_crop.png) — enlarged 2 Way Stretch N cell
 - [`two-way-stretch-alphabet.jpg`](assets/two-way-stretch-alphabet.jpg) — the poster that crop came from
 
@@ -67,7 +67,7 @@ python generate_font.py
 | **A** | [`silhouettes/a.png`](assets/silhouettes/a.png) | Standing wide-legged forward fold: lifted hips the apex, spread legs the diagonals, folded torso and arms the crossbar. |
 | **B** | [`b_gymnast_photo.png`](assets/b_gymnast_photo.png) | From behind: standing leg and torso the stem, hand-on-hip elbow the upper bowl, bent knee the lower bowl. |
 | **C** | [`c_gymnast_photo.png`](assets/c_gymnast_photo.png) | Kneeling backbend, thighs the left stem, arched torso and thrown-back head opening right. |
-| **D** | [`silhouettes/d.png`](assets/silhouettes/d.png) | Kneeling camel: thighs the stem, thrown-back head the top of the bowl, hands on the heels. The import is mirrored to face the conventional D. |
+| **D** | [`d_gymnast_photo.png`](assets/d_gymnast_photo.png) | Kneeling camel: thighs the stem, thrown-back head the top of the bowl, hands on the heels. The import is mirrored to face the conventional D. |
 | **E** | [`silhouettes/e.png`](assets/silhouettes/e.png) | Kneeling: upright spine the stem, raised arm the top bar, forward arm the middle bar, folded legs the bottom bar. |
 | **F** | [`f_gymnast_photo.png`](assets/f_gymnast_photo.png) | Standing on one straight leg; both arms the top bar; folded lifted leg the middle bar. |
 | **G** | [`silhouettes/g.png`](assets/silhouettes/g.png) | Seated: spine curled into a C as the bowl, knees drawn up to close the lower right, arms arcing overhead with the hands as the spur. |
