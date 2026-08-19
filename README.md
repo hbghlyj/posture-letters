@@ -34,7 +34,6 @@ Or declare only the compact WOFF2:
 - `index.html` — interactive, self-contained specimen
 - `glyph-sheet.svg` — A–Z visual overview
 - `generate_font.py` — builds the TTF/WOFF/WOFF2 files and `glyph-sheet.svg`
-- `build_proofs.py` — raster overview from the TTF (`font-proof.png`, gitignored)
 - `build_specimen.py` — rebuilds the self-contained specimen
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
@@ -58,7 +57,6 @@ Punctuation is still drawn with a few simple primitives (`path`, `torso`, `circl
 
 ```bash
 python generate_font.py
-python build_proofs.py
 ```
 
 ## Letter notes
