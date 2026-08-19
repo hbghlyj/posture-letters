@@ -976,30 +976,39 @@ class Drawer:
 
     def front_head(
         self, x: float, y: float, radius: float = 58, hair_down: bool = True,
-        upside_down: bool = False, gaze_up: bool = False,
+        upside_down: bool = False, gaze_up: bool = False, hat: bool = True,
     ) -> None:
-        """A compact aerial/front-facing head with an anatomical serif-hat.
+        """A compact aerial/front-facing head, optionally with a serif-hat.
 
         ``upside_down`` rotates the facial hierarchy inside a fixed head, while
         ``gaze_up`` adds pupils at the upper edge of the eye sockets. These are
         independent of ``hair_down`` so an inverted recumbent face can retain
-        the source-visible hair/hat silhouette beneath the skull.
+        the source-visible hair silhouette beneath the skull. ``hat`` drops
+        the cocked brim and crown — Q's print is bareheaded.
         """
         self.anatomy.append({"part": "head", "diameter": radius * 2, "center": (x, y)})
         self.ellipse(x, y, radius, radius * 0.9)
         self.circle(x - radius * 0.88, y, radius * 0.19)
         self.circle(x + radius * 0.88, y, radius * 0.19)
         hat_sign = -1 if hair_down else 1
-        brim_y = y + hat_sign * radius * 0.72
-        self.ellipse(x, brim_y, radius * 1.12, radius * 0.13)
-        crown_base = y + hat_sign * radius * 0.70
-        crown_top = y + hat_sign * radius * 1.30
-        self.polygon([
-            (x - radius * 0.57, crown_base),
-            (x + radius * 0.57, crown_base),
-            (x + radius * 0.43, crown_top),
-            (x - radius * 0.49, crown_top),
-        ])
+        if hat:
+            brim_y = y + hat_sign * radius * 0.72
+            self.ellipse(x, brim_y, radius * 1.12, radius * 0.13)
+            crown_base = y + hat_sign * radius * 0.70
+            crown_top = y + hat_sign * radius * 1.30
+            self.polygon([
+                (x - radius * 0.57, crown_base),
+                (x + radius * 0.57, crown_base),
+                (x + radius * 0.43, crown_top),
+                (x - radius * 0.49, crown_top),
+            ])
+        else:
+            # A hair cap on the skull, not a cocked hat: the print's Q has
+            # dark hair on the outer (bottom) side of the inverted head.
+            self.ellipse(
+                x, y + hat_sign * radius * 0.52,
+                radius * 0.92, radius * 0.42,
+            )
         face_sign = -1 if upside_down else 1
         eye_y = y + face_sign * radius * 0.15
         eye_radius = max(5.5, radius * 0.105)
@@ -2219,7 +2228,10 @@ def pose(letter: str) -> Drawer:
         d.ellipse(352, 766, 16, 13, -0.40)
         d.ellipse(apex[0], apex[1] - 2, 20, 15, 0.0)
         d.cut_path([(340, 754), (340, 778)], 4.0, False)
-        d.front_head(340, 108, 62, hair_down=True, upside_down=True, gaze_up=True)
+        # No hat: the print's inverted face is bareheaded, looking up
+        # out of the ring, with only hair on the outer skull.
+        d.front_head(340, 108, 62, hair_down=True, upside_down=True,
+                     gaze_up=True, hat=False)
         # The projecting Q tail is the visible arm. Begin it well inside the
         # right shoulder mass, reinforce the socket, and continue outward as one
         # unbroken upper-arm/forearm route so the appendage cannot read detached.
