@@ -1229,9 +1229,13 @@ def pose(letter: str) -> Drawer:
         pts = NAVASANA_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
-        left, top, bottom = min(xs), min(ys), max(ys)
-        cap_height = 788.0
-        scale = (cap_height - BAR_GROUND) / (bottom - top)
+        left, right, top, bottom = min(xs), max(xs), min(ys), max(ys)
+        # The boat is much wider than it is tall. Scaling it to L/D's
+        # 788 cap made the head hang out of the glyph-sheet cell. Fit
+        # the width to the other wide letters (~X) instead; height
+        # follows, still seated on BAR_GROUND.
+        target_width = 780.0
+        scale = target_width / (right - left)
 
         def placed(x: float, y: float) -> Point:
             # Extra vertical flip vs L: image-bottom (the sit) goes to
@@ -2889,12 +2893,19 @@ def build_svg_sheet(drawings: dict[str, Drawer]) -> None:
         x = col * cell_w
         y = 90 + row * cell_h
         path = drawings[letter].svg_path()
+        xs = [px for contour, _ in drawings[letter].contours for px, _ in contour]
+        ys = [py for contour, _ in drawings[letter].contours for _, py in contour]
+        gw = max(xs) - min(xs) if xs else 1.0
+        gh = max(ys) - min(ys) if ys else 1.0
+        sc = min(176.0 / gw, 188.0 / gh, 0.29)
+        ox = x + 105 - (min(xs) + gw / 2) * sc
+        oy = y + 148 + (min(ys) + gh / 2) * sc
         cards.append(
             f'<rect x="{x + 7}" y="{y + 7}" width="196" height="238" rx="10" '
             f'fill="none" stroke="#d3bea0" stroke-width="2"/>'
         )
         cards.append(
-            f'<g transform="translate({x + 1},{y + 208}) scale(.29)">'
+            f'<g transform="translate({ox:.1f},{oy:.1f}) scale({sc:.4f})">'
             f'<path d="{path}" fill="#17243a" fill-rule="nonzero"/></g>'
         )
         cards.append(

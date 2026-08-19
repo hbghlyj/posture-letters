@@ -45,17 +45,29 @@ def build_glyph_sheet() -> None:
     contours) is what the released files should show: the rasteriser applies
     the TrueType nonzero fill rule, so overlapping limbs merge correctly and
     engraved cuts read as fine lines instead of tearing the silhouette apart.
+    Each letter is sized to fit its cell so a wide pose cannot clip.
     """
+    from fontTools.ttLib import TTFont
+
     cols, rows = 7, 4
     cell_w, cell_h = 210, 250
+    pad = 14
     im = Image.new("RGB", (cols * cell_w, rows * cell_h), "white")
     draw = ImageDraw.Draw(im)
-    face = font(200)
+    metrics = TTFont(ROOT / "posture-master.ttf")
     for index in range(26):
         letter = chr(ord("A") + index)
         col, row = index % cols, index // cols
         box = (col * cell_w, row * cell_h, (col + 1) * cell_w, (row + 1) * cell_h)
-        centered(draw, box, letter, face, INK)
+        glyph = metrics["glyf"][letter]
+        ink_w = max(1.0, glyph.xMax - glyph.xMin)
+        ink_h = max(1.0, glyph.yMax - glyph.yMin)
+        size = min(
+            (cell_w - 2 * pad) * 1000 / ink_w,
+            (cell_h - 2 * pad) * 1000 / ink_h,
+            200,
+        )
+        centered(draw, box, letter, font(int(size)), INK)
     im.save(ROOT / "glyph-sheet.png")
 
 
