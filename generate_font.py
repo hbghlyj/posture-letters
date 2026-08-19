@@ -1644,67 +1644,77 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "G":
-        # G built as one continuous body with a deliberate twist at the waist.
-        # The arms stretch overhead and curve forward to make the upper crest,
-        # the head looking down and the chest turned inward so the top of the
-        # letter reads as a rounded, protected profile. The middle torso then
-        # twists, reorienting the body so the lower torso faces outward to the
-        # left; that puts the hips where the knees can bend up and forward,
-        # sweeping the thighs through the wide bottom arc. Finally the shins
-        # push up the right side and the feet angle sharply back inward,
-        # running horizontally into the counter as G's terminal bar.
-        shoulder = (300, 754)
-        hip = (170, 232)
-        # Upper crest: both arms stretched overhead, curving forward and down
-        # to the open terminal at the upper right.
-        for spread, width in ((22, 54), (-20, 44)):
-            arm = [
-                (shoulder[0] + 14, shoulder[1] + spread * 0.4),
-                (452 + spread, 790 + spread * 0.3),
-                (596 + spread, 690 + spread * 0.6),
-            ]
-            d.path(arm, width, True, False, track=False)
+        # Print's G: the same kneeling back-arch as C, not a twisted body
+        # whose shins climb the right side and throw a mid-height foot-bar
+        # into the counter. Head sits in the upper-left opening facing
+        # right; arms sweep over the top to a reaching hand; a rounded
+        # breech owns the lower-left; the legs run right along the
+        # baseline. G's spur is one shoe kicking up at the end of that
+        # run — the print's internal terminal — while the other shoe
+        # points on to the right.
+        hip = (176, 224)
+        spine = [(235, 555), (168, 450), (148, 336), hip]
+        d.tapered_path(spine, [86, 84, 92, 118], True)
+        segments, length = d.centerline_measurements(spine)
+        d.anatomy.append({
+            "part": "torso", "segments": segments, "length": length,
+            "points": spine,
+        })
+        # Sitting breech, same construction as C, so the lower-left is a
+        # continuous hip curve rather than a kink.
+        d.ellipse(156, 228, 72, 48, -1.18)
+        d.ellipse(184, 206, 40, 34, -0.85)
+        d.ellipse(212, 216, 40, 32, -0.55)
+        d.ellipse(174, 176, 46, 34, -0.22)
+        # Head in the upper-left opening, facing into the counter. No hat:
+        # the brim would jam the underside of the sleeve.
+        d.path([(228, 548), (214, 572)], 40, False, False, track=False)
+        d.head(228, 548, 1, 0.22, hat=False)
+        # Upper crest: both arms over the top, tapering to a modelled hand.
+        for arm, base_w in (
+            ([(248, 592), (400, 688), (568, 618)], 46),
+            ([(236, 568), (388, 660), (552, 592)], 36),
+        ):
+            d.tapered_path(
+                arm + [(arm[-1][0] + 6, arm[-1][1] - 8)],
+                [base_w, base_w * 0.90, base_w * 0.64, base_w * 0.50],
+                True,
+            )
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
-            # Hand terminal closing the top of the arc.
-            d.ellipse(arm[-1][0] + 8, arm[-1][1] - 18, 20, 24, -0.35)
-            d.cut_path([
-                (arm[-1][0] - 12, arm[-1][1] - 6),
-                (arm[-1][0] + 16, arm[-1][1] - 14),
-            ], 3.6, False)
-        # Torso: chest turned inward at the top, twisting through the waist so
-        # the lower torso faces outward down the left side.
-        d.torso([shoulder, (112, 486), hip], 92, True)
-        # An engraved seam marks the rotational shift at the middle torso.
-        d.cut_path([(84, 520), (128, 496), (146, 458)], 5.0, True)
-        # Lower curve: hips open so the knees bend up and forward, the thighs
-        # sweeping the wide bottom arc to the right.
-        for spread, width, breeches in ((-18, 56, 68), (20, 46, 56)):
-            knee = (474 + spread, 92)
-            ankle = (600 + spread * 0.4, 330 + spread)
-            d.leg(
-                [(hip[0] + spread * 0.5, hip[1] - 24), knee, ankle],
-                width, knee_index=1, breeches_width=breeches,
-                shoe_direction=(-1, 0), shoe_scale=0.5,
-            )
-            # The foot turns sharply inward and runs horizontally into the
-            # counter: this pair of level feet is the letter's crossbar. The
-            # bar is kept to a believable foot length — roughly half the shin
-            # rather than matching it — so the terminal reads as feet.
-            foot_y = ankle[1] + 24
-            d.path([(ankle[0] + 4, foot_y), (462 + spread * 0.5, foot_y)],
-                   width * 0.78, False, False, track=False)
-            d.ellipse(458 + spread * 0.5, foot_y, 15, width * 0.42, 0.0)
-            d.cut_path([
-                (ankle[0] - 30, foot_y - 13), (ankle[0] - 30, foot_y + 13),
-            ], 3.4, False)
-        # The head is tucked into the crest, face turned down into the letter.
-        # No hat: the brim crowds the crest of the arch.
-        d.head(336, 668, 1, -math.pi / 2, hat=False)
+            d.circle(arm[0][0], arm[0][1], base_w * 0.46)
+            wx, wy = arm[-1]
+            d.ellipse(wx + 14, wy - 14, base_w * 0.40, base_w * 0.30, -0.55)
+            for dx, dy in ((12, -32), (22, -24), (28, -12)):
+                d.polygon([
+                    (wx + 4, wy - 10), (wx + dx, wy + dy),
+                    (wx + dx + 8, wy + dy + 5),
+                ])
+        # Bottom run: thighs through the hip, knees, shins along the ground.
+        up_ankle = (528, 102)
+        out_ankle = (568, 86)
+        d.leg(
+            [(hip[0] + 8, hip[1] + 4), (336, 108), up_ankle],
+            56, knee_index=1, breeches_width=76, shoe_scale=0.0,
+        )
+        d.leg(
+            [(hip[0] + 28, hip[1] + 10), (354, 136), out_ankle],
+            48, knee_index=1, breeches_width=64, shoe_scale=0.0,
+        )
+        # G's spur: a whole shoe kicking up into the counter. Kept to a
+        # real foot length and thickness so it reads as a foot, not a pin.
+        d.ellipse(up_ankle[0] - 2, up_ankle[1] + 4, 24, 20, 0.35)
+        d.tapered_path(
+            [up_ankle, (516, 148), (504, 186)],
+            [42, 34, 24], True,
+        )
+        d.ellipse(500, 194, 20, 16, -0.35)
+        d.cut_path([(518, 128), (532, 134)], 3.0, False)
+        # The far shoe continues the C's bottom terminal, pointing right.
+        d.shoe(out_ankle[0], out_ankle[1], (354, 136), (0.92, 0.38), 0.86)
 
     elif letter == "H":
         # Two standing figures act as the vertical sides of the H; their joined
