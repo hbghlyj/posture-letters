@@ -637,17 +637,25 @@ class Drawer:
         scaled_width = original_width * uniform_scale
         scaled_height = original_height * uniform_scale
         
-        # Position the outline so the hip connection point connects to the hip
-        # The hip connection in the original outline is around x=131, y=0 (top-left of thigh)
-        # After scaling, this becomes x=0, y=0 (top-left of scaled outline)
+        # Position the outline so the thigh section aligns with the torso
+        # The thigh section in the scaled outline is 84 units wide (matching torso width)
+        # For L (step=1), the thigh is at the left end (x=0 to x=84)
+        # For J (step=-1), the thigh is at the right end (after transformation)
         
-        # We need to position the outline so the thigh top connects to the hip
-        # The hip is at (hip_x, hip_y) in the glyph
+        # We want the thigh section to align with the torso
+        # The torso spans from hip_x - torso_width/2 to hip_x + torso_width/2
         
-        # The thigh top in the scaled outline is at x=0
-        # We want it to be at hip_x in the glyph
-        # So the offset is: knee_offset_x = hip_x (since thigh top is at x=0)
-        knee_offset_x = hip_x
+        if step > 0:  # L: thigh at left end (norm_x 0 to 0.22)
+            # After transformation, thigh maps to x from knee_offset_x to knee_offset_x + 84
+            # We want this to be hip_x - 42 to hip_x + 42
+            # So knee_offset_x = hip_x - 42
+            knee_offset_x = hip_x - torso_width / 2
+        else:  # J: thigh at left end (norm_x 0 to 0.22), but step=-1 flips it
+            # After transformation with step=-1, thigh maps to x from knee_offset_x to knee_offset_x - 84
+            # We want this to be hip_x - 42 to hip_x + 42
+            # So knee_offset_x - 84 = hip_x - 42  =>  knee_offset_x = hip_x + 42
+            # And knee_offset_x = hip_x + 42  =>  knee_offset_x = hip_x + 42
+            knee_offset_x = hip_x + torso_width / 2
         
         # For y positioning, we need the thigh top to be at the hip y-coordinate
         # The thigh top in the original is at y=0 (the very top of the outline)
