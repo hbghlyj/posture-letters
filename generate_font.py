@@ -15,7 +15,11 @@ from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
+<<<<<<< HEAD
 from profile_loader import SHIN_PROFILE
+=======
+from profile_loader import SHIN_OUTLINE_POINTS, SHIN_PROFILE_TOP
+>>>>>>> fc16874 (Fix shin height profile by using top edge profile instead of 2D outline)
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -600,11 +604,17 @@ class Drawer:
         upward, the calf muscle curves downward. The popliteal crease
         (skin fold behind the knee) is engraved as anatomical detail.
 
+<<<<<<< HEAD
         The shin is drawn as its own filled shape using SHIN_PROFILE.
+=======
+        The shin is drawn as its own filled shape using SHIN_OUTLINE_POINTS,
+        which is a 2D outline transformed to fit the shin region.
+>>>>>>> fc16874 (Fix shin height profile by using top edge profile instead of 2D outline)
         """
         k = width / 52.0
         ground = profile.ground
         step = profile.step
+<<<<<<< HEAD
         # The shin runs from knee to ankle, which is the portion of the bar
         # before the foot region (approximately 0 to 0.7 of the bar)
         ankle_x = profile.arch_x  # Ankle is at the arch position
@@ -623,6 +633,38 @@ class Drawer:
             x = at(frac)
             y = ground + (profile.top(x) - ground) * height
             shin_outline.append((x, y))
+=======
+        # The shin runs from knee to ankle
+        ankle_x = profile.arch_x  # Ankle is at the arch position
+        run = (ankle_x - knee_x) * step
+
+        # Get the bar height at knee and ankle
+        bar_height_knee = profile.top(knee_x)
+        bar_height_ankle = profile.top(ankle_x)
+
+        # Draw the shin shape using SHIN_PROFILE_TOP as a 1D profile.
+        # The profile gives the height of the top edge at each fraction along the shin.
+        # We create a polygon that goes from knee to ankle along the top edge,
+        # then back from ankle to knee along the ground.
+        
+        shin_top = []
+        shin_bottom = []
+        
+        # Build the top edge
+        for frac, height in SHIN_PROFILE_TOP:
+            x = knee_x + step * frac * abs(run)
+            bar_height = bar_height_knee + frac * (bar_height_ankle - bar_height_knee)
+            y = ground + height * (bar_height - ground)
+            shin_top.append((x, y))
+        
+        # Build the bottom edge (at ground level, reversed)
+        for frac, height in reversed(SHIN_PROFILE_TOP):
+            x = knee_x + step * frac * abs(run)
+            shin_bottom.append((x, ground))
+        
+        # Combine to form a closed polygon
+        shin_outline = shin_top + shin_bottom
+>>>>>>> fc16874 (Fix shin height profile by using top edge profile instead of 2D outline)
         
         # Draw the shin shape as filled geometry
         if len(shin_outline) >= 3:
@@ -632,7 +674,11 @@ class Drawer:
         # This is a horizontal crease on the back of the knee, visible
         # when the knee is bent. In the kneeling position, this appears
         # on the upper surface of the shin near the knee.
+<<<<<<< HEAD
         crease_x = at(0.08)  # 8% from knee
+=======
+        crease_x = knee_x + step * 0.08 * abs(run)  # 8% from knee
+>>>>>>> fc16874 (Fix shin height profile by using top edge profile instead of 2D outline)
         crease_top = profile.top(crease_x)
         crease_bottom = ground + (crease_top - ground) * 0.7
         # Draw as a thin horizontal line
