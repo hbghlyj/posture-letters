@@ -24,6 +24,8 @@ from rajakapotasana_outline_points import (
 )
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
+from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
+from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -2034,47 +2036,25 @@ def pose(letter: str) -> Drawer:
         d.front_head(486, 596, 54, hair_down=True, upside_down=True, gaze_up=True)
 
     elif letter == "P":
-        # Standing upright. Head, straight torso and closely planted legs
-        # stack into the solid left stem. The whole upper bowl is made by one
-        # arm: it leaves the shoulder, exaggerates into a smooth rubbery curve
-        # out and down, and closes on the hand resting on the hip at the
-        # torso's midline. The far arm hangs straight down the opposite side,
-        # tucked in so it never breaks the letter's silhouette.
-        stem_x = 168
-        hip_y = 452
-        d.head(stem_x - 2, 752, 1)
-        d.torso([(stem_x, 690), (stem_x, 570), (stem_x, hip_y)], 86, False)
-        # Passive far arm: straight down, held close against the body.
-        far_arm = [(stem_x - 30, 654), (stem_x - 38, 570), (stem_x - 34, 492)]
-        d.path(far_arm, 28, True, False, track=False)
-        d.circle(far_arm[-1][0], far_arm[-1][1], 15)
-        # The looping arm: shoulder, out and over, down the outside, then back
-        # in to the hand planted on the hip.
-        loop = [
-            (stem_x + 26, 664), (300, 690), (410, 640),
-            (438, 552), (382, 486), (250, 464),
-        ]
-        d.path(loop, 46, True, False, track=False)
-        segments, length = d.centerline_measurements(loop)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": loop,
-        })
-        d.circle(loop[0][0], loop[0][1], 24)
-        # Elbow crease at the top of the rubbery arc.
-        d.cut_path([(392, 664), (416, 640), (426, 610)], 4.6, True)
-        # Enclosure point: the hand closes the bowl against the hip.
-        d.ellipse(238, 468, 28, 24, 0.18)
-        d.cut_path([(224, 484), (242, 474), (258, 480)], 4.2, True)
-        # Closely planted legs continue the stem to the baseline.
-        d.leg(
-            [(stem_x - 18, hip_y), (stem_x - 24, 254), (stem_x - 28, 58)], 52,
-            knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
-        )
-        d.leg(
-            [(stem_x + 18, hip_y), (stem_x + 22, 254), (stem_x + 26, 58)], 52,
-            knee_index=1, breeches_width=58, shoe_direction=(1, 0)
-        )
+        # Editorial yoga-alphabet P, imported like L. A standing
+        # backbend whose planted legs are the stem and whose arched
+        # torso, hanging head and clasped hands close the bowl.
+        pts = YOGA_P_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_P_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "Q":
         # Editorial bow-as-Q, imported like L. A prone backbend whose
@@ -2099,56 +2079,25 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "R":
-        # R is P's stance with one leg swung out: head, upright torso and the
-        # firmly planted straight leg align vertically as the left backbone,
-        # the same single arm loops out from the shoulder and hooks back to
-        # close on the waist at the body's midline, and the other leg drives
-        # sharply down and out to the right, planting at an angle to make the
-        # stabilising diagonal.
-        stem_x = 168
-        hip_y = 452
-        d.head(stem_x - 2, 752, 1)
-        d.torso([(stem_x, 690), (stem_x, 570), (stem_x, hip_y)], 86, False)
-        # Passive far arm: straight down, held close against the body.
-        far_arm = [(stem_x - 30, 654), (stem_x - 38, 570), (stem_x - 34, 492)]
-        d.path(far_arm, 28, True, False, track=False)
-        d.circle(far_arm[-1][0], far_arm[-1][1], 15)
-        # The looping arm, exactly as on P: shoulder, out and over, down the
-        # outside, then back in to the hand resting flat on the waist.
-        loop = [
-            (stem_x + 26, 664), (300, 690), (410, 640),
-            (438, 552), (382, 486), (250, 464),
-        ]
-        d.path(loop, 46, True, False, track=False)
-        segments, length = d.centerline_measurements(loop)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": loop,
-        })
-        d.circle(loop[0][0], loop[0][1], 24)
-        # Elbow crease at the top of the rubbery arc.
-        d.cut_path([(392, 664), (416, 640), (426, 610)], 4.6, True)
-        # Midline enclosure: the hand closes the loop against the waist.
-        d.ellipse(238, 468, 28, 24, 0.18)
-        d.cut_path([(224, 484), (242, 474), (258, 480)], 4.2, True)
-        # Planted straight leg: continues the stem to the baseline.
-        d.leg(
-            [(stem_x - 16, hip_y), (stem_x - 22, 254), (stem_x - 26, 58)], 52,
-            knee_index=1, breeches_width=58, shoe_direction=(-1, 0)
-        )
-        # Lower-right branch, as on K: the leg reaches out from the pelvis and
-        # changes direction at the knee to drive down and right, planting flat
-        # with spread toes anchoring the base.
-        d.leg(
-            [(stem_x + 18, hip_y), (334, 262), (520, 68)], 56,
-            knee_index=1, breeches_width=64, shoe_scale=0.0,
-        )
-        d.ellipse(530, 60, 23, 18, -0.5)
-        for dx, dy in ((21, -6), (17, -17), (7, -26)):
-            d.polygon([
-                (526, 64), (530 + dx, 60 + dy), (534 + dx, 68 + dy),
-            ])
-        d.cut_path([(513, 68), (530, 54), (540, 38)], 3.2, True)
+        # Editorial yoga-alphabet R, imported like L. The same standing
+        # backbend as P, with the front leg stepped forward as the
+        # diagonal of the letter.
+        pts = YOGA_R_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_R_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "S":
         # Print's S: the arms sweep the upper hook, the head sits in the
