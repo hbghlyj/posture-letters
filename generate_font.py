@@ -679,18 +679,9 @@ class Drawer:
         if len(shin_outline) >= 3:
             self.polygon(shin_outline)
         
-        # Engrave the popliteal crease (skin fold behind the knee).
-        # This is a horizontal crease on the back of the knee, visible
-        # when the knee is bent. In the kneeling position, this appears
-        # on the upper surface of the shin near the knee.
-        crease_x = knee_x + step * 0.08 * abs(run)  # 8% from knee
-        crease_top = profile.top(crease_x)
-        crease_bottom = ground + (crease_top - ground) * 0.7
-        # Draw as a thin horizontal line
-        self.cut_path([
-            (crease_x - 8 * k, (crease_top + crease_bottom) / 2),
-            (crease_x + 8 * k, (crease_top + crease_bottom) / 2),
-        ], 2.5 * k, False)
+        # Note: Popliteal crease engraving removed for now as it was causing
+        # floating artifacts. The crease position calculation needs to be
+        # updated to work with the transformed shin outline coordinates.
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
