@@ -26,6 +26,7 @@ from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
+from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
 from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
@@ -1576,77 +1577,25 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "G":
-        # Print's G: the same kneeling back-arch as C, not a twisted body
-        # whose shins climb the right side and throw a mid-height foot-bar
-        # into the counter. Head sits in the upper-left opening facing
-        # right; arms sweep over the top to a reaching hand; a rounded
-        # breech owns the lower-left; the legs run right along the
-        # baseline. G's spur is one shoe kicking up at the end of that
-        # run — the print's internal terminal — while the other shoe
-        # points on to the right.
-        hip = (176, 224)
-        spine = [(235, 555), (168, 450), (148, 336), hip]
-        d.tapered_path(spine, [86, 84, 92, 118], True)
-        segments, length = d.centerline_measurements(spine)
-        d.anatomy.append({
-            "part": "torso", "segments": segments, "length": length,
-            "points": spine,
-        })
-        # Sitting breech, same construction as C, so the lower-left is a
-        # continuous hip curve rather than a kink.
-        d.ellipse(156, 228, 72, 48, -1.18)
-        d.ellipse(184, 206, 40, 34, -0.85)
-        d.ellipse(212, 216, 40, 32, -0.55)
-        d.ellipse(174, 176, 46, 34, -0.22)
-        # Head in the upper-left opening, facing into the counter. No hat:
-        # the brim would jam the underside of the sleeve.
-        d.path([(228, 548), (214, 572)], 40, False, False, track=False)
-        d.head(228, 548, 1, 0.22, hat=False)
-        # Upper crest: both arms over the top, tapering to a modelled hand.
-        for arm, base_w in (
-            ([(248, 592), (400, 688), (568, 618)], 46),
-            ([(236, 568), (388, 660), (552, 592)], 36),
-        ):
-            d.tapered_path(
-                arm + [(arm[-1][0] + 6, arm[-1][1] - 8)],
-                [base_w, base_w * 0.90, base_w * 0.64, base_w * 0.50],
-                True,
+        # Editorial yoga-alphabet G / Vrischikasana (scorpion), imported
+        # like L. An inverted backbend: arms and hanging head at the
+        # bottom, arched torso the bowl, feet the spur.
+        pts = YOGA_G_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], base_w * 0.46)
-            wx, wy = arm[-1]
-            d.ellipse(wx + 14, wy - 14, base_w * 0.40, base_w * 0.30, -0.55)
-            for dx, dy in ((12, -32), (22, -24), (28, -12)):
-                d.polygon([
-                    (wx + 4, wy - 10), (wx + dx, wy + dy),
-                    (wx + dx + 8, wy + dy + 5),
-                ])
-        # Bottom run: thighs through the hip, knees, shins along the ground.
-        up_ankle = (528, 102)
-        out_ankle = (568, 86)
-        d.leg(
-            [(hip[0] + 8, hip[1] + 4), (336, 108), up_ankle],
-            56, knee_index=1, breeches_width=76, shoe_scale=0.0,
-        )
-        d.leg(
-            [(hip[0] + 28, hip[1] + 10), (354, 136), out_ankle],
-            48, knee_index=1, breeches_width=64, shoe_scale=0.0,
-        )
-        # G's spur: a whole shoe kicking up into the counter. Kept to a
-        # real foot length and thickness so it reads as a foot, not a pin.
-        d.ellipse(up_ankle[0] - 2, up_ankle[1] + 4, 24, 20, 0.35)
-        d.tapered_path(
-            [up_ankle, (516, 148), (504, 186)],
-            [42, 34, 24], True,
-        )
-        d.ellipse(500, 194, 20, 16, -0.35)
-        d.cut_path([(518, 128), (532, 134)], 3.0, False)
-        # The far shoe continues the C's bottom terminal, pointing right.
-        d.shoe(out_ankle[0], out_ankle[1], (354, 136), (0.92, 0.38), 0.86)
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_G_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "H":
         # Two standing figures act as the vertical sides of the H; their joined
