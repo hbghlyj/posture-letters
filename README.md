@@ -90,5 +90,3 @@ python generate_font.py
 | **X** | [`x_gymnast_photo.png`](assets/x_gymnast_photo.png) | Wide forward fold from behind: legs an inverted V, head hanging at the centre, arms to the upper corners. |
 | **Y** | [`y_gymnast_photo.png`](assets/y_gymnast_photo.png) | Headstand: torso the stem, split legs the V. |
 | **Z** | [`silhouettes/z.png`](assets/silhouettes/z.png) | Kneeling: both arms the top bar, leaning torso and thighs the diagonal, shins and feet the bottom bar. |
-
-The shipped outlines are monochrome letterforms for playful display, not body text. Treat the poses as typographic fiction, not exercise instructions.
