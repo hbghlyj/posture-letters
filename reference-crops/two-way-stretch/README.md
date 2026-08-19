@@ -23,6 +23,11 @@ Crops kept here:
   stretched straight forward above the head as the long top bar and the
   other stretched straight forward at mid-chest height as a shorter
   middle prong. Neither elbow is tucked.
+  NOTE: this crop is no longer the source of the shipped E. The shipped
+  E now comes from a separate reference with both arms folded at the
+  elbow and the head tucked low beneath the top forearm, which closes
+  the stem-to-top-bar junction and reads better at text sizes. The crop
+  is kept here for provenance and comparison.
 - `U.png` - row 4, second cell. Lying on the back with the rounded back
   and hips on the floor as the bowl, both legs pressed together and
   raised vertically as one stem and both arms extended vertically as
