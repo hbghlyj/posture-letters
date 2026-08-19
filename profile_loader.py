@@ -1,0 +1,40 @@
+"""Load lower limb outline from SVG file."""
+import re
+from pathlib import Path
+
+def load_outline_from_svg(svg_path):
+    """Load 2D outline points from an SVG file."""
+    with open(svg_path) as f:
+        svg = f.read()
+    
+    # Extract path d attribute
+    match = re.search(r'd="([^"]+)"', svg)
+    if not match:
+        raise ValueError(f"No path found in {svg_path}")
+    
+    d = match.group(1)
+    
+    # Parse path commands
+    points = []
+    tokens = re.findall(r'[MLZ]|[-+]?\d*\.?\d+', d)
+    i = 0
+    while i < len(tokens):
+        if tokens[i] == 'M' or tokens[i] == 'L':
+            x = float(tokens[i+1])
+            y = float(tokens[i+2])
+            points.append((x, y))
+            i += 3
+        elif tokens[i] == 'Z':
+            i += 1
+        else:
+            # Bare coordinate pair (continuation)
+            x = float(tokens[i])
+            y = float(tokens[i+1])
+            points.append((x, y))
+            i += 2
+    
+    return points
+
+# Load full lower limb outline from SVG file (thigh + knee + shin + foot)
+ROOT = Path(__file__).resolve().parent
+LOWER_LIMB_OUTLINE_POINTS = load_outline_from_svg(ROOT / 'lower_limb_outline.svg')

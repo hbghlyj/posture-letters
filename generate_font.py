@@ -15,6 +15,8 @@ from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
+from profile_loader import LOWER_LIMB_OUTLINE_POINTS
+
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
 ADVANCE = 700
@@ -38,6 +40,11 @@ ANKLE_X = 548.0
 # enough forward that shin and thigh come out close to equal, as a real leg
 # and the print's seated figure both are.
 KNEE_X = 320.0
+
+# Normalized foot profile points from vectorized reference
+# (fraction_along_foot, height_from_ground) where 0=ground, 1=top
+
+
 
 Point = tuple[float, float]
 
@@ -504,7 +511,7 @@ class Drawer:
                 {"part": "composite_path", "segments": segments, "length": length, "points": pts}
             )
 
-    def flat_bar(self, profile: BarProfile, anchor_rise: float) -> None:
+    def flat_bar(self, profile: BarProfile, anchor_rise: float, stop_at: float = 1.0) -> None:
         """Fill the bar of a leg lying along the ground, heel to toe point.
 
         The kneeling glyphs put a whole lower limb on the floor, and the
@@ -526,6 +533,11 @@ class Drawer:
         heel differs: L and J turn up into a tall vertical stem, so the curve
         can start well inside it, while Z's leg runs away on a shallow
         diagonal and the curve has to start close to the bar to stay covered.
+        
+        ``stop_at`` is a fraction (0.0 to 1.0) specifying where to stop drawing
+        the bar along the heel-to-toe run. Use this to stop before the foot
+        region so the foot can be drawn separately as its own filled shape.
+        Default is 1.0 (draw all the way to the toe).
         """
         ground = profile.ground
         # How far the outline swells back past the line of the stem. Scaled
@@ -547,10 +559,23 @@ class Drawer:
         # the stroke, which is what the print shows.
         bulge = profile.heel_depth * 0.30
         heel = profile.heel_outline(anchor_rise, bulge)
-        edge = profile.edge()
+        # Sample the top edge only up to stop_at fraction
+        samples = int(96 * stop_at)
+        edge = [
+            (
+                profile.heel_x + profile.step * profile.toe_s * i / 96,
+                profile.top(profile.heel_x + profile.step * profile.toe_s * i / 96),
+            )
+            for i in range(samples)
+        ]
+        # Add the stopping point
+        stop_x = profile.heel_x + profile.step * profile.toe_s * stop_at
+        edge.append((stop_x, profile.top(stop_x)))
+        # Add ground point at stop location
+        edge.append((stop_x, ground))
         # One closed loop, traced the whole way round: out of the leg and down
-        # around the heel to the floor, forward along the sole to the toe
-        # point, then back along the top edge and in to close inside the limb.
+        # around the heel to the floor, forward along the sole to the stop point,
+        # then back along the top edge and in to close inside the limb.
         # The bulge is a stretch of this contour rather than a shape stuck on
         # the end of it, so it reads as the band's own rear end.
         self.polygon(
@@ -559,61 +584,116 @@ class Drawer:
             + list(reversed(edge))
         )
 
-    def kneeling_foot(
-        self, profile: BarProfile, ankle_x: float, width: float,
+        # Draw the foot shape as filled geometry (not a cutout).
+        # The shin has already been drawn separately and stopped before
+        # the foot region, so the foot is its own filled shape.
+        if len(foot_outline) >= 3:
+            self.polygon(foot_outline)
+
+    def kneeling_shin(
+        self, profile: BarProfile, knee_x: float, width: float, torso_width: float = 84.0, hip_x: float = 452.0, hip_y: float = 300.0,
     ) -> None:
-        """The foot at the front of a limb lying flat along the ground.
+        """The lower limb (thigh + knee + shin + foot) in kneeling position.
 
-        These kneeling legs put the whole lower limb on the floor, so the
-        letter's bottom bar has to read as one straight stroke. The foot is
-        therefore set flush with the shin rather than bent away from it: its
-        upper surface continues the bar's own profile and its sole rests on
-        the same ground line, so nothing steps above or below the bar.
+        Uses the complete lower limb outline from LOWER_LIMB_OUTLINE_POINTS, which
+        contains the thigh, knee bend, shin, and foot as one continuous shape.
+        The outline is scaled so the thigh width matches the torso width, and
+        positioned so that:
+        - The thigh top connects to the hip
+        - The knee is at ground level
+        - The shin lies flat on the ground from knee to ankle
+        - The foot extends from the ankle
 
-        Within that band it keeps a real foot's shape. The heel is not built
-        here — it is the rear end of the bar itself, so the weight-bearing
-        mass belongs to the band's contour instead of being a lump stuck onto
-        it. From the arch forward the outline simply runs on, sloping evenly
-        down and thinning to a point where the toe tip meets the floor.
-        Engraved ankle crease, hollow arch and toe clefts model the detail,
-        all kept well inside the silhouette so they can never notch the bar.
+        The popliteal crease (skin fold behind the knee) is engraved as
+        anatomical detail.
         """
         k = width / 52.0
         ground = profile.ground
         step = profile.step
-        # The engraving is spaced along the foot's own run, from the ankle out
-        # to the toe point, so it stays in proportion however long the foot
-        # is. Everything is placed forward of the leg strokes: where the leg
-        # and the bar overlap, the nonzero fill rule cancels a reverse contour
-        # outright, so a cut back there simply would not render.
-        run = (profile.toe_x - ankle_x) * step
+        # The shin runs from knee to ankle
+        ankle_x = profile.arch_x  # Ankle is at the arch position
+        run = (ankle_x - knee_x) * step
 
-        def at(fraction: float) -> float:
-            return ankle_x + step * run * fraction
-
-        # Ankle crease, where the shin hands over to the foot. It leans
-        # forward the way the front of an ankle does and is held well inside
-        # the profile at both ends so it can never notch the flat bar.
-        crease_x = at(0.10)
-        crease_top = profile.top(crease_x)
-        self.cut_path([
-            (crease_x + step * 3 * k, crease_top - 10 * k),
-            (crease_x - step * 4 * k, (ground + crease_top) * 0.5),
-            (crease_x + step * 3 * k, ground + 10 * k),
-        ], 3.0 * k, True)
-        # Arch: the shallow hollow lifted off the floor under the instep.
-        self.cut_path([
-            (at(0.24), ground + 4 * k),
-            (at(0.38), ground + 11 * k),
-            (at(0.52), ground + 4 * k),
-        ], 3.4 * k, True)
-        # Toe clefts, engraved down the sloping upper surface of the foot.
-        for i in range(2):
-            cx = at(0.62 + 0.16 * i)
-            self.cut_path([
-                (cx, profile.top(cx) - 7 * k),
-                (cx + step * run * 0.09, ground + (5 - 1.5 * i) * k),
-            ], 2.4 * k, False)
+        # Original outline dimensions (from lower_limb_outline.svg)
+        # Bounding box: x=[131, 1354], y=[0, 611]
+        # The outline contains: thigh (x~131-400), knee (x~400), shin (x~400-1000), foot (x~1000-1354)
+        original_x_min = 131.0
+        original_x_max = 1354.0
+        original_y_min = 0.0
+        original_y_max = 611.0
+        original_width = original_x_max - original_x_min
+        original_height = original_y_max - original_y_min
+        
+        # The thigh portion is roughly x=[131, 400] in the original outline
+        # Scale so the thigh width matches the torso width
+        thigh_x_min = 131.0
+        thigh_x_max = 400.0
+        thigh_width = thigh_x_max - thigh_x_min
+        
+        # Scale factor: thigh width -> torso width
+        uniform_scale = torso_width / thigh_width
+        
+        # Calculate the actual dimensions after scaling
+        scaled_width = original_width * uniform_scale
+        scaled_height = original_height * uniform_scale
+        
+        # Position the outline so the thigh section aligns with the torso
+        # The thigh section in the scaled outline is 84 units wide (matching torso width)
+        # For L (step=1), the thigh is at the left end (x=0 to x=84)
+        # For J (step=-1), the thigh is at the right end (after transformation)
+        
+        # We want the thigh section to align with the torso
+        # The torso spans from hip_x - torso_width/2 to hip_x + torso_width/2
+        
+        if step > 0:  # L: thigh at left end (norm_x 0 to 0.22)
+            # After transformation, thigh maps to x from knee_offset_x to knee_offset_x + 84
+            # We want this to be hip_x - 42 to hip_x + 42
+            # So knee_offset_x = hip_x - 42
+            knee_offset_x = hip_x - torso_width / 2
+        else:  # J: thigh at left end (norm_x 0 to 0.22), but step=-1 flips it
+            # After transformation with step=-1, thigh maps to x from knee_offset_x to knee_offset_x - 84
+            # We want this to be hip_x - 42 to hip_x + 42
+            # So knee_offset_x - 84 = hip_x - 42  =>  knee_offset_x = hip_x + 42
+            # And knee_offset_x = hip_x + 42  =>  knee_offset_x = hip_x + 42
+            knee_offset_x = hip_x + torso_width / 2
+        
+        # For y positioning, we need the thigh top to be at the hip y-coordinate
+        # The thigh top in the original is at y=0 (the very top of the outline)
+        # After scaling and inverting, it's at: (611 - 0) * uniform_scale = 611 * uniform_scale from the ground
+        # We want this to be at hip_y
+        # So: ground_offset_y = hip_y - (611 * uniform_scale)
+        
+        # The thigh top y in the original outline (minimum y)
+        original_thigh_top_y = 0.0
+        
+        # Calculate the scaled position of the thigh top (from the bottom/ground)
+        scaled_thigh_top_y_from_ground = (original_y_max - original_thigh_top_y) * uniform_scale
+        
+        # We want the thigh top to be at hip_y in the glyph
+        # So: ground_offset_y = hip_y - scaled_thigh_top_y_from_ground
+        ground_offset_y = hip_y - scaled_thigh_top_y_from_ground
+        
+        # Transform the outline
+        shin_outline = []
+        for x, y in LOWER_LIMB_OUTLINE_POINTS:
+            # Normalize to [0, 1]
+            norm_x = (x - original_x_min) / original_width
+            norm_y = (y - original_y_min) / original_height
+            
+            # Apply uniform scale and position
+            new_x = knee_offset_x + norm_x * scaled_width * step
+            # Invert y (SVG y goes down, we want y to go up from ground)
+            new_y = ground_offset_y + (1.0 - norm_y) * scaled_height
+            
+            shin_outline.append((new_x, new_y))
+        
+        # Draw the shin shape as filled geometry
+        if len(shin_outline) >= 3:
+            self.polygon(shin_outline)
+        
+        # Note: Popliteal crease engraving removed for now as it was causing
+        # floating artifacts. The crease position calculation needs to be
+        # updated to work with the transformed shin outline coordinates.
 
     def cut_path(self, pts: list[Point], width: float = 6, smooth: bool = True) -> None:
         """Punch a fine engraved line through a filled body contour."""
@@ -659,6 +739,7 @@ class Drawer:
         shoe_scale: float = 1.0,
         anatomy_points: list[Point] | None = None,
         bar: "BarProfile | None" = None,
+        draw_shin: bool = True,
     ) -> None:
         """Draw short breeches, a knee cuff, muscular calf, ankle, and shoe.
 
@@ -673,6 +754,10 @@ class Drawer:
         profile owns the silhouette and the leg's own swells are held inside
         it — otherwise the calf and the breeches push up through the stroke
         that is supposed to read as flat.
+        
+        ``draw_shin`` controls whether to draw the shin (lower leg) portion.
+        Set to False when the shin will be drawn separately (e.g., using
+        kneeling_shin() with a traced profile).
         """
         if not 0 < knee_index < len(pts) - 1:
             raise ValueError("A leg needs hip, interior knee, and ankle points")
@@ -690,11 +775,12 @@ class Drawer:
             [breeches * 0.94, breeches * 1.10, breeches * 1.02, breeches * 0.78],
             True, cap=bar,
         )
-        self.tapered_path(
-            lower_profile,
-            [width * 0.78, width * 0.90, width * 1.22, width * 0.82, width * 0.50],
-            True, cap=bar,
-        )
+        if draw_shin:
+            self.tapered_path(
+                lower_profile,
+                [width * 0.78, width * 0.90, width * 1.22, width * 0.82, width * 0.50],
+                True, cap=bar,
+            )
 
         # Thigh and shin are separate tapered strokes with flat ends, so at a
         # bent knee their two square ends leave a sharp beveled wedge. A joint
@@ -753,30 +839,31 @@ class Drawer:
             (knee[0] + nx * breeches * 0.20, knee[1] + ny * breeches * 0.20),
         ], max(2.8, width * 0.055), False)
 
-        # One engraved contour rides the outward belly of the calf and makes
-        # the muscle readable even where two legs overlap at specimen scale.
-        calf_points = [lower_profile[i] for i in (1, 2, 3)]
-        calf_mid = calf_points[1]
-        # Pull the two ends toward the belly of the calf so the contour is a
-        # short interior stroke; a full-length one runs out to the ankle and
-        # knee edges and shreds the leg silhouette where limbs overlap.
-        calf_points = [
-            (
-                calf_mid[0] + (point[0] - calf_mid[0]) * 0.40,
-                calf_mid[1] + (point[1] - calf_mid[1]) * 0.40,
-            )
-            for point in calf_points
-        ]
-        radial = (calf_mid[0] - 350, calf_mid[1] - 400)
-        if nx * radial[0] + ny * radial[1] < 0:
-            nx, ny = -nx, -ny
-        # Offsets are deliberately conservative: the contour must stay inside
-        # the calf so it reads as engraving instead of notching the outline.
-        offsets = (width * 0.08, width * 0.14, width * 0.07)
-        self.cut_path([
-            (point[0] + nx * offset, point[1] + ny * offset)
-            for point, offset in zip(calf_points, offsets)
-        ], max(2.6, width * 0.055), True)
+        if draw_shin:
+            # One engraved contour rides the outward belly of the calf and makes
+            # the muscle readable even where two legs overlap at specimen scale.
+            calf_points = [lower_profile[i] for i in (1, 2, 3)]
+            calf_mid = calf_points[1]
+            # Pull the two ends toward the belly of the calf so the contour is a
+            # short interior stroke; a full-length one runs out to the ankle and
+            # knee edges and shreds the leg silhouette where limbs overlap.
+            calf_points = [
+                (
+                    calf_mid[0] + (point[0] - calf_mid[0]) * 0.40,
+                    calf_mid[1] + (point[1] - calf_mid[1]) * 0.40,
+                )
+                for point in calf_points
+            ]
+            radial = (calf_mid[0] - 350, calf_mid[1] - 400)
+            if nx * radial[0] + ny * radial[1] < 0:
+                nx, ny = -nx, -ny
+            # Offsets are deliberately conservative: the contour must stay inside
+            # the calf so it reads as engraving instead of notching the outline.
+            offsets = (width * 0.08, width * 0.14, width * 0.07)
+            self.cut_path([
+                (point[0] + nx * offset, point[1] + ny * offset)
+                for point, offset in zip(calf_points, offsets)
+            ], max(2.6, width * 0.055), True)
 
         measured = anatomy_points if anatomy_points is not None else pts
         segments, measured_length = self.centerline_measurements(measured)
@@ -784,10 +871,11 @@ class Drawer:
             "part": "limb", "segments": segments, "length": measured_length,
             "points": measured,
         })
-        ankle = pts[-1]
-        self.shoe(
-            ankle[0], ankle[1], lower_profile[-2], shoe_direction, shoe_scale
-        )
+        if draw_shin:
+            ankle = pts[-1]
+            self.shoe(
+                ankle[0], ankle[1], lower_profile[-2], shoe_direction, shoe_scale
+            )
 
     def shoe(
         self, x: float, y: float, previous: Point, direction: Point | None = None,
@@ -1662,8 +1750,10 @@ def pose(letter: str) -> Drawer:
         # the upward-turning hook. The arms hang straight down the sides,
         # blending into the vertical line of the stem.
         stem_x = 452
+        torso_width = 84
+        # Cut torso at hip to avoid overlap with thigh in lower limb outline
         hip = (stem_x, 300)
-        d.torso([hip, (stem_x, 466), (stem_x, 632)], 84, False)
+        d.torso([hip, (stem_x, 466), (stem_x, 632)], torso_width, False)
         d.head(stem_x + 2, 696, 1)
         for sign in (-1, 1):
             arm = [
@@ -1685,50 +1775,16 @@ def pose(letter: str) -> Drawer:
                 (stem_x + sign * 44, 592), (stem_x + sign * 50, 482),
                 (stem_x + sign * 48, 388),
             ], 3.6, True)
-        # Thighs drop to bent knees that turn forward onto the ground, and
-        # from there the shins lie flat along the floor running left as the
-        # hook. Previously the shins swung diagonally up behind the body,
-        # which put the knees in the air and left the ankles nowhere to bend.
-        # Mirror of L's bottom bar, running left instead of right: one band on
-        # a single ground line, deepest at the heel under the stem, thinning
-        # forward through the arch, and taken out to a point at the toe.
-        #
-        # The heel is registered on the back of the widest leg rather than on
-        # the stem centre. J's rear thigh is set out at spread +20 and carries
-        # full breeches, so its outer edge stands at x≈499; a heel anchored
-        # further forward bulged only to x≈464 and sat *inside* that edge,
-        # reading as a notch under the leg instead of a heel behind it. Put
-        # the anchor on the leg's own back edge and the bulge clears it.
+        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
+        # The outline is scaled to match the torso width for seamless integration
+        # Mirror of L's bottom bar, running left instead of right
         bar = BarProfile(
             ground=BAR_GROUND, heel_x=478, arch_x=144, toe_x=18,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
             calf_x=241,
         )
-        for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
-            d.leg(
-                [
-                    (stem_x + spread * 0.5, hip[1]),
-                    (stem_x + spread, 126),
-                    (300 - spread * 0.30, 112),
-                    (144 - spread * 0.20, 112),
-                ],
-                width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar,
-            )
-        # The heel curve starts further up the shin than it did. Anchored low
-        # it left the leg at x≈489 while the leg's own back edge there stands
-        # at ≈496, so the swell began seven units *inside* the limb: climbing
-        # the flank the outline ran out to the heel's peak, pulled back into a
-        # waist where the band ended, then swelled out again as the leg
-        # resumed — a double reversal, where L's flank is strictly monotone
-        # from the stem to the floor. Starting the curve higher lets it leave
-        # along the limb's own edge instead of stepping off it, which takes
-        # the mean tangent break from 0.256 to 0.232 and shallows the waist.
-        # It is not carried further than this: the same move keeps flattening
-        # the flank, but it does so by eating the calcaneus, and past here the
-        # heel stops reading as a heel at specimen scale.
-        d.flat_bar(bar, anchor_rise=54.0)
-        d.kneeling_foot(bar, 144, 52)
+        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
+        d.kneeling_shin(bar, 478, 52, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
 
     elif letter == "K":
         # Cartwheel K: the figure balances sideways on one hand. The head lies
@@ -1830,24 +1886,13 @@ def pose(letter: str) -> Drawer:
         # plane, the shins and ankles stretching out along the floor as the
         # bottom bar. The feet finish the stroke as a serif, heels and toes
         # adding a slight vertical terminal.
-        # The hip is carried lower and the shin pulled in: previously the shin
-        # ran 385 units against a 174 thigh (a 2.2 ratio), so the horizontal
-        # bar was really one overlong lower leg. Femur and tibia are close to
-        # equal in a real leg, and the over-long torso is brought back toward
-        # the font's baseline at the same time.
         stem_x = 208
-        # The hip sits where the flipped base's thigh tops now are, so the
-        # trunk lands on the component instead of running past it to the
-        # floor. E's prong is drawn hip-down, and inverting it puts those
-        # thigh tops at the upper edge of the base rather than the lower.
-        # The hip sits down on the bar now that the base is seated on the
-        # floor, so the trunk meets the stroke instead of stopping short of
-        # it and leaving the letter in two disconnected pieces. It follows the
-        # bar down: with the base resting on the baseline rather than hanging
-        # off its heel serif, a hip still set for the old height would leave
-        # the trunk ending in mid-air above the stroke.
+        torso_width = 84
+        # The hip sits where the lower limb outline connects
+        # Cut the torso at the hip to avoid overlap with the thigh in the lower limb outline
         hip = (stem_x, 134)
-        d.torso([hip, (stem_x, 419), (stem_x, 642)], 84, False)
+        # Draw torso from hip up to head (cut at hip to avoid duplicate knee)
+        d.torso([hip, (stem_x, 419), (stem_x, 642)], torso_width, False)
         d.head(stem_x - 2, 706, -1)
         # Arms hang along the sides, carried just clear of the trunk so the
         # shoulder-to-hand run stays legible against the stem.
@@ -1871,97 +1916,14 @@ def pose(letter: str) -> Drawer:
                 (stem_x + sign * 44, 602), (stem_x + sign * 50, 512),
                 (stem_x + sign * 48, 428),
             ], 3.6, True)
-        # Bottom bar: E's lower prong, taken whole and turned upside down.
-        # The two letters now share one base component (``kneeling_base``)
-        # so their kneeling anatomy is defined in a single place.
-        #
-        # The flip is the point of the exercise and it is what the shape is
-        # built around, but it does invert the leg: E's prong rises into its
-        # heel serif at the right-hand end, so inverted that terminal drops
-        # instead, and the calf and breeches swap sides top to bottom.
-        #
-        # Seating it matters as much as flipping it. Registering the whole
-        # component by its lowest ink left the shin bar floating at
-        # mid-height, because after the flip the lowest ink is not the bar —
-        # it is E's thigh, which ran hip-downward and now runs down from the
-        # far side of the base. The bar is therefore registered on its own
-        # underside, measured over the run where the shin actually lies, so
-        # the stroke lands flat on the shared ground line the way every other
-        # glyph's base does. That drops the thigh past the baseline, and
-        # ``floor`` cuts it off flush there: it occupies the same column as
-        # the stem, so the trunk covers the join and nothing dips below the
-        # line the letter stands on.
-        base = kneeling_base(stem_x, hip[1])
-        # Mirror about the component's own global axis — the same one
-        # ``merge_transformed`` uses. Taking each contour about its own centre
-        # instead leaves every piece where it started and measures nothing.
-        base_ys = [y for contour, _ in base.contours for _, y in contour]
-        base_axis = min(base_ys) + max(base_ys)
-        # Register on the shin itself. ``x > 300`` was meant to name the bar,
-        # but after the flip the lowest ink past that line is not the shin —
-        # it is the heel serif, which E draws rising off the floor and which
-        # inverting turns into the component's deepest point. Seating the
-        # component on that tip parked the whole horizontal stroke 57 units
-        # in the air, leaving only the seat and the patched corner touching
-        # the ground. Naming the shin run explicitly puts the stroke that is
-        # supposed to be the bar on the baseline, the way J and Z do.
-        bar_low = min(
-            base_axis - y
-            for contour, _ in base.contours for x, y in contour
-            if 320 < x < 520
-        )
-        # Ahead of the trunk the clip follows the bar's own sole, so the
-        # inverted thigh cannot hang below the stroke and read as a spur
-        # dropping out of the knee. Behind that line it still clips to the
-        # baseline, where the trunk covers the cut.
-        merge_transformed(
-            d, base, flip=True, dy=BAR_GROUND - bar_low, floor=BAR_GROUND,
-            floor_from=stem_x + 42,
-        )
-        # Level the sole, and finish the stroke with a foot.
-        #
-        # Seating the component puts the shin's lowest point on the baseline,
-        # but the shin does not lie level: E draws the leg tapering from a
-        # deep knee to a shallow ankle, and the flip turns that taper upside
-        # down, so the underside sags away from the ground in a shallow arch
-        # — about twenty units at its worst, a quarter of the stroke's own
-        # depth — and the letter ends up balanced on the two points where the
-        # arch happens to touch. No offset can fix that, because the edge is
-        # sloped rather than displaced.
-        #
-        # Filling that crescent column by column does flatten the sole, but
-        # on its own it flattens the *whole* stroke: run out to the end of the
-        # component it swallows the ankle and buries the terminal, and L ends
-        # in a blunt slab where the other kneeling glyphs end in a foot. So
-        # the fill is stopped at the ankle, and the foot is drawn past it the
-        # way J and Z draw theirs — from a shared ``BarProfile``, whose top
-        # edge thins forward from the arch and runs out to a point at the toe.
+        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
+        # The outline is scaled to match the torso width for seamless integration
         bar = BarProfile(
             ground=BAR_GROUND, heel_x=246.0, arch_x=ANKLE_X, toe_x=665.0,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
-        sole = []
-        for index in range(49):
-            x = 246.0 + (ANKLE_X - 246.0) * index / 48.0
-            spans = [
-                span for span in _column_spans(d.contours, x)
-                if span[0] < 260.0
-            ]
-            if spans:
-                sole.append((x, min(lo for lo, _ in spans)))
-        if sole:
-            d.polygon(sole + [(x, BAR_GROUND) for x, _ in reversed(sole)])
-        # The foot itself: ankle to toe point, sole on the same ground line so
-        # it continues the bar rather than stepping out of it. The heel end is
-        # already the shin behind it, so only the forward span is filled here.
-        toe_edge = [
-            point for point in bar.edge(64) if point[0] >= ANKLE_X - 1.0
-        ]
-        if toe_edge:
-            d.polygon(
-                toe_edge + [(x, BAR_GROUND) for x, _ in reversed(toe_edge)]
-            )
-        d.kneeling_foot(bar, ANKLE_X, 52)
+        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
+        d.kneeling_shin(bar, 246.0, 54, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
         # settled that high, so the trunk's foot stood clear underneath the
@@ -2647,6 +2609,9 @@ def pose(letter: str) -> Drawer:
         # the heels and upturned toes lift into a small vertical foot serif.
         shoulder = (516, 672)
         knee = (166, 168)
+        torso_width = 92
+        # Cut torso at knee to avoid overlap with thigh in lower limb outline
+        d.torso([shoulder, (340, 420), knee], torso_width, False)
         d.head(576, 712, -1)
         # Top bar: two flat arms tapering from shoulder to fingertip.
         # The arms are separately drawn shapes stacked on one another, so a
@@ -2679,197 +2644,14 @@ def pose(letter: str) -> Drawer:
                 (tip_x + 74, shoulder[1] + spread - 13),
                 (tip_x + 74, shoulder[1] + spread + 13),
             ], 3.4, False)
-        # Diagonal spine: one straight lean from the shoulders back to the knees.
-        d.torso([shoulder, (340, 420), knee], 92, False)
-        # Bottom bar: shins and ankles flat along the floor, feet turning up at
-        # the back end as the serif.
-        # The same bottom bar L uses: one band on a single ground line, its
-        # heel at the back under the kneeling corner, thinning forward through
-        # the arch and carried to a point at the toe. The top surface of the
-        # foot is therefore continuous with the shin and the stroke is flat.
-        #
-        # The heel is registered at the kneeling corner itself, not forward of
-        # it. Anchored at 316 the band began seventy units ahead of where the
-        # torso actually lands, so between the corner and the band's start the
-        # bar was carried only by the tapering leg strokes: it necked to 35
-        # units against the band's 74 and its sole rode up to y=120 instead of
-        # resting on the floor, which reads as a thin, notched section beside
-        # the knee. Starting the band at the corner fills that run.
-        #
-        # 266 was still too far forward. The band's rear end is a vertical
-        # face, so wherever it starts the silhouette drops to the floor in one
-        # step; put that face out at 266 and it landed in open space beyond
-        # the knee, cutting a cliff twenty units deep across the underside
-        # just where the limb should be flowing into the bar. Tucked back
-        # under the corner the face is buried inside the thigh and the leg
-        # runs down into the band continuously, which is what the print shows.
+        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
+        # The outline is scaled to match the torso width for seamless integration
         bar = BarProfile(
             ground=BAR_GROUND, heel_x=200, arch_x=584, toe_x=710,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
-        for spread, width, breeches in ((-20, 56, 66), (18, 46, 54)):
-            d.leg(
-                [
-                    # Both thighs start from inside the torso's own end cap
-                    # rather than from a point offset along the spread. Offset
-                    # starts put the two strokes 19 units apart at the corner,
-                    # and because a tapered stroke is at its thinnest where it
-                    # begins, neither reached the other: a hairline of white
-                    # ran between them and on into the bar, which read as a
-                    # seam splitting the diagonal from the base. Starting both
-                    # at the knee buries the join under the cap, where the
-                    # nonzero fill merges the strokes into one mass.
-                    (knee[0], knee[1]),
-                    (330 + spread, 118),
-                    (430 + spread * 0.30, 112),
-                    (584 + spread * 0.20, 112),
-                ],
-                width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar,
-            )
-        d.flat_bar(bar, anchor_rise=0.0)
-        # Carry the limb's underside from the kneeling corner into the bar.
-        #
-        # Thigh and shin are separate tapered strokes that swell about their
-        # own centrelines, so where they meet their two undersides do not line
-        # up: the thigh's runs down to about y=98 and the shin's picks up
-        # again at about y=114, leaving a step in the silhouette right at the
-        # joint. On the other kneeling glyphs the band hides that step, but
-        # here it cannot — the bar is registered at x=266 and its top edge
-        # sits at y=146, well *above* both, so the mismatch stays exposed
-        # underneath the band and the knee reads as two components pushed
-        # together at the wrong angle rather than one limb bending.
-        #
-        # Filling between the leg's own underside and the band's top edge
-        # closes it. The lower edge is sampled off whatever ink is actually
-        # there, column by column, so it follows the thigh down, across the
-        # joint and onto the shin without inventing an outline of its own;
-        # the upper edge is the band, which the strokes already reach. The
-        # run stops where the band takes over the silhouette, so the open
-        # counter above the bar is untouched.
-        joint = []
-        for index in range(65):
-            x = knee[0] + (360.0 - knee[0]) * index / 64.0
-            spans = [
-                span for span in _column_spans(d.contours, x)
-                if span[0] < bar.top(x) + 1.0
-            ]
-            if not spans:
-                continue
-            joint.append((x, min(span[0] for span in spans)))
-        if joint:
-            d.polygon(
-                [(x, min(bar.top(x), knee[1] + (x - knee[0]) * 1.4483 + 6))
-                 for x, _ in joint]
-                + joint[::-1]
-            )
-        # Give the knee a joint mass, the way L's corner has one.
-        #
-        # L is the smooth one of the three kneeling glyphs and the reason is
-        # structural: its trunk ends in a round cap that sits *in* the corner,
-        # so a single arc owns the whole turn and the rear flank falls in one
-        # decelerating curve — x=219 at y=74 easing to 166 by y=134 — with a
-        # worst tangent break of 1.5 and a mean of 0.11.
-        #
-        # Z had two arcs competing for that corner instead. Climbing the rear
-        # flank the outline followed the heel out to x≈176, then the trunk's
-        # cap took over at y=122 and the edge jumped ten units inward in a
-        # single step: a break of 4.5, three times L's, and the one place the
-        # joint read as two parts pushed together rather than a limb bending.
-        # Neither moving the heel anchor nor resizing the bulge helps, because
-        # the step is where the two arcs hand over, not how big either is.
-        #
-        # A joint mass spanning the handover gives the corner the single
-        # dominant radius L gets from its cap: it covers the last of the heel
-        # and the first of the cap, so the flank crosses between them on the
-        # mass's own arc. Sized and placed by sweeping both against the
-        # tangent metric, this is the best that keeps the sole on the
-        # baseline — the break falls from 4.5 to 2.0 and the mean from 0.41
-        # to 0.25, against L's 1.5 and 0.11.
-        d.ellipse(knee[0] + 20.0, knee[1] - 36.0, 60.0, 60.0, 0.0)
-        # Round the back of the knee, where the torso's cap meets the heel.
-        #
-        # The trunk ends in a round cap of its own half-width, and its lowest
-        # point sits at y=122 — above the band, and behind the heel curve that
-        # drops from the band's top edge to the floor. Where the two outlines
-        # cross, the silhouette turns from level to five units per column in a
-        # single step, so the back of the knee showed a shelf: the diagonal
-        # looked cut off square against the bar rather than folded onto it.
-        #
-        # This fills the pocket between the cap's trailing underside and the
-        # heel, so the outline runs from the cap into the heel curve as one
-        # sweep. Both bounds are outlines already drawn here, and the fill is
-        # confined to the columns where the cap is genuinely the silhouette,
-        # so it cannot reach the sole or the counter.
-        # The cap's underside and the heel's descent cross at a very shallow
-        # angle — around x=185 they are barely two units apart — so instead of
-        # meeting at a rounded turn they clip each other and leave a concave
-        # nick in the outline. A circular arc struck between the two, tangent
-        # to the cap where it is still level and running down to the heel
-        # where that is already falling, replaces the nick with the fillet a
-        # real joint would show. It is bounded by ink on both sides, so it
-        # only fills the hollow between them.
-        fold = []
-        for index in range(65):
-            x = knee[0] + (bar.heel_x - knee[0]) * index / 64.0
-            reach = 46.0 ** 2 - (x - knee[0]) ** 2
-            if reach <= 0.0:
-                continue
-            cap_low = knee[1] - math.sqrt(reach)
-            spans = [
-                span for span in _column_spans(d.contours, x)
-                if span[0] < bar.top(x) + 1.0
-            ]
-            if not spans:
-                continue
-            below = min(span[0] for span in spans)
-            # Sweep a fillet of the trunk's own quarter-width through the
-            # turn: level under the cap, easing into the heel's slope.
-            t = (x - knee[0]) / max(1.0, bar.heel_x - knee[0])
-            blend = cap_low + (below - cap_low) * (t * t * (3.0 - 2.0 * t))
-            fold.append((x, min(below, blend), max(below, blend)))
-        if len(fold) > 1:
-            d.polygon(
-                [(x, low) for x, low, _ in fold]
-                + [(x, high) for x, _, high in reversed(fold)]
-            )
-        # Weld the limb to the band where the two graze.
-        #
-        # Leaving the corner the band's top edge runs level at y=146 while the
-        # thigh above it falls away toward the ankle, and for a short stretch
-        # past the knee the two pass within a couple of units of each other
-        # before the thigh lifts clear and the letter's open counter begins.
-        # Over that stretch they never quite touch: a tapering hairline of
-        # white is threaded between them, widest at about two units and
-        # narrowing to nothing, and at text sizes it breaks the diagonal away
-        # from the bar exactly where the knee should read as solid.
-        #
-        # The counter past that run is the letter's own shape and is left
-        # alone — only a gap narrow enough to be a rendering artefact rather
-        # than drawn white is closed. The weld is bounded by the two edges
-        # themselves, so it adds no outline of its own.
-        weld = []
-        for index in range(97):
-            x = 190.0 + (240.0 - 190.0) * index / 96.0
-            spans = sorted(_column_spans(d.contours, x))
-            if len(spans) < 2:
-                continue
-            for lower, upper in zip(spans, spans[1:]):
-                gap = upper[0] - lower[1]
-                if 0.0 < gap < 6.0:
-                    weld.append((x, lower[1], upper[0]))
-                    break
-        if len(weld) > 1:
-            d.polygon(
-                [(x, lo) for x, lo, _ in weld]
-                + [(x, hi) for x, _, hi in reversed(weld)]
-            )
-        if len(weld) > 1:
-            d.polygon(
-                [(x, lo) for x, lo, _ in weld]
-                + [(x, hi) for x, _, hi in reversed(weld)]
-            )
-        d.kneeling_foot(bar, 584, 56)
+        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
+        d.kneeling_shin(bar, 200, 56, torso_width=torso_width, hip_x=knee[0], hip_y=knee[1])
 
     return d
 
@@ -3054,3 +2836,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+# Reordered SHIN_PROFILE - starts at knee (frac near 0, height near 0)
