@@ -2437,73 +2437,62 @@ def pose(letter: str) -> Drawer:
         d.limb([(375, 190), (455, 345), (510, 500)], 44, True, end="hand")
 
     elif letter == "W":
-        # The print's four-stroke W: the inner red-sleeved arms reach to the
-        # shared baseline, while the outer stockinged legs bend at baseline
-        # knees and rise to high feet. The palms sit exactly on y=0, and their
-        # index fingers and thumbs are drawn as distinct supporting digits.
-        # The arms are lengthened and the shins shortened: at the old lengths
-        # the raised shin ran nearly five times the forearm, so the outer
-        # strokes dwarfed the inner ones.
-        d.head(350, 660, 1)
-        d.torso([(350, 600), (350, 430)], 88, False)
-        left_arm = [(320, 448), (278, 250), (252, 72)]
-        right_arm = [(380, 448), (422, 250), (448, 72)]
+        # Print's W: a folded figure whose four strokes are one body. Head
+        # at the middle peak; red-sleeved arms drop to planted hands as the
+        # inner strokes; thighs drop to baseline knees and calves rise to
+        # the outer peaks. The previous build had 987-unit legs against
+        # 382-unit arms, giant knee balls, and forked insect hands.
+        ground = 64.0
+        d.head(350, 548, 1, hat=False)
+        d.torso([(350, 500), (350, 410)], 86, False)
+        # Inner strokes: arms as thick as the thighs, from the shoulders
+        # down to planted hands on the shared ground.
+        left_hand = (268, ground + 28)
+        right_hand = (432, ground + 28)
+        left_arm = [(318, 468), (292, 270), left_hand]
+        right_arm = [(382, 468), (408, 270), right_hand]
         for arm in (left_arm, right_arm):
-            d.path(arm, 54, True, True, track=False)
+            d.tapered_path(arm, [58, 52, 42], True)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-        # The knees rest ON the baseline, so their control points sit a joint
-        # radius above it rather than on it. Authored at y=0 the knee mass and
-        # its cuff straddled the line and bulged 44 units underneath as two
-        # rounded lobes — the only ink in the alphabet below the baseline,
-        # and not something the print shows: there all four strokes finish
-        # together on one line. Lifting the point puts the bottom of the joint
-        # on y=0 instead of its centre.
-        d.leg(
-            [(315, 430), (150, 44), (74, 606)], 62, knee_index=1,
-            shoe_direction=(-0.92, 0.40),
-        )
-        d.leg(
-            [(385, 430), (550, 44), (626, 606)], 62, knee_index=1,
-            shoe_direction=(0.92, 0.40),
-        )
-        # Draw the supporting hands after the outer legs so the fingertips stay
-        # visible. Each palm sits between the baseline knees; the index finger
-        # and thumb extend as two separate supports down to y=0.
-        d.polygon([
-            (242, 75), (258, 80), (275, 70), (272, 50),
-            (256, 42), (238, 52),
-        ])
-        d.polygon([
-            (239, 53), (230, 30), (213, 0), (229, 0),
-            (244, 26), (250, 54),
-        ])
-        d.polygon([
-            (267, 55), (278, 31), (297, 0), (304, 10),
-            (285, 31), (276, 60),
-        ])
-        d.cut_path([(252, 76), (252, 48), (258, 16)], 5.2, True)
-        d.cut_path([(223, 18), (233, 24), (240, 18)], 3.2, True)
-        d.cut_path([(281, 18), (288, 25), (296, 18)], 3.2, True)
-
-        d.polygon([
-            (458, 75), (442, 80), (425, 70), (428, 50),
-            (444, 42), (462, 52),
-        ])
-        d.polygon([
-            (461, 53), (470, 30), (487, 0), (471, 0),
-            (456, 26), (450, 54),
-        ])
-        d.polygon([
-            (433, 55), (422, 31), (403, 0), (396, 10),
-            (415, 31), (424, 60),
-        ])
-        d.cut_path([(448, 76), (448, 48), (442, 16)], 5.2, True)
-        d.cut_path([(477, 18), (467, 24), (460, 18)], 3.2, True)
-        d.cut_path([(419, 18), (412, 25), (404, 18)], 3.2, True)
+            d.circle(arm[0][0], arm[0][1], 28)
+        # Planted hands: a real palm and four fingers reaching the ground.
+        for hx, hy, sign in ((left_hand[0], left_hand[1], -1),
+                             (right_hand[0], right_hand[1], 1)):
+            d.ellipse(hx + sign * 2, hy + 4, 24, 18, sign * 0.18)
+            for fx in (-12, 0, 12):
+                d.polygon([
+                    (hx + fx - 6, hy + 6), (hx + fx + 6, hy + 6),
+                    (hx + fx + 5, ground), (hx + fx - 5, ground),
+                ])
+            d.cut_path([(hx - 8, hy + 2), (hx + 2, hy + 2)], 2.8, False)
+            d.cut_path([(hx - 2, hy + 2), (hx + 8, hy + 2)], 2.8, False)
+        # Outer strokes: thigh down to a modest baseline knee, calf up to a
+        # foot at about head height so the three peaks of the W sit together.
+        # Drawn as separate tapers so the sharp fold does not spawn a
+        # limb-width knee ball.
+        for sign in (-1, 1):
+            hip = (350 + sign * 32, 408)
+            knee = (350 + sign * 156, ground + 22)
+            foot = (350 + sign * 236, 540)
+            thigh = [hip, knee]
+            shin = [knee, (350 + sign * 210, 300), foot]
+            d.tapered_path(thigh, [64, 50], True)
+            d.tapered_path(shin, [46, 38, 30], True)
+            segments, length = d.centerline_measurements(thigh + shin[1:])
+            d.anatomy.append({
+                "part": "limb", "segments": [
+                    math.dist(thigh[0], thigh[1]),
+                    math.dist(shin[0], shin[1]) + math.dist(shin[1], shin[2]),
+                ], "length": length, "points": [hip, knee, foot],
+            })
+            d.ellipse(knee[0], knee[1], 20, 18, 0.0)
+            d.ellipse(knee[0], knee[1], 22, 8, math.pi / 2)
+            # Raised shoe, toe pointing up and out.
+            d.shoe(foot[0], foot[1], shin[1], (sign * 0.35, 0.94), 0.78)
 
     elif letter == "X":
         # Spread-eagle X in the Vitruvian diagonal pose: head at center, arms
