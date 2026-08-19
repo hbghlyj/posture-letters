@@ -16,6 +16,7 @@ from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
 from profile_loader import LOWER_LIMB_OUTLINE_POINTS
+from upright_torso_outline_points import UPRIGHT_TORSO_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -1898,60 +1899,29 @@ def pose(letter: str) -> Drawer:
         d.cut_path([(549, 152), (566, 138), (576, 122)], 3.2, True)
 
     elif letter == "L":
-        # Kneeling side profile, proportioned like J. Head, neck and upright
-        # torso make the stem; at the hip the thighs drop to grounded knees
-        # and the shins run out along the floor as the bottom bar. The hip
-        # sits at the same height as J's so the trunk is not longer than the
-        # thigh. The feet finish the stroke as a serif.
-        stem_x = 208
-        torso_width = 84
-        # Same hip height as J: the thigh outline is ~191 tall once it is
-        # scaled to the torso width, so a hip at 300 leaves a real femur
-        # under a normal trunk. The previous hip (134) was a leftover from
-        # seating the old flipped-E bar — it swallowed the thigh and left
-        # an overlong pillar on a stub of sitting mass.
-        hip = (stem_x, 300)
-        d.torso([hip, (stem_x, 466), (stem_x, 632)], torso_width, False)
-        d.head(stem_x - 2, 696, -1)
-        # Arms hang along the sides to mid-thigh, matching J, carried just
-        # clear of the trunk so the shoulder-to-hand run stays legible.
-        for sign in (-1, 1):
-            arm = [
-                (stem_x + sign * 52, 612),
-                (stem_x + sign * 60, 482),
-                (stem_x + sign * 58, 362),
-            ]
-            d.path(arm, 26, True, False, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.path([(stem_x + sign * 24, 630), arm[0]], 24, False, False,
-                   track=False)
-            d.circle(arm[0][0], arm[0][1], 15)
-            d.circle(arm[-1][0], arm[-1][1], 14)
-            d.cut_path([
-                (stem_x + sign * 44, 592), (stem_x + sign * 50, 482),
-                (stem_x + sign * 48, 388),
-            ], 3.6, True)
-        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
-        # The outline is scaled to match the torso width for seamless integration
-        bar = BarProfile(
-            ground=BAR_GROUND, heel_x=246.0, arch_x=ANKLE_X, toe_x=665.0,
-            heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
-        )
-        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
-        d.kneeling_shin(bar, 246.0, 54, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
-        # The corner fillet that used to sit here is gone with the cause it
-        # patched. It spanned the baseline up to y=129 because the bar's sole
-        # settled that high, so the trunk's foot stood clear underneath the
-        # stroke and the gap between them read as a block hanging off the
-        # knee. Now that the bar is registered on the shin it rests on the
-        # baseline itself, the trunk meets it along their shared edge, and
-        # there is no re-entrant angle left to fill: keeping the polygon would
-        # only re-add a wedge of ink under a stroke that is already flat on
-        # the ground.
+        # Kneeling side profile, imported as a traced silhouette rather than
+        # assembled from body-part primitives. The outline is VTracer's spline
+        # trace of vector_kneeling_upright_torso.png — a female figure in
+        # strict side profile, high-kneeling with the upper torso perfectly
+        # upright and vertical (head with a low bun, straight erect spine, arm
+        # relaxed at the side), the shin and pointed foot lying flat along the
+        # floor to the right as the letter's bottom bar. The figure's own
+        # anatomy supplies the letterform: the vertical trunk is the stem and
+        # the grounded lower leg is the bar, so no synthetic strokes, serifs
+        # or engraved cuts are added on top of the trace. The single closed
+        # contour is scaled uniformly from SVG pixel space (y-down) into font
+        # units (y-up), seated on the shared kneeling ground line BAR_GROUND
+        # and reaching the same 788-unit cap height as the previous L.
+        pts = UPRIGHT_TORSO_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+        d.polygon([
+            (SIDEBEARING + (x - left) * scale, BAR_GROUND + (bottom - y) * scale)
+            for x, y in pts
+        ])
 
     elif letter == "M":
         # Seated M built from the body's own hinges rather than an impossible
