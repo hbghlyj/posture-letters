@@ -1,14 +1,13 @@
 """Traced silhouette outline for the G glyph.
 
-Editorial yoga-alphabet G, traced from the G of the '2 Way Stretch'
-yoga-alphabet poster (reference-crops/two-way-stretch/G.png):
-seated in profile with the spine curled into a deep rounded C
-making the left bowl, the knees drawn up to close the lower right,
-and both arms arcing overhead with the hands dropping into a short
-hook as the spur. Flattened via OpenCV contour trace and resampled
-to about 3px of arc length. Coordinates are in image pixel space,
-y-down. generate_font.py scales and flips them into font units the
-same way as L.
+Editorial yoga-alphabet G, matched to the 2 Way Stretch G pose and
+traced from assets/silhouettes/g.png: seated in profile with the
+spine curled into a deep rounded C making the left bowl, the knees
+drawn up to close the lower right, and both arms arcing overhead
+with the hands dropping into a short hook as the spur. Flattened
+via OpenCV contour trace and resampled to about 3px of arc length.
+Coordinates are in image pixel space, y-down. generate_font.py
+scales and flips them into font units the same way as L.
 """
 
 OUTLINE_POINTS = [
