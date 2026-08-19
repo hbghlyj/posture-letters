@@ -86,7 +86,7 @@ python generate_font.py
 | **R** | [`r_gymnast_photo.png`](assets/r_gymnast_photo.png) | The same standing backbend as P, with the front leg stepped forward as the diagonal. |
 | **S** | [`s_gymnast_photo.png`](assets/s_gymnast_photo.png) | Grounded shins the lower terminal, backbend and head the middle curve, overlapped arms the upper hook. |
 | **T** | [`silhouettes/t.png`](assets/silhouettes/t.png) | Standing from behind: legs together the stem, both arms level with the shoulders the bar. |
-| **U** | [`u_gymnast_photo.png`](assets/u_gymnast_photo.png), [`u.png`](assets/silhouettes/u.png) | Arms the left stem with an inward hand serif, hips the bowl, joined legs the right stem to pointed feet; profile head on the left stem, counter left open. |
+| **U** | [`u_gymnast_photo.png`](assets/u_gymnast_photo.png), [`silhouettes/u.png`](assets/silhouettes/u.png) | Arms the left stem with an inward hand serif, hips the bowl, joined legs the right stem to pointed feet; profile head on the left stem, counter left open. |
 | **V** | [`v_gymnast_photo.png`](assets/v_gymnast_photo.png) | Two equal legs rise from a compact buttocks apex; outward-turned shod feet are the upper terminals. |
 | **W** | [`w_gymnast_photo.png`](assets/w_gymnast_photo.png) | Head and shoulders the centre peak, arms overlapping thighs as inner strokes, shorter slimmer calves as outer strokes. Hands conceal the grounded knees; pointed feet turn modestly outward. One contour, no carved notch. |
 | **X** | [`x_gymnast_photo.png`](assets/x_gymnast_photo.png) | Wide forward fold from behind: legs an inverted V, head hanging at the centre, arms to the upper corners. |
