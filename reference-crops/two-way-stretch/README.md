@@ -38,18 +38,12 @@ Crops kept here:
 - `U.png` - photographic study matching the current U construction: a
   side-profile gymnast lying on the back, arms rising as one stem and
   joined legs rising as the other, with a rounded hip-and-torso bowl.
+  The traced silhouette source now lives at `assets/u_silhouette.png`.
 - `V.png` - current high-resolution photographic reference for the
   shipped V. Two equal legs rise from a compact rounded buttocks apex
   as the strokes of a capital V, with natural thigh-to-calf taper and
   outward-turned shod feet as the upper terminals. The photograph is
   converted to a one-piece silhouette before tracing.
-- `image_6a52f7c6.png` - current high-resolution silhouette source for
-  the shipped U. Both arms rise as the left stem and finish in a compact
-  inward hand serif; the rounded hips and torso make the bowl; both
-  joined legs rise as the right stem to pointed feet. The profile head
-  sits on the left stem without closing the open counter, and both stems
-  reach the same height. Trace this file rather than the softer poster
-  crop.
 - `image_fc2e377e.png` - previous high-resolution photographic reference
   for J, retained for provenance. Its joined upright legs and compact
   lower-left terminal informed the superseded trace, but its pointed feet
@@ -57,11 +51,5 @@ Crops kept here:
 - `image_91f51c7c.png` - previous high-resolution photographic reference for
   J, retained for provenance. Its joined legs, left-pointing feet, and broad
   hook informed the superseded trace.
-- `image_89bd1753.png` - current high-resolution photographic reference for
-  J. In profile, both straight joined legs rise as the single tall right
-  stem; the flexed feet point left as a short top serif; and the hips, back,
-  and merged arms sweep through the broad bottom hook. Its naturally neutral
-  head and cervical alignment make the compact lower-left terminal without
-  bridging the open counter. The shipped glyph is a simplified one-piece
-  exterior derived from this pose, with clothing, hand, toe, and facial
-  details flattened for reliable text-size rendering.
+
+The current J photograph is `assets/j_gymnast_photo.png`.

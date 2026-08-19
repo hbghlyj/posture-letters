@@ -35,6 +35,8 @@ Or declare only the compact WOFF2:
 - `generate_font.py` — builds the TTF/WOFF/WOFF2 files and `glyph-sheet.svg`
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
+- `assets/j_gymnast_photo.png`, `assets/s_gymnast_photo.png`, `assets/w_gymnast_photo.png` — photographic sources for J, S, and W
+- `assets/u_silhouette.png` — pre-canonical silhouette source for U
 - `reference-crops/` — pose references, including modern studies in `two-way-stretch/`
 
 ## Character coverage
@@ -68,7 +70,7 @@ python generate_font.py
 - **G** — inverted scorpion: arms and hanging head at the bottom, arched torso the bowl, feet the spur.
 - **H** — horizontal torso the crossbar; raised leg and kneeling shin the left stem; raised and planted arms the right stem.
 - **I** — legs pressed together the stem; crossed arms and open hands the top serif; feet turned out the bottom serif.
-- **J** — from `reference-crops/two-way-stretch/image_89bd1753.png`. Joined legs the tall right stem, flexed feet a short top serif, hips/back/arms the open bottom hook, upright profile head the lower-left terminal.
+- **J** — from `assets/j_gymnast_photo.png`. Joined legs the tall right stem, flexed feet a short top serif, hips/back/arms the open bottom hook, upright profile head the lower-left terminal.
 - **K** — kneeling upright torso the stem, raised arm the upper diagonal, extended straight leg the lower diagonal.
 - **L** — high-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar.
 - **M** — folded double from behind: raised knees the peaks, calves the outer stems, thighs sloping in to hanging hips the central V.
@@ -79,7 +81,7 @@ python generate_font.py
 - **R** — the same standing backbend as P, with the front leg stepped forward as the diagonal.
 - **S** — side-profile gymnast: grounded shins the lower terminal, backbend and head the middle curve, overlapped arms the upper hook.
 - **T** — standing from behind: legs together the stem, both arms level with the shoulders the bar.
-- **U** — from `reference-crops/two-way-stretch/image_6a52f7c6.png`. Arms the left stem with an inward hand serif, hips the bowl, joined legs the right stem to pointed feet; profile head on the left stem, counter left open.
+- **U** — from `assets/u_silhouette.png`. Arms the left stem with an inward hand serif, hips the bowl, joined legs the right stem to pointed feet; profile head on the left stem, counter left open.
 - **V** — from `reference-crops/two-way-stretch/V.png`. Two equal legs rise from a compact buttocks apex; outward-turned shod feet are the upper terminals.
 - **W** — forward-hinged gymnast: head and shoulders the centre peak, arms overlapping thighs as inner strokes, shorter slimmer calves as outer strokes. Hands conceal the grounded knees; pointed feet turn modestly outward. One contour, no carved notch.
 - **X** — wide forward fold from behind: legs an inverted V, head hanging at the centre, arms to the upper corners.

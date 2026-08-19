@@ -599,7 +599,7 @@ def pose(letter: str) -> Drawer:
 
     elif letter == "U":
         # Editorial yoga-alphabet U, imported like L from
-        # image_6a52f7c6.png. A side-profile gymnast on the back: arms
+        # assets/u_silhouette.png. A side-profile gymnast on the back: arms
         # rise as the left stem with an inward hand serif, the rounded
         # hips and torso make the bowl, and joined legs rise as the
         # right stem to pointed feet. The profile head sits on the left
