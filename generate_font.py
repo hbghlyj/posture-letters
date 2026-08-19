@@ -2599,19 +2599,25 @@ def pose(letter: str) -> Drawer:
             ], 4.2, True)
 
     elif letter == "Z":
-        # Side-profile Z: a dramatic backward lean over a deep kneel, with the
-        # arms thrown flat out in front. Both arms extend horizontally from the
-        # shoulders as the top bar, the hands held completely flat in line with
-        # the forearms so the stroke tapers to a thinner tip like a pen stroke.
-        # The torso leans back from the knees in one straight diagonal, with no
-        # bend at the waist, linking the top bar to the base. The shins and
-        # ankles lie flat on the floor as the bottom bar, and at its back end
-        # the heels and upturned toes lift into a small vertical foot serif.
-        shoulder = (516, 672)
-        knee = (166, 168)
-        torso_width = 92
-        # Cut torso at knee to avoid overlap with thigh in lower limb outline
-        d.torso([shoulder, (340, 420), knee], torso_width, False)
+        # Side-profile Z: a backward lean over a deep kneel. Both arms reach
+        # horizontally from the shoulders as the top bar. The diagonal is one
+        # straight line split at the hip — torso above, thighs below — the way
+        # the print shows the coat handing off to the breeches. The previous
+        # build drew that whole diagonal as torso and bolted L's vertical
+        # sitting outline onto the end, so the thigh vanished, the join
+        # notched, and the outline dipped below the baseline (yMin −41).
+        torso_width = 88
+        shoulder = (520, 668)
+        # Knee sits a joint-radius above the ground so the corner lands on
+        # the baseline rather than straddling it. Hip is the midpoint of the
+        # shoulder-to-knee run, giving torso and thigh the same length
+        # (~325), comparable to J's trunk instead of one 614-unit pillar.
+        knee = (200, 118)
+        hip = ((shoulder[0] + knee[0]) * 0.5, (shoulder[1] + knee[1]) * 0.5)
+        ankle = (528, 118)
+        toe = (668, BAR_GROUND)
+        d.torso([shoulder, hip], torso_width, False)
+        d.circle(hip[0], hip[1], torso_width * 0.50)
         d.head(576, 712, -1)
         # Top bar: two flat arms tapering from shoulder to fingertip.
         # The arms are separately drawn shapes stacked on one another, so a
@@ -2644,14 +2650,65 @@ def pose(letter: str) -> Drawer:
                 (tip_x + 74, shoulder[1] + spread - 13),
                 (tip_x + 74, shoulder[1] + spread + 13),
             ], 3.4, False)
-        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
-        # The outline is scaled to match the torso width for seamless integration
+        # Waist seam: the print's coat/breeches line, held inside the stroke.
+        d.cut_path([
+            (hip[0] - 22, hip[1] + 18),
+            (hip[0] + 6, hip[1] + 2),
+            (hip[0] + 24, hip[1] - 16),
+        ], 4.6, True)
+        # Thighs continue the same diagonal down to the grounded knee, as
+        # wide as the torso so the letter's stem does not step. Tracked as
+        # legs for the anatomy audit; the shin is the bar below, not a
+        # second tapered stroke, so it cannot swell a lump through the sole.
+        for spread, width, breeches in ((0, 58, torso_width), (12, 48, 74)):
+            thigh = [
+                (hip[0] + spread * 0.25, hip[1] + spread * 0.12),
+                (knee[0] + 18 + spread * 0.12, knee[1] - 6),
+            ]
+            d.tapered_path(
+                thigh,
+                [breeches * 0.98, breeches * 0.82],
+                True,
+            )
+            segments, length = d.centerline_measurements(
+                [thigh[0], (knee[0] + spread * 0.12, knee[1]), (ankle[0], ankle[1])]
+            )
+            d.anatomy.append({
+                "part": "limb", "segments": segments, "length": length,
+                "points": [thigh[0], (knee[0], knee[1]), (ankle[0], ankle[1])],
+            })
+        # Modest kneecap on the outside of the fold — sized to the corner,
+        # not to a full limb-width ball that would hang under the baseline.
+        d.ellipse(knee[0] - 4, knee[1] + 8, 32, 28, 0.75)
+        d.cut_path([
+            (knee[0] + 6, knee[1] + 24),
+            (knee[0] + 20, knee[1] + 8),
+            (knee[0] + 18, knee[1] - 10),
+        ], 4.0, True)
+        # Fillet the inner corner so the diagonal meets the bar in one turn
+        # instead of a re-entrant notch.
+        d.polygon([
+            (knee[0] + 8, knee[1] + 36),
+            (knee[0] + 56, BAR_GROUND + 70),
+            (knee[0] + 96, BAR_GROUND + 68),
+            (knee[0] + 36, knee[1] + 8),
+        ])
+        # Bottom bar: one planted band. The profile owns the sole (straight
+        # on the ground line) and tapers to a point at the toe, so the foot
+        # is the end of the stroke rather than a spike stuck onto it.
         bar = BarProfile(
-            ground=BAR_GROUND, heel_x=200, arch_x=584, toe_x=710,
+            ground=BAR_GROUND, heel_x=knee[0] - 4, arch_x=ankle[0] - 20, toe_x=toe[0],
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
+            calf_x=knee[0] + 130,
         )
-        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
-        d.kneeling_shin(bar, 200, 56, torso_width=torso_width, hip_x=knee[0], hip_y=knee[1])
+        heel = [(x, max(BAR_GROUND, y)) for x, y in bar.heel_outline(rise=6, bulge=22)]
+        edge = [(x, max(BAR_GROUND, y)) for x, y in bar.edge(80)]
+        d.polygon(list(heel) + list(reversed(edge)))
+        # Soft calf on the bar, kept low so it does not read as a step, and
+        # a short instep cut so the toe reads as a shoe.
+        d.ellipse(knee[0] + 136, BAR_GROUND + 46, 58, 16, 0.02)
+        d.cut_path([(ankle[0] - 8, 128), (ankle[0] + 36, 116)], 3.2, False)
+        d.cut_path([(ankle[0] + 58, 102), (ankle[0] + 78, 94)], 2.6, False)
 
     return d
 
