@@ -2184,16 +2184,44 @@ def pose(letter: str) -> Drawer:
         # four stacked filled shapes, where the nonzero fill rule cancels any
         # engraved cut outright — no seam could ever render there.
         d.path([(245, 185), (330, 203), (386, 193)], 88, True, True, track=False)
-        left_leg = [(255, 200), (125, 285), (80, 455), (145, 625), (265, 720), (313, 745)]
+        # Calves end at the ankles, not at a needle point. The old last
+        # segment (313, 745) was a fake toe; the 0.48-scale default shoes
+        # then sat on that tip and vanished at specimen size, leaving two
+        # sticks with a gap at the apex instead of the print's joined feet.
+        left_ankle = (288, 728)
+        right_ankle = (392, 728)
+        left_leg = [(255, 200), (125, 285), (80, 455), (145, 625), left_ankle]
         right_leg = [(680 - x, y) for x, y in left_leg]
         d.leg(
             left_leg, 58, knee_index=2, breeches_width=78,
-            shoe_direction=(1, 0), shoe_scale=0.48,
+            shoe_scale=0.0,
         )
         d.leg(
             right_leg, 58, knee_index=2, breeches_width=78,
-            shoe_direction=(-1, 0), shoe_scale=0.48,
+            shoe_scale=0.0,
         )
+        # Compact inward shoes. Each runs from its ankle up and in so the
+        # toes meet at the apex, closing the ring the way the print's dark
+        # pair does — soles facing, a short seam between the two toes.
+        apex = (340, 770)
+        # Heel pads sit on the ankles, wider than the stocking so the shoe
+        # reads as a shoe. The sole stays thick into the toe — a taper to a
+        # point is what made the old apex look like two sticks.
+        d.ellipse(left_ankle[0] + 4, left_ankle[1] + 2, 22, 17, 0.62)
+        d.tapered_path(
+            [left_ankle, (316, 750), (334, 766)],
+            [36, 30, 22], True,
+        )
+        d.ellipse(right_ankle[0] - 4, right_ankle[1] + 2, 22, 17, -0.62)
+        d.tapered_path(
+            [right_ankle, (364, 750), (346, 766)],
+            [36, 30, 22], True,
+        )
+        # Two toe pads press together, rounding the apex instead of peaking it.
+        d.ellipse(328, 766, 16, 13, 0.40)
+        d.ellipse(352, 766, 16, 13, -0.40)
+        d.ellipse(apex[0], apex[1] - 2, 20, 15, 0.0)
+        d.cut_path([(340, 754), (340, 778)], 4.0, False)
         d.front_head(340, 108, 62, hair_down=True, upside_down=True, gaze_up=True)
         # The projecting Q tail is the visible arm. Begin it well inside the
         # right shoulder mass, reinforce the socket, and continue outward as one
