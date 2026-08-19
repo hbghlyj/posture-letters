@@ -10,10 +10,11 @@ The script:
 - Refits the bounding box of that component to a 1024-px portrait, applies
   a 32-px white margin, and binarises the result so the trace is pure
   black-and-white.
-- Extracts the largest external contour with OpenCV, resamples it uniformly
-  to roughly 3 px of arc length, normalises winding so the area is positive
-  in image space (y-down), and writes a Python module exporting
-  ``YOGA_<LETTER>_OUTLINE_POINTS`` plus an empty ``YOGA_<LETTER>_HOLES`` list.
+- Extracts the largest external contour plus any interior cavities (holes)
+  with OpenCV, resamples each uniformly to roughly 3 px of arc length,
+  normalises winding so the area is positive in image space (y-down), and
+  writes a Python module exporting ``YOGA_<LETTER>_OUTLINE_POINTS`` and
+  ``YOGA_<LETTER>_HOLES``.
 - Prints the trace statistics (components, body area, outer bbox, area)
   so a downstream caller can validate the topology.
 """
@@ -66,7 +67,14 @@ def resample_closed(
 
 
 def build_binary_mask(image_path: Path) -> np.ndarray:
-    """Return a uint8 binary mask (255 = foreground) using Otsu on luminance."""
+    """Return a uint8 binary mask (255 = foreground) using Otsu on luminance.
+
+    The source image is expected to follow the conventional "body brighter
+    than background" convention so that 255-pixel regions mark the body. A
+    fall-back fixed threshold is used when the image is already a strict
+    0/255 binary, because Otsu would otherwise pick a degenerate threshold
+    of 0 and silently invert the body and the background.
+    """
     array = cv2.imread(str(image_path), cv2.IMREAD_UNCHANGED)
     if array is None:
         raise SystemExit(f"cannot read {image_path}")
@@ -83,7 +91,20 @@ def build_binary_mask(image_path: Path) -> np.ndarray:
             mask = 255 - mask  # opaque regions are foreground
     else:
         gray = cv2.cvtColor(array, cv2.COLOR_BGR2GRAY) if array.ndim == 3 else array
-        _, mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
+        unique_values = np.unique(gray)
+        if int(unique_values.size) <= 2:
+            # Already a pure binary (body=255, background=0). Otsu would
+            # pick the degenerate threshold 0 and invert the two regions,
+            # so apply a fixed threshold at the histogram midpoint.
+            threshold_value = 127.0
+        else:
+            otsu_threshold, _ = cv2.threshold(
+                gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU,
+            )
+            threshold_value = float(otsu_threshold)
+            if threshold_value < 1.0:
+                threshold_value = 1.0
+        _, mask = cv2.threshold(gray, threshold_value, 255, cv2.THRESH_BINARY)
     return mask
 
 
@@ -119,31 +140,72 @@ def prepare_canvas(
     return canvas
 
 
-def trace_exterior(canvas: np.ndarray) -> np.ndarray:
-    contours, _ = cv2.findContours(
-        canvas, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE,
+def trace_outline_with_holes(
+    canvas: np.ndarray,
+) -> tuple[np.ndarray, list[np.ndarray]]:
+    """Find the largest external contour and any interior cavities.
+
+    Returns the outer contour as an Nx2 float array and a list of hole
+    contours, also as Nx2 float arrays. We use RETR_TREE so the inner
+    cavities of a C-/U-shape silhouette are recovered as children of the
+    outer contour.
+    """
+    contours, hierarchy = cv2.findContours(
+        canvas, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE,
     )
     if not contours:
         raise SystemExit("no external contour after resampling")
-    contour = max(contours, key=cv2.contourArea)
-    return contour[:, 0, :].astype(np.float64)
+
+    # Find the largest contour with no parent (an outermost contour).
+    outer_candidates = [
+        (i, contours[i])
+        for i in range(len(contours))
+        if hierarchy[0, i, 3] == -1
+    ]
+    if not outer_candidates:
+        raise SystemExit("no outermost contour found")
+    outer_candidates.sort(key=lambda kv: cv2.contourArea(kv[1]), reverse=True)
+    outer_idx, outer_ct = outer_candidates[0]
+
+    # Holes are descendants of the outer contour.
+    holes: list[np.ndarray] = []
+    queue = [outer_idx]
+    while queue:
+        idx = queue.pop()
+        # Every first child of idx becomes part of our tree.
+        child = hierarchy[0, idx, 2]
+        while child != -1:
+            # If this child is a hole (parent is idx, grandparent is not idx),
+            # treat as a hole if its sibling index in the traversal is even;
+            # otherwise it is an outer of an interior region. For a typical
+            # single-outer-multiple-holes shape the children of the outer
+            # contour are the holes themselves.
+            if hierarchy[0, child, 3] == idx:
+                holes.append(contours[child])
+            queue.append(child)
+            child = hierarchy[0, child, 0]
+
+    return outer_ct[:, 0, :].astype(np.float64), [h[:, 0, :].astype(np.float64) for h in holes]
 
 
 def write_module(
     points: list[tuple[float, float]],
+    holes: list[list[tuple[float, float]]],
     letter: str,
     description: str,
     output: Path,
 ) -> None:
     letter = letter.upper()
-    text_lines = [
-        '"""' + description.strip(),
-        '"""',
-        "",
-        f"YOGA_{letter}_OUTLINE_POINTS = [",
-    ]
+    text_lines = ['"""' + description.strip(), '"""', "",
+                   f"YOGA_{letter}_OUTLINE_POINTS = ["]
     text_lines.extend(f"    ({px:.2f}, {py:.2f})," for px, py in points)
-    text_lines.extend(["]", "", f"YOGA_{letter}_HOLES = [", "]", ""])
+    text_lines.extend([']', "", f"YOGA_{letter}_HOLES = ["]
+    for hole in holes:
+        text_lines.append('    [')
+        text_lines.extend(f"        ({px:.2f}, {py:.2f})," for px, py in hole)
+        text_lines.append('    ],')
+    text_lines.append(']')
+    text_lines.append("")
     output.write_text("\n".join(text_lines), encoding="utf-8")
 
 
@@ -158,17 +220,29 @@ def main() -> None:
     mask = build_binary_mask(Path(args.image))
     body, component, bbox = select_largest_component(mask)
     canvas = prepare_canvas(body, bbox)
-    raw = trace_exterior(canvas)
+    raw, hole_raws = trace_outline_with_holes(canvas)
     points = resample_closed([(float(x), float(y)) for x, y in raw], 3.0)
     if signed_area(points) > 0:
         points.reverse()
-    write_module(points, args.letter, args.description, Path(args.output))
+    holes: list[list[tuple[float, float]]] = []
+    for hole in hole_raws:
+        # Skip degenerate "holes" smaller than 1% of the outer area.
+        outer_area = cv2.contourArea(raw)
+        if cv2.contourArea(hole) < 0.005 * outer_area:
+            continue
+        hpts = resample_closed([(float(x), float(y)) for x, y in hole], 3.0)
+        # Inner holes in y-down image convention have the opposite signed
+        # area to the outer contour, so reversing them equalises sign.
+        if signed_area(hpts) > 0:
+            hpts.reverse()
+        holes.append(hpts)
+    write_module(points, holes, args.letter, args.description, Path(args.output))
     xs = [p[0] for p in points]
     ys = [p[1] for p in points]
     print(
         f"component={component} bbox={bbox[:4]} area={bbox[4]} "
         f"trace pts={len(points)} bbox=({min(xs):.0f},{min(ys):.0f},{max(xs):.0f},{max(ys):.0f}) "
-        f"area={abs(signed_area(points)):.0f} wrote={args.output}"
+        f"area={abs(signed_area(points)):.0f} holes={len(holes)} wrote={args.output}"
     )
 
 
