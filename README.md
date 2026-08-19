@@ -70,7 +70,7 @@ python generate_font.py
 - **D** — kneeling camel: thighs the stem, thrown-back head the top of the bowl, hands on the heels. The import is mirrored to face the conventional D.
 - **E** — kneeling: upright spine the stem, raised arm the top bar, forward arm the middle bar, folded legs the bottom bar.
 - **F** — from `assets/f_gymnast_photo.png`. Standing on one straight leg; both arms the top bar; folded lifted leg the middle bar.
-- **G** — inverted scorpion: arms and hanging head at the bottom, arched torso the bowl, feet the spur.
+- **G** — seated: spine curled into a C as the bowl, knees drawn up to close the lower right, arms arcing overhead with the hands as the spur.
 - **H** — from `assets/h_gymnast_photo.png`. Horizontal torso the crossbar; raised leg and kneeling shin the left stem; raised and planted arms the right stem.
 - **I** — legs pressed together the stem; crossed arms and open hands the top serif; feet turned out the bottom serif.
 - **J** — from `assets/j_gymnast_photo.png`. Joined legs the tall right stem, flexed feet a short top serif, hips/back/arms the open bottom hook, upright profile head the lower-left terminal.
