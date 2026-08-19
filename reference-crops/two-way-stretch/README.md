@@ -33,9 +33,18 @@ Crops kept here:
   raised vertically as one stem and both arms extended vertically as
   the other, the flexed feet and the open flat hands making the two
   serifs at equal height.
-- `image_fc2e377e.png` - high-resolution photographic reference for J.
-  In profile, both straight joined legs rise as the single tall right
-  stem; the curled hips and torso sweep through the bottom hook; and the
-  tucked head and bent arms make a compact lower-left terminal. Unlike
-  the small poster crops, this reference can anchor natural anatomy
-  directly before conversion to a flat silhouette.
+- `image_fc2e377e.png` - previous high-resolution photographic reference
+  for J, retained for provenance. Its joined upright legs and compact
+  lower-left terminal informed the superseded trace, but its pointed feet
+  supplied no clear upper serif.
+- `image_91f51c7c.png` - previous high-resolution photographic reference for
+  J, retained for provenance. Its joined legs, left-pointing feet, and broad
+  hook informed the superseded trace.
+- `image_89bd1753.png` - current high-resolution photographic reference for
+  J. In profile, both straight joined legs rise as the single tall right
+  stem; the flexed feet point left as a short top serif; and the hips, back,
+  and merged arms sweep through the broad bottom hook. Its naturally neutral
+  head and cervical alignment make the compact lower-left terminal without
+  bridging the open counter. The shipped glyph is a simplified one-piece
+  exterior derived from this pose, with clothing, hand, toe, and facial
+  details flattened for reliable text-size rendering.

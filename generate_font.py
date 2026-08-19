@@ -1447,10 +1447,11 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "J":
-        # Editorial yoga-alphabet J, imported like L. In a curled hollow-body
-        # pose, the joined upright legs make the single tall right stem; hips
-        # and torso sweep through the bottom hook, which ends in the tucked
-        # head and compact bent arms at lower left.
+        # Editorial yoga-alphabet J, imported like L. The joined upright legs
+        # make the single tall right stem and the flexed feet point left as a
+        # short top serif. Hips, back, and merged arms sweep through the open
+        # bottom hook; its naturally upright profile head and smooth neck make
+        # the compact lower-left terminal without closing the counter.
         pts = YOGA_J_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
