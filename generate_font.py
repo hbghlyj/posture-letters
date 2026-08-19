@@ -2670,7 +2670,6 @@ def pose(letter: str) -> Drawer:
         knee = (200, 118)
         hip = ((shoulder[0] + knee[0]) * 0.5, (shoulder[1] + knee[1]) * 0.5)
         ankle = (528, 118)
-        toe = (668, BAR_GROUND)
         d.torso([shoulder, hip], torso_width, False)
         d.circle(hip[0], hip[1], torso_width * 0.50)
         d.head(576, 712, -1)
@@ -2732,38 +2731,53 @@ def pose(letter: str) -> Drawer:
                 "part": "limb", "segments": segments, "length": length,
                 "points": [thigh[0], (knee[0], knee[1]), (ankle[0], ankle[1])],
             })
-        # Modest kneecap on the outside of the fold — sized to the corner,
-        # not to a full limb-width ball that would hang under the baseline.
-        d.ellipse(knee[0] - 4, knee[1] + 8, 32, 28, 0.75)
+        # Bottom limb: J's traced sitting shin+foot, running right from the
+        # kneeling corner. The previous BarProfile wedge was a typographic
+        # taper; the print (and J) show a real calf, arch and pointed toe.
+        # Only the shin/foot of the outline is used — rotating the whole
+        # sitting limb would tilt the shin off the baseline.
+        original_x_min, original_x_max = 131.0, 1354.0
+        original_y_min, original_y_max = 0.0, 611.0
+        original_width = original_x_max - original_x_min
+        original_height = original_y_max - original_y_min
+        thigh_width = 400.0 - 131.0
+        # Same scale J uses, so the bar's thickness and foot match.
+        j_torso_width = 84.0
+        uniform_scale = j_torso_width / thigh_width
+        # From the knee through the toe. Starting earlier includes the
+        # vertical thigh and spikes a hairline up the diagonal.
+        shin_src = [(x, y) for x, y in LOWER_LIMB_OUTLINE_POINTS if x >= 410.0]
+        src_x0 = min(x for x, _ in shin_src)
+        src_y0 = min(y for _, y in shin_src)
+        src_y1 = max(y for _, y in shin_src)
+        # Place the knee at the letter's left corner, sole on BAR_GROUND.
+        knee_x = knee[0] - 8
+        shin_outline = []
+        for x, y in shin_src:
+            new_x = knee_x + (x - src_x0) * uniform_scale
+            new_y = BAR_GROUND + (src_y1 - y) * uniform_scale
+            shin_outline.append((new_x, new_y))
+        if shin_outline:
+            # Sole on the ground; drop any leftover thigh that still
+            # climbs the diagonal.
+            d.polygon([
+                (x, min(BAR_GROUND + 108, max(BAR_GROUND, y)))
+                for x, y in shin_outline
+            ])
+        # Rounded kneeling knee — J's fold, not a separate joint ball.
+        d.ellipse(knee[0] + 10, BAR_GROUND + 42, 40, 36, 0.15)
         d.cut_path([
-            (knee[0] + 6, knee[1] + 24),
-            (knee[0] + 20, knee[1] + 8),
-            (knee[0] + 18, knee[1] - 10),
-        ], 4.0, True)
-        # Fillet the inner corner so the diagonal meets the bar in one turn
-        # instead of a re-entrant notch.
+            (knee[0] + 16, knee[1] + 20),
+            (knee[0] + 28, knee[1] + 6),
+            (knee[0] + 22, knee[1] - 8),
+        ], 3.6, True)
+        # Fillet the inner corner so the diagonal meets J's bar in one turn.
         d.polygon([
             (knee[0] + 8, knee[1] + 36),
-            (knee[0] + 56, BAR_GROUND + 70),
-            (knee[0] + 96, BAR_GROUND + 68),
+            (knee[0] + 56, BAR_GROUND + 64),
+            (knee[0] + 100, BAR_GROUND + 58),
             (knee[0] + 36, knee[1] + 8),
         ])
-        # Bottom bar: one planted band. The profile owns the sole (straight
-        # on the ground line) and tapers to a point at the toe, so the foot
-        # is the end of the stroke rather than a spike stuck onto it.
-        bar = BarProfile(
-            ground=BAR_GROUND, heel_x=knee[0] - 4, arch_x=ankle[0] - 20, toe_x=toe[0],
-            heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
-            calf_x=knee[0] + 130,
-        )
-        heel = [(x, max(BAR_GROUND, y)) for x, y in bar.heel_outline(rise=6, bulge=22)]
-        edge = [(x, max(BAR_GROUND, y)) for x, y in bar.edge(80)]
-        d.polygon(list(heel) + list(reversed(edge)))
-        # Soft calf on the bar, kept low so it does not read as a step, and
-        # a short instep cut so the toe reads as a shoe.
-        d.ellipse(knee[0] + 136, BAR_GROUND + 46, 58, 16, 0.02)
-        d.cut_path([(ankle[0] - 8, 128), (ankle[0] + 36, 116)], 3.2, False)
-        d.cut_path([(ankle[0] + 58, 102), (ankle[0] + 78, 94)], 2.6, False)
 
     return d
 
