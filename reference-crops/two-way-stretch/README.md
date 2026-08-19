@@ -35,11 +35,13 @@ Crops kept here:
   elbow and the head tucked low beneath the top forearm, which closes
   the stem-to-top-bar junction and reads better at text sizes. The crop
   is kept here for provenance and comparison.
-- `U.png` - row 4, second cell. Lying on the back with the rounded back
-  and hips on the floor as the bowl, both legs pressed together and
-  raised vertically as one stem and both arms extended vertically as
-  the other, the flexed feet and the open flat hands making the two
-  serifs at equal height.
+ - `U.png` - row 4, second cell. A side-profile boat pose (Paripurna
+   Navasana) on the sit bones: both straight joined legs rise symmetrically
+   up and outward to flexed-foot terminals at the upper corners, while the
+   hips form the rounded apex at the lower centre. The body is one
+   connected component with no head, neck, arms, or torso drawn above the
+   hips; the wide open space between the legs reads as the U counter. This
+   crop is the source of the shipped U.
 - `image_fc2e377e.png` - previous high-resolution photographic reference
   for J, retained for provenance. Its joined upright legs and compact
   lower-left terminal informed the superseded trace, but its pointed feet

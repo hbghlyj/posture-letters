@@ -1693,9 +1693,12 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "U":
-        # Editorial yoga-alphabet U, imported like L. A cobra with both
-        # shins lifted: raised feet the left stem, hips the bowl, lifted
-        # torso and planted arms the right stem.
+        # Reference-conditioned reconstruction of the U pose from the cropped
+        # Two Way Stretch U (reference-crops/two-way-stretch/U.png):
+        # a side-profile boat (Paripurna Navasana) on the sit bones with
+        # both straight joined legs rising symmetrically to flexed-foot
+        # terminals at the upper corners, and the hips forming the rounded
+        # apex at the lower centre.
         pts = YOGA_U_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
