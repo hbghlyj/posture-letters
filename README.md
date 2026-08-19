@@ -38,8 +38,6 @@ Or declare only the compact WOFF2:
 - `cut_reference.py` — optional helper for older print-cell crops
 - `reference-crops/` — pose references, including modern gymnast studies in `two-way-stretch/`
 - `outline_points/` — A–Z traced silhouette contours consumed by the generator
-- `validate_anatomy.py` — source-centerline proportion audit
-- `anatomy-validation.md` / `.json` — readable and machine-readable audit results
 
 ## Character coverage
 
@@ -77,7 +75,7 @@ The bar itself is **one band** rather than a run of separately swelling body par
 
 **L** is no longer assembled from the shared body-part primitives. Its whole letterform is a **single traced contour** imported from `vector_kneeling_upright_torso.svg` — a VTracer spline trace of `vector_kneeling_upright_torso.png`, a flat vector silhouette of a female figure in strict side profile, high-kneeling with the **upper torso perfectly upright and vertical** (head with a low bun, straight erect spine, arm relaxed at the side) and the shin and pointed foot lying flat along the floor to the right. The figure's own anatomy supplies the letter: the vertical trunk is the stem and the grounded lower leg is the bottom bar, so no synthetic strokes, hats, shoes, or engraved cuts are layered on top of the trace.
 
-The flattened outline lives in `outline_points/l.py` (one point roughly every 3px of arc length, in SVG pixel space). `generate_font.py` scales it uniformly into font units, flips it y-up, seats it on the shared kneeling ground line (`BAR_GROUND`, y=72), and stretches it to the same 788-unit cap height as the previous L. Because the glyph is one closed silhouette it opts out of the hat-and-shoe serif system, the breeches/calf system, and the anatomical audit's limb counting; the sections below that mention L describe the **superseded primitive construction**, retained in Git history.
+The flattened outline lives in `outline_points/l.py` (one point roughly every 3px of arc length, in SVG pixel space). `generate_font.py` scales it uniformly into font units, flips it y-up, seats it on the shared kneeling ground line (`BAR_GROUND`, y=72), and stretches it to the same 788-unit cap height as the previous L. Because the glyph is one closed silhouette it opts out of the hat-and-shoe serif system and the breeches/calf system; the sections below that mention L describe the **superseded primitive construction**, retained in Git history.
 
 ## L's base: E's lower prong, inverted (superseded)
 
@@ -182,14 +180,13 @@ The notes below record how each letter is built. Current sources are mostly mode
 - **W:** rebuilt through a two-stage photographic-to-silhouette workflow. The gymnast leans forward so the foreshortened head and shoulders form the centre peak; each arm overlaps one thigh; the hand conceals the grounded knee hinge; and a naturally shorter calf, clearly thinner than the muscular thigh, alone forms each outer bar and tapers into the ankle. Each anterior ankle faces forward while its pointed foot turns modestly outward, showing the dorsolateral top rather than the sole. The silhouette is converted directly from the corrected photograph, preserving its natural calf–thigh overlap without carving or deepening the junction.
 - Pose notes for remaining letters are in `reference-crops/historical-pose-map.md`.
 
-## Anatomical audit policy
-
-`validate_anatomy.py` measures thigh, calf, arm, torso/spine, and head dimensions from source centerlines against A with a ±5% threshold. It is a **diagnostic**, not the release gate: traced gymnast silhouettes and a few remaining constructed letters will not all match one skeletal template.
+- **Z:** rebuilt as a side profile combining a dramatic backward lean with flat arm extensions. Both arms reach horizontally out from the shoulders as the top bar, running parallel and held apart by a real gap — a seam would be cancelled, since the two are separately drawn shapes stacked on one another — with the hands completely flat in line with the forearms so each stroke tapers to a thinner tip like a stylised pen stroke. The diagonal is one straight line from shoulder to grounded knee, split at the hip so the trunk and the thigh come out the same length (~325), matching J's proportions rather than drawing the whole run as torso and bolting L's vertical sitting outline onto the end. The bottom bar is J's traced sitting shin and foot — calf, arch and pointed toe — not a typographic wedge. Nothing dips below the ground line. A waist seam marks the coat/breeches handoff.
 
 The shipped TTF/WOFF outlines are monochrome letterforms. The face is intended for playful display settings rather than body text. Please treat the poses as typographic fiction, not exercise instructions.
-- **Z:** rebuilt as a side profile combining a dramatic backward lean with flat arm extensions. Both arms reach horizontally out from the shoulders as the top bar, running parallel and held apart by a real gap — a seam would be cancelled, since the two are separately drawn shapes stacked on one another — with the hands completely flat in line with the forearms so each stroke tapers to a thinner tip like a stylised pen stroke. The diagonal is one straight line from shoulder to grounded knee, split at the hip so the trunk and the thigh come out the same length (~325), matching J's proportions rather than drawing the whole run as torso and bolting L's vertical sitting outline onto the end. The bottom bar is J's traced sitting shin and foot — calf, arch and pointed toe — not a typographic wedge. Nothing dips below the ground line. A waist seam marks the coat/breeches handoff. Nothing dips below the ground line.## E's leg proportions
 
-**E**'s lower prong used to be one enormous shin: 370-386 units against a 188 thigh, a ratio near 2.0, which the audit flagged as the two worst limbs in the font (calf +158% and +169%). This was the same fault **L** was rebuilt for, left uncorrected, and the print does not support it - the source figure sits with the legs extended and the shin roughly comparable to the thigh.
+## E's leg proportions
+
+**E**'s lower prong used to be one enormous shin: 370-386 units against a 188 thigh, a ratio near 2.0. This was the same fault **L** was rebuilt for, left uncorrected, and the print does not support it - the source figure sits with the legs extended and the shin roughly comparable to the thigh.
 
 The knee is now carried **forward along the floor** rather than tucked under the hip, so the femur and tibia split the prong's horizontal reach instead of the tibia carrying all of it (`KNEE_X`). Shin drops to 220-236 against a 188 thigh: **shin/forearm falls from 1.83-1.91 to 1.09-1.17**, and both calf overshoot flags disappear.
 

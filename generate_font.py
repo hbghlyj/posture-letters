@@ -88,14 +88,6 @@ def ribbon(points: list[Point], width: float, smooth: bool = True) -> list[Point
 class Drawer:
     def __init__(self) -> None:
         self.contours: list[tuple[list[Point], bool]] = []
-        # Source-level skeletal measurements used by validate_anatomy.py.
-        # Lengths follow centerline control points, before stroke expansion.
-        self.anatomy: list[dict[str, object]] = []
-
-    @staticmethod
-    def centerline_measurements(pts: list[Point]) -> tuple[list[float], float]:
-        segments = [math.dist(a, b) for a, b in zip(pts, pts[1:])]
-        return segments, sum(segments)
 
     def polygon(self, pts: Iterable[Point], hole: bool = False) -> None:
         poly = [(round(x, 2), round(y, 2)) for x, y in pts]
@@ -119,7 +111,6 @@ class Drawer:
         width: float = 52,
         smooth: bool = True,
         joints: bool = True,
-        track: bool = True,
     ) -> None:
         poly = ribbon(pts, width, smooth)
         if poly:
@@ -127,18 +118,11 @@ class Drawer:
         if joints:
             for x, y in pts:
                 self.circle(x, y, width / 2)
-        if track:
-            segments, length = self.centerline_measurements(pts)
-            self.anatomy.append(
-                {"part": "composite_path", "segments": segments, "length": length, "points": pts}
-            )
 
     def torso(
         self, pts: list[Point], width: float = 88, smooth: bool = True, joints: bool = True
     ) -> None:
-        self.path(pts, width, smooth, joints, track=False)
-        segments, length = self.centerline_measurements(pts)
-        self.anatomy.append({"part": "torso", "segments": segments, "length": length, "points": pts})
+        self.path(pts, width, smooth, joints)
 
     def to_glyph(self, dx: float = 0.0):
         """Build the TrueType glyph, optionally shifted along x.
@@ -773,7 +757,7 @@ def punctuation(name: str) -> Drawer:
         d.circle(170, 620, 28)
     elif name == "hyphen":
         # A plain horizontal dash — no head or limb anatomy needed.
-        d.path([(180, 380), (520, 380)], 52, False, joints=False, track=False)
+        d.path([(180, 380), (520, 380)], 52, False, joints=False)
     return d
 
 
