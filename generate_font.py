@@ -1879,28 +1879,28 @@ def pose(letter: str) -> Drawer:
         d.cut_path([(549, 152), (566, 138), (576, 122)], 3.2, True)
 
     elif letter == "L":
-        # Kneeling side profile. The upright upper body — head, straight neck
-        # and vertical torso — makes the tall pillar. At its base the posture
-        # hinges sharply: the knees turn forward and bend completely so the
-        # thighs drop vertically and the lower body pivots into the horizontal
-        # plane, the shins and ankles stretching out along the floor as the
-        # bottom bar. The feet finish the stroke as a serif, heels and toes
-        # adding a slight vertical terminal.
+        # Kneeling side profile, proportioned like J. Head, neck and upright
+        # torso make the stem; at the hip the thighs drop to grounded knees
+        # and the shins run out along the floor as the bottom bar. The hip
+        # sits at the same height as J's so the trunk is not longer than the
+        # thigh. The feet finish the stroke as a serif.
         stem_x = 208
         torso_width = 84
-        # The hip sits where the lower limb outline connects
-        # Cut the torso at the hip to avoid overlap with the thigh in the lower limb outline
-        hip = (stem_x, 134)
-        # Draw torso from hip up to head (cut at hip to avoid duplicate knee)
-        d.torso([hip, (stem_x, 419), (stem_x, 642)], torso_width, False)
-        d.head(stem_x - 2, 706, -1)
-        # Arms hang along the sides, carried just clear of the trunk so the
-        # shoulder-to-hand run stays legible against the stem.
+        # Same hip height as J: the thigh outline is ~191 tall once it is
+        # scaled to the torso width, so a hip at 300 leaves a real femur
+        # under a normal trunk. The previous hip (134) was a leftover from
+        # seating the old flipped-E bar — it swallowed the thigh and left
+        # an overlong pillar on a stub of sitting mass.
+        hip = (stem_x, 300)
+        d.torso([hip, (stem_x, 466), (stem_x, 632)], torso_width, False)
+        d.head(stem_x - 2, 696, -1)
+        # Arms hang along the sides to mid-thigh, matching J, carried just
+        # clear of the trunk so the shoulder-to-hand run stays legible.
         for sign in (-1, 1):
             arm = [
-                (stem_x + sign * 52, 620),
-                (stem_x + sign * 60, 512),
-                (stem_x + sign * 58, 404),
+                (stem_x + sign * 52, 612),
+                (stem_x + sign * 60, 482),
+                (stem_x + sign * 58, 362),
             ]
             d.path(arm, 26, True, False, track=False)
             segments, length = d.centerline_measurements(arm)
@@ -1908,13 +1908,13 @@ def pose(letter: str) -> Drawer:
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.path([(stem_x + sign * 24, 638), arm[0]], 24, False, False,
+            d.path([(stem_x + sign * 24, 630), arm[0]], 24, False, False,
                    track=False)
             d.circle(arm[0][0], arm[0][1], 15)
             d.circle(arm[-1][0], arm[-1][1], 14)
             d.cut_path([
-                (stem_x + sign * 44, 602), (stem_x + sign * 50, 512),
-                (stem_x + sign * 48, 428),
+                (stem_x + sign * 44, 592), (stem_x + sign * 50, 482),
+                (stem_x + sign * 48, 388),
             ], 3.6, True)
         # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
         # The outline is scaled to match the torso width for seamless integration
