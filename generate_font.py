@@ -913,7 +913,6 @@ def build_svg_sheet(drawings: dict[str, Drawer]) -> None:
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">
 <rect width="100%" height="100%" fill="#f5edda"/>
 <text x="24" y="42" font-family="DejaVu Sans, sans-serif" font-size="34" font-weight="800" letter-spacing="5" fill="#17243a">POSTURE MASTER · GLYPH SHEET</text>
-<text x="24" y="69" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#6d6256">26 improbable stretches. No spotters. Please do not try this at home.</text>
 {''.join(cards)}
 </svg>'''
     (ROOT / "glyph-sheet.svg").write_text(svg, encoding="utf-8")
