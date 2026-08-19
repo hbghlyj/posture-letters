@@ -35,9 +35,9 @@ def load_outline_from_svg(svg_path):
     
     return points
 
-# Load shin-only outline from SVG file
+# Load full lower limb outline from SVG file (thigh + knee + shin + foot)
 ROOT = Path(__file__).resolve().parent
-SHIN_OUTLINE_POINTS = load_outline_from_svg(ROOT / 'shin_only.svg')
+SHIN_OUTLINE_POINTS = load_outline_from_svg(ROOT / 'shin_outline.svg')
 
 # Load the top edge profile
 # This file contains SHIN_PROFILE_TOP which is the normalized top edge
