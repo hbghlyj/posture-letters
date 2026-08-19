@@ -24,6 +24,7 @@ from rajakapotasana_outline_points import (
 )
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 from yoga_h_outline_points import YOGA_H_HOLES, YOGA_H_OUTLINE_POINTS
+from yoga_k_outline_points import YOGA_K_HOLES, YOGA_K_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
@@ -1500,67 +1501,26 @@ def pose(letter: str) -> Drawer:
         d.kneeling_shin(bar, 478, 52, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
 
     elif letter == "K":
-        # Standing profile K, matching the print. Head, upright torso and the
-        # planted standing leg make the left stem. The near arm reaches up and
-        # out as the upper branch, ending in a pointing hand. The other leg
-        # kicks down and out from the hip as the lower branch, foot planted.
-        # The previous build was a cartwheel on one hand, which the print
-        # does not show.
-        stem_x = 196
-        hip_y = 448
-        d.head(stem_x + 8, 718, 1)
-        d.torso([(stem_x, 658), (stem_x, 554), (stem_x, hip_y)], 82, False)
-        # Far arm hangs along the stem, blending into the pillar.
-        far_arm = [(stem_x - 28, 622), (stem_x - 34, 530), (stem_x - 30, 448)]
-        d.path(far_arm, 26, True, False, track=False)
-        d.circle(far_arm[-1][0], far_arm[-1][1], 14)
-        # Upper branch: the pointing arm. Shoulder, elbow, wrist — a real
-        # reach, not a rubber stroke.
-        shoulder = (stem_x + 28, 624)
-        elbow = (338, 698)
-        wrist = (478, 748)
-        arm = [shoulder, elbow, wrist]
-        d.tapered_path(arm, [40, 34, 28], True)
-        segments, length = d.centerline_measurements(arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": arm,
-        })
-        d.circle(shoulder[0], shoulder[1], 21)
-        d.circle(elbow[0], elbow[1], 18)
-        d.cut_path([
-            (elbow[0] + 6, elbow[1] + 16), (elbow[0] + 16, elbow[1] + 2),
-            (elbow[0] + 8, elbow[1] - 14),
-        ], 3.6, True)
-        # Pointing hand: index out as the terminal, the other fingers folded.
-        d.ellipse(wrist[0] + 6, wrist[1] + 2, 18, 14, 0.28)
-        d.tapered_path(
-            [(wrist[0] + 10, wrist[1] + 4), (wrist[0] + 48, wrist[1] + 16),
-             (wrist[0] + 78, wrist[1] + 22)],
-            [16, 12, 7], True,
-        )
-        d.polygon([
-            (wrist[0] + 4, wrist[1] - 6), (wrist[0] + 18, wrist[1] - 18),
-            (wrist[0] + 24, wrist[1] - 12), (wrist[0] + 12, wrist[1] + 2),
-        ])
-        d.cut_path([(wrist[0] - 4, wrist[1] + 10), (wrist[0] + 8, wrist[1] - 6)],
-                   3.0, False)
-        # Standing leg: continues the stem to the baseline.
-        d.leg(
-            [(stem_x - 16, hip_y), (stem_x - 18, 252), (stem_x - 14, 56)], 52,
-            knee_index=1, breeches_width=58, shoe_direction=(1, 0),
-        )
-        # Lower branch: the kicked leg, knee clearly bent, foot planted right.
-        d.leg(
-            [(stem_x + 20, hip_y - 8), (348, 292), (518, 72)], 54,
-            knee_index=1, breeches_width=64, shoe_scale=0.0,
-        )
-        d.ellipse(534, 64, 22, 16, -0.28)
-        for dx, dy in ((20, -2), (18, -12), (10, -20)):
-            d.polygon([
-                (530, 66), (534 + dx, 64 + dy), (538 + dx, 72 + dy),
-            ])
-        d.cut_path([(518, 70), (534, 56), (542, 44)], 3.2, True)
+        # Editorial yoga-alphabet K, imported like L. The upright torso
+        # over a kneeling leg is the vertical stem, the raised arm is the
+        # upper diagonal, and the extended straight leg is the lower
+        # diagonal.
+        pts = YOGA_K_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_K_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "L":
         # Kneeling side profile, imported as a traced silhouette rather than
