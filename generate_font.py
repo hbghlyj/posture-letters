@@ -1541,10 +1541,10 @@ def pose(letter: str) -> Drawer:
 
 
     elif letter == "N":
-        # Editorial yoga-alphabet N, imported like L. A backbend / bridge
-        # whose planted legs are the left stem, the arched torso the
-        # diagonal, and the raised joined arms the right stem. The head
-        # rests on the floor at the foot of the arm stem.
+        # Editorial yoga-alphabet N, imported like L from the 2 Way Stretch
+        # crop. A straight supporting arm and planted hand make the left stem;
+        # the profile head, chest, waist, abdomen, and pelvis descend as the
+        # organic diagonal; and the joined raised leg makes the right stem.
         pts = YOGA_N_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
@@ -2025,7 +2025,10 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
     fb.save(ttf_path)
 
     for flavor, filename in [("woff", "posture-master.woff"), ("woff2", "posture-master.woff2")]:
-        font = TTFont(ttf_path)
+        # Preserve the fixed release timestamp above in the webfont builds too.
+        # TTFont otherwise refreshes head.modified while saving each flavor,
+        # making byte-identical source builds produce different WOFF files.
+        font = TTFont(ttf_path, recalcTimestamp=False)
         font.flavor = flavor
         font.save(ROOT / filename)
 
