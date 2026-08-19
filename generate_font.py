@@ -18,6 +18,10 @@ from fontTools.ttLib import TTFont
 from profile_loader import LOWER_LIMB_OUTLINE_POINTS
 from upright_torso_outline_points import UPRIGHT_TORSO_OUTLINE_POINTS
 from navasana_outline_points import NAVASANA_HOLES, NAVASANA_OUTLINE_POINTS
+from rajakapotasana_outline_points import (
+    RAJAKAPOTASANA_HOLES,
+    RAJAKAPOTASANA_OUTLINE_POINTS,
+)
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
@@ -2118,94 +2122,26 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "Q":
-        # Inverted lower body: the short-breeched thighs rise around the outer
-        # ring, bend visibly at cuffed knees, and taper through calves/ankles to
-        # the inward-pointing shoes that meet at the apex. These are articulated
-        # legs, not anonymous tubular arms.
-        # The shoulder bar stops short of the arm root. Run out to x=435 its
-        # rounded cap buried the whole shoulder-to-arm junction under three or
-        # four stacked filled shapes, where the nonzero fill rule cancels any
-        # engraved cut outright — no seam could ever render there.
-        d.path([(245, 185), (330, 203), (386, 193)], 88, True, True, track=False)
-        # Calves end at the ankles, not at a needle point. The old last
-        # segment (313, 745) was a fake toe; the 0.48-scale default shoes
-        # then sat on that tip and vanished at specimen size, leaving two
-        # sticks with a gap at the apex instead of the print's joined feet.
-        left_ankle = (288, 728)
-        right_ankle = (392, 728)
-        left_leg = [(255, 200), (125, 285), (80, 455), (145, 625), left_ankle]
-        right_leg = [(680 - x, y) for x, y in left_leg]
-        d.leg(
-            left_leg, 58, knee_index=2, breeches_width=78,
-            shoe_scale=0.0,
-        )
-        d.leg(
-            right_leg, 58, knee_index=2, breeches_width=78,
-            shoe_scale=0.0,
-        )
-        # Compact inward shoes. Each runs from its ankle up and in so the
-        # toes meet at the apex, closing the ring the way the print's dark
-        # pair does — soles facing, a short seam between the two toes.
-        apex = (340, 770)
-        # Heel pads sit on the ankles, wider than the stocking so the shoe
-        # reads as a shoe. The sole stays thick into the toe — a taper to a
-        # point is what made the old apex look like two sticks.
-        d.ellipse(left_ankle[0] + 4, left_ankle[1] + 2, 22, 17, 0.62)
-        d.tapered_path(
-            [left_ankle, (316, 750), (334, 766)],
-            [36, 30, 22], True,
-        )
-        d.ellipse(right_ankle[0] - 4, right_ankle[1] + 2, 22, 17, -0.62)
-        d.tapered_path(
-            [right_ankle, (364, 750), (346, 766)],
-            [36, 30, 22], True,
-        )
-        # Two toe pads press together, rounding the apex instead of peaking it.
-        d.ellipse(328, 766, 16, 13, 0.40)
-        d.ellipse(352, 766, 16, 13, -0.40)
-        d.ellipse(apex[0], apex[1] - 2, 20, 15, 0.0)
-        d.cut_path([(340, 754), (340, 778)], 4.0, False)
-        # No hat: the print's inverted face is bareheaded, looking up
-        # out of the ring, with only hair on the outer skull.
-        d.front_head(340, 108, 62, hair_down=True, upside_down=True,
-                     gaze_up=True, hat=False)
-        # The projecting Q tail is the visible arm. Begin it well inside the
-        # right shoulder mass, reinforce the socket, and continue outward as one
-        # unbroken upper-arm/forearm route so the appendage cannot read detached.
-        # The arm emerges from the edge of the shoulder mass rather than being
-        # rooted deep inside it: previously its socket circle sat entirely
-        # within the shoulder bar, so shoulder, arm and leg piled into one
-        # blob with no readable joint. A modest ball marks the joint at the
-        # shoulder's edge and the limb tapers away from it.
-        d.circle(423, 179, 16)
-        tail_arm = [(424, 178), (462, 152), (498, 126), (528, 102), (556, 80)]
-        d.tapered_path(tail_arm, [42, 38, 34, 30, 26], True)
-        # Engraved seam marking where the arm emerges from the shoulder mass.
-        # Measuring the overlap shows the arm's upper edge is buried only for
-        # its first quarter, leaving the body at about (479, 174); a seam run
-        # any further along the limb cuts open silhouette instead of the
-        # shared boundary, which is what made earlier attempts read as a nick
-        # in the outline rather than a joint.
-        # A cut cannot mark this junction: the arm and the leg are two stacked
-        # filled shapes, and under the nonzero fill rule a reverse contour
-        # there is simply cancelled. The separation has to be geometric, so
-        # the arm is lifted clear of the leg and only a short crease at the
-        # shoulder — where a single layer remains — is engraved.
-        d.cut_path([
-            (436, 194), (450, 184), (464, 173),
-        ], 6.0, True)
-        segments, length = d.centerline_measurements(tail_arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": tail_arm, "role": "Q-tail-arm",
-        })
-        # Compact tail hand with two visible supporting finger tips; the arm
-        # stops just outside the lower-right ring instead of stretching past
-        # the descender into a detached line.
-        d.ellipse(564, 74, 16, 21, -0.58)
-        d.polygon([(558, 62), (571, 51), (588, 46), (582, 58), (568, 67)])
-        d.polygon([(573, 70), (585, 64), (596, 71), (587, 80), (576, 77)])
-        d.cut_path([(561, 66), (569, 59), (579, 60)], 4.0, True)
+        # Editorial bow-as-Q, imported like L. A prone backbend whose
+        # raised feet and grasping arm close the ring, while the other
+        # arm plants on the floor as the tail. The print's inverted
+        # ring is replaced because this pose is more legible as a Q.
+        pts = RAJAKAPOTASANA_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in RAJAKAPOTASANA_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "R":
         # R is P's stance with one leg swung out: head, upright torso and the
