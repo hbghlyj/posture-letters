@@ -591,7 +591,7 @@ class Drawer:
             self.polygon(foot_outline)
 
     def kneeling_shin(
-        self, profile: BarProfile, knee_x: float, width: float, torso_width: float = 84.0, hip_y: float = 300.0,
+        self, profile: BarProfile, knee_x: float, width: float, torso_width: float = 84.0, hip_x: float = 452.0, hip_y: float = 300.0,
     ) -> None:
         """The lower limb (thigh + knee + shin + foot) in kneeling position.
 
@@ -638,26 +638,11 @@ class Drawer:
         scaled_height = original_height * uniform_scale
         
         # Position the outline so the hip connection point connects to the hip
-        # The hip connection in the original outline is around x=131, y=63 (top-left of thigh)
-        # After scaling, this becomes x=0, y=19.7 (from the top)
+        # The hip connection in the original outline is around x=131, y=0 (top-left of thigh)
+        # After scaling, this becomes x=0, y=0 (top-left of scaled outline)
         
         # We need to position the outline so the thigh top connects to the hip
-        # For J, the hip is at (stem_x, 300) = (452, 300)
-        # For L, the hip is at (stem_x, 134) = (208, 134)
-        
-        # We can infer stem_x from the knee_x and the bar profile
-        # For J: knee_x = 478, and the hip is at stem_x = 452 (26 units to the left)
-        # For L: knee_x = 246, and the hip is at stem_x = 208 (38 units to the left)
-        
-        # The offset from knee to hip depends on the letter
-        # For J: hip_x = knee_x - 26
-        # For L: hip_x = knee_x - 38
-        
-        # We can use a heuristic: the hip is typically at knee_x - (torso_width / 2)
-        # For torso_width = 84, this gives hip_x = knee_x - 42
-        
-        # Let's use this heuristic for x positioning
-        hip_x = knee_x - torso_width / 2
+        # The hip is at (hip_x, hip_y) in the glyph
         
         # The thigh top in the scaled outline is at x=0
         # We want it to be at hip_x in the glyph
@@ -1791,7 +1776,7 @@ def pose(letter: str) -> Drawer:
             calf_x=241,
         )
         # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
-        d.kneeling_shin(bar, 478, 52, torso_width=torso_width, hip_y=hip[1])
+        d.kneeling_shin(bar, 478, 52, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
 
     elif letter == "K":
         # Cartwheel K: the figure balances sideways on one hand. The head lies
@@ -1930,7 +1915,7 @@ def pose(letter: str) -> Drawer:
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
         # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
-        d.kneeling_shin(bar, 246.0, 54, torso_width=torso_width, hip_y=hip[1])
+        d.kneeling_shin(bar, 246.0, 54, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
         # settled that high, so the trunk's foot stood clear underneath the
