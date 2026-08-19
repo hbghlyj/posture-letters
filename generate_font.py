@@ -613,7 +613,7 @@ class Drawer:
         ankle_x = profile.arch_x  # Ankle is at the arch position
         run = (ankle_x - knee_x) * step
 
-        # Original outline dimensions (from shin_outline.svg)
+        # Original outline dimensions (from lower_limb_outline.svg)
         # Bounding box: x=[131, 1354], y=[0, 611]
         # The outline contains: thigh (x~131-400), knee (x~400), shin (x~400-1000), foot (x~1000-1354)
         original_x_min = 131.0

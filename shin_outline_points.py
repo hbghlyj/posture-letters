@@ -1,5 +1,5 @@
 # Full lower limb outline (thigh + knee + shin + foot)
-# Extracted from shin_outline.svg
+# Extracted from lower_limb_outline.svg
 SHIN_OUTLINE_POINTS = [
     (136.00, 0.00),
     (136.00, 4.00),
