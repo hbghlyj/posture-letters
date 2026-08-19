@@ -33,6 +33,7 @@ from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
+from yoga_s_outline_points import YOGA_S_HOLES, YOGA_S_OUTLINE_POINTS
 from yoga_t_outline_points import YOGA_T_HOLES, YOGA_T_OUTLINE_POINTS
 from yoga_u_outline_points import YOGA_U_HOLES, YOGA_U_OUTLINE_POINTS
 from yoga_z_outline_points import YOGA_Z_HOLES, YOGA_Z_OUTLINE_POINTS
@@ -1648,95 +1649,27 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "S":
-        # Print's S: the arms sweep the upper hook, the head sits in the
-        # upper-left opening facing right, the torso is the diagonal spine,
-        # and the legs carry the lower hook left to the shoes. The previous
-        # build inverted that — legs on top, head on the floor, arms as two
-        # nubs tucked into the lower curve.
-        shoulder = (248, 488)
-        hip = (498, 278)
-        # Upper hook: both arms leave the shoulder, arch over the head and
-        # run out to the right, tapering to a reaching hand.
-        for spread, width in ((16, 50), (-14, 40)):
-            arm = [
-                (shoulder[0] + 10, shoulder[1] + 22 + spread * 0.3),
-                (300 + spread, 660 + spread * 0.12),
-                (470 + spread * 0.5, 742 + spread * 0.08),
-                (618 + spread * 0.2, 668 + spread * 0.3),
-            ]
-            d.tapered_path(
-                arm, [width, width * 0.90, width * 0.70, width * 0.48], True,
+        # Historic S, reconstructed through a corrected photographic gymnast
+        # and direct monochrome conversion. Grounded shins and feet sweep left
+        # as the lower terminal; thighs rise at lower right; the backbend and
+        # profile head form the middle curve; closely overlapped arms continue
+        # overhead into the upper-right terminal.
+        pts = YOGA_S_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], width * 0.46)
-            wx, wy = arm[-1]
-            d.ellipse(wx + 12, wy - 6, 18, 14, -0.40)
-            for dx, dy in ((10, -20), (20, -14), (26, -6)):
-                d.polygon([
-                    (wx + 4, wy - 4), (wx + dx, wy + dy),
-                    (wx + dx + 6, wy + dy + 5),
-                ])
-        # Head in the upper-left opening, facing right, clear of the arm
-        # arch. No hat: the brim would jam the underside of the sleeve.
-        d.path([(shoulder[0] - 4, shoulder[1] + 18), (214, 548)], 36,
-               False, False, track=False)
-        d.head(198, 592, 1, -0.18, hat=False)
-        # Diagonal spine, bent so the letter is an S-curve rather than a
-        # zigzag: chest turns down, waist eases into the hip.
-        d.torso([shoulder, (360, 400), (470, 330), hip], 88, True)
-        # Hip mass rounds the lower-right bulge of the S.
-        d.ellipse(hip[0] + 16, hip[1] - 4, 48, 44, 0.55)
-        d.ellipse(hip[0] + 4, hip[1] - 28, 40, 34, 0.35)
-        # Lower hook: thighs drop through the bulge to a grounded knee;
-        # the shin+foot is J's traced sitting limb, running left — the
-        # print's stocking and shoe, not a blunt sausage.
-        knee = (408, 118)
-        for spread, width, breeches in ((-8, 56, 70), (14, 46, 56)):
-            thigh = [
-                (hip[0] + 8 + spread * 0.3, hip[1] - 20),
-                (knee[0] + spread * 0.2, knee[1] - 4),
-            ]
-            d.tapered_path(thigh, [breeches * 0.98, breeches * 0.80], True)
-            segments, length = d.centerline_measurements(
-                [thigh[0], knee, (148, 74)]
-            )
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": [thigh[0], knee, (148, 74)],
-            })
-        thigh_width = 400.0 - 131.0
-        uniform_scale = 84.0 / thigh_width
-        shin_src = [(x, y) for x, y in LOWER_LIMB_OUTLINE_POINTS if x >= 410.0]
-        src_x0 = min(x for x, _ in shin_src)
-        src_y1 = max(y for _, y in shin_src)
-        # Flip: J's bar runs left from the knee, same as this hook.
-        shin_outline = []
-        for x, y in shin_src:
-            new_x = knee[0] + 8 - (x - src_x0) * uniform_scale
-            new_y = BAR_GROUND + (src_y1 - y) * uniform_scale
-            shin_outline.append((new_x, new_y))
-        if shin_outline:
-            d.polygon([
-                (x, min(BAR_GROUND + 108, max(BAR_GROUND, y)))
-                for x, y in shin_outline
-            ])
-        d.ellipse(knee[0] - 6, BAR_GROUND + 42, 40, 36, -0.15)
-        d.cut_path([
-            (knee[0] - 12, knee[1] + 18),
-            (knee[0] - 24, knee[1] + 4),
-            (knee[0] - 16, knee[1] - 10),
-        ], 3.6, True)
-        # Weld the thigh into J's bar so the hook does not nick.
-        d.polygon([
-            (knee[0] - 8, knee[1] + 36),
-            (knee[0] - 56, BAR_GROUND + 64),
-            (knee[0] - 100, BAR_GROUND + 58),
-            (knee[0] - 36, knee[1] + 8),
-        ])
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_S_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "T":
         # Editorial yoga-alphabet T, imported like L. Standing upright
