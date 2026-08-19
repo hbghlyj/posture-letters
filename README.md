@@ -34,7 +34,6 @@ Or declare only the compact WOFF2:
 - `glyph-sheet.svg` — A–Z visual overview
 - `generate_font.py` — builds the TTF/WOFF/WOFF2 files and `glyph-sheet.svg`
 - `trace_silhouette.py` — OpenCV tracer for A–Z except L
-- [VTracer 0.6.12](https://github.com/visioncortex/vtracer) — cubic-spline tracer used only for L (`assets/silhouettes/l.svg`)
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
 - `assets/j_gymnast_photo.png`, `assets/s_gymnast_photo.png`, `assets/u_gymnast_photo.png`, `assets/v_gymnast_photo.png`, `assets/w_gymnast_photo.png` — photographic sources for J, S, U, V, and W
