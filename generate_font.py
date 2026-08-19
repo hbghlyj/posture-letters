@@ -24,6 +24,7 @@ from rajakapotasana_outline_points import (
 )
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
+from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
 from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
@@ -1925,65 +1926,25 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "O":
-        # Backbend O. The figure leans back from standing until the body closes
-        # into a ring: the deep continuous arch of the spine and torso makes the
-        # rounded crest at the top, the buttocks and the backward-sloping thighs
-        # and knees sweep down the left and tuck in at the ankles, and the upper
-        # back, neck and arms carry the right side down with the hair falling
-        # loosely along the outer perimeter. At the bottom the planted hands on
-        # the right and the shod feet on the left curve toward one another,
-        # leaving only a narrow gap to close the circle.
-        hip = (196, 546)
-        shoulder = (566, 520)
-        # Top curve: the arched spine sweeping hips-to-shoulders over the crest.
-        d.torso(
-            [hip, (270, 700), (382, 752), (496, 688), shoulder], 96, True
-        )
-        # Left side curve: thighs and knees sloping back and down, tucking in
-        # at the ankles to the planted shoes.
-        for spread, width in ((-16, 58), (18, 50)):
-            d.leg(
-                [
-                    (hip[0] + spread * 0.4, hip[1] - 30),
-                    (116 + spread, 320),
-                    (300 + spread, 84),
-                ],
-                width, knee_index=1, breeches_width=width * 1.3,
-                shoe_direction=(1, -0.24),
+        # Editorial yoga-alphabet O, imported like L. A full bow whose
+        # raised feet and both grasping arms close a ring, with a large
+        # natural counter.
+        pts = YOGA_O_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-        # Right side curve: neck and arms running down to the planted hands.
-        for spread, width in ((-16, 52), (16, 44)):
-            arm = [
-                (shoulder[0] + spread * 0.4, shoulder[1] - 28),
-                (628 + spread, 322),
-                (438 + spread, 112),
-            ]
-            d.path(arm, width, True, False, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
-            # Elbow crease on the outside of the descending arm.
-            d.cut_path([
-                (642 + spread, 388), (650 + spread, 330),
-                (632 + spread, 276),
-            ], 4.0, True)
-        # Hands planted flat on the ground, fingers reaching toward the feet.
-        for spread, hy in ((-18, 126), (18, 92)):
-            hx = 438 + spread
-            d.ellipse(hx, hy, 25, 19, 0.0)
-            # Fingers spread forward along the floor toward the feet.
-            for dy in (-11, 0, 11):
-                d.polygon([
-                    (hx - 6, hy + dy + 5), (hx - 6, hy + dy - 5),
-                    (hx - 44, hy + dy - 4), (hx - 44, hy + dy + 4),
-                ])
-            d.cut_path([(hx - 12, hy - 15), (hx - 12, hy + 15)], 3.4, False)
-        # The head hangs back inside the ring beneath the arched shoulders,
-        # face turned up toward the crest, with the hair falling outward.
-        d.front_head(486, 596, 54, hair_down=True, upside_down=True, gaze_up=True)
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_O_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "P":
         # Editorial yoga-alphabet P, imported like L. A standing
