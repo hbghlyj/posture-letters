@@ -593,16 +593,18 @@ class Drawer:
     def kneeling_shin(
         self, profile: BarProfile, knee_x: float, width: float,
     ) -> None:
-        """The shin (lower leg) lying flat along the ground in kneeling position.
+        """The lower limb (thigh + knee + shin + foot) in kneeling position.
 
-        The shin extends from the knee (touching the ground) to the ankle,
-        lying flat on the ground line. The anterior shin bone ridge faces
-        upward, the calf muscle curves downward. The popliteal crease
-        (skin fold behind the knee) is engraved as anatomical detail.
+        Uses the complete lower limb outline from SHIN_OUTLINE_POINTS, which
+        contains the thigh, knee bend, shin, and foot as one continuous shape.
+        The outline is transformed so that:
+        - The thigh top connects to the hip
+        - The knee is at ground level
+        - The shin lies flat on the ground from knee to ankle
+        - The foot extends from the ankle
 
-        The shin is drawn as its own filled shape using SHIN_PROFILE_TOP,
-        which defines the height of the top edge at each position along the
-        shin. The bottom edge follows the ground line.
+        The popliteal crease (skin fold behind the knee) is engraved as
+        anatomical detail.
         """
         k = width / 52.0
         ground = profile.ground
@@ -611,32 +613,58 @@ class Drawer:
         ankle_x = profile.arch_x  # Ankle is at the arch position
         run = (ankle_x - knee_x) * step
 
-        # Get the bar height at knee and ankle
-        bar_height_knee = profile.top(knee_x)
-        bar_height_ankle = profile.top(ankle_x)
-
-        # Draw the shin shape using SHIN_PROFILE_TOP as a 1D profile.
-        # The profile gives the height of the top edge at each fraction along the shin.
-        # We create a polygon that goes from knee to ankle along the top edge,
-        # then back from ankle to knee along the ground.
+        # Original outline dimensions (from shin_outline.svg)
+        # Bounding box: x=[131, 1354], y=[0, 611]
+        # The outline contains: thigh (x~131-400), knee (x~400), shin (x~400-1000), foot (x~1000-1354)
+        original_x_min = 131.0
+        original_x_max = 1354.0
+        original_y_min = 0.0
+        original_y_max = 611.0
+        original_width = original_x_max - original_x_min
+        original_height = original_y_max - original_y_min
         
-        shin_top = []
-        shin_bottom = []
+        # Target dimensions
+        # The shin portion (x~400-1000 in original) should span from knee_x to ankle_x
+        # The thigh portion (x~131-400 in original) should connect to the hip
+        # The foot portion (x~1000-1354 in original) should extend from ankle_x
         
-        # Build the top edge
-        for frac, height in SHIN_PROFILE_TOP:
-            x = knee_x + step * frac * abs(run)
-            bar_height = bar_height_knee + frac * (bar_height_ankle - bar_height_knee)
-            y = ground + height * (bar_height - ground)
-            shin_top.append((x, y))
+        # For now, use uniform scaling to fit the entire outline
+        # Scale to fit the available width (knee to ankle + some extra for thigh and foot)
+        target_width = abs(run) * 1.5  # Extra space for thigh and foot
+        target_height = profile.top(knee_x) - ground  # Available height
         
-        # Build the bottom edge (at ground level, reversed)
-        for frac, height in reversed(SHIN_PROFILE_TOP):
-            x = knee_x + step * frac * abs(run)
-            shin_bottom.append((x, ground))
+        # Use uniform scaling to preserve aspect ratio
+        scale_x = target_width / original_width
+        scale_y = target_height / original_height
+        uniform_scale = min(scale_x, scale_y)
         
-        # Combine to form a closed polygon
-        shin_outline = shin_top + shin_bottom
+        # Calculate the actual dimensions after scaling
+        scaled_width = original_width * uniform_scale
+        scaled_height = original_height * uniform_scale
+        
+        # Position the outline
+        # The knee in the original outline is around x=400
+        # We want the knee to be at knee_x in the glyph
+        original_knee_x = 400.0
+        knee_offset_x = knee_x - (original_knee_x - original_x_min) * uniform_scale * step
+        
+        # The ground in the original outline is around y=611 (bottom)
+        # We want the ground to be at 'ground' in the glyph
+        ground_offset_y = ground - (original_y_max * uniform_scale)
+        
+        # Transform the outline
+        shin_outline = []
+        for x, y in SHIN_OUTLINE_POINTS:
+            # Normalize to [0, 1]
+            norm_x = (x - original_x_min) / original_width
+            norm_y = (y - original_y_min) / original_height
+            
+            # Apply uniform scale and position
+            new_x = knee_offset_x + norm_x * scaled_width * step
+            # Invert y (SVG y goes down, we want y to go up from ground)
+            new_y = ground_offset_y + (1.0 - norm_y) * scaled_height
+            
+            shin_outline.append((new_x, new_y))
         
         # Draw the shin shape as filled geometry
         if len(shin_outline) >= 3:
