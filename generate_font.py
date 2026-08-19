@@ -1355,7 +1355,29 @@ def pose(letter: str) -> Drawer:
     elif letter == "C":
         # Historical kneeling back-arch: face inside the upper-left opening,
         # arms over the top, and paired shins running right along the ground.
-        d.torso([(205, 205), (165, 325), (180, 455), (235, 555)], 90, True)
+        # The print's lower-left is a full rounded breech, not a tucked-in
+        # waist handing off to two skinny thighs. The previous hip sat
+        # inward of the waist, so the outer C kinked and the inner counter
+        # notched where the torso cap met the legs.
+        hip = (176, 224)
+        spine = [(235, 555), (176, 458), (152, 344), hip]
+        # Coat stays near torso width; the stroke itself widens into the
+        # breeches so the hip is a swell of the C, not a ball stuck on it.
+        d.tapered_path(spine, [86, 84, 90, 118], True)
+        segments, length = d.centerline_measurements(spine)
+        d.anatomy.append({
+            "part": "torso", "segments": segments, "length": length,
+            "points": spine,
+        })
+        # Elongated breech, long axis along the spine. Fills the outer
+        # curve and the inner notch without reading as a separate blob.
+        d.ellipse(158, 228, 72, 48, -1.18)
+        d.ellipse(186, 206, 40, 34, -0.85)
+        # Fillets at the hip-to-thigh handover: the inner counter was a
+        # notch, and the outer curve dented where the ellipse met the
+        # breeches stroke.
+        d.ellipse(214, 216, 40, 32, -0.55)
+        d.ellipse(176, 176, 46, 34, -0.22)
         d.head(245, 555, 1, 0.18)
         # The arms taper toward the wrist and finish in modelled hands rather
         # than a round terminal: a plain circle at the tip came out wider than
@@ -1388,8 +1410,14 @@ def pose(letter: str) -> Drawer:
             d.cut_path([
                 (wx + 2, wy - 4), (wx + 12, wy - 14), (wx + 20, wy - 20),
             ], 3.4, True)
-        d.leg([(205, 210), (315, 115), (555, 105)], 58, knee_index=1)
-        d.leg([(225, 210), (335, 145), (525, 140)], 46, knee_index=1)
+        d.leg(
+            [(hip[0] + 6, hip[1] + 4), (328, 118), (555, 105)],
+            58, knee_index=1, breeches_width=80,
+        )
+        d.leg(
+            [(hip[0] + 26, hip[1] + 10), (348, 150), (525, 140)],
+            48, knee_index=1, breeches_width=66,
+        )
 
     elif letter == "D":
         # Deep backbend over a kneeling stance. Chest, hips and thighs stack
