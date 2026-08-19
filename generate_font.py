@@ -27,6 +27,7 @@ from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
+from yoga_b_outline_points import YOGA_B_HOLES, YOGA_B_OUTLINE_POINTS
 from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
 from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
 
@@ -1260,69 +1261,25 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "B":
-        # Print's B: a crouched standing figure, not an I-stem with a hat
-        # on top. The head sits at the upper-left — the cocked hat is the
-        # top-left of the letter — and both arms loop out to clasp at the
-        # right, closing the upper bowl. The standing leg is the left stem;
-        # the other leg lifts, bows out at the knee and tucks its foot back
-        # onto the toe beside the standing ankle, closing the lower bowl.
-        # The previous build used one rubbery arm to the waist and left the
-        # far arm hanging unused, which the print does not show.
-        stem_x = 210
-        hip_y = 400
-        d.head(stem_x - 2, 636, 1, -0.06)
-        d.path([(stem_x + 6, 580), (stem_x + 4, 598)], 50, False, False, track=False)
-        d.torso([(stem_x + 6, 576), (stem_x - 6, 488), (stem_x + 6, hip_y)], 86, True)
-        # Hip / breech bulge on the left of the stem, as in the print.
-        d.ellipse(stem_x - 16, hip_y + 12, 44, 48, 0.30)
-        d.ellipse(stem_x, hip_y - 6, 38, 36, 0.12)
-        # Upper bowl: both arms. The high arm leaves the shoulder below the
-        # head, rises to hat height and turns down to the clasp. The low
-        # arm leaves the chest and rises to meet it, so the two bowls of
-        # the B stack instead of the upper one swallowing the letter.
-        shoulder = (stem_x + 42, 586)
-        clasp = (438, 528)
-        upper_draw = [shoulder, (318, 662), (416, 652), clasp]
-        lower_draw = [(stem_x + 30, 536), (328, 498), (392, 504), clasp]
-        d.tapered_path(upper_draw, [44, 38, 34, 28], True)
-        d.tapered_path(lower_draw, [42, 36, 32, 28], True)
-        upper_arm = [shoulder, (360, 658), clasp]
-        lower_arm = [(stem_x + 30, 536), (348, 500), clasp]
-        for arm, root_r in ((upper_arm, 22), (lower_arm, 20)):
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], root_r)
-        d.circle(416, 646, 17)
-        d.circle(348, 502, 16)
-        d.cut_path([(408, 664), (426, 646), (420, 624)], 3.6, True)
-        d.cut_path([(334, 516), (354, 500), (350, 482)], 3.4, True)
-        # Clasped hands: a solid mass split by one thin seam, as on A/H.
-        d.ellipse(clasp[0] + 12, clasp[1] + 2, 28, 24, 0.70)
-        d.cut_path([
-            (clasp[0] - 2, clasp[1] + 18),
-            (clasp[0] + 14, clasp[1] + 2),
-            (clasp[0] + 10, clasp[1] - 16),
-        ], 4.4, True)
-        # Standing leg: crouched, slightly bent. Shoe points right.
-        d.leg(
-            [(stem_x - 12, hip_y + 4), (stem_x - 26, 232), (stem_x + 8, 66)], 52,
-            knee_index=1, breeches_width=62, shoe_direction=(1, -0.08),
-        )
-        # Lower bowl: thigh bows out almost level, knee is the lower-right
-        # bulge, calf comes back so the foot stands on the toe beside the
-        # standing shoe.
-        lifted_hip = (stem_x + 30, hip_y + 4)
-        lifted_knee = (444, 268)
-        lifted_ankle = (296, 78)
-        d.leg(
-            [lifted_hip, (344, 368), lifted_knee, lifted_ankle],
-            56, knee_index=2, breeches_width=74, shoe_scale=0.0,
-            anatomy_points=[lifted_hip, lifted_knee, lifted_ankle],
-        )
-        d.shoe(lifted_ankle[0], lifted_ankle[1], lifted_knee, (0.58, -0.81), 0.64)
+        # Editorial yoga-alphabet B, imported like L. Seen from behind:
+        # the standing leg and torso are the stem, the hand-on-hip
+        # elbow is the upper bowl, and the bent knee is the lower bowl.
+        pts = YOGA_B_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_B_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "C":
         # Historical kneeling back-arch: face inside the upper-left opening,
