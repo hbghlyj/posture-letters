@@ -1807,96 +1807,67 @@ def pose(letter: str) -> Drawer:
         d.kneeling_shin(bar, 478, 52, torso_width=torso_width, hip_x=hip[0], hip_y=hip[1])
 
     elif letter == "K":
-        # Cartwheel K: the figure balances sideways on one hand. The head lies
-        # horizontally out to the left of the shoulders, anchoring the node
-        # where every branch meets. Both arms run vertically from that node —
-        # one down to the planted hand, one up into the air — and together they
-        # make the whole left stem. They are drawn equal in length, each with a
-        # marked elbow, and noticeably slimmer than the legs; a handstand
-        # stretches them, but they no longer outweigh the branches. Each hand
-        # flexes at the wrist into a horizontal serif. The legs split from the
-        # hips to the right: one up and out as the northeast branch with the
-        # foot flexed up at the ankle, the other down and out as the southeast
-        # branch with the foot planted flat on the ground.
-        stem_x = 214
-        node = (stem_x, 424)
-        # Head extends straight left from the shoulders, facing sideways.
-        d.path([(stem_x - 8, node[1] + 2), (168, 426)], 42, False, False,
-               track=False)
-        d.head(122, 428, -1)
-        # Left arm: down from the shoulder through a marked elbow to the floor.
-        # Upper arm and forearm are the same length, as in a real skeleton.
-        down_elbow = (stem_x, 243)
-        down_arm = [(stem_x, node[1] - 34), (down_elbow[0], down_elbow[1]),
-                    (stem_x, 96)]
-        d.tapered_path(down_arm, [38, 33, 28], True)
-        segments, length = d.centerline_measurements(down_arm)
+        # Standing profile K, matching the print. Head, upright torso and the
+        # planted standing leg make the left stem. The near arm reaches up and
+        # out as the upper branch, ending in a pointing hand. The other leg
+        # kicks down and out from the hip as the lower branch, foot planted.
+        # The previous build was a cartwheel on one hand, which the print
+        # does not show.
+        stem_x = 196
+        hip_y = 448
+        d.head(stem_x + 8, 718, 1)
+        d.torso([(stem_x, 658), (stem_x, 554), (stem_x, hip_y)], 82, False)
+        # Far arm hangs along the stem, blending into the pillar.
+        far_arm = [(stem_x - 28, 622), (stem_x - 34, 530), (stem_x - 30, 448)]
+        d.path(far_arm, 26, True, False, track=False)
+        d.circle(far_arm[-1][0], far_arm[-1][1], 14)
+        # Upper branch: the pointing arm. Shoulder, elbow, wrist — a real
+        # reach, not a rubber stroke.
+        shoulder = (stem_x + 28, 624)
+        elbow = (338, 698)
+        wrist = (478, 748)
+        arm = [shoulder, elbow, wrist]
+        d.tapered_path(arm, [40, 34, 28], True)
+        segments, length = d.centerline_measurements(arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
-            "points": down_arm,
+            "points": arm,
         })
-        d.circle(down_arm[0][0], down_arm[0][1], 20)
-        d.circle(down_elbow[0], down_elbow[1], 18)
+        d.circle(shoulder[0], shoulder[1], 21)
+        d.circle(elbow[0], elbow[1], 18)
         d.cut_path([
-            (stem_x + 15, down_elbow[1] + 16), (stem_x + 19, down_elbow[1]),
-            (stem_x + 13, down_elbow[1] - 16),
-        ], 3.8, True)
-        # Bottom-left serif: the wrist flexes ninety degrees and the hand lies
-        # flat on the floor with the fingers spread wide.
-        d.ellipse(stem_x - 6, 84, 24, 19, 0.0)
-        for fy in (100, 84, 68):
-            d.polygon([
-                (stem_x - 8, fy + 7), (stem_x - 8, fy - 7),
-                (stem_x - 82, fy - 6), (stem_x - 82, fy + 6),
-            ])
-        for fy in (92, 76):
-            d.cut_path([(stem_x - 18, fy), (stem_x - 74, fy)], 3.2, False)
-        # Right arm: up from the shoulder through its own elbow, in line.
-        up_elbow = (stem_x, 605)
-        up_arm = [(stem_x, node[1] + 38), (up_elbow[0], up_elbow[1]),
-                  (stem_x, 752)]
-        d.tapered_path(up_arm, [36, 31, 26], True)
-        segments, length = d.centerline_measurements(up_arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": up_arm,
-        })
-        d.circle(up_elbow[0], up_elbow[1], 17)
-        d.cut_path([
-            (stem_x + 14, up_elbow[1] - 15), (stem_x + 18, up_elbow[1]),
-            (stem_x + 12, up_elbow[1] + 15),
+            (elbow[0] + 6, elbow[1] + 16), (elbow[0] + 16, elbow[1] + 2),
+            (elbow[0] + 8, elbow[1] - 14),
         ], 3.6, True)
-        # Top-left serif: the wrist bends sharply, flexing the hand out left.
-        d.ellipse(stem_x - 6, 764, 22, 18, 0.0)
-        for fy in (777, 762, 747):
-            d.polygon([
-                (stem_x - 8, fy + 6), (stem_x - 8, fy - 6),
-                (stem_x - 74, fy - 5), (stem_x - 74, fy + 5),
-            ])
-        d.cut_path([(stem_x - 18, 769), (stem_x - 66, 769)], 3.0, False)
-        # Short torso carrying the hips a little right of the node.
-        d.torso([node, (268, 422), (306, 420)], 78, False)
-        # Upper diagonal: the right leg splits up and out, knee straight.
-        d.leg(
-            [(312, 442), (420, 552), (528, 662)], 52,
-            knee_index=1, breeches_width=60, shoe_scale=0.0,
+        # Pointing hand: index out as the terminal, the other fingers folded.
+        d.ellipse(wrist[0] + 6, wrist[1] + 2, 18, 14, 0.28)
+        d.tapered_path(
+            [(wrist[0] + 10, wrist[1] + 4), (wrist[0] + 48, wrist[1] + 16),
+             (wrist[0] + 78, wrist[1] + 22)],
+            [16, 12, 7], True,
         )
-        # The foot flexes up at the ankle: vertical terminal at the upper tip.
-        d.path([(536, 668), (552, 744)], 36, False, False, track=False)
-        d.ellipse(554, 754, 16, 17, 0.10)
-        d.cut_path([(528, 694), (558, 700)], 3.2, False)
-        # Lower diagonal: the left leg drives down and out to the lower right.
+        d.polygon([
+            (wrist[0] + 4, wrist[1] - 6), (wrist[0] + 18, wrist[1] - 18),
+            (wrist[0] + 24, wrist[1] - 12), (wrist[0] + 12, wrist[1] + 2),
+        ])
+        d.cut_path([(wrist[0] - 4, wrist[1] + 10), (wrist[0] + 8, wrist[1] - 6)],
+                   3.0, False)
+        # Standing leg: continues the stem to the baseline.
         d.leg(
-            [(312, 398), (428, 282), (552, 160)], 54,
-            knee_index=1, breeches_width=62, shoe_scale=0.0,
+            [(stem_x - 16, hip_y), (stem_x - 18, 252), (stem_x - 14, 56)], 52,
+            knee_index=1, breeches_width=58, shoe_direction=(1, 0),
         )
-        # The foot plants flat, heel and arch resting on the ground.
-        d.ellipse(566, 144, 22, 18, -0.42)
-        for dx, dy in ((20, -8), (16, -19), (6, -27)):
+        # Lower branch: the kicked leg, knee clearly bent, foot planted right.
+        d.leg(
+            [(stem_x + 20, hip_y - 8), (348, 292), (518, 72)], 54,
+            knee_index=1, breeches_width=64, shoe_scale=0.0,
+        )
+        d.ellipse(534, 64, 22, 16, -0.28)
+        for dx, dy in ((20, -2), (18, -12), (10, -20)):
             d.polygon([
-                (562, 148), (566 + dx, 144 + dy), (570 + dx, 152 + dy),
+                (530, 66), (534 + dx, 64 + dy), (538 + dx, 72 + dy),
             ])
-        d.cut_path([(549, 152), (566, 138), (576, 122)], 3.2, True)
+        d.cut_path([(518, 70), (534, 56), (542, 44)], 3.2, True)
 
     elif letter == "L":
         # Kneeling side profile, imported as a traced silhouette rather than
@@ -2910,3 +2881,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 # Reordered SHIN_PROFILE - starts at knee (frac near 0, height near 0)
+
