@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-"""Load shin profile from SVG file."""
-import re
-from pathlib import Path
-
-def load_profile_from_svg(svg_path):
-    """Load normalized profile points from an SVG file."""
-=======
 """Load shin outline from SVG file."""
 import re
 from pathlib import Path
 
 def load_outline_from_svg(svg_path):
     """Load 2D outline points from an SVG file."""
->>>>>>> fc16874 (Fix shin height profile by using top edge profile instead of 2D outline)
     with open(svg_path) as f:
         svg = f.read()
     
@@ -42,39 +33,12 @@ def load_outline_from_svg(svg_path):
             points.append((x, y))
             i += 2
     
-<<<<<<< HEAD
-    # Normalize to 0-1 range
-    xs = [x for x, y in points]
-    ys = [y for x, y in points]
-    x_min, x_max = min(xs), max(xs)
-    y_min, y_max = min(ys), max(ys)
-    x_range = x_max - x_min
-    y_range = y_max - y_min
-    
-    normalized = []
-    for x, y in points:
-        nx = (x - x_min) / x_range
-        ny = 1.0 - (y - y_min) / y_range  # Invert Y
-        normalized.append((nx, ny))
-    
-    return normalized
-
-# Load profile from SVG file
-ROOT = Path(__file__).resolve().parent
-SHIN_PROFILE = load_profile_from_svg(ROOT / 'shin_outline.svg')
-
-# Reorder to start at knee
-shin_knee_candidates = [(i, frac, height) for i, (frac, height) in enumerate(SHIN_PROFILE) 
-                        if frac < 0.15 and height < 0.15]
-if shin_knee_candidates:
-    shin_knee_idx = min(shin_knee_candidates, key=lambda x: x[1] + x[2])[0]
-    SHIN_PROFILE = SHIN_PROFILE[shin_knee_idx:] + SHIN_PROFILE[:shin_knee_idx]
-=======
     return points
 
 # Load outline from SVG file
 ROOT = Path(__file__).resolve().parent
 SHIN_OUTLINE_POINTS = load_outline_from_svg(ROOT / 'shin_outline.svg')
+
 # Top edge profile of shin outline
 # (fraction_along_shin, height_from_bottom) where 0=bottom, 1=top
 SHIN_PROFILE_TOP = [
@@ -725,7 +689,3 @@ SHIN_PROFILE_TOP = [
     (0.999182, 0.049100),
     (1.000000, 0.045827),
 ]
-
-# Load the top edge profile
-exec(open('shin_profile_top.py').read())
->>>>>>> fc16874 (Fix shin height profile by using top edge profile instead of 2D outline)
