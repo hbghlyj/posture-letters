@@ -1515,46 +1515,65 @@ def pose(letter: str) -> Drawer:
         # in the upward heel serif. L reuses this same component.
         merge_transformed(d, kneeling_base(stem_x, hip_y))
     elif letter == "F":
-        # Upright F built from both arms. Head, torso and two tightly parallel
-        # legs make the vertical trunk; the near arm reaches straight out from
-        # the shoulder as the longer top bar, and the far arm crosses the front
-        # of the chest and reaches out lower down, dead parallel to it, as the
-        # slightly shorter middle bar. Both feet face forward at the base.
+        # Standing F on I's body ratios. The previous build had a 256 torso
+        # over 368-unit legs and two rubber arms (406 and 306) — the top one
+        # nearly twice a real arm, the middle one almost at the hip. The print
+        # is an ordinary standing figure: hips near mid-stem, a normal reach
+        # for the top prong, and a short forearm across the chest for the
+        # middle one.
         stem_x = 172
-        top_y = 646
-        mid_y = 470
-        d.head(stem_x, 748, 1)
-        d.torso([(stem_x, 684), (stem_x, 556), (stem_x, 428)], 86, False)
-        # Top bar: the near arm straight out from the shoulder line.
-        for bar_y, reach, width in ((top_y, 600, 46), (mid_y, 500, 42)):
-            arm = [(stem_x + 22, bar_y), (stem_x + 200, bar_y), (reach, bar_y)]
-            d.path(arm, width, False, False, track=False)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], width // 2 + 2)
-            # Open hand at the end of each prong.
-            d.ellipse(reach + 12, bar_y, 20, width * 0.46, 0.0)
-            d.cut_path([
-                (reach - 4, bar_y - 14), (reach - 4, bar_y + 14),
-            ], 3.6, False)
-        # The far arm crosses the chest before running out: a short engraved
-        # seam marks where it passes over the trunk.
+        hip_y = 450
+        d.head(stem_x, 742, 1)
+        d.torso([(stem_x, 675), (stem_x, 562), (stem_x, hip_y)], 80, False)
+        # Top prong: a real arm straight out from the shoulder. Length matches
+        # I's hanging arm (~274) instead of stretching past 400.
+        top_y = 638
+        top_reach = stem_x + 296
+        top_arm = [(stem_x + 22, top_y), (stem_x + 160, top_y), (top_reach, top_y)]
+        d.path(top_arm, 42, False, False, track=False)
+        segments, length = d.centerline_measurements(top_arm)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": top_arm,
+        })
+        d.circle(top_arm[0][0], top_arm[0][1], 23)
+        # Hand at the tip, fingers slightly down as in the print — a serif
+        # without turning the bar into T's hanging terminal.
+        d.ellipse(top_reach + 10, top_y - 4, 20, 16, -0.15)
+        d.tapered_path(
+            [(top_reach + 6, top_y - 2), (top_reach + 14, top_y - 22),
+             (top_reach + 16, top_y - 38)],
+            [22, 16, 11], True,
+        )
+        d.cut_path([(top_reach - 6, top_y - 12), (top_reach - 6, top_y + 12)], 3.4, False)
+        # Middle prong: the far arm crosses the chest and throws only the
+        # forearm out, so the bar sits at chest height and stays short —
+        # the print's hand barely clears the torso.
+        mid_y = 548
+        mid_reach = stem_x + 168
+        mid_arm = [(stem_x + 18, mid_y), (stem_x + 92, mid_y), (mid_reach, mid_y)]
+        d.path(mid_arm, 36, False, False, track=False)
+        segments, length = d.centerline_measurements(mid_arm)
+        d.anatomy.append({
+            "part": "limb", "segments": segments, "length": length,
+            "points": mid_arm,
+        })
+        d.circle(mid_arm[0][0], mid_arm[0][1], 19)
+        d.ellipse(mid_reach + 8, mid_y, 16, 15, 0.0)
+        d.cut_path([(mid_reach - 6, mid_y - 12), (mid_reach - 6, mid_y + 12)], 3.2, False)
+        # Seam where the far arm crosses the trunk.
         d.cut_path([
-            (stem_x - 18, mid_y + 34), (stem_x + 4, mid_y + 12),
-            (stem_x + 8, mid_y - 16),
-        ], 4.2, True)
-        # Tightly parallel legs. The feet flare out left and right at the base
-        # as foot serifs, matching I, P and T; pointing them forward gave the
-        # stem a blunt end with no terminal.
+            (stem_x - 16, mid_y + 28), (stem_x + 4, mid_y + 8),
+            (stem_x + 8, mid_y - 14),
+        ], 4.0, True)
+        # Legs match I: ~400 units, hip at 450, so the trunk is no longer
+        # longer than the thigh. Feet flare as serifs, like I, P and T.
         d.leg(
-            [(stem_x - 18, 430), (stem_x - 22, 244), (stem_x - 26, 62)], 50,
+            [(stem_x - 18, 455), (stem_x - 22, 255), (stem_x - 26, 55)], 50,
             knee_index=1, breeches_width=56, shoe_direction=(-1, 0)
         )
         d.leg(
-            [(stem_x + 18, 430), (stem_x + 22, 244), (stem_x + 26, 62)], 50,
+            [(stem_x + 18, 455), (stem_x + 22, 255), (stem_x + 26, 55)], 50,
             knee_index=1, breeches_width=56, shoe_direction=(1, 0)
         )
 
