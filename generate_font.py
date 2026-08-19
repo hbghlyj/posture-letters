@@ -1766,24 +1766,20 @@ def pose(letter: str) -> Drawer:
         ])
 
     elif letter == "T":
-        # Editorial yoga-alphabet T, imported like L. A handstand: the
-        # legs split into a wide horizontal line as the crossbar, the
-        # inverted torso over straight vertical arms as the stem. This
-        # pose is wider than it is tall, so it is fitted to the cap
-        # width rather than the cap height; scaling the height instead
-        # would throw the crossbar far past Q, the widest glyph.
+        # Editorial yoga-alphabet T, imported like L. Standing upright
+        # seen from behind: legs together as the vertical stem, both arms
+        # stretched straight out level with the shoulders as the bar.
         pts = YOGA_T_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
-        left, right = min(xs), max(xs)
-        top, bottom = min(ys), max(ys)
-        scale = 820.0 / (right - left)
-        height = (bottom - top) * scale
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
 
         def placed(x: float, y: float) -> Point:
             return (
                 SIDEBEARING + (x - left) * scale,
-                788.0 - height + (bottom - y) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
 
         d.polygon([placed(x, y) for x, y in pts])
