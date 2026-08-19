@@ -591,7 +591,7 @@ class Drawer:
             self.polygon(foot_outline)
 
     def kneeling_shin(
-        self, profile: BarProfile, knee_x: float, width: float, torso_width: float = 84.0,
+        self, profile: BarProfile, knee_x: float, width: float, torso_width: float = 84.0, hip_y: float = 300.0,
     ) -> None:
         """The lower limb (thigh + knee + shin + foot) in kneeling position.
 
@@ -637,33 +637,48 @@ class Drawer:
         scaled_width = original_width * uniform_scale
         scaled_height = original_height * uniform_scale
         
-        # Position the outline
-        # The thigh top in the original outline is around x=131, y=249 (top-left of thigh)
-        # We want this to connect to the hip
-        # The knee in the original outline is around x=400
-        # We want the knee to be at knee_x in the glyph
-        original_knee_x = 400.0
-        original_thigh_top_x = 131.0
-        original_thigh_top_y = 249.0
+        # Position the outline so the hip connection point connects to the hip
+        # The hip connection in the original outline is around x=131, y=63 (top-left of thigh)
+        # After scaling, this becomes x=0, y=19.7 (from the top)
         
-        # Calculate offset so thigh top connects to hip
-        # The hip is at (stem_x, hip_y) in the glyph
-        # We need to know the hip position - it's passed implicitly via knee_x and the bar profile
-        # For L, the hip is at (208, 134) and knee_x is 246
-        # The thigh top should connect to the hip
+        # We need to position the outline so the thigh top connects to the hip
+        # For J, the hip is at (stem_x, 300) = (452, 300)
+        # For L, the hip is at (stem_x, 134) = (208, 134)
         
-        # Calculate the scaled position of the thigh top
-        scaled_thigh_top_x = (original_thigh_top_x - original_x_min) * uniform_scale
-        scaled_thigh_top_y = (original_thigh_top_y - original_y_min) * uniform_scale
+        # We can infer stem_x from the knee_x and the bar profile
+        # For J: knee_x = 478, and the hip is at stem_x = 452 (26 units to the left)
+        # For L: knee_x = 246, and the hip is at stem_x = 208 (38 units to the left)
         
-        # The knee should be at knee_x, ground level
-        # Calculate offset based on knee position
-        scaled_knee_x = (original_knee_x - original_x_min) * uniform_scale
-        knee_offset_x = knee_x - scaled_knee_x * step
+        # The offset from knee to hip depends on the letter
+        # For J: hip_x = knee_x - 26
+        # For L: hip_x = knee_x - 38
         
-        # The ground in the original outline is around y=611 (bottom)
-        # We want the ground to be at 'ground' in the glyph
-        ground_offset_y = ground - (original_y_max * uniform_scale)
+        # We can use a heuristic: the hip is typically at knee_x - (torso_width / 2)
+        # For torso_width = 84, this gives hip_x = knee_x - 42
+        
+        # Let's use this heuristic for x positioning
+        hip_x = knee_x - torso_width / 2
+        
+        # The thigh top in the scaled outline is at x=0
+        # We want it to be at hip_x in the glyph
+        # So the offset is: knee_offset_x = hip_x (since thigh top is at x=0)
+        knee_offset_x = hip_x
+        
+        # For y positioning, we need the thigh top to be at the hip y-coordinate
+        # The thigh top in the original is at y=0 (the very top of the outline)
+        # After scaling and inverting, it's at: (611 - 0) * uniform_scale = 611 * uniform_scale from the ground
+        # We want this to be at hip_y
+        # So: ground_offset_y = hip_y - (611 * uniform_scale)
+        
+        # The thigh top y in the original outline (minimum y)
+        original_thigh_top_y = 0.0
+        
+        # Calculate the scaled position of the thigh top (from the bottom/ground)
+        scaled_thigh_top_y_from_ground = (original_y_max - original_thigh_top_y) * uniform_scale
+        
+        # We want the thigh top to be at hip_y in the glyph
+        # So: ground_offset_y = hip_y - scaled_thigh_top_y_from_ground
+        ground_offset_y = hip_y - scaled_thigh_top_y_from_ground
         
         # Transform the outline
         shin_outline = []
@@ -1776,7 +1791,7 @@ def pose(letter: str) -> Drawer:
             calf_x=241,
         )
         # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
-        d.kneeling_shin(bar, 478, 52, torso_width=torso_width)
+        d.kneeling_shin(bar, 478, 52, torso_width=torso_width, hip_y=hip[1])
 
     elif letter == "K":
         # Cartwheel K: the figure balances sideways on one hand. The head lies
@@ -1915,7 +1930,7 @@ def pose(letter: str) -> Drawer:
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
         )
         # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
-        d.kneeling_shin(bar, 246.0, 54, torso_width=torso_width)
+        d.kneeling_shin(bar, 246.0, 54, torso_width=torso_width, hip_y=hip[1])
         # The corner fillet that used to sit here is gone with the cause it
         # patched. It spanned the baseline up to y=129 because the bar's sole
         # settled that high, so the trunk's foot stood clear underneath the
