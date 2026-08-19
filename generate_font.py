@@ -1733,9 +1733,9 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "W":
-        # Reference-conditioned reconstruction of the 1782 W topology,
-        # imported like L. The gymnast hinges forward so the compact head and
-        # shoulders make the centre peak. Arms overlap the long inner thighs;
+        # Traced gymnast W, imported like L. The figure hinges forward so the
+        # compact head and shoulders make the centre peak. Arms overlap the
+        # long inner thighs;
         # concealed grounded knees make uncarved low vertices; naturally
         # shorter calves stay visibly slimmer than the muscular thighs as they
         # taper to forward-facing ankles, then the pointed feet
