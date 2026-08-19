@@ -1,7 +1,9 @@
-# Historical reference crops
+# Pose references
 
-The 1782 print contains 24 letter cells: A–I, K–T, V–Z; J and U are absent.
+Current letter construction comes mostly from modern gymnast and yoga
+photographs. The older print-cell crops in `pose/` are retained for
+comparison, not as the construction source.
 
-- `full/`: complete cells including each rhyme.
-- `pose/`: enlarged pose-and-label crops for anatomical review.
-- `review-*.png`: eight-pose review sheets.
+- `pose/`: earlier enlarged letter crops
+- `two-way-stretch/`: modern photographic and silhouette sources
+- `historical-pose-map.md`: per-letter construction notes

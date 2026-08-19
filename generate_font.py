@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Build Posture Master, a deliberately bendy human-alphabet display font.
 
-The design is an original geometric reinterpretation of the supplied
-18th-century posture-master print. All outlines are generated from simple
-body-part primitives so the font remains editable and reproducible.
+Most letterforms are traced from modern gymnast and yoga photographs.
+A few remaining constructed glyphs still use body-part primitives.
 """
 from __future__ import annotations
 
@@ -1934,7 +1933,7 @@ def build_font() -> tuple[dict[str, Drawer], Path]:
             "psName": "PostureMaster-Regular",
             "version": "Version 1.000",
             "description": "A comic body alphabet with anatomical hat-and-shoe serifs.",
-            "designer": "Designed on Arena.ai from a user-supplied 18th-century reference",
+            "designer": "Designed on Arena.ai from modern gymnast and yoga references",
             "licenseDescription": "Original generated outlines; free to use and modify.",
         }
     )
