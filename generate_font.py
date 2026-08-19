@@ -14,7 +14,6 @@ from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
-from profile_loader import LOWER_LIMB_OUTLINE_POINTS
 from outline_points import LETTERS
 
 ROOT = Path(__file__).resolve().parent
