@@ -38,6 +38,11 @@ Crops kept here:
 - `U.png` - photographic study matching the current U construction: a
   side-profile gymnast lying on the back, arms rising as one stem and
   joined legs rising as the other, with a rounded hip-and-torso bowl.
+- `V.png` - current high-resolution photographic reference for the
+  shipped V. Two equal legs rise from a compact rounded buttocks apex
+  as the strokes of a capital V, with natural thigh-to-calf taper and
+  outward-turned shod feet as the upper terminals. The photograph is
+  converted to a one-piece silhouette before tracing.
 - `image_6a52f7c6.png` - current high-resolution silhouette source for
   the shipped U. Both arms rise as the left stem and finish in a compact
   inward hand serif; the rounded hips and torso make the bowl; both
