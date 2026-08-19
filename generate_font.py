@@ -1488,80 +1488,89 @@ def pose(letter: str) -> Drawer:
         ], 6.5, True)
 
     elif letter == "E":
-        # Kneeling E, coordinated limb by limb from the source figure. The
-        # torso is turned to her right into a partial side profile and stands
-        # dead vertical as the spine of the letter. The right arm is rotated
-        # fully at the shoulder and arches over the crown of the head to make
-        # the upper prong, and at its tip the hand droops straight down as the
-        # top-right serif. The head is nestled directly beneath that arch,
-        # tilted forward and facing to her right. The left arm hangs down the
-        # flank, flexes about ninety degrees at the elbow and throws the
-        # forearm out horizontally as the middle prong, set at the height that
-        # halves the counter. The figure has dropped into a deep kneel so the
-        # shins lie flat along the ground as the lower prong, and at the back
-        # of that stroke the heels flex up into a sharp bottom-right serif.
-        stem_x = 172
-        hip_y = 306
-        d.torso([(stem_x, hip_y), (stem_x, 452), (stem_x, 598)], 84, False)
-        # Upper prong: the right arm rotated up out of the shoulder, then
-        # arching over the crown and running right. The whole arch sits above
-        # the torso's own end, so the limb reads clear of the trunk without
-        # needing a seam (an engraved seam is cancelled where fills stack).
-        upper = [(158, 592), (146, 686), (316, 740), (512, 734)]
-        d.path(upper[:2], 42, False, False, track=False)
-        d.path(upper[1:], 38, True, False, track=False)
-        segments, length = d.centerline_measurements(upper)
+        # Print's E: a seated figure, not a kneeling I-stem with an arm
+        # arched over a bare head. The cocked hat is the top-left; the
+        # near arm runs straight out from the shoulder at hat height as
+        # the top prong, hand drooping at the tip; the far arm throws
+        # the forearm out at chest height as the shorter middle prong;
+        # the sitting breech is the bottom-left, and both legs extend
+        # right as the bottom bar, feet pointing up-right.
+        stem_x = 214
+        hip_y = 222
+        d.head(stem_x - 4, 528, 1, -0.10)
+        # Slight recline, as in the print — not a standing I-stem.
+        d.torso(
+            [(stem_x + 14, 470), (stem_x - 2, 346), (stem_x - 8, hip_y)],
+            82, True,
+        )
+        # Sitting breech, elongated along the sit so it is the bottom-left
+        # of the E rather than a ball stuck on the hip.
+        d.ellipse(stem_x - 18, hip_y - 28, 54, 52, 0.55)
+        d.ellipse(stem_x + 10, hip_y - 48, 50, 38, 0.20)
+        d.ellipse(stem_x - 6, hip_y - 68, 42, 34, 0.05)
+        # Top prong: a real arm straight out from the shoulder, at hat
+        # height — not an arch over the crown.
+        shoulder = (stem_x + 42, 478)
+        top_wrist = (500, 486)
+        top_arm = [shoulder, (356, 492), top_wrist]
+        d.tapered_path(top_arm, [42, 36, 30], True)
+        segments, length = d.centerline_measurements(top_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
-            "points": upper,
+            "points": top_arm,
         })
-        # Shoulder ball and deltoid, and the elbow mass at the top of the arch.
-        d.circle(upper[0][0], upper[0][1], 22)
-        d.circle(upper[1][0], upper[1][1], 21, n=24)
-        # Crease inside the elbow, on the underside of the arch.
-        d.cut_path([(140, 660), (172, 698), (214, 714)], 4.0, True)
-        # Hand serif: the wrist breaks over a rounded joint and the hand hangs
-        # straight down, giving the top-right corner a clean vertical terminal.
-        d.circle(512, 734, 20, n=24)
-        d.tapered_path([(514, 736), (522, 698), (528, 666)], [36, 31, 26], True)
-        d.ellipse(529, 658, 18, 15, 0.0)
-        for dx in (-11, -1, 9):
-            d.polygon([
-                (529 + dx - 4, 654), (529 + dx + 4, 654),
-                (529 + dx + 3, 628), (529 + dx - 4, 628),
-            ])
-        d.cut_path([(516, 704), (542, 700)], 3.2, False)
-        # Head nestled under the arch, tilted forward, facing to her right.
-        # No hat here: the crown and brim jam straight into the underside of
-        # the arching arm in this tight corner (the same reason A and G go
-        # bare-headed), leaving the head as one merged blob with the prong.
-        d.head(stem_x + 46, 624, 1, -0.34, hat=False)
-        # Middle prong: the left arm hangs down the flank, then the elbow
-        # flexes forward and the forearm runs out horizontally. The bar height
-        # is set so the two counters of the letter come out even.
-        bar_y = 414
-        shoulder = (200, 586)
-        elbow = (268, bar_y + 6)
-        d.path([shoulder, (250, 494), elbow], 38, True, False, track=False)
-        d.path([elbow, (470, bar_y)], 34, False, False, track=False)
-        mid_arm = [shoulder, elbow, (470, bar_y)]
+        d.circle(shoulder[0], shoulder[1], 22)
+        d.circle(top_wrist[0], top_wrist[1], 16)
+        # Hand droops at the tip as the top-right terminal.
+        d.tapered_path(
+            [(top_wrist[0] + 4, top_wrist[1] - 2),
+             (top_wrist[0] + 14, top_wrist[1] - 28),
+             (top_wrist[0] + 16, top_wrist[1] - 52)],
+            [24, 18, 12], True,
+        )
+        d.cut_path(
+            [(top_wrist[0] - 6, top_wrist[1] - 10),
+             (top_wrist[0] + 10, top_wrist[1] - 10)],
+            3.2, False,
+        )
+        # Middle prong: the far arm, shorter, open palm facing out.
+        mid_shoulder = (stem_x + 24, 358)
+        mid_elbow = (308, 328)
+        mid_hand = (390, 338)
+        mid_arm = [mid_shoulder, mid_elbow, mid_hand]
+        d.tapered_path(mid_arm, [38, 34, 28], True)
         segments, length = d.centerline_measurements(mid_arm)
         d.anatomy.append({
             "part": "limb", "segments": segments, "length": length,
             "points": mid_arm,
         })
-        d.circle(shoulder[0], shoulder[1], 20)
-        d.circle(elbow[0], elbow[1], 20)
+        d.circle(mid_shoulder[0], mid_shoulder[1], 19)
+        d.circle(mid_elbow[0], mid_elbow[1], 17)
         d.cut_path([
-            (elbow[0] + 20, elbow[1] + 16), (elbow[0] + 24, elbow[1]),
-            (elbow[0] + 12, elbow[1] - 17),
-        ], 4.0, True)
-        d.ellipse(482, bar_y, 17, 18, 0.0)
-        d.cut_path([(464, bar_y - 16), (464, bar_y + 16)], 3.4, False)
-        # Lower prong: the thighs drop to the knees at the front, and from the
-        # knees the shins lie flat along the ground running right, finishing
-        # in the upward heel serif. L reuses this same component.
-        merge_transformed(d, kneeling_base(stem_x, hip_y))
+            (mid_elbow[0] + 6, mid_elbow[1] + 14),
+            (mid_elbow[0] + 16, mid_elbow[1] + 2),
+            (mid_elbow[0] + 8, mid_elbow[1] - 12),
+        ], 3.4, True)
+        d.ellipse(mid_hand[0] + 10, mid_hand[1] + 2, 18, 15, 0.10)
+        for dx, dy in ((10, 12), (20, 6), (22, -4), (14, -12)):
+            d.polygon([
+                (mid_hand[0] + 2, mid_hand[1]),
+                (mid_hand[0] + dx, mid_hand[1] + dy),
+                (mid_hand[0] + dx + 6, mid_hand[1] + dy + 4),
+            ])
+        # Bottom prong: sitting legs, thigh then shin, feet up-right.
+        near_ankle = (562, 88)
+        far_ankle = (538, 116)
+        d.leg(
+            [(stem_x + 18, hip_y - 24), (378, 128), near_ankle],
+            56, knee_index=1, breeches_width=74, shoe_scale=0.0,
+        )
+        d.leg(
+            [(stem_x + 36, hip_y - 10), (392, 156), far_ankle],
+            48, knee_index=1, breeches_width=62, shoe_scale=0.0,
+        )
+        d.shoe(near_ankle[0], near_ankle[1], (378, 128), (0.62, 0.78), 0.86)
+        d.shoe(far_ankle[0], far_ankle[1], (392, 156), (0.70, 0.72), 0.78)
     elif letter == "F":
         # Standing F on I's body ratios. The previous build had a 256 torso
         # over 368-unit legs and two rubber arms (406 and 306) — the top one
