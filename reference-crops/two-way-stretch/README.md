@@ -21,14 +21,6 @@ Crops kept here:
   joined raised leg makes the tall right stem. This crop is the source of the
   shipped N; its chest, waist, pelvis, thigh, and calf remain organically
   curved so the diagonal does not become a ruled bar.
-- `U.png` - photographic study matching the current U construction: a
-  side-profile gymnast lying on the back, arms rising as one stem and
-  joined legs rising as the other, with a rounded hip-and-torso bowl.
-  The traced silhouette is `assets/silhouettes/u.png`.
-- `V.png` - current high-resolution photographic reference for the
-  shipped V. Two equal legs rise from a compact rounded buttocks apex
-  as the strokes of a capital V, with natural thigh-to-calf taper and
-  outward-turned shod feet as the upper terminals. The photograph is
-  converted to a one-piece silhouette before tracing.
 
-The current J photograph is `assets/j_gymnast_photo.png`.
+The current U, V, and J photographs are `assets/u_gymnast_photo.png`,
+`assets/v_gymnast_photo.png`, and `assets/j_gymnast_photo.png`.

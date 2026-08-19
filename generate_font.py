@@ -546,7 +546,8 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "V":
-        # Editorial yoga-alphabet V, imported like L from two-way-stretch/V.png.
+        # Editorial yoga-alphabet V, imported like L from
+        # assets/v_gymnast_photo.png.
         # Two equal legs rise from a compact buttocks apex as the strokes of
         # a capital V; outward-turned shod feet are the upper terminals.
         pts, holes = LETTERS["V"]
