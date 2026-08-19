@@ -8,7 +8,7 @@ This map records the visible construction of each figure. Historical fidelity ta
 |---|---|
 | A | Editorial Paripurna Navasana (full boat), flipped vertically. Sit bones form the apex; torso and raised legs are the two strokes; both hands grasp the knees as the crossbar. Head and feet land on the baseline. |
 | B | Editorial yoga-alphabet B. Seen from behind: the standing leg and torso are the stem, the hand-on-hip elbow is the upper bowl, and the bent knee is the lower bowl. Replaces the print's crouched two-arm clasp. |
-| C | Kneeling backward arch. Shins and feet run right along the baseline; thighs, a full rounded breech and the spine sweep up the left curve, the hip swelling past the waist as the lower-left of the letter. The face is inside the upper-left opening, and the arms extend over the top, tapering to modelled hands, toward the upper-right. |
+| C | Editorial yoga-alphabet C. A kneeling backbend: shins on the floor, thighs the left stem, arched torso and thrown-back head opening to the right, arms wrapped at the waist. Replaces the print's kneeling C-arch with arms over the top. |
 | D | Editorial Ustrasana (camel pose), replacing the print's impossible ring backbend. Kneeling on both shins; thighs form the left stem; the spine arches back so the head is thrown back as the top of the bowl; both hands reach down and grasp the heels. |
 | E | Seated figure. The cocked hat is the top-left of the letter. The near arm runs straight out from the shoulder at hat height as the top prong, the hand drooping at the tip. The far arm throws the forearm out at chest height as the shorter middle prong, open palm facing out. The sitting breech is the bottom-left corner, and both legs extend right as the bottom bar, feet pointing up-right. |
 | F | Standing upright, both arms making the crossbars. The head, upright torso and two tightly parallel legs align straight down as the vertical trunk. The near arm extends horizontally straight out from the shoulder line as the longer upper prong; the far arm crosses over the front of the chest and extends straight out parallel to it, positioned lower on the torso, as the slightly shorter middle prong. The feet flare out left and right at the base as foot serifs. |
@@ -59,6 +59,7 @@ Across A–Z, hats and shoes now act as anatomical serif terminals: cocked-hat b
 
 - **J** and **U** do not occur in the print and therefore cannot be claimed as exact historical reconstructions.
 - **A** replaces the print's two-person Mitelli pose with a vertically flipped Paripurna Navasana (full boat). It is an editorial interpolation, not a 1782 source pose.
+- **C** replaces the print's kneeling C-arch with a yoga-alphabet kneeling backbend. It is an editorial interpolation, not a 1782 source pose.
 - **D** replaces the print's impossible ring backbend with Ustrasana (camel pose). It is an editorial interpolation, not a 1782 source pose.
 - **N** replaces the print's piked headstand with a yoga-alphabet backbend / bridge. It is an editorial interpolation, not a 1782 source pose.
 - **P** and **R** replace the print's I-stem-plus-loop with a standing backbend (R steps the front leg out as the diagonal). They are editorial interpolations, not 1782 source poses.

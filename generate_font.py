@@ -28,6 +28,7 @@ from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
 from yoga_b_outline_points import YOGA_B_HOLES, YOGA_B_OUTLINE_POINTS
+from yoga_c_outline_points import YOGA_C_HOLES, YOGA_C_OUTLINE_POINTS
 from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
 from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
 
@@ -1282,71 +1283,25 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "C":
-        # Historical kneeling back-arch: face inside the upper-left opening,
-        # arms over the top, and paired shins running right along the ground.
-        # The print's lower-left is a full rounded breech, not a tucked-in
-        # waist handing off to two skinny thighs. The previous hip sat
-        # inward of the waist, so the outer C kinked and the inner counter
-        # notched where the torso cap met the legs.
-        hip = (176, 224)
-        spine = [(235, 555), (176, 458), (152, 344), hip]
-        # Coat stays near torso width; the stroke itself widens into the
-        # breeches so the hip is a swell of the C, not a ball stuck on it.
-        d.tapered_path(spine, [86, 84, 90, 118], True)
-        segments, length = d.centerline_measurements(spine)
-        d.anatomy.append({
-            "part": "torso", "segments": segments, "length": length,
-            "points": spine,
-        })
-        # Elongated breech, long axis along the spine. Fills the outer
-        # curve and the inner notch without reading as a separate blob.
-        d.ellipse(158, 228, 72, 48, -1.18)
-        d.ellipse(186, 206, 40, 34, -0.85)
-        # Fillets at the hip-to-thigh handover: the inner counter was a
-        # notch, and the outer curve dented where the ellipse met the
-        # breeches stroke.
-        d.ellipse(214, 216, 40, 32, -0.55)
-        d.ellipse(176, 176, 46, 34, -0.22)
-        d.head(245, 555, 1, 0.18)
-        # The arms taper toward the wrist and finish in modelled hands rather
-        # than a round terminal: a plain circle at the tip came out wider than
-        # the forearm itself and read as a blob beside the tapered shins.
-        # The far arm is swung clear of the near one: drawn on the same route
-        # the two fused into a single slab, and a cut cannot separate stacked
-        # shapes under the nonzero fill rule.
-        for arm, base_w in (
-            ([(256, 592), (394, 682), (552, 606)], 44),
-            ([(244, 566), (382, 652), (536, 578)], 34),
-        ):
-            d.tapered_path(
-                arm + [(arm[-1][0] + 4, arm[-1][1] - 6)],
-                [base_w, base_w * 0.92, base_w * 0.66, base_w * 0.52],
-                True,
+        # Editorial yoga-alphabet C, imported like L. A kneeling
+        # backbend: shins on the floor, thighs the left stem, arched
+        # torso and thrown-back head opening to the right.
+        pts = YOGA_C_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            wx, wy = arm[-1]
-            # Hand: a compact palm with fingers reaching on past the wrist.
-            d.ellipse(wx + 12, wy - 12, base_w * 0.40, base_w * 0.30, -0.55)
-            for dx, dy in ((10, -30), (20, -24), (26, -14)):
-                d.polygon([
-                    (wx + 2, wy - 10), (wx + dx, wy + dy),
-                    (wx + dx + 8, wy + dy + 5),
-                ])
-            d.cut_path([
-                (wx + 2, wy - 4), (wx + 12, wy - 14), (wx + 20, wy - 20),
-            ], 3.4, True)
-        d.leg(
-            [(hip[0] + 6, hip[1] + 4), (328, 118), (555, 105)],
-            58, knee_index=1, breeches_width=80,
-        )
-        d.leg(
-            [(hip[0] + 26, hip[1] + 10), (348, 150), (525, 140)],
-            48, knee_index=1, breeches_width=66,
-        )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_C_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "D":
         # Ustrasana (camel pose) in place of the print's impossible ring
