@@ -17,6 +17,7 @@ from fontTools.ttLib import TTFont
 
 from profile_loader import LOWER_LIMB_OUTLINE_POINTS
 from upright_torso_outline_points import UPRIGHT_TORSO_OUTLINE_POINTS
+from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -1429,72 +1430,29 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "D":
-        # Deep backbend over a kneeling stance. Chest, hips and thighs stack
-        # into one straight upright line as the letter's stem, the head facing
-        # left at the sharp top-left corner. The arm sweeps up from the
-        # shoulder and arches dramatically back and down behind the torso to
-        # make the upper curve, while the lower legs fold back at the kneeling
-        # knees and rise to meet the descending hand, closing the belly.
-        stem_x = 168
-        hip = (stem_x, 356)
-        knee = (stem_x + 16, 108)
-        meet = (506, 322)
-        # Vertical spine: chest and hips.
-        d.torso([hip, (stem_x, 500), (stem_x, 644)], 86, False)
-        d.head(stem_x - 4, 710, -1)
-        # Thighs drop from the hips to the kneeling knees on the ground, then
-        # the lower legs fold sharply backward and rise to the enclosure point.
-        for sign, spread in ((-1, 0), (1, 26)):
-            d.leg(
-                [
-                    (stem_x + spread * 0.5, 350),
-                    (knee[0] + spread, knee[1]),
-                    (meet[0] - 62 + spread, meet[1] - 10),
-                ],
-                56, knee_index=1, breeches_width=74,
-                shoe_direction=(0.42, 0.91), shoe_scale=0.82,
+        # Ustrasana (camel pose) in place of the print's impossible ring
+        # backbend. The 1782 D closed the bowl by folding the legs up to
+        # meet a descending hand — past a real spine. This glyph is a
+        # traced silhouette of a kneeling camel: thighs the left stem,
+        # arched back and thrown-back head the bowl, hands on the heels.
+        # Same import path as L: one closed outline (plus the natural
+        # counter) scaled uniformly onto BAR_GROUND.
+        pts = USTRASANA_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-        # Upper curve: the arm arches back over the top and down behind.
-        # Upper arm and forearm are drawn to the same length: the elbow was
-        # sitting far round the arch, leaving a short upper arm feeding a
-        # forearm half again as long.
-        # The elbow is carried further round the arch so the upper arm and the
-        # forearm come out near equal; before, the forearm ran half as long
-        # again as the upper arm.
-        arm = [
-            (stem_x + 34, 640), (296, 734), (440, 676),
-            (520, 530), (500, 386),
-        ]
-        d.path(arm[:3], 46, True, False, track=False)
-        d.path(arm[2:], 40, True, False, track=False)
-        segments, length = d.centerline_measurements(arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": arm,
-        })
-        d.circle(arm[0][0], arm[0][1], 24)
-        # Elbow crease where the arch turns down behind the body.
-        d.circle(410, 700, 22)
-        d.cut_path([(404, 726), (428, 706), (430, 678)], 4.4, True)
-        # Enclosure point: the reaching hand closes on the raised feet. Hand
-        # and feet must stay legible as two separate body parts, so the palm
-        # sits above the shoes and an engraved seam runs along the contact
-        # line, with finger creases across the palm itself.
-        d.ellipse(meet[0] - 12, meet[1] + 56, 27, 23, -0.35)
-        # Fingers reach down past the palm onto the shoes.
-        for dx in (-22, -8, 6):
-            d.polygon([
-                (meet[0] + dx - 5, meet[1] + 48),
-                (meet[0] + dx + 5, meet[1] + 48),
-                (meet[0] + dx + 3, meet[1] + 18),
-                (meet[0] + dx - 4, meet[1] + 18),
-            ])
-        # Engraved seam along the contact line keeps hand and feet legible as
-        # two separate body parts rather than one fused mass.
-        d.cut_path([
-            (meet[0] - 52, meet[1] + 6), (meet[0] - 14, meet[1] - 2),
-            (meet[0] + 20, meet[1] + 8),
-        ], 6.5, True)
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in USTRASANA_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "E":
         # Print's E: a seated figure, not a kneeling I-stem with an arm
