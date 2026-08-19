@@ -1747,8 +1747,10 @@ def pose(letter: str) -> Drawer:
         # the upward-turning hook. The arms hang straight down the sides,
         # blending into the vertical line of the stem.
         stem_x = 452
+        torso_width = 84
+        # Cut torso at hip to avoid overlap with thigh in lower limb outline
         hip = (stem_x, 300)
-        d.torso([hip, (stem_x, 466), (stem_x, 632)], 84, False)
+        d.torso([hip, (stem_x, 466), (stem_x, 632)], torso_width, False)
         d.head(stem_x + 2, 696, 1)
         for sign in (-1, 1):
             arm = [
@@ -1770,51 +1772,16 @@ def pose(letter: str) -> Drawer:
                 (stem_x + sign * 44, 592), (stem_x + sign * 50, 482),
                 (stem_x + sign * 48, 388),
             ], 3.6, True)
-        # Thighs drop to bent knees that turn forward onto the ground, and
-        # from there the shins lie flat along the floor running left as the
-        # hook. Previously the shins swung diagonally up behind the body,
-        # which put the knees in the air and left the ankles nowhere to bend.
-        # Mirror of L's bottom bar, running left instead of right: one band on
-        # a single ground line, deepest at the heel under the stem, thinning
-        # forward through the arch, and taken out to a point at the toe.
-        #
-        # The heel is registered on the back of the widest leg rather than on
-        # the stem centre. J's rear thigh is set out at spread +20 and carries
-        # full breeches, so its outer edge stands at x≈499; a heel anchored
-        # further forward bulged only to x≈464 and sat *inside* that edge,
-        # reading as a notch under the leg instead of a heel behind it. Put
-        # the anchor on the leg's own back edge and the bulge clears it.
+        # Bottom bar: use the complete lower limb outline (thigh + knee + shin + foot)
+        # The outline is scaled to match the torso width for seamless integration
+        # Mirror of L's bottom bar, running left instead of right
         bar = BarProfile(
             ground=BAR_GROUND, heel_x=478, arch_x=144, toe_x=18,
             heel_depth=BAR_HEEL_DEPTH, arch_depth=BAR_ARCH_DEPTH,
             calf_x=241,
         )
-        for spread, width, breeches in ((-18, 52, 60), (20, 44, 52)):
-            d.leg(
-                [
-                    (stem_x + spread * 0.5, hip[1]),
-                    (stem_x + spread, 126),
-                    (300 - spread * 0.30, 112),
-                    (144 - spread * 0.20, 112),
-                ],
-                width, knee_index=2, breeches_width=breeches,
-                shoe_scale=0.0, bar=bar, draw_shin=False,
-            )
-        # The heel curve starts further up the shin than it did. Anchored low
-        # it left the leg at x≈489 while the leg's own back edge there stands
-        # at ≈496, so the swell began seven units *inside* the limb: climbing
-        # the flank the outline ran out to the heel's peak, pulled back into a
-        # waist where the band ended, then swelled out again as the leg
-        # resumed — a double reversal, where L's flank is strictly monotone
-        # from the stem to the floor. Starting the curve higher lets it leave
-        # along the limb's own edge instead of stepping off it, which takes
-        # the mean tangent break from 0.256 to 0.232 and shallows the waist.
-        # It is not carried further than this: the same move keeps flattening
-        # the flank, but it does so by eating the calcaneus, and past here the
-        # heel stops reading as a heel at specimen scale.
-        # Draw the shin as a separate filled shape (stops before foot region)
-        # The knee is at the heel position (back of the shin)
-        d.kneeling_shin(bar, 478, 52)
+        # Draw the complete lower limb (thigh + knee + shin + foot) scaled to torso width
+        d.kneeling_shin(bar, 478, 52, torso_width=torso_width)
 
     elif letter == "K":
         # Cartwheel K: the figure balances sideways on one hand. The head lies
