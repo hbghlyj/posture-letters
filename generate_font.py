@@ -1831,13 +1831,14 @@ def pose(letter: str) -> Drawer:
 def punctuation(name: str) -> Drawer:
     d = Drawer()
     if name == "period":
-        d.head(350, 85, 1)
+        # Plain solid disc, matching the dot used by ! and ?.
+        d.circle(350, 90, 55)
     elif name == "comma":
-        d.head(340, 90, 1)
+        # Plain disc with a descending tail — no hat, nose, or eye.
+        d.circle(340, 90, 55)
         d.path([(355, 55), (330, -15), (285, -65)], 36)
     elif name == "exclam":
-        # The dot is a plain solid disc: a hatted head here reads as a figure
-        # rather than punctuation and clutters the mark at text sizes.
+        # Plain solid disc dot and a straight vertical stroke.
         d.circle(350, 90, 55)
         d.torso([(350, 720), (350, 250)], 80, False)
         d.circle(350, 760, 34)
@@ -1846,8 +1847,8 @@ def punctuation(name: str) -> Drawer:
         d.path([(170, 620), (250, 750), (455, 730), (530, 600), (470, 475), (355, 400), (350, 260)], 72)
         d.circle(170, 620, 28)
     elif name == "hyphen":
-        d.limb([(180, 380), (520, 380)], 52, False, end="hand")
-        d.head(350, 430, 1)
+        # A plain horizontal dash — no head or limb anatomy needed.
+        d.path([(180, 380), (520, 380)], 52, False, joints=False, track=False)
     return d
 
 
