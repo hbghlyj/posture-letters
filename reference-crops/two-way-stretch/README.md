@@ -23,3 +23,8 @@ Crops kept here:
   stretched straight forward above the head as the long top bar and the
   other stretched straight forward at mid-chest height as a shorter
   middle prong. Neither elbow is tucked.
+- `U.png` - row 4, second cell. Lying on the back with the rounded back
+  and hips on the floor as the bowl, both legs pressed together and
+  raised vertically as one stem and both arms extended vertically as
+  the other, the flexed feet and the open flat hands making the two
+  serifs at equal height.
