@@ -597,7 +597,8 @@ class Drawer:
 
         Uses the complete lower limb outline from LOWER_LIMB_OUTLINE_POINTS, which
         contains the thigh, knee bend, shin, and foot as one continuous shape.
-        The outline is scaled to match the torso width and positioned so that:
+        The outline is scaled so the thigh width matches the torso width, and
+        positioned so that:
         - The thigh top connects to the hip
         - The knee is at ground level
         - The shin lies flat on the ground from knee to ankle
@@ -623,11 +624,14 @@ class Drawer:
         original_width = original_x_max - original_x_min
         original_height = original_y_max - original_y_min
         
-        # Scale to match torso width
-        # The top edge width of the lower limb outline is 1223.0 units
-        # We scale it to match the torso width for seamless integration
-        top_edge_width = 1223.0
-        uniform_scale = torso_width / top_edge_width
+        # The thigh portion is roughly x=[131, 400] in the original outline
+        # Scale so the thigh width matches the torso width
+        thigh_x_min = 131.0
+        thigh_x_max = 400.0
+        thigh_width = thigh_x_max - thigh_x_min
+        
+        # Scale factor: thigh width -> torso width
+        uniform_scale = torso_width / thigh_width
         
         # Calculate the actual dimensions after scaling
         scaled_width = original_width * uniform_scale
