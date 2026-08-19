@@ -44,12 +44,4 @@ Crops kept here:
   as the strokes of a capital V, with natural thigh-to-calf taper and
   outward-turned shod feet as the upper terminals. The photograph is
   converted to a one-piece silhouette before tracing.
-- `image_fc2e377e.png` - previous high-resolution photographic reference
-  for J, retained for provenance. Its joined upright legs and compact
-  lower-left terminal informed the superseded trace, but its pointed feet
-  supplied no clear upper serif.
-- `image_91f51c7c.png` - previous high-resolution photographic reference for
-  J, retained for provenance. Its joined legs, left-pointing feet, and broad
-  hook informed the superseded trace.
-
 The current J photograph is `assets/j_gymnast_photo.png`.
