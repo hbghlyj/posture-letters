@@ -78,7 +78,7 @@ python generate_font.py
 - **L** — from `assets/silhouettes/l.png` / `l.svg`. High-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar.
 - **M** — folded double from behind: raised knees the peaks, calves the outer stems, thighs sloping in to hanging hips the central V.
 - **N** — from `assets/n_poster_crop.png`. Planted arm the left stem, organic torso the diagonal, raised leg the right stem.
-- **O** — from `assets/o_gymnast_photo.png`. Full bow whose raised feet and grasping arms close a ring, with a large natural counter.
+- **O** — full bow whose raised feet and grasping arms close a ring, with a large natural counter.
 - **P** — from `assets/p_gymnast_photo.png`. Standing backbend: planted legs the stem; arched torso, hanging head, and clasped hands the bowl.
 - **Q** — from `assets/q_gymnast_photo.png`. Prone bow: raised feet and grasping arm close the ring; the other arm plants as the tail.
 - **R** — from `assets/r_gymnast_photo.png`. The same standing backbend as P, with the front leg stepped forward as the diagonal.
