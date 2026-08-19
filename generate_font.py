@@ -1433,20 +1433,21 @@ def pose(letter: str) -> Drawer:
         # Ustrasana (camel pose) in place of the print's impossible ring
         # backbend. The 1782 D closed the bowl by folding the legs up to
         # meet a descending hand — past a real spine. This glyph is a
-        # traced silhouette of a kneeling camel: thighs the left stem,
-        # arched back and thrown-back head the bowl, hands on the heels.
+        # traced silhouette of a kneeling camel: head thrown back on the
+        # left, thighs the right pillar, hands on the heels. The source
+        # photo faces this way; the first import was mirrored.
         # Same import path as L: one closed outline (plus the natural
         # counter) scaled uniformly onto BAR_GROUND.
         pts = USTRASANA_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
-        left, top, bottom = min(xs), min(ys), max(ys)
+        left, right, top, bottom = min(xs), max(xs), min(ys), max(ys)
         cap_height = 788.0
         scale = (cap_height - BAR_GROUND) / (bottom - top)
 
         def placed(x: float, y: float) -> Point:
             return (
-                SIDEBEARING + (x - left) * scale,
+                SIDEBEARING + (right - x) * scale,
                 BAR_GROUND + (bottom - y) * scale,
             )
 
