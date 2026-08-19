@@ -18,3 +18,8 @@ Crops kept here:
   deep rounded C as the left bowl, knees drawn up to close the lower
   right, both arms arcing overhead with the hands dropping into a short
   hook as the spur.
+- `E.png` - row 1, fifth cell. Kneeling in profile, shins along the
+  floor as the bottom bar and the spine upright as the stem, one arm
+  stretched straight forward above the head as the long top bar and the
+  other stretched straight forward at mid-chest height as a shorter
+  middle prong. Neither elbow is tucked.
