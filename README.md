@@ -36,7 +36,7 @@ Or declare only the compact WOFF2:
 - `trace_silhouette.py` — OpenCV tracer for A–Z except L
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
-- `assets/*_gymnast_photo.png` — photographic sources for A, B, C, F, G, H, J, O, P, Q, R, S, U, V, W, X, and Y
+- `assets/*_gymnast_photo.png` — photographic sources for B, C, F, H, J, Q, R, S, U, V, W, X, and Y
 - `assets/n_poster_crop.png` — enlarged 2 Way Stretch N cell
 - `assets/two-way-stretch-alphabet.jpg` — the poster that crop came from
 
@@ -64,13 +64,13 @@ python generate_font.py
 
 ## Letter notes
 
-- **A** — from `assets/a_gymnast_photo.png`. Standing wide-legged forward fold: lifted hips the apex, spread legs the diagonals, folded torso and arms the crossbar.
+- **A** — standing wide-legged forward fold: lifted hips the apex, spread legs the diagonals, folded torso and arms the crossbar.
 - **B** — from `assets/b_gymnast_photo.png`. From behind: standing leg and torso the stem, hand-on-hip elbow the upper bowl, bent knee the lower bowl.
 - **C** — from `assets/c_gymnast_photo.png`. Kneeling backbend, thighs the left stem, arched torso and thrown-back head opening right.
 - **D** — kneeling camel: thighs the stem, thrown-back head the top of the bowl, hands on the heels. The import is mirrored to face the conventional D.
 - **E** — kneeling: upright spine the stem, raised arm the top bar, forward arm the middle bar, folded legs the bottom bar.
 - **F** — from `assets/f_gymnast_photo.png`. Standing on one straight leg; both arms the top bar; folded lifted leg the middle bar.
-- **G** — from `assets/g_gymnast_photo.png`. Inverted scorpion: arms and hanging head at the bottom, arched torso the bowl, feet the spur.
+- **G** — inverted scorpion: arms and hanging head at the bottom, arched torso the bowl, feet the spur.
 - **H** — from `assets/h_gymnast_photo.png`. Horizontal torso the crossbar; raised leg and kneeling shin the left stem; raised and planted arms the right stem.
 - **I** — legs pressed together the stem; crossed arms and open hands the top serif; feet turned out the bottom serif.
 - **J** — from `assets/j_gymnast_photo.png`. Joined legs the tall right stem, flexed feet a short top serif, hips/back/arms the open bottom hook, upright profile head the lower-left terminal.
