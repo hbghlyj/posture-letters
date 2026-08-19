@@ -1505,18 +1505,27 @@ def pose(letter: str) -> Drawer:
         # the sitting breech is the bottom-left, and both legs extend
         # right as the bottom bar, feet pointing up-right.
         stem_x = 214
-        hip_y = 222
+        # One sit-line for breech, thighs and shins. The letter's bottom
+        # bar is that bench: flat on BAR_GROUND, not a downhill ramp.
+        sit_y = BAR_GROUND + 36
         d.head(stem_x - 4, 528, 1, -0.10)
-        # Slight recline, as in the print — not a standing I-stem.
-        d.torso(
-            [(stem_x + 14, 470), (stem_x - 2, 346), (stem_x - 8, hip_y)],
-            82, True,
-        )
-        # Sitting breech, elongated along the sit so it is the bottom-left
-        # of the E rather than a ball stuck on the hip.
-        d.ellipse(stem_x - 18, hip_y - 28, 54, 52, 0.55)
-        d.ellipse(stem_x + 10, hip_y - 48, 50, 38, 0.20)
-        d.ellipse(stem_x - 6, hip_y - 68, 42, 34, 0.05)
+        # Coat tapers into the sit so the stem does not pinch off the
+        # breech. Slight recline, as in the print — not a standing I-stem.
+        spine = [
+            (stem_x + 14, 470), (stem_x - 2, 346),
+            (stem_x - 4, 248), (stem_x + 10, sit_y + 18),
+        ]
+        d.tapered_path(spine, [82, 80, 98, 118], True)
+        segments, length = d.centerline_measurements(spine)
+        d.anatomy.append({
+            "part": "torso", "segments": segments, "length": length,
+            "points": spine,
+        })
+        # Sitting breech elongated along the bar so it is the bottom-left
+        # of the E, on the same plane as the thighs.
+        d.ellipse(stem_x - 18, sit_y + 20, 54, 46, 0.48)
+        d.ellipse(stem_x + 12, sit_y + 8, 62, 40, 0.10)
+        d.ellipse(stem_x + 38, sit_y + 2, 46, 34, 0.04)
         # Top prong: a real arm straight out from the shoulder, at hat
         # height — not an arch over the crown.
         shoulder = (stem_x + 42, 478)
@@ -1567,19 +1576,23 @@ def pose(letter: str) -> Drawer:
                 (mid_hand[0] + dx, mid_hand[1] + dy),
                 (mid_hand[0] + dx + 6, mid_hand[1] + dy + 4),
             ])
-        # Bottom prong: sitting legs, thigh then shin, feet up-right.
-        near_ankle = (562, 88)
-        far_ankle = (538, 116)
+        # Bottom prong: legs leave the front of the sit and run level.
+        # The previous build dropped the ankles to y=88, so the bar
+        # ramped downhill; only the feet kick up-right, as in the print.
+        near_knee = (392, sit_y)
+        far_knee = (406, sit_y + 16)
+        near_ankle = (568, sit_y)
+        far_ankle = (544, sit_y + 16)
         d.leg(
-            [(stem_x + 18, hip_y - 24), (378, 128), near_ankle],
+            [(stem_x + 28, sit_y + 14), near_knee, near_ankle],
             56, knee_index=1, breeches_width=74, shoe_scale=0.0,
         )
         d.leg(
-            [(stem_x + 36, hip_y - 10), (392, 156), far_ankle],
+            [(stem_x + 46, sit_y + 24), far_knee, far_ankle],
             48, knee_index=1, breeches_width=62, shoe_scale=0.0,
         )
-        d.shoe(near_ankle[0], near_ankle[1], (378, 128), (0.62, 0.78), 0.86)
-        d.shoe(far_ankle[0], far_ankle[1], (392, 156), (0.70, 0.72), 0.78)
+        d.shoe(near_ankle[0], near_ankle[1], near_knee, (0.62, 0.78), 0.86)
+        d.shoe(far_ankle[0], far_ankle[1], far_knee, (0.70, 0.72), 0.78)
     elif letter == "F":
         # Standing F on I's body ratios. The previous build had a 256 torso
         # over 368-unit legs and two rubber arms (406 and 306) — the top one
