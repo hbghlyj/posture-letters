@@ -33,3 +33,9 @@ Crops kept here:
   raised vertically as one stem and both arms extended vertically as
   the other, the flexed feet and the open flat hands making the two
   serifs at equal height.
+- `image_fc2e377e.png` - high-resolution photographic reference for J.
+  In profile, both straight joined legs rise as the single tall right
+  stem; the curled hips and torso sweep through the bottom hook; and the
+  tucked head and bent arms make a compact lower-left terminal. Unlike
+  the small poster crops, this reference can anchor natural anatomy
+  directly before conversion to a flat silhouette.

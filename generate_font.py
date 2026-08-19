@@ -1447,9 +1447,10 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "J":
-        # Editorial yoga-alphabet J, imported like L. A shoulderstand:
-        # torso and legs rise as the vertical column, and the head and
-        # shoulders lying flat on the floor make the hook at the foot.
+        # Editorial yoga-alphabet J, imported like L. In a curled hollow-body
+        # pose, the joined upright legs make the single tall right stem; hips
+        # and torso sweep through the bottom hook, which ends in the tucked
+        # head and compact bent arms at lower left.
         pts = YOGA_J_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
