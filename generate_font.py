@@ -1714,8 +1714,11 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "V":
-        # Editorial yoga-alphabet V, imported like L. A V-sit / boat on
-        # the sit bones: raised legs one stroke, leaning torso the other.
+        # Reference-conditioned reconstruction of the 2 Way Stretch V pose,
+        # imported like L. A side-profile V-sit on the sit bones: both
+        # straight joined legs rise symmetrically to flexed-foot terminals
+        # at the upper corners while the hips form the rounded apex at the
+        # lower centre.
         pts = YOGA_V_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]

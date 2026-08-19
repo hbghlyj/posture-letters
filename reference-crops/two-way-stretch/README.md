@@ -55,3 +55,9 @@ Crops kept here:
   bridging the open counter. The shipped glyph is a simplified one-piece
   exterior derived from this pose, with clothing, hand, toe, and facial
   details flattened for reliable text-size rendering.
+- `V.png` - row 3, last cell. A side-profile V-sit on the sit bones: both
+  straight joined legs rise symmetrically up and outward to flexed-foot
+  terminals at the upper corners, while the hips form the rounded apex
+  at the lower centre. No head, neck, arms, or torso are drawn above the
+  hips; the wide open space between the legs reads as the V counter. This
+  crop is the source of the shipped V.
