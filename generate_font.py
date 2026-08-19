@@ -41,6 +41,7 @@ from yoga_e_outline_points import YOGA_E_HOLES, YOGA_E_OUTLINE_POINTS
 from yoga_f_outline_points import YOGA_F_HOLES, YOGA_F_OUTLINE_POINTS
 from yoga_g_outline_points import YOGA_G_HOLES, YOGA_G_OUTLINE_POINTS
 from yoga_v_outline_points import YOGA_V_HOLES, YOGA_V_OUTLINE_POINTS
+from yoga_w_outline_points import YOGA_W_HOLES, YOGA_W_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -1828,62 +1829,27 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "W":
-        # Print's W: a folded figure whose four strokes are one body. Head
-        # at the middle peak; red-sleeved arms drop to planted hands as the
-        # inner strokes; thighs drop to baseline knees and calves rise to
-        # the outer peaks. The previous build had 987-unit legs against
-        # 382-unit arms, giant knee balls, and forked insect hands.
-        ground = 64.0
-        d.head(350, 548, 1, hat=False)
-        d.torso([(350, 500), (350, 410)], 86, False)
-        # Inner strokes: arms as thick as the thighs, from the shoulders
-        # down to planted hands on the shared ground.
-        left_hand = (268, ground + 28)
-        right_hand = (432, ground + 28)
-        left_arm = [(318, 468), (292, 270), left_hand]
-        right_arm = [(382, 468), (408, 270), right_hand]
-        for arm in (left_arm, right_arm):
-            d.tapered_path(arm, [58, 52, 42], True)
-            segments, length = d.centerline_measurements(arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": arm,
-            })
-            d.circle(arm[0][0], arm[0][1], 28)
-        # Planted hands: a real palm and four fingers reaching the ground.
-        for hx, hy, sign in ((left_hand[0], left_hand[1], -1),
-                             (right_hand[0], right_hand[1], 1)):
-            d.ellipse(hx + sign * 2, hy + 4, 24, 18, sign * 0.18)
-            for fx in (-12, 0, 12):
-                d.polygon([
-                    (hx + fx - 6, hy + 6), (hx + fx + 6, hy + 6),
-                    (hx + fx + 5, ground), (hx + fx - 5, ground),
-                ])
-            d.cut_path([(hx - 8, hy + 2), (hx + 2, hy + 2)], 2.8, False)
-            d.cut_path([(hx - 2, hy + 2), (hx + 8, hy + 2)], 2.8, False)
-        # Outer strokes: thigh down to a modest baseline knee, calf up to a
-        # foot at about head height so the three peaks of the W sit together.
-        # Drawn as separate tapers so the sharp fold does not spawn a
-        # limb-width knee ball.
-        for sign in (-1, 1):
-            hip = (350 + sign * 32, 408)
-            knee = (350 + sign * 156, ground + 22)
-            foot = (350 + sign * 236, 540)
-            thigh = [hip, knee]
-            shin = [knee, (350 + sign * 210, 300), foot]
-            d.tapered_path(thigh, [64, 50], True)
-            d.tapered_path(shin, [46, 38, 30], True)
-            segments, length = d.centerline_measurements(thigh + shin[1:])
-            d.anatomy.append({
-                "part": "limb", "segments": [
-                    math.dist(thigh[0], thigh[1]),
-                    math.dist(shin[0], shin[1]) + math.dist(shin[1], shin[2]),
-                ], "length": length, "points": [hip, knee, foot],
-            })
-            d.ellipse(knee[0], knee[1], 20, 18, 0.0)
-            d.ellipse(knee[0], knee[1], 22, 8, math.pi / 2)
-            # Raised shoe, toe pointing up and out.
-            d.shoe(foot[0], foot[1], shin[1], (sign * 0.35, 0.94), 0.78)
+        # Editorial yoga-alphabet W, imported like L. Lying on the back with
+        # the head and shoulders at the base, both legs splayed wide into a
+        # broad V and both arms raised together in the centre with the palms
+        # pressed, giving the three peaks of the W.
+        pts = YOGA_W_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
+            )
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_W_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
+
 
     elif letter == "X":
         # Spread-eagle X in the Vitruvian diagonal pose: head at center, arms
