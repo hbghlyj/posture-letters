@@ -23,6 +23,7 @@ from rajakapotasana_outline_points import (
     RAJAKAPOTASANA_OUTLINE_POINTS,
 )
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
+from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
 UPM = 1000
@@ -1950,72 +1951,26 @@ def pose(letter: str) -> Drawer:
                 ])
 
     elif letter == "N":
-        # Print's N: a piked headstand, not inverted legs-left / arms-right.
-        # The head sits on the ground at the lower-left; the coat is the
-        # left stem up to a rounded hip; the thighs run the diagonal down
-        # to a grounded knee; the calf rises as the right stem to a shoe
-        # at the top. One sleeve lies along the diagonal with a hand.
-        hip = (198, 672)
-        knee = (540, 132)
-        ankle = (568, 712)
-        # Head on the ground at the foot of the left stem. No hat: the
-        # print is hair and a face, not a cocked brim.
-        d.head(186, 128, -1, 0.10, hat=False)
-        d.ellipse(170, 72, 46, 18, 0.06)
-        # Collar / cuff mass at the neck, the print's white ruff.
-        d.ellipse(192, 178, 36, 20, 0.04)
-        # Left stem: torso up to the hip.
-        spine = [(190, 186), (188, 430), (194, 640), hip]
-        d.tapered_path(spine, [80, 84, 94, 108], True)
-        segments, length = d.centerline_measurements(spine)
-        d.anatomy.append({
-            "part": "torso", "segments": segments, "length": length,
-            "points": spine,
-        })
-        # One elongated breech at the top-left, not two stacked balls.
-        d.ellipse(186, 690, 64, 46, -0.55)
-        # Diagonal thighs. Two close together for weight; tracked as legs.
-        for spread, breeches in ((0, 92), (16, 76)):
-            thigh = [
-                (hip[0] + 12 + spread * 0.25, hip[1] - 16),
-                (knee[0] - 10 + spread * 0.3, knee[1] + 20),
-            ]
-            d.tapered_path(thigh, [breeches, breeches * 0.80], True)
-            segments, length = d.centerline_measurements(
-                [thigh[0], knee, (ankle[0], ankle[1])]
+        # Editorial yoga-alphabet N, imported like L. A backbend / bridge
+        # whose planted legs are the left stem, the arched torso the
+        # diagonal, and the raised joined arms the right stem. The head
+        # rests on the floor at the foot of the arm stem.
+        pts = YOGA_N_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
+
+        def placed(x: float, y: float) -> Point:
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (bottom - y) * scale,
             )
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": [thigh[0], knee, (ankle[0], ankle[1])],
-            })
-        # Grounded knee — the print's lower-right corner.
-        d.ellipse(knee[0] + 2, knee[1] + 12, 46, 38, 0.35)
-        # Right stem: a real calf, thick enough to match the left stem.
-        shin = [
-            (knee[0] + 6, knee[1] + 28),
-            (ankle[0] - 4, 420),
-            ankle,
-        ]
-        d.tapered_path(shin, [62, 72, 44], True)
-        d.shoe(ankle[0] - 4, ankle[1] + 6, shin[1], (-0.55, 0.84), 1.02)
-        # Foreground sleeve held just above the thigh so the hand reads.
-        shoulder = (228, 624)
-        hand = (418, 352)
-        arm = [shoulder, (318, 500), hand]
-        d.tapered_path(arm, [40, 34, 26], True)
-        segments, length = d.centerline_measurements(arm)
-        d.anatomy.append({
-            "part": "limb", "segments": segments, "length": length,
-            "points": arm,
-        })
-        d.circle(shoulder[0], shoulder[1], 20)
-        d.ellipse(hand[0] + 12, hand[1] - 4, 18, 14, -0.50)
-        for dx, dy in ((10, -16), (20, -10), (26, 0)):
-            d.polygon([
-                (hand[0] + 4, hand[1] - 2),
-                (hand[0] + dx, hand[1] + dy),
-                (hand[0] + dx + 6, hand[1] + dy + 5),
-            ])
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in YOGA_N_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "O":
         # Backbend O. The figure leans back from standing until the body closes
