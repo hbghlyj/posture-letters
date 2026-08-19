@@ -2569,64 +2569,50 @@ def pose(letter: str) -> Drawer:
         )
 
     elif letter == "Y":
-        # Seated Y, deliberately contrasted with the standing T. Both arms
-        # extend up and outward from the shoulders in a wide V with the open
-        # palms turned upward, instead of T's flat horizontal bar. Below, the
-        # body is condensed into a tight frontal squat: the knees come up close
-        # against the chest and the shins and feet run vertically down the
-        # front of the body, giving a short, thick central column. The head
-        # sits centrally between the shoulders, exactly where the upper
-        # branches converge on the seated torso.
-        fork_y = 392
-        d.torso([(350, 212), (350, 302), (350, fork_y)], 92, False)
-        d.head(350, 456, 1)
+        # Standing Y, matching the print: a normally proportioned upright
+        # figure with both arms raised in a V. The previous build was a
+        # frontal squat — knees up, a short thick column — which the print
+        # does not show. The head sits in the fork, the raised arms are the
+        # two branches, and the standing legs are the stem.
+        d.head(350, 698, 1, hat=False)
+        d.path([(350, 638), (350, 668)], 52, False, False, track=False)
+        d.torso([(350, 638), (350, 544), (350, 450)], 80, False)
         for sign in (-1, 1):
-            tip = (350 + sign * 258, 668)
+            tip = (350 + sign * 236, 792)
             arm = [
-                (350 + sign * 34, fork_y - 16),
-                (350 + sign * 146, 530),
+                (350 + sign * 38, 618),
+                (350 + sign * 128, 708),
                 tip,
             ]
-            d.path(arm, 40, True, False, track=False)
+            d.tapered_path(arm, [38, 33, 28], True)
             segments, length = d.centerline_measurements(arm)
             d.anatomy.append({
                 "part": "limb", "segments": segments, "length": length,
                 "points": arm,
             })
-            d.circle(arm[0][0], arm[0][1], 22)
-            # Open palm turned upward, fingers spread at the top of the branch.
-            d.ellipse(tip[0], tip[1] + 14, 21, 16, sign * 0.30)
-            for dx, dy in ((-16, 20), (-6, 26), (5, 25), (14, 19)):
+            d.circle(arm[0][0], arm[0][1], 20)
+            # Open palm facing up and slightly out, as in the print.
+            d.ellipse(tip[0] + sign * 6, tip[1] + 12, 18, 15, sign * 0.35)
+            for dx, dy in ((-10, 16), (-2, 22), (7, 21), (14, 15)):
                 d.polygon([
-                    (tip[0] + sign * dx - 5, tip[1] + dy),
-                    (tip[0] + sign * dx + 5, tip[1] + dy),
-                    (tip[0] + sign * dx + 4, tip[1] + dy + 30),
-                    (tip[0] + sign * dx - 4, tip[1] + dy + 30),
+                    (tip[0] + sign * dx - 4, tip[1] + dy),
+                    (tip[0] + sign * dx + 4, tip[1] + dy),
+                    (tip[0] + sign * dx + 3, tip[1] + dy + 24),
+                    (tip[0] + sign * dx - 3, tip[1] + dy + 24),
                 ])
             d.cut_path([
-                (tip[0] - 15, tip[1] + 22), (tip[0] + 15, tip[1] + 22),
-            ], 3.4, False)
-        # Frontal squat: knees drawn up toward the chest, then the shins drop
-        # vertically down the front of the body to the planted feet.
-        # The squat is drawn as real geometry, not engraving: a cut here is
-        # cancelled by the torso stacked beneath, so the fold has to live in
-        # the silhouette. Each thigh runs outward from the hip to a knee that
-        # juts clear of the body, and the shin then drops back inward, cutting
-        # a visible notch into the outline on each side.
-        for sign in (-1, 1):
-            knee = (350 + sign * 74, 252)
-            d.leg(
-                [(350 + sign * 22, 330), knee, (350 + sign * 26, 56)],
-                46, knee_index=1, breeches_width=56,
-                shoe_direction=(sign, 0), shoe_scale=0.82,
-            )
-            # A rounded cap on the projecting knee makes the joint explicit.
-            d.ellipse(knee[0] + sign * 3, knee[1] + 6, 26, 23, 0.0)
-            # Crease inside the fold, held clear of the outline.
-            d.cut_path([
-                (350 + sign * 46, 234), (350 + sign * 60, 252),
-                (350 + sign * 53, 274),
-            ], 4.2, True)
+                (tip[0] + sign * 2 - 12, tip[1] + 18),
+                (tip[0] + sign * 2 + 12, tip[1] + 18),
+            ], 3.2, False)
+        # Standing legs, same ratio as I, feet flaring as stem serifs.
+        d.leg(
+            [(332, 455), (328, 255), (324, 55)], 50,
+            knee_index=1, breeches_width=56, shoe_direction=(-1, 0),
+        )
+        d.leg(
+            [(368, 455), (372, 255), (376, 55)], 50,
+            knee_index=1, breeches_width=56, shoe_direction=(1, 0),
+        )
 
     elif letter == "Z":
         # Side-profile Z: a backward lean over a deep kneel. Both arms reach
