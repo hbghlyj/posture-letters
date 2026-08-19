@@ -6,7 +6,7 @@ This map records the visible construction of each figure. Historical fidelity ta
 
 | Glyph | Construction visible in the print |
 |---|---|
-| A | Two-person letter (Mitelli). Two figures lean toward one another, each head turned inward so they look at each other; each raises the inner arm straight up so the flat hands press together at a sharp apex, and each lower arm bends slightly at the elbow to clasp hands at hip level, the grip reading as the crossbar. Each stands on a straight weight-bearing outer leg with the inner leg slightly forward and gently bent, the two kept close together for a tight base. |
+| A | Editorial Paripurna Navasana (full boat), flipped vertically. Sit bones form the apex; torso and raised legs are the two strokes; both hands grasp the knees as the crossbar. Head and feet land on the baseline. |
 | B | A crouched standing figure. The head with cocked hat sits at the upper-left of the letter. Both arms loop outward from the shoulder and chest and clasp at the right, closing the upper bowl. The standing leg is the left stem; the other leg lifts, bows outward at the knee and stands on the toe beside the standing ankle, closing the lower bowl. |
 | C | Kneeling backward arch. Shins and feet run right along the baseline; thighs, a full rounded breech and the spine sweep up the left curve, the hip swelling past the waist as the lower-left of the letter. The face is inside the upper-left opening, and the arms extend over the top, tapering to modelled hands, toward the upper-right. |
 | D | Editorial Ustrasana (camel pose), replacing the print's impossible ring backbend. Kneeling on both shins; thighs form the left stem; the spine arches back so the head is thrown back as the top of the bowl; both hands reach down and grasp the heels. |
@@ -58,5 +58,6 @@ Across A–Z, hats and shoes now act as anatomical serif terminals: cocked-hat b
 ## Editorial letters
 
 - **J** and **U** do not occur in the print and therefore cannot be claimed as exact historical reconstructions.
+- **A** replaces the print's two-person Mitelli pose with a vertically flipped Paripurna Navasana (full boat). It is an editorial interpolation, not a 1782 source pose.
 - **D** replaces the print's impossible ring backbend with Ustrasana (camel pose). It is an editorial interpolation, not a 1782 source pose.
 - If retained for modern A–Z coverage, they must be labeled as editorial interpolations rather than 1782 source poses.

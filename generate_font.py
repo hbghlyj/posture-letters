@@ -17,6 +17,7 @@ from fontTools.ttLib import TTFont
 
 from profile_loader import LOWER_LIMB_OUTLINE_POINTS
 from upright_torso_outline_points import UPRIGHT_TORSO_OUTLINE_POINTS
+from navasana_outline_points import NAVASANA_HOLES, NAVASANA_OUTLINE_POINTS
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 
 ROOT = Path(__file__).resolve().parent
@@ -1219,83 +1220,30 @@ def pose(letter: str) -> Drawer:
     d = Drawer()
 
     if letter == "A":
-        # Two figures build the A, as in the Mitelli engraving: they lean
-        # toward one another, press their raised palms flat together at a sharp
-        # apex, and jointly hold a round object at hip level whose bar reads as
-        # the crossbar. A single folded body could not carry this letter at
-        # believable proportions, so the load is shared between two people.
-        apex_y = 742
-        ball = (350, 352)
-        for side in (-1, 1):
-            # side -1 is the left figure, +1 the right; each is the mirror of
-            # the other about the glyph centre.
-            def px(x: float) -> float:
-                return 350 + side * (x - 350)
+        # Editorial Paripurna Navasana (full boat), imported like L and
+        # then flipped vertically so the sit bones become the apex of
+        # the A. The source silhouette is a woman balanced on the sit
+        # bones, torso leaning back, both legs raised straight, both
+        # hands grasping the knees. After the flip the head and feet
+        # land on the baseline and the clasped knees read as the bar.
+        pts = NAVASANA_OUTLINE_POINTS
+        xs = [x for x, _ in pts]
+        ys = [y for _, y in pts]
+        left, top, bottom = min(xs), min(ys), max(ys)
+        cap_height = 788.0
+        scale = (cap_height - BAR_GROUND) / (bottom - top)
 
-            hip = (px(196), 330)
-            shoulder = (px(238), 502)
-            # Head turned toward the partner, above a torso that leans inward.
-            # Each head turns toward the partner: the two figures look at one
-            # another across the letter rather than away from it.
-            # No hat: the two brims meet at the apex and collide.
-            d.head(px(232), 552, side, hat=False)
-            d.torso(
-                [(px(228), 496), (px(212), 418), (px(198), 336)], 72, True
+        def placed(x: float, y: float) -> Point:
+            # Extra vertical flip vs L: image-bottom (the sit) goes to
+            # the cap, image-top (head and feet) goes to BAR_GROUND.
+            return (
+                SIDEBEARING + (x - left) * scale,
+                BAR_GROUND + (y - top) * scale,
             )
-            # Raised arm: straight from the shoulder up to the apex, where the
-            # flat hand presses against the other figure's hand.
-            up_arm = [(px(262), 530), (px(304), 638), (px(338), apex_y - 24)]
-            d.path(up_arm, 34, True, False, track=False)
-            segments, length = d.centerline_measurements(up_arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": up_arm,
-            })
-            d.circle(up_arm[0][0], up_arm[0][1], 19)
-            # Flat pressed hand: fingers extended straight along the apex line.
-            d.polygon([
-                (px(330), apex_y - 46), (px(348), apex_y - 4),
-                (px(340), apex_y + 2), (px(314), apex_y - 38),
-            ])
-            d.cut_path([
-                (px(326), apex_y - 40), (px(338), apex_y - 18),
-            ], 3.4, False)
-            # Lower arm: down and forward from the shoulder, bending gently at
-            # the elbow to meet the partner's hand on the round object.
-            low_arm = [(px(238), 504), (px(256), 396), (px(328), 354)]
-            d.path(low_arm, 32, True, False, track=False)
-            segments, length = d.centerline_measurements(low_arm)
-            d.anatomy.append({
-                "part": "limb", "segments": segments, "length": length,
-                "points": low_arm,
-            })
-            d.cut_path([
-                (px(258), 384), (px(272), 380), (px(286), 386),
-            ], 3.6, True)
-            # Outer leg: straight and firmly planted, carrying the lean.
-            d.leg(
-                [(px(186), 326), (px(168), 176), (px(152), 32)], 50,
-                knee_index=1, breeches_width=58, shoe_direction=(side, 0),
-            )
-            # Inner leg: set slightly forward with a gentle bend at the knee.
-            # The pair is kept close, as on H, so each figure stands on a
-            # tight two-leg base instead of a splayed stance.
-            d.leg(
-                [(px(212), 326), (px(200), 174), (px(198), 32)], 48,
-                knee_index=1, breeches_width=56, shoe_direction=(side, 0),
-            )
-        # Apex: the two flat hands meet in a sharp peak.
-        d.polygon([
-            (350, apex_y + 16), (368, apex_y - 30), (332, apex_y - 30),
-        ])
-        # The two hands clasp at the centre. This uses H's crossbar treatment —
-        # a solid ellipse split by one thin seam — rather than a circle with a
-        # punched centre, which read as a ring rather than gripped hands.
-        d.ellipse(ball[0], ball[1], 40, 28, 0.0)
-        d.cut_path([
-            (ball[0], ball[1] - 24), (ball[0] + 3, ball[1]),
-            (ball[0], ball[1] + 24),
-        ], 5.0, True)
+
+        d.polygon([placed(x, y) for x, y in pts])
+        for hole in NAVASANA_HOLES:
+            d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "B":
         # Print's B: a crouched standing figure, not an I-stem with a hat
