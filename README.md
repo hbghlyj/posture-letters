@@ -2,9 +2,7 @@
 
 ![The A–Z glyph set](glyph-sheet.svg)
 
-A comic display font in which **single bodies contort into letterforms**. Every capital is a traced silhouette from a modern gymnast or yoga photograph, chosen for readable letter topology and natural limb proportions. An eighteenth-century body-alphabet print suggested the original joke; it is not the construction source.
-
-The body’s own terminals — bun, hands, pointed feet — finish the letters. There is no hat-and-shoe costume system and no constructed breeches/calf machinery.
+A comic display font in which **single bodies contort into letterforms**. Every capital is a traced silhouette from a modern gymnast or yoga photograph, chosen for readable letter topology and natural limb proportions.
 
 ## Quick start
 
