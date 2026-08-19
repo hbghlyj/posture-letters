@@ -36,7 +36,7 @@ Or declare only the compact WOFF2:
 - [`trace_silhouette.py`](trace_silhouette.py) — OpenCV tracer for A–Z except L
 - [`outline_points/`](outline_points/) — A–Z traced contours consumed by the generator
 - [`assets/silhouettes/`](assets/silhouettes/) — source rasters for those contours
-- [`assets/`](assets/) `*_gymnast_photo.png` — photographic sources for B, C, F, H, J, O, P, Q, R, S, U, V, W, X, and Y
+- [`assets/`](assets/) `*_gymnast_photo.png` — photographic sources for B, C, F, H, J, O, P, Q, R, S, U, V, W, X, Y, and Z
 - [`n_poster_crop.png`](assets/n_poster_crop.png) — enlarged 2 Way Stretch N cell
 - [`two-way-stretch-alphabet.jpg`](assets/two-way-stretch-alphabet.jpg) — the poster that crop came from
 
@@ -77,7 +77,7 @@ python generate_font.py
 | **I** | [`silhouettes/i.png`](assets/silhouettes/i.png) | Legs pressed together the stem; crossed arms and open hands the top serif; feet turned out the bottom serif. |
 | **J** | [`j_gymnast_photo.png`](assets/j_gymnast_photo.png) | Joined legs the tall right stem, flexed feet a short top serif, hips/back/arms the open bottom hook, upright profile head the lower-left terminal. |
 | **K** | [`silhouettes/k.png`](assets/silhouettes/k.png) | Kneeling upright torso the stem, raised arm the upper diagonal, extended straight leg the lower diagonal. |
-| **L** | [`l.png`](assets/silhouettes/l.png), [`l.svg`](assets/silhouettes/l.svg) | High-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar. |
+| **L** | [`silhouettes/l.png`](assets/silhouettes/l.png), [`silhouettes/l.svg`](assets/silhouettes/l.svg) | High-kneeling side profile: vertical trunk the stem, shin and pointed foot the bottom bar. |
 | **M** | [`silhouettes/m.png`](assets/silhouettes/m.png) | Folded double from behind: raised knees the peaks, calves the outer stems, thighs sloping in to hanging hips the central V. |
 | **N** | [`n_poster_crop.png`](assets/n_poster_crop.png) | Planted arm the left stem, organic torso the diagonal, raised leg the right stem. |
 | **O** | [`o_gymnast_photo.png`](assets/o_gymnast_photo.png) | Full bow whose raised feet and grasping arms close a ring, with a large natural counter. |
