@@ -17,11 +17,6 @@ from fontTools.ttLib import TTFont
 
 from profile_loader import LOWER_LIMB_OUTLINE_POINTS
 from upright_torso_outline_points import UPRIGHT_TORSO_OUTLINE_POINTS
-from navasana_outline_points import NAVASANA_HOLES, NAVASANA_OUTLINE_POINTS
-from rajakapotasana_outline_points import (
-    RAJAKAPOTASANA_HOLES,
-    RAJAKAPOTASANA_OUTLINE_POINTS,
-)
 from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
 from yoga_h_outline_points import YOGA_H_HOLES, YOGA_H_OUTLINE_POINTS
 from yoga_i_outline_points import YOGA_I_HOLES, YOGA_I_OUTLINE_POINTS
@@ -32,6 +27,7 @@ from yoga_m_outline_points import YOGA_M_HOLES, YOGA_M_OUTLINE_POINTS
 from yoga_n_outline_points import YOGA_N_HOLES, YOGA_N_OUTLINE_POINTS
 from yoga_o_outline_points import YOGA_O_HOLES, YOGA_O_OUTLINE_POINTS
 from yoga_p_outline_points import YOGA_P_HOLES, YOGA_P_OUTLINE_POINTS
+from yoga_q_outline_points import YOGA_Q_HOLES, YOGA_Q_OUTLINE_POINTS
 from yoga_r_outline_points import YOGA_R_HOLES, YOGA_R_OUTLINE_POINTS
 from yoga_s_outline_points import YOGA_S_HOLES, YOGA_S_OUTLINE_POINTS
 from yoga_t_outline_points import YOGA_T_HOLES, YOGA_T_OUTLINE_POINTS
@@ -1610,7 +1606,7 @@ def pose(letter: str) -> Drawer:
         # raised feet and grasping arm close the ring, while the other
         # arm plants on the floor as the tail. The print's inverted
         # ring is replaced because this pose is more legible as a Q.
-        pts = RAJAKAPOTASANA_OUTLINE_POINTS
+        pts = YOGA_Q_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, top, bottom = min(xs), min(ys), max(ys)
@@ -1624,7 +1620,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in RAJAKAPOTASANA_HOLES:
+        for hole in YOGA_Q_HOLES:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "R":
