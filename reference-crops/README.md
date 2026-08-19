@@ -1,9 +1,6 @@
 # Pose references
 
-Current letter construction comes from modern gymnast and yoga
-photographs. Per-letter notes live in the root `README.md`. The older
-print-cell crops in `pose/` are retained for comparison, not as the
-construction source.
+Per-letter notes live in the root `README.md`.
 
-- `pose/`: earlier enlarged letter crops
-- `two-way-stretch/`: modern photographic and silhouette sources
+- `two-way-stretch/`: the 2 Way Stretch poster and the N crop used as
+  the shipped N source. U, V, and J photographs now live in `assets/`.

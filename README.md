@@ -37,7 +37,7 @@ Or declare only the compact WOFF2:
 - `outline_points/` — A–Z traced contours consumed by the generator
 - `assets/silhouettes/` — source rasters for those contours
 - `assets/j_gymnast_photo.png`, `assets/s_gymnast_photo.png`, `assets/u_gymnast_photo.png`, `assets/v_gymnast_photo.png`, `assets/w_gymnast_photo.png` — photographic sources for J, S, U, V, and W
-- `reference-crops/` — pose references, including modern studies in `two-way-stretch/`
+- `reference-crops/two-way-stretch/` — the 2 Way Stretch poster and the N crop
 
 ## Character coverage
 
@@ -90,7 +90,5 @@ python generate_font.py
 - **X** — wide forward fold from behind: legs an inverted V, head hanging at the centre, arms to the upper corners.
 - **Y** — headstand: torso the stem, split legs the V.
 - **Z** — kneeling: both arms the top bar, leaning torso and thighs the diagonal, shins and feet the bottom bar.
-
-Older print-cell crops in `reference-crops/pose/` are comparison only.
 
 The shipped outlines are monochrome letterforms for playful display, not body text. Treat the poses as typographic fiction, not exercise instructions.
