@@ -16,7 +16,7 @@ from fontTools.ttLib import TTFont
 
 from profile_loader import LOWER_LIMB_OUTLINE_POINTS
 from upright_torso_outline_points import UPRIGHT_TORSO_OUTLINE_POINTS
-from ustrasana_outline_points import USTRASANA_HOLES, USTRASANA_OUTLINE_POINTS
+from yoga_d_outline_points import YOGA_D_HOLES, YOGA_D_OUTLINE_POINTS
 from yoga_h_outline_points import YOGA_H_HOLES, YOGA_H_OUTLINE_POINTS
 from yoga_i_outline_points import YOGA_I_HOLES, YOGA_I_OUTLINE_POINTS
 from yoga_j_outline_points import YOGA_J_HOLES, YOGA_J_OUTLINE_POINTS
@@ -1316,7 +1316,7 @@ def pose(letter: str) -> Drawer:
         # photo faces this way; the first import was mirrored.
         # Same import path as L: one closed outline (plus the natural
         # counter) scaled uniformly onto BAR_GROUND.
-        pts = USTRASANA_OUTLINE_POINTS
+        pts = YOGA_D_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
         left, right, top, bottom = min(xs), max(xs), min(ys), max(ys)
@@ -1330,7 +1330,7 @@ def pose(letter: str) -> Drawer:
             )
 
         d.polygon([placed(x, y) for x, y in pts])
-        for hole in USTRASANA_HOLES:
+        for hole in YOGA_D_HOLES:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "E":
