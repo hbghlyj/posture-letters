@@ -1429,9 +1429,10 @@ def pose(letter: str) -> Drawer:
             d.polygon([placed(x, y) for x, y in hole], hole=True)
 
     elif letter == "I":
-        # Editorial yoga-alphabet I, imported like L. A headstand with
-        # both legs pressed together into one tall vertical column, the
-        # crown of the head and the forearms making the base.
+        # Editorial yoga-alphabet I, imported like L. Standing upright with
+        # the legs pressed together as the stem, both arms raised and crossed
+        # above the head so the forearms and open hands make the top serif,
+        # and the feet turned outward to make the bottom serif.
         pts = YOGA_I_OUTLINE_POINTS
         xs = [x for x, _ in pts]
         ys = [y for _, y in pts]
